@@ -278,7 +278,6 @@
             </request>
         </entry>
 
-        <!-- Menge_Patient > Patient > Menge_Meldung > Menge_OP > OP -->
         <xsl:apply-templates select="./Tumor" mode="tumor">
             <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID" />
             <xsl:with-param name="Patient_ID" select="$Patient_ID" />
@@ -286,12 +285,11 @@
     </xsl:template>
 
 
-    <xsl:template match="System_Therapy">
+    <xsl:template match="SYST">
         <xsl:param name="Progress_ID" />
         <xsl:param name="Patient_ID" />
         <xsl:param name="Diagnosis_ID" />
-        <xsl:variable name="System_Therapy_ID" select="mds2fhir:getID(./@System_Therapy_ID, mds2fhir:transformDate(./Systemische_Therapie_Beginn), generate-id())" as="xs:string" />
-        <xsl:variable name="Residualstatus_ID" select="mds2fhir:getID('', '', generate-id(./Residualstatus))" as="xs:string" />
+        <xsl:variable name="System_Therapy_ID" select="mds2fhir:getID(./@SYST_ID, mds2fhir:transformDate(./Systemische_Therapie_Beginn), generate-id())" as="xs:string" />
         <entry>
             <fullUrl value="http://example.com/MedicationStatement/{$System_Therapy_ID}" />
             <resource>
@@ -320,12 +318,14 @@
                             </valueCodeableConcept>
                         </extension>
                     </xsl:if>
-                    <xsl:if test="./Residualstatus">
+                    <xsl:if test="./Lokale_Beurteilung_Resttumor">
                         <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-LokaleResidualstatus">
-                            <reference value="Observation/{$Residualstatus_ID}-lokal" />
+                            <reference value="Observation/{mds2fhir:getID('','', generate-id(./Lokale_Beurteilung_Resttumor))}" />
                         </extension>
+                    </xsl:if>
+                    <xsl:if test="./Gesamtbeurteilung_Resttumor">
                         <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-GesamtbeurteilungResidualstatus">
-                            <reference value="Observation/{$Residualstatus_ID}-gesamt" />
+                            <reference value="Observation/{mds2fhir:getID('','', generate-id(./Gesamtbeurteilung_Resttumor))}" />
                         </extension>
                     </xsl:if>
                     <xsl:choose>
@@ -354,15 +354,16 @@
                         </xsl:otherwise>
                     </xsl:choose>
                     <category>
-                        <xsl:for-each select="./Menge_Therapieart/SYST_Therapieart">
+                        <xsl:for-each select="./SYST_Therapieart">
                             <coding>
                                 <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTTherapieartCS" />
                                 <code value="{.}" />
                             </coding>
                         </xsl:for-each>
                     </category>
+                    <!-- There may be more substances, but we can only save one here -->
                     <medicationCodeableConcept>
-                        <text value="{./Systemische_Therapie_Substanzen}" />
+                        <text value="{./SYST_Substanz}" />
                     </medicationCodeableConcept>
                     <subject>
                         <reference value="Patient/{$Patient_ID}" />
@@ -378,7 +379,6 @@
                         </effectivePeriod>
                     </xsl:if>
                     <reasonReference value="Condition/{$Diagnosis_ID}" />
-                    "
                 </MedicationStatement>
             </resource>
             <request>
@@ -387,7 +387,7 @@
             </request>
         </entry>
 
-        <xsl:for-each select="./Menge_Nebenwirkung/SYST_Nebenwirkung">
+        <xsl:for-each select="./SYST_Nebenwirkung">
             <xsl:variable name="Nebenwirkung_ID" select="mds2fhir:getID('', '', generate-id())" as="xs:string" />
             <entry>
                 <fullUrl value="http://example.com/AdverseEvent/{$Nebenwirkung_ID}" />
@@ -415,18 +415,77 @@
             </entry>
         </xsl:for-each>
 
-        <xsl:apply-templates select="./Residualstatus">
-            <xsl:with-param name="Patient_ID" select="$Patient_ID" />
-            <xsl:with-param name="Residualstatus_ID" select="$Residualstatus_ID" />
-        </xsl:apply-templates>
+        <entry>
+            <fullUrl value="http://example.com/Observation/{mds2fhir:getID('','', generate-id(./Gesamtbeurteilung_Resttumor))}" />
+            <resource>
+                <Observation xmlns="http://hl7.org/fhir">
+                    <id value="{mds2fhir:getID('','', generate-id(./Gesamtbeurteilung_Resttumor))}" />
+                    <meta>
+                        <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-GesamtbeurteilungResidualstatus" />
+                    </meta>
+                    <status value="final" />
+                    <code>
+                        <coding>
+                            <system value="http://loinc.org" />
+                            <code value="81169-5" />
+                        </coding>
+                    </code>
+                    <subject>
+                        <reference value="Patient/{$Patient_ID}" />
+                    </subject>
+                    <valueCodeableConcept>
+                        <coding>
+                            <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/GesamtbeurteilungResidualstatusCS" />
+                            <code value="{./Gesamtbeurteilung_Resttumor}" />
+                        </coding>
+                    </valueCodeableConcept>
+                </Observation>
+            </resource>
+            <request>
+                <method value="PUT" />
+                <url value="Observation/{mds2fhir:getID('','', generate-id(./Gesamtbeurteilung_Resttumor))}" />
+            </request>
+        </entry>
+        <entry>
+            <fullUrl value="http://example.com/Observation/{mds2fhir:getID('','', generate-id(./Lokale_Beurteilung_Resttumor))}" />
+            <resource>
+                <Observation xmlns="http://hl7.org/fhir">
+                    <id value="{mds2fhir:getID('','', generate-id(./Lokale_Beurteilung_Resttumor))}" />
+                    <meta>
+                        <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-LokaleBeurteilungResidualstatus" />
+                    </meta>
+                    <status value="final" />
+                    <code>
+                        <coding>
+                            <system value="http://loinc.org" />
+                            <code value="84892-9" />
+                        </coding>
+                    </code>
+                    <subject>
+                        <reference value="Patient/{$Patient_ID}" />
+                    </subject>
+                    <valueCodeableConcept>
+                        <coding>
+                            <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/LokaleBeurteilungResidualstatusCS" />
+                            <code value="{./Lokale_Beurteilung_Resttumor}" />
+                        </coding>
+                    </valueCodeableConcept>
+                </Observation>
+            </resource>
+            <request>
+                <method value="PUT" />
+                <url value="Observation/{mds2fhir:getID('','', generate-id(./Lokale_Beurteilung_Resttumor))}" />
+            </request>
+        </entry>
+
 
     </xsl:template>
 
-    <xsl:template match="Radiation_Therapy">
+    <xsl:template match="ST">
         <xsl:param name="Progress_ID" />
         <xsl:param name="Patient_ID" />
         <xsl:param name="Diagnosis_ID" />
-        <xsl:variable name="Radiation_Therapy_ID" select="mds2fhir:getID(./@Radiation_Therapy_ID,'', generate-id())" as="xs:string" />
+        <xsl:variable name="Radiation_Therapy_ID" select="mds2fhir:getID(./@ST_ID,'', generate-id())" as="xs:string" />
         <entry>
             <fullUrl value="http://example.com/Procedure/{$Radiation_Therapy_ID}" />
             <resource>
@@ -474,23 +533,21 @@
                         <reference value="Patient/{$Patient_ID}" />
                     </subject>
                     <reasonReference value="Condition/{$Diagnosis_ID}" />"
-                    <xsl:if test="./Residualstatus">
                     <outcome>
-                        <xsl:if test="./Residualstatus/Lokale_Beurteilung_Residualstatus">
+                        <xsl:if test="./Lokale_Beurteilung_Resttumor">
                         <coding>
                             <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/LokaleBeurteilungResidualstatusCS" />
-                            <code value="{./Residualstatus/Lokale_Beurteilung_Residualstatus}" />
+                            <code value="{./Lokale_Beurteilung_Resttumor}" />
                         </coding>
                     </xsl:if>
-                    <xsl:if test="./Residualstatus/Gesamtbeurteilung_Residualstatus">
+                    <xsl:if test="./Gesamtbeurteilung_Resttumor">
                         <coding>
                             <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/GesamtbeurteilungResidualstatusCS" />
-                            <code value="{./Residualstatus/Gesamtbeurteilung_Residualstatus}" />
+                            <code value="{./Gesamtbeurteilung_Resttumor}" />
                         </coding>
                     </xsl:if>
                     </outcome>
-                </xsl:if>
-                <xsl:for-each select="./Menge_Nebenwirkung/ST_Nebenwirkung">
+                <xsl:for-each select="./ST_Nebenwirkung">
                     <complication>
                         <text value="./Nebenwirkung_Art"/>
                     </complication>
@@ -503,7 +560,7 @@
             </request>
         </entry>
 
-        <xsl:for-each select="./Menge_Bestrahlung/Bestrahlung">
+        <xsl:for-each select="./Bestrahlung">
         <xsl:variable name="Single_Radiation_Therapy_ID" select="mds2fhir:getID('',mds2fhir:transformDate(./ST_Beginn_Datum), generate-id())" as="xs:string" />
         <entry>
             <fullUrl value="http://example.com/Procedure/{$Single_Radiation_Therapy_ID}" />
@@ -517,7 +574,7 @@
                         <reference value="Procedure/{$Radiation_Therapy_ID}"/>
                     </partOf>
                     <xsl:choose>
-                        <xsl:when test="./Strahlentherapie_Ende">
+                        <xsl:when test="./ST_Ende_Datum">
                             <xsl:choose>
                                 <xsl:when test="ST_Ende_Grund='E'">
                                     <status value="completed" />
@@ -532,7 +589,7 @@
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:choose>
-                                <xsl:when test="./Strahlentherapie_Beginn">
+                                <xsl:when test="./ST_Beginn_Datum">
                                     <status value="in-progress" />
                                 </xsl:when>
                                 <xsl:otherwise>
@@ -558,13 +615,13 @@
                     <subject>
                         <reference value="Patient/{$Patient_ID}" />
                     </subject>
-                    <xsl:if test="./Strahlentherapie_Beginn or ./Strahlentherapie_Ende">
+                    <xsl:if test="./ST_Beginn_Datum or ./ST_Ende_Datum">
                         <performedPeriod>
                             <xsl:if test="./Strahlentherapie_Beginn">
-                                <start value="{mds2fhir:transformDate(./Strahlentherapie_Beginn)}" />
+                                <start value="{mds2fhir:transformDate(./ST_Beginn_Datum)}" />
                             </xsl:if>
                             <xsl:if test="./Strahlentherapie_Ende">
-                                <end value="{mds2fhir:transformDate(./Strahlentherapie_Ende)}" />
+                                <end value="{mds2fhir:transformDate(./ST_Ende_Datum)}" />
                             </xsl:if>
                         </performedPeriod>
                     </xsl:if>
@@ -580,17 +637,17 @@
 
     </xsl:template>
 
-    <xsl:template match="Surgery">
+    <xsl:template match="OP">
         <xsl:param name="Patient_ID" />
         <xsl:param name="Diagnosis_ID" />
 
-        <xsl:variable name="Surgery_ID" select="mds2fhir:getID(./@Surgery_ID, '', generate-id())" as="xs:string" />
+        <xsl:variable name="OP_ID" select="mds2fhir:getID(./@OP_ID, '', generate-id())" as="xs:string" />
         
         <entry>
-            <fullUrl value="http://example.com/Procedure/{$Surgery_ID}" />
+            <fullUrl value="http://example.com/Procedure/{$OP_ID}" />
             <resource>
                 <Procedure>
-                    <id value="{$Surgery_ID}" />
+                    <id value="{$OP_ID}" />
                     <meta>
                         <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Procedure-Operation" />
                     </meta>
@@ -613,7 +670,7 @@
                         </coding>
                     </category>
                     <code>
-                        <xsl:for-each select="./Menge_OPS/OP_OPS">
+                        <xsl:for-each select="./OP_OPS">
                             <coding>
                                 <system value="http://fhir.de/CodeSystem/dimdi/ops" />
                                 <version value="{../../OP_OPS_Version}"/>
@@ -625,7 +682,6 @@
                         <reference value="Patient/{$Patient_ID}" />
                     </subject>
                     <reasonReference value="Condition/{$Diagnosis_ID}" />"
-                    <!-- In neuen testdaten nicht vorhanden-->
                     <outcome>
                         <xsl:if test="./Lokale_Beurteilung_Resttumor">
                         <coding>
@@ -644,7 +700,7 @@
             </resource>
             <request>
                 <method value="PUT" />
-                <url value="Procedure/{$Surgery_ID}" />
+                <url value="Procedure/{$OP_ID}" />
             </request>
         </entry>
 
@@ -680,7 +736,7 @@
                     <subject>
                         <reference value="Patient/{Patient_ID}" />
                     </subject>
-                    <effectiveDateTime value="{mds2fhir:transformDate(./Untersuchungs-Befunddatum_im_Verlauf)}" />
+                    <effectiveDateTime value="{mds2fhir:transformDate(./Datum_Verlauf)}" />
                     <problem>
                         <reference value="Condition/{Diagnosis_ID}" />
                     </problem>
@@ -698,7 +754,7 @@
                         </itemReference>
                     </finding>
                 </xsl:for-each>
-                <xsl:for-each select="./Menge_FM/Fernmetastase">
+                <xsl:for-each select="./Metastasis">
                     <finding>
                         <itemReference>
                             <reference value="Observation/{mds2fhir:getID('', '', generate-id())}" />
@@ -732,7 +788,6 @@
                 <url value="ClinicalImpression/{$Progress_ID}" />
             </request>
         </entry>
-        <!-- TODO Datum umstellen sobald fertig -->
         <entry>
             <fullUrl value="http://example.com/Observation/{$Lokales_Rezidiv_ID}" />
             <resource>
@@ -751,7 +806,7 @@
                     <subject>
                         <reference value="Patient/{$Patient_ID}" />
                     </subject>
-                    <effectiveDateTime value="{mds2fhir:transformDate(./Untersuchungs-Befunddatum_im_Verlauf)}" />
+                    <effectiveDateTime value="{mds2fhir:transformDate(./Datum_Verlauf)}" />
                     <valueCodeableConcept>
                         <coding>
                             <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VerlaufLokalerTumorstatusCS" />
@@ -783,7 +838,7 @@
                     <subject>
                         <reference value="Patient/{$Patient_ID}" />
                     </subject>
-                    <effectiveDateTime value="{mds2fhir:transformDate(./Untersuchungs-Befunddatum_im_Verlauf)}" />
+                    <effectiveDateTime value="{mds2fhir:transformDate(./Datum_Verlauf)}" />
                     <valueCodeableConcept>
                         <coding>
                             <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VerlaufTumorstatusLymphknotenCS" />
@@ -815,7 +870,7 @@
                     <subject>
                         <reference value="Patient/{$Patient_ID}" />
                     </subject>
-                    <effectiveDateTime value="{mds2fhir:transformDate(./Untersuchungs-Befunddatum_im_Verlauf)}" />
+                    <effectiveDateTime value="{mds2fhir:transformDate(./Datum_Verlauf)}" />
                     <valueCodeableConcept>
                         <coding>
                             <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VerlaufTumorstatusFernmetastasenCS" />
@@ -847,7 +902,7 @@
                     <subject>
                         <reference value="Patient/{$Patient_ID}" />
                     </subject>
-                    <effectiveDateTime value="{mds2fhir:transformDate(./Untersuchungs-Befunddatum_im_Verlauf)}" />
+                    <effectiveDateTime value="{mds2fhir:transformDate(./Datum_Verlauf)}" />
                     <valueCodeableConcept>
                         <coding>
                             <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VerlaufTumorstatusFernmetastasenCS" />
@@ -869,7 +924,7 @@
             <xsl:with-param name="Patient_ID" select="$Patient_ID" />
         </xsl:apply-templates>
 
-        <xsl:apply-templates select="./Menge_FM/Fernmetastase">
+        <xsl:apply-templates select="./Metastasis">
             <xsl:with-param name="Patient_ID" select="$Patient_ID" />
         </xsl:apply-templates>
 
@@ -1228,75 +1283,6 @@
         </entry>
     </xsl:template>
 
-    <xsl:template match="Residualstatus">
-        <xsl:param name="Patient_ID" />
-        <xsl:param name="Residualstatus_ID"/>
-        <entry>
-            <fullUrl value="http://example.com/Observation/{$Residualstatus_ID}-gesamt" />
-            <resource>
-                <Observation xmlns="http://hl7.org/fhir">
-                    <id value="{$Residualstatus_ID}-gesamt" />
-                    <meta>
-                        <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-GesamtbeurteilungResidualstatus" />
-                    </meta>
-                    <status value="final" />
-                    <code>
-                        <coding>
-                            <system value="http://loinc.org" />
-                            <code value="81169-5" />
-                        </coding>
-                    </code>
-                    <subject>
-                        <reference value="Patient/{$Patient_ID}" />
-                    </subject>
-                    <valueCodeableConcept>
-                        <coding>
-                            <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/GesamtbeurteilungResidualstatusCS" />
-                            <code value="{./Gesamtbeurteilung_Residualstatus}" />
-                        </coding>
-                    </valueCodeableConcept>
-                </Observation>
-            </resource>
-            <request>
-                <method value="PUT" />
-                <url value="Observation/{$Residualstatus_ID}-gesamt" />
-            </request>
-        </entry>
-        <entry>
-            <fullUrl value="http://example.com/Observation/{$Residualstatus_ID}-lokal" />
-            <resource>
-                <Observation xmlns="http://hl7.org/fhir">
-                    <id value="{$Residualstatus_ID}-lokal" />
-                    <meta>
-                        <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-LokaleBeurteilungResidualstatus" />
-                    </meta>
-                    <status value="final" />
-                    <code>
-                        <coding>
-                            <system value="http://loinc.org" />
-                            <code value="84892-9" />
-                        </coding>
-                    </code>
-                    <subject>
-                        <reference value="Patient/{$Patient_ID}" />
-                    </subject>
-                    <valueCodeableConcept>
-                        <coding>
-                            <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/LokaleBeurteilungResidualstatusCS" />
-                            <code value="{./Lokale_Beurteilung_Residualstatus}" />
-                        </coding>
-                    </valueCodeableConcept>
-                </Observation>
-            </resource>
-            <request>
-                <method value="PUT" />
-                <url value="Observation/{$Residualstatus_ID}-lokal" />
-            </request>
-        </entry>
-
-
-    </xsl:template>
-
 
     <xsl:template match="Tumor" mode="tumor">
         <xsl:param name="Diagnosis_ID" />
@@ -1317,17 +1303,17 @@
             <xsl:with-param name="Patient_ID" select="$Patient_ID" />
         </xsl:apply-templates>
 
-        <xsl:apply-templates select="./Surgery">
+        <xsl:apply-templates select="./OP">
             <xsl:with-param name="Patient_ID" select="$Patient_ID" />
             <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID" />
         </xsl:apply-templates>
 
-        <xsl:apply-templates select="./Radiation_Therapy">
+        <xsl:apply-templates select="./ST">
             <xsl:with-param name="Patient_ID" select="$Patient_ID" />
             <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID" />
         </xsl:apply-templates>
 
-        <xsl:apply-templates select="./System_Therapy">
+        <xsl:apply-templates select="./SYST">
             <xsl:with-param name="Patient_ID" select="$Patient_ID" />
             <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID" />
         </xsl:apply-templates>
