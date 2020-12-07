@@ -14,6 +14,10 @@ changes or another processor is used. Therefore, if you plan to load updates int
 
 ## Settings
     - _Lokal_DKTK_ID_Pat_System_ needs to conform to https://www.hl7.org/fhir/datatypes.html#uri
+
+## Running the Transformation
+You can download the Saxon XSL processor [here](http://saxon.sourceforge.net/#F10HE) (Java Version). Unpack and find the JAR called saxon-he-[version].jar 
+Call the JAR from the command line: ´java -jar path/to/jar/saxon-he-[version].jar -s:sorceFile.xml -xsl:tranformationFile.xsl -o:outputFile.xml`. Additional documentation can be found [here](https://www.saxonica.com/documentation/index.html#!using-xsl/commandline).
 	
 ## Notes
 
