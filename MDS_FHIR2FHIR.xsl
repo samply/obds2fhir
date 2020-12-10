@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<xsl:stylesheet xmlns="http://hl7.org/fhir" xmlns:mds2fhir="https://github.com/samply/repoTODO" xmlns:dktk="http://dktk.dkfz.de" xmlns:saxon="http://saxon.sf.net" xmlns:xalan="http://xml.apache.org/xalan" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" exclude-result-prefixes="xs xsi dktk saxon xalan #default" version="2.0" xpath-default-namespace="http://www.mds.de/namespace">
+<xsl:stylesheet xmlns="http://hl7.org/fhir" xmlns:mds2fhir="https://github.com/samply/adt2fhir/blob/main/MDS_FHIR2FHIR" xmlns:dktk="http://dktk.dkfz.de" xmlns:saxon="http://saxon.sf.net" xmlns:xalan="http://xml.apache.org/xalan" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" exclude-result-prefixes="xs xsi dktk saxon xalan mds2fhir #default" version="2.0" xpath-default-namespace="http://www.mds.de/namespace">
 
     <!-- Settings-->
     <!-- System für lokale Identifier-->
@@ -648,7 +648,7 @@
             </resource>
             <request>
                 <method value="PUT" />
-                <url value="Procedure/{$Radiation_Therapy_ID}" />
+                <url value="Procedure/{$Single_Radiation_Therapy_ID}" />
             </request>
         </entry>
     </xsl:for-each>
