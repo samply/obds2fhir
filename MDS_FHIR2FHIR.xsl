@@ -22,6 +22,7 @@
 
     <xsl:template match="Patient" mode="patient">
         <xsl:variable name="Patient_ID" select="@Patient_ID" />
+        <xsl:result-document href="./Bundle_{$Patient_ID}.xml">
         <Bundle xmlns="http://hl7.org/fhir">
             <id value="{generate-id()}" />
             <type value="transaction" />
@@ -108,6 +109,7 @@
             </xsl:apply-templates>
 
         </Bundle>
+    </xsl:result-document>
     </xsl:template>
 
     <xsl:template match="Sample" mode="sample">
