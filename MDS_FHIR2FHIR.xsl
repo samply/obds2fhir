@@ -547,7 +547,7 @@
                         <reference value="Patient/{$Patient_ID}" />
                     </subject>
                     <reasonReference>
-                        <reference value="Condition/{$Diagnosis_ID}" />"
+                        <reference value="Condition/{$Diagnosis_ID}" />
                     </reasonReference> 
                     <xsl:if test="./Lokale_Beurteilung_Resttumor or ./Gesamtbeurteilung_Resttumor">
                     <outcome>
@@ -644,7 +644,7 @@
                         </performedPeriod>
                     </xsl:if>
                     <reasonReference>
-                        <reference  value="Condition/{$Diagnosis_ID}" />"
+                        <reference  value="Condition/{$Diagnosis_ID}" />
                     </reasonReference>
                 </Procedure>
             </resource>
