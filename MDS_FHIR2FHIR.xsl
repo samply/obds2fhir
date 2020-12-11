@@ -253,7 +253,7 @@
                     <onsetAge>
                         <value value="{./Alter_bei_Erstdiagnose}" />
                         <unit value="Jahre" />
-                        <system value="http://unitsofmeasure.org/" />
+                        <system value="http://unitsofmeasure.org" />
                         <code value="a" />
                     </onsetAge>
                     <recordedDate value="{mds2fhir:transformDate(./Tumor_Diagnosedatum)}" />
