@@ -62,16 +62,29 @@
             
             <!--pass children entities SAMPLE and DIAGNOSIS for further processing-->
             <xsl:if test="./Menge_Meldung/Meldung/Menge_Biomaterial/Biomaterial"><xsl:apply-templates select="./Menge_Meldung/Meldung/Menge_Biomaterial/Biomaterial"></xsl:apply-templates></xsl:if>
-            <xsl:for-each select="./Menge_Meldung/Meldung/Diagnose[not(@Tumor_ID=../preceding-sibling::*/Diagnose/@Tumor_ID)]"><!--use foreach loop to allow multiple Diagnoses for one Patient AND ignore multiple identical diagnoses-->
-                <xsl:choose>
-                    <xsl:when test="@Tumor_ID">
-                        <xsl:apply-templates select="../../../Menge_Meldung" mode="withIds">
-                            <xsl:with-param name="Tumor_Id" select="@Tumor_ID"></xsl:with-param><!-- For multiple Diagnoses: assign ID for appropriate structure-->
-                        </xsl:apply-templates>
+            <xsl:choose>
+                <xsl:when test="./Menge_Meldung/Meldung/Diagnose">
+                    <xsl:for-each select="./Menge_Meldung/Meldung/Diagnose[not(@Tumor_ID=../preceding-sibling::*/Diagnose/@Tumor_ID)]"><!--use foreach loop to allow multiple Diagnoses for one Patient AND ignore multiple identical diagnoses-->
+                        <xsl:choose>
+                            <xsl:when test="@Tumor_ID">
+                               <xsl:apply-templates select="../../../Menge_Meldung" mode="withIds">
+                                   <xsl:with-param name="Tumor_Id" select="@Tumor_ID"></xsl:with-param><!-- For multiple Diagnoses: assign ID for appropriate structure-->
+                               </xsl:apply-templates>
+                           </xsl:when>
+                        <xsl:otherwise><xsl:apply-templates select="../../../Menge_Meldung" mode="noIds"/></xsl:otherwise>
+                       </xsl:choose>
+                    </xsl:for-each>
                     </xsl:when>
-                    <xsl:otherwise><xsl:apply-templates select="../../../Menge_Meldung" mode="noIds"/></xsl:otherwise>
-                </xsl:choose>
-            </xsl:for-each>
+            <xsl:when test="not(./Menge_Meldung/Meldung/Diagnose) and ./Menge_Meldung/Meldung/Tumorzuordnung/@Tumor_ID"><!-- use Tumorzuordnung if no Diagnosis is delivered at all; requieres Tumor IDs -->
+                    <!--handle multiple different or similar Tumorzuordnung and place them in the correct tree structure-->
+                    <xsl:for-each select="./Menge_Meldung/Meldung/Tumorzuordnung[not(@Tumor_ID=../preceding-sibling::*/Tumorzuordnung/@Tumor_ID)]">
+                        <xsl:variable name="TumorID"><xsl:value-of select="./@Tumor_ID"/></xsl:variable>
+                         <xsl:apply-templates select="../../../Menge_Meldung" mode="withIds">
+                             <xsl:with-param name="Tumor_Id" select="$TumorID"/>
+                         </xsl:apply-templates>
+                    </xsl:for-each>
+                </xsl:when>
+            </xsl:choose>
         </Patient>
     </xsl:template>
     
@@ -103,6 +116,7 @@
         
         <Diagnosis>
             <xsl:attribute name="Diagnosis_ID" select="$Tumor_Id"/>
+            <xsl:if test="./Meldung/Diagnose"><!-- dont create those elements if no Diagnose is delivered -->
             <xsl:element name="Alter_bei_Erstdiagnose">
                 <xsl:variable name="geb" select="number(replace(../Patienten_Stammdaten/Patienten_Geburtsdatum,'\d\d\.\d\d\.(\d\d\d\d)$','$1'))"/>
                 <xsl:variable name="diag" select="number(replace($diagnoseDatum,'\d\d\.\d\d\.(\d\d\d\d)$','$1'))"/>
@@ -115,16 +129,28 @@
 <!--            <Tumor_Diagnosedatum><xsl:apply-templates select="number(replace($diagnoseDatum,'\d\d\.\d\d\.(\d\d\d\d)$','$1'))"/></Tumor_Diagnosedatum>-->
             <Tumor_Diagnosedatum><xsl:apply-templates select="$diagnoseDatum"/></Tumor_Diagnosedatum>
             <xsl:apply-templates select="./Meldung[./Diagnose/@Tumor_ID=$Tumor_Id][1]/Diagnose[./@Tumor_ID=$Tumor_Id]/Primaertumor_ICD_Code | ./Meldung[./Diagnose/@Tumor_ID=$Tumor_Id][1]/Diagnose[./@Tumor_ID=$Tumor_Id]/Primaertumor_ICD_Version"/>
-            
+            </xsl:if>
             <!--Generate third Level TUMOR entity (Elements:  Lokalisation | ICD-O_Katalog_Topographie_Version |  Seitenlokalisation ) -->
             <Tumor>
                 <xsl:attribute name="Tumor_ID" select="$Tumor_Id"/>
+                <xsl:if test="./Meldung/Diagnose"><!-- dont create those elements if no Diagnose is delivered -->
                 <Lokalisation><xsl:value-of select="./Meldung[./Diagnose/@Tumor_ID=$Tumor_Id][1]/Diagnose[./@Tumor_ID=$Tumor_Id]/Primaertumor_Topographie_ICD_O"/></Lokalisation>
                 <ICD-O_Katalog_Topographie_Version><xsl:value-of select="./Meldung[./Diagnose/@Tumor_ID=$Tumor_Id][1]/Diagnose[./@Tumor_ID=$Tumor_Id]/Primaertumor_Topographie_ICD_O_Version"/></ICD-O_Katalog_Topographie_Version>
                 <Seitenlokalisation><xsl:value-of select="./Meldung[./Diagnose/@Tumor_ID=$Tumor_Id][1]/Diagnose[./@Tumor_ID=$Tumor_Id]/Seitenlokalisation"/></Seitenlokalisation>                
-                
+                </xsl:if>
                 <!--Initiate all TUMOR child nodes-->
-                <xsl:apply-templates select="./Meldung/Diagnose[./@Tumor_ID=$Tumor_Id]/Menge_Histologie/Histologie | ./Meldung/Diagnose[./@Tumor_ID=$Tumor_Id]/Menge_FM/Fernmetastase | ./Meldung/Diagnose[./@Tumor_ID=$Tumor_Id]/cTNM | ./Meldung/Diagnose[./@Tumor_ID=$Tumor_Id]/pTNM | Meldung[./Tumorzuordnung/@Tumor_ID=$Tumor_Id]/Menge_OP/OP |Meldung[./Tumorzuordnung/@Tumor_ID=$Tumor_Id]/Menge_ST/ST | Meldung[./Tumorzuordnung/@Tumor_ID=$Tumor_Id]/Menge_SYST/SYST |Meldung[./Tumorzuordnung/@Tumor_ID=$Tumor_Id]/Menge_Verlauf/Verlauf"/>
+                <xsl:apply-templates select="
+                    ./Meldung/Diagnose[./@Tumor_ID=$Tumor_Id]/Menge_Histologie/Histologie | 
+                    ./Meldung/Diagnose[./@Tumor_ID=$Tumor_Id]/Menge_FM/Fernmetastase | 
+                    ./Meldung/Diagnose[./@Tumor_ID=$Tumor_Id]/cTNM | 
+                    ./Meldung/Diagnose[./@Tumor_ID=$Tumor_Id]/pTNM | 
+                    ./Meldung/Menge_OP/OP[../../Tumorzuordnung/@Tumor_ID=$Tumor_Id]/TNM | 
+                    ./Meldung/Menge_Verlauf/Verlauf[../../Tumorzuordnung/@Tumor_ID=$Tumor_Id]/TNM | 
+                    ./Meldung[./Tumorzuordnung/@Tumor_ID=$Tumor_Id]/Menge_OP/OP | 
+                    ./Meldung[./Tumorzuordnung/@Tumor_ID=$Tumor_Id]/Menge_ST/ST | 
+                    ./Meldung[./Tumorzuordnung/@Tumor_ID=$Tumor_Id]/Menge_SYST/SYST | 
+                    ./Meldung[./Tumorzuordnung/@Tumor_ID=$Tumor_Id]/Menge_Verlauf/Verlauf
+                    "/>
                 
                 <!--If metastasis doesn't exist: set requried CCP element "nicht erfasst"-->
                 <xsl:if test="not(./Meldung/Diagnose[./@Tumor_ID=$Tumor_Id]/Menge_FM/Fernmetastase)">
