@@ -139,7 +139,18 @@
                 <Seitenlokalisation><xsl:value-of select="./Meldung[./Diagnose/@Tumor_ID=$Tumor_Id][1]/Diagnose[./@Tumor_ID=$Tumor_Id]/Seitenlokalisation"/></Seitenlokalisation>                
                 </xsl:if>
                 <!--Initiate all TUMOR child nodes-->
-                <xsl:apply-templates select="./Meldung/Diagnose[./@Tumor_ID=$Tumor_Id]/Menge_Histologie/Histologie | ./Meldung/Diagnose[./@Tumor_ID=$Tumor_Id]/Menge_FM/Fernmetastase | ./Meldung/Diagnose[./@Tumor_ID=$Tumor_Id]/cTNM | ./Meldung/Diagnose[./@Tumor_ID=$Tumor_Id]/pTNM | Meldung[./Tumorzuordnung/@Tumor_ID=$Tumor_Id]/Menge_OP/OP |Meldung[./Tumorzuordnung/@Tumor_ID=$Tumor_Id]/Menge_ST/ST | Meldung[./Tumorzuordnung/@Tumor_ID=$Tumor_Id]/Menge_SYST/SYST |Meldung[./Tumorzuordnung/@Tumor_ID=$Tumor_Id]/Menge_Verlauf/Verlauf"/>
+                <xsl:apply-templates select="
+                    ./Meldung/Diagnose[./@Tumor_ID=$Tumor_Id]/Menge_Histologie/Histologie | 
+                    ./Meldung/Diagnose[./@Tumor_ID=$Tumor_Id]/Menge_FM/Fernmetastase | 
+                    ./Meldung/Diagnose[./@Tumor_ID=$Tumor_Id]/cTNM | 
+                    ./Meldung/Diagnose[./@Tumor_ID=$Tumor_Id]/pTNM | 
+                    ./Meldung/Menge_OP/OP[../../Tumorzuordnung/@Tumor_ID=$Tumor_Id]/TNM | 
+                    ./Meldung/Menge_Verlauf/Verlauf[../../Tumorzuordnung/@Tumor_ID=$Tumor_Id]/TNM | 
+                    ./Meldung[./Tumorzuordnung/@Tumor_ID=$Tumor_Id]/Menge_OP/OP | 
+                    ./Meldung[./Tumorzuordnung/@Tumor_ID=$Tumor_Id]/Menge_ST/ST | 
+                    ./Meldung[./Tumorzuordnung/@Tumor_ID=$Tumor_Id]/Menge_SYST/SYST | 
+                    ./Meldung[./Tumorzuordnung/@Tumor_ID=$Tumor_Id]/Menge_Verlauf/Verlauf
+                    "/>
                 
                 <!--If metastasis doesn't exist: set requried CCP element "nicht erfasst"-->
                 <xsl:if test="not(./Meldung/Diagnose[./@Tumor_ID=$Tumor_Id]/Menge_FM/Fernmetastase)">
