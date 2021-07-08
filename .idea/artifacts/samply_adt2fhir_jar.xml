@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact name="samply.adt2fhir:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/samply_adt2fhir_jar</output-path>
+    <root id="root">
+      <element id="archive" name="samply.adt2fhir.jar">
+        <element id="module-output" name="samply.adt2fhir" />
+      </element>
+    </root>
+  </artifact>
+</component>
