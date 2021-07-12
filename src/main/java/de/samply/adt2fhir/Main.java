@@ -34,21 +34,18 @@ public class Main {
     public static void main(String[] args)
         throws IOException, TransformerException {
 
-      String ADTfile = "";
-      System.out.println("test");
+      String ADT2MDS ="ADT2MDS_FHIR.xsl";
+      String MDS2FHIR ="MDS_FHIR2FHIR.xsl";
+
+      String ADTfile = null;
       if (0 < args.length) {
         String filename = args[0];
         ADTfile = new String(Files.readAllBytes(Paths.get(filename)));
       }
-      String ADT2MDS ="ADT2MDS_FHIR.xsl";
-      //String MDS2FHIR ="MDS_FHIR2FHIR.xsl";
-
-
-      //Scanner input = new Scanner(new File(args[0]));
 
       String MDS = importData(ADTfile, ADT2MDS);
-      System.out.println(MDS);
-      //String FHIR =importData(MDS, MDS2FHIR);
+      //System.out.println(MDS);
+      String FHIR =importData(MDS, MDS2FHIR);
       //System.out.println(FHIR);
     }
 
