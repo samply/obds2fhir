@@ -94,8 +94,8 @@
         <Sample>
             <xsl:attribute name="Sample_ID" ><xsl:value-of select="@Biomaterial_ID"/></xsl:attribute>
             <Entnahmedatum><xsl:value-of select="Entnahmedatum"/></Entnahmedatum>
-            <xsl:if test="Patienten_mit_Biomaterial='ja'"><Patienten_mit_Biomaterial>true</Patienten_mit_Biomaterial></xsl:if>
-            <xsl:if test="Patienten_mit_Biomaterial='nein'"><Patienten_mit_Biomaterial>false</Patienten_mit_Biomaterial></xsl:if>
+            <xsl:if test="Patienten_mit_Biomaterial='ja' or Patienten_mit_Biomaterial='Ja' or Patienten_mit_Biomaterial='true'"><Patienten_mit_Biomaterial>true</Patienten_mit_Biomaterial></xsl:if>
+            <xsl:if test="Patienten_mit_Biomaterial='nein' or Patienten_mit_Biomaterial='Nein' or Patienten_mit_Biomaterial='false'"><Patienten_mit_Biomaterial>false</Patienten_mit_Biomaterial></xsl:if>
             <Fixierungsart><xsl:value-of select="Fixierungsart"/></Fixierungsart>
             <Probentyp><xsl:value-of select="Probentyp"/></Probentyp>
             <Probenart><xsl:value-of select="Probenart"/></Probenart>
@@ -587,11 +587,6 @@
         <Strahlentherapie_Stellung_zu_operativer_Therapie>
             <xsl:apply-templates select="node() | @*"/>
         </Strahlentherapie_Stellung_zu_operativer_Therapie>
-    </xsl:template>
-    <xsl:template match="SYST_Stellung_OP">
-        <Systemische_Therapie_Stellung_zu_operativer_Therapie>
-            <xsl:apply-templates select="node() | @*"/>
-        </Systemische_Therapie_Stellung_zu_operativer_Therapie>
     </xsl:template>
     <xsl:template match="SYST_Stellung_OP">
         <Systemische_Therapie_Stellung_zu_operativer_Therapie>
