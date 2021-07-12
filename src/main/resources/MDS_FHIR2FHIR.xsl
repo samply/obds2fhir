@@ -950,6 +950,7 @@
 
         <xsl:apply-templates select="./Metastasis">
             <xsl:with-param name="Patient_ID" select="$Patient_ID" />
+            <xsl:with-param name="Datum_Verlauf" select="./Datum_Verlauf" />
         </xsl:apply-templates>
 
     </xsl:template>
@@ -1151,6 +1152,7 @@
 
     <xsl:template match="Metastasis">
         <xsl:param name="Patient_ID" />
+        <xsl:param name="Datum_Verlauf"/>
 
         <xsl:variable name="Metastasis_ID" select="mds2fhir:getID(./@Metastasis_ID, '', generate-id())" as="xs:string" />
         <entry>
@@ -1171,7 +1173,7 @@
                     <subject>
                         <reference value="Patient/{$Patient_ID}" />
                     </subject>
-                    <effectiveDateTime value="{mds2fhir:transformDate(../Verlauf/Datum_Verlauf)}" />
+                    <effectiveDateTime value="{mds2fhir:transformDate($Datum_Verlauf)}" />
                     <xsl:if test="./Fernmetastasen_vorhanden">
                     <valueCodeableConcept>
                         <coding>
