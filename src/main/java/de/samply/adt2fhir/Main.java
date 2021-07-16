@@ -1,18 +1,14 @@
 package de.samply.adt2fhir;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
-import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Scanner;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -20,14 +16,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.transform.*;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
+import net.sf.saxon.TransformerFactoryImpl;
 
 public class Main {
 
@@ -58,22 +47,6 @@ public class Main {
 
       InputStream xsltStream = Main.class.getClassLoader().getResourceAsStream(transformation);
 
-
-//      if (xslFileADT2MDS == null) {
-//        return Response.status(Status.INTERNAL_SERVER_ERROR)
-//            .entity("Path not found:" + xslFilenameADT2MDS).build();
-//      }
-//      if (xslFileMDS2Store == null) {
-//        return Response.status(Status.INTERNAL_SERVER_ERROR)
-//            .entity("Path not found:" + xslFilenameMDS2Store).build();
-//      }
-
-      //      if (xsdFile == null) {
-      //        return Response.status(Status.INTERNAL_SERVER_ERROR).entity("Path not found:" + xsdFilename).build();
-      //      }
-
-      //transform stream to source for
-
       String xslTransformation = applyXslt(xsltStream, xmlStream);
 
       return xslTransformation;
@@ -82,12 +55,10 @@ public class Main {
     private static String applyXslt(InputStream xsltStream, InputStream xmlStream) throws TransformerException {
 
       Source xslt = new StreamSource(xsltStream);
-  //      String xsdContent = new String(Files.readAllBytes(Paths.get(xsdFile.toURI())), "UTF-8");
-      //XmlXsdValidator.validate(xmlStreamCopy, xsdContent);
       Writer outputWriter = new StringWriter();
       StreamResult transformed = new StreamResult(outputWriter);
       Source adtSource = new StreamSource(xmlStream);
-      TransformerFactory factory = TransformerFactory.newInstance("net.sf.saxon.TransformerFactoryImpl", null);
+      TransformerFactoryImpl factory = (TransformerFactoryImpl) TransformerFactory.newInstance("net.sf.saxon.TransformerFactoryImpl", null);
       Transformer adtPrime = factory.newTransformer(xslt);
       adtPrime.transform(adtSource, transformed);
       String output = outputWriter.toString();
