@@ -153,9 +153,10 @@
                     "/>
                 
                 <!--If metastasis doesn't exist: set requried CCP element "nicht erfasst"-->
-                <xsl:if test="not(./Meldung/Diagnose[./@Tumor_ID=$Tumor_Id]/Menge_FM/Fernmetastase)">
+                <!--Remove: generates unnecessary artifacts-->
+                <!--<xsl:if test="not(./Meldung/Diagnose[./@Tumor_ID=$Tumor_Id]/Menge_FM/Fernmetastase)">
                     <Metastasis><Fernmetastasen_vorhanden>nicht erfasst</Fernmetastasen_vorhanden></Metastasis>
-                </xsl:if>
+                </xsl:if>-->
             </Tumor>
         </Diagnosis>
     </xsl:template>
