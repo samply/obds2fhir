@@ -144,8 +144,6 @@
                     ./Meldung/Diagnose[./@Tumor_ID=$Tumor_Id]/Menge_FM/Fernmetastase | 
                     ./Meldung/Diagnose[./@Tumor_ID=$Tumor_Id]/cTNM | 
                     ./Meldung/Diagnose[./@Tumor_ID=$Tumor_Id]/pTNM | 
-                    ./Meldung/Menge_OP/OP[../../Tumorzuordnung/@Tumor_ID=$Tumor_Id]/TNM | 
-                    ./Meldung/Menge_Verlauf/Verlauf[../../Tumorzuordnung/@Tumor_ID=$Tumor_Id]/TNM | 
                     ./Meldung[./Tumorzuordnung/@Tumor_ID=$Tumor_Id]/Menge_OP/OP | 
                     ./Meldung[./Tumorzuordnung/@Tumor_ID=$Tumor_Id]/Menge_ST/ST | 
                     ./Meldung[./Tumorzuordnung/@Tumor_ID=$Tumor_Id]/Menge_SYST/SYST | 
