@@ -9,6 +9,8 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -27,15 +29,37 @@ public class Main {
       String MDS2FHIR ="MDS_FHIR2FHIR.xsl";
 
       String ADTfile = null;
-      if (0 < args.length) {
+      /*if (0 < args.length) {
         String filename = args[0];
         ADTfile = new String(Files.readAllBytes(Paths.get(filename)));
-      }
+      }*/
 
-      String MDS = importData(ADTfile, ADT2MDS);
-      //System.out.println(MDS);
-      String FHIR =importData(MDS, MDS2FHIR);
-      //System.out.println(FHIR);
+
+        Scanner scanner = new Scanner(System.in);
+        try {
+            while (true) {
+                System.out.println("Please input an ADT/GEKID XML");
+                long then = System.currentTimeMillis();
+                ADTfile = new String(Files.readAllBytes(Paths.get(scanner.nextLine())));
+                long now = System.currentTimeMillis();
+                System.out.println("Transform to MDS");
+
+                String MDS = importData(ADTfile, ADT2MDS);
+                System.out.println("succesfully transformed to MDS");
+                System.out.println("Transform to FHIR");
+                //System.out.println(MDS);
+                String FHIR =importData(MDS, MDS2FHIR);
+                //System.out.println(FHIR);
+                System.out.println("succesfully transformed to FHIR");
+                System.out.println("FHIR bundle(s) stored in "+System.getProperty("user.dir"));
+            }
+        } catch(IllegalStateException | NoSuchElementException e) {
+            // System.in has been closed
+            System.out.println("System.in was closed; exiting");
+        }
+
+
+
     }
 
 
@@ -64,4 +88,5 @@ public class Main {
       String output = outputWriter.toString();
       return output;
     }
+
 }

@@ -1,9 +1,22 @@
 # adt2fhir
 
-Using the two XSLT files, XML Files conforming to ADT/GEKID can be transformed into FHIR resources conforming to [de.dktk.oncology 1.0.4](https://simplifier.net/packages/de.dktk.oncology/1.0.4).
-First apply ADT2MDS_FHIR to your ADT data, then MDS_FHIR2FHIR to the results of the first transformation.
+Using the two XSLT files (/src/main/resources/ADT2MDS_FHIR.xsl and /src/main/resources/MDS_FHIR2FHIR.xsl), XML Files conforming to ADT/GEKID (/src/main/resources/
+ADT_GEKID_v2.1.*x*-dktk_v1.0.0.xsd ) can be transformed into FHIR resources conforming to [de.dktk.oncology 1.0.4](https://simplifier.net/packages/de.dktk.oncology/1.0.4).
+
+The Main method expects an ADT XML File. The two transformations are then applied and the resulting FHIR Bundles are stored in the Project directory.
+
+You can also build and use a JAR File. Via Maven apply **mvn clean install**. The file *adt2fhir-***versionnumber***-jar-with-dependencies.jar* is then generated in your target folder. Use it via **java -jar adt2fhir-versionnumber-jar-with-dependencies.jar**
+For a manual transformation first apply ADT2MDS_FHIR.xsl to your ADT.xml data, then MDS_FHIR2FHIR.xsl to the results of the first transformation.
+
+**DOCKER**
+
+Build the image via **docker build -t adt2fhir .**
+
+Start the Container via **docker-compose up**
+
 
 **IMPORTANT**
+
 You should modify line 6 in the MDS_FHIT2FHIR file (```<xsl:variable name="Lokal_DKTK_ID_Pat_System">http://fhir.example.org/LokaleTumorPatientenIds</xsl:variable>```, replace http://fhir.example.org/LokaleTumorPatientenIds
 with a local URL. You can just make one up, but note that this URL will be used as Identifer.system in the resulting FHIR Patient resoures (Identifer.value will be the local ID from your ADT file, the value of *Patienten_Stammdaten/@Patient_ID*).
 Also note that NO pseudonymization or anonymization takes place. If you need to e.g. pseudonymize the IDs, you should do so either by preprocessing the ADT or processing the FHIR resources before loading them into your local FHIR store. Note that the Patient id is also used als the technical (resource) id , not just in the identifer.
@@ -18,9 +31,11 @@ One Outpunt file is created for each Patient (´Bundle_{Patient_ID}.xml´) in th
     - _Lokal_DKTK_ID_Pat_System_ needs to conform to https://www.hl7.org/fhir/datatypes.html#uri
 
 ## Running the Transformation
+###Manual:
 You can download the Saxon XSL processor [here](http://saxon.sourceforge.net/#F10HE) (Java Version). Unpack and find the JAR called saxon-he-[version].jar 
 Call the JAR from the command line: ´java -jar path/to/jar/saxon-he-[version].jar -s:sorceFile.xml -xsl:tranformationFile.xsl`. Additional documentation can be found [here](https://www.saxonica.com/documentation/index.html#!using-xsl/commandline).
-	
+###JAR:
+Compile the 
 ## Notes
 
-Assumes: Patient, Sample, Diagnose alwaays have an Id, other Ids are optional.
+Assumes: Patient, Sample, Diagnose always have an Id, other Ids are optional.
