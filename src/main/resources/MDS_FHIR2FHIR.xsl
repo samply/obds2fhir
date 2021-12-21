@@ -1255,7 +1255,7 @@
         <xsl:param name="Patient_ID" />
 
         <xsl:variable name="Histology_ID" select="mds2fhir:getID(./@Histology_ID, mds2fhir:transformDate(./Tumor_Histologiedatum), generate-id())" as="xs:string" />
-        <xsl:variable name="Grading_ID" select="mds2fhir:getID(./@Histology_ID, '', generate-id())" as="xs:string"/>
+        <xsl:variable name="Grading_ID" select="mds2fhir:getID(concat(./@Histology_ID,'grading'), '', generate-id())" as="xs:string"/>
 
         <entry>
             <fullUrl value="http://example.com/Observation/{$Histology_ID}" />
