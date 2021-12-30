@@ -40,7 +40,7 @@ public class Main {
             while (true) {
                 System.out.println("Please input an ADT/GEKID XML");
                 long then = System.currentTimeMillis();
-                ADTfile = new String(Files.readAllBytes(Paths.get(scanner.nextLine())));
+                ADTfile = new String(Files.readAllBytes(Paths.get(scanner.nextLine())), StandardCharsets.UTF_8);
                 long now = System.currentTimeMillis();
                 System.out.println("Transform to MDS");
 
