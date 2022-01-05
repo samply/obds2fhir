@@ -3,7 +3,7 @@
 
     <!-- Settings-->
     <!-- System für lokale Identifier-->
-    <xsl:variable name="Lokal_DKTK_ID_Pat_System">http://fhir.example.org/LokaleTumorPatientenIds</xsl:variable>
+    <xsl:variable name="Lokal_DKTK_ID_Pat_System">http://dktk.dkfz.de/fhir/onco/core/CodeSystem/PseudonymArtCS</xsl:variable>
 
     <!-- Ende Settings -->
 
@@ -35,7 +35,12 @@
                             <profile value="https://fhir.bbmri.de/StructureDefinition/Patient" />
                         </meta>
                         <identifier>
-                            <system value="{$Lokal_DKTK_ID_Pat_System}"/>
+                            <type>
+                                <coding>
+                                    <system value="{$Lokal_DKTK_ID_Pat_System}"/>
+                                    <code value="Lokal"/>
+                                </coding>
+                            </type>
                             <value value="{./DKTK_LOCAL_ID}"/>
                         </identifier>
                         <xsl:if test="./Verlauf/Tod">
