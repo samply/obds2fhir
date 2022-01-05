@@ -1,0 +1,13 @@
+version: "3.7"
+volumes:
+  adt2fhir_data:
+
+services:
+  adt2fhir:
+    image: adt2fhir
+    #build this image locally using the Dockerfile "docker build -t adt2fhir ."
+    ports:
+      - "8084:8080"
+    volumes:
+      - "adt2fhir_data:/usr/local/fhir"
+    restart: always

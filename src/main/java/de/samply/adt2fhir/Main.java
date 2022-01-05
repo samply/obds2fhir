@@ -26,7 +26,7 @@ public class Main {
         throws IOException, TransformerException {
 
       String ADT2MDS ="ADT2MDS_FHIR.xsl";
-      String MDS2FHIR ="MDS_FHIR2FHIR.xsl";
+      String MDS2FHIR = "MDS2FHIR.xsl";
 
       String ADTfile = null;
       /*if (0 < args.length) {
@@ -57,9 +57,6 @@ public class Main {
             // System.in has been closed
             System.out.println("System.in was closed; exiting");
         }
-
-
-
     }
 
 
