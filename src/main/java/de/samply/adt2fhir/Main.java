@@ -1,11 +1,6 @@
 package de.samply.adt2fhir;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
-import java.io.Writer;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -25,37 +20,29 @@ public class Main {
     public static void main(String[] args)
         throws IOException, TransformerException {
 
-      String ADT2MDS ="ADT2MDS_FHIR.xsl";
-      String MDS2FHIR = "MDS2FHIR.xsl";
+        String ADT2singleADT = "toSinglePatients.xsl";
+        String ADT2MDS = "ADT2MDS_FHIR.xsl";
+        String MDS2FHIR = "MDS2FHIR.xsl";
 
-      String ADTfile = null;
-      /*if (0 < args.length) {
-        String filename = args[0];
-        ADTfile = new String(Files.readAllBytes(Paths.get(filename)));
-      }*/
-
-
-        Scanner scanner = new Scanner(System.in);
-        try {
-            while (true) {
-                System.out.println("Please input an ADT/GEKID XML");
-                long then = System.currentTimeMillis();
-                ADTfile = new String(Files.readAllBytes(Paths.get(scanner.nextLine())), StandardCharsets.UTF_8);
-                long now = System.currentTimeMillis();
-                System.out.println("Transform to MDS");
-
-                String MDS = importData(ADTfile, ADT2MDS);
+        String ADTfile = null;
+        ConfigReader configReader = new ConfigReader();
+        configReader.init();
+        File inputFolder = new File(configReader.getFile_path()+"/InputADT");
+        File[] listOfFiles = inputFolder.listFiles();
+        for (File file : listOfFiles) {
+            if (file.isFile() & file.getName().toLowerCase().endsWith(".xml") ) {
+                String combinedADTfile = new String(Files.readAllBytes(Paths.get(String.valueOf(file))), StandardCharsets.UTF_8);
+                importData(combinedADTfile, ADT2singleADT);
+                System.out.println("succesfully splitted ADT to single patients");
+                importData(ADTfile, ADT2MDS);
                 System.out.println("succesfully transformed to MDS");
                 System.out.println("Transform to FHIR");
                 //System.out.println(MDS);
-                String FHIR =importData(MDS, MDS2FHIR);
+                //String FHIR = importData(MDS, MDS2FHIR);
                 //System.out.println(FHIR);
                 System.out.println("succesfully transformed to FHIR");
-                System.out.println("FHIR bundle(s) stored in "+System.getProperty("user.dir"));
+                System.out.println("FHIR bundle(s) stored in " + System.getProperty("user.dir"));
             }
-        } catch(IllegalStateException | NoSuchElementException e) {
-            // System.in has been closed
-            System.out.println("System.in was closed; exiting");
         }
     }
 
