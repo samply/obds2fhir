@@ -12,8 +12,8 @@
 
     <xsl:template match="/ADT_GEKID">
         <xsl:for-each select="Menge_Patient/Patient">
-            <!-- <xsl:result-document method="xml" href="file:C:\Workspace\tmp\singleADT\Patient_{Patienten_Stammdaten/@Patient_ID}.xml"> -->
-            <xsl:result-document method="xml" href=".\ADT_Patients\Patient_{Patienten_Stammdaten/@Patient_ID}.xml">
+            <xsl:result-document method="xml" href="file:/C:/Workspace/adt2fhir/clinical_data/ADT_Patients/Patient_{Patienten_Stammdaten/@Patient_ID}.xml">
+            <!--<xsl:result-document method="xml" href="Patient_{Patienten_Stammdaten/@Patient_ID}.xml">-->
                 <ADT_GEKID Schema_Version="2.2.1">
                     <xsl:copy-of select="/ADT_GEKID/@*" />
                     <Menge_Patient>
