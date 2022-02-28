@@ -38,7 +38,7 @@
                         <configuration>
                             <archive>
                                 <manifest>
-                                    <mainClass>de.samply.adt2fhir.Main</mainClass>
+                                    <mainClass>de.samply.adt2fhir.Adt2fhir</mainClass>
                                 </manifest>
                             </archive>
                             <descriptorRefs>
