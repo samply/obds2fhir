@@ -22,7 +22,7 @@
 
     <xsl:template match="Patient" mode="patient">
         <xsl:variable name="Patient_ID" select="@Patient_ID" />
-        <xsl:result-document href="file:/C:/Workspace/adt2fhir/clinical_data/FHIR_Patients/Bundle_{$Patient_ID}.xml">
+        <xsl:result-document href="file:/adt2fhir/clinical_data/FHIR_Patients/Bundle_{$Patient_ID}.xml">
         <Bundle xmlns="http://hl7.org/fhir">
             <id value="{generate-id()}" />
             <type value="transaction" />
