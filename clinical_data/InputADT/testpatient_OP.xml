@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ADT_GEKID xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.gekid.de/namespace ../../../../data/xsd/ADT_2.0.0/store/ADT_GEKID_v2.1.1-dktk_v0.1.0.xsd"
+ xmlns="http://www.gekid.de/namespace" Schema_Version="2.1.1">
+    <Absender Absender_ID="1" Software_ID="xxx" Installations_ID="xxx">
+        <Absender_Bezeichnung>Universitätsklinikum x</Absender_Bezeichnung>
+        <Absender_Ansprechpartner>Mustermelder</Absender_Ansprechpartner>
+        <Absender_Anschrift>Musterstrasse 11</Absender_Anschrift>
+        <Absender_Telefon>0698723828</Absender_Telefon>
+        <Absender_EMail>mustermail@mustermail.de</Absender_EMail>
+    </Absender>
+    <Menge_Patient>
+        <Patient>
+            <Patienten_Stammdaten Patient_ID="1">
+                <Patienten_Geschlecht>M</Patienten_Geschlecht>
+                <Patienten_Geburtsdatum>01.01.1955</Patienten_Geburtsdatum>
+            </Patienten_Stammdaten>
+            <Menge_Meldung>
+				<Meldung Melder_ID="1" Meldung_ID="1">
+					<Meldedatum>01.01.2021</Meldedatum>
+					<Tumorzuordnung Tumor_ID="1">
+					</Tumorzuordnung>
+					<Menge_OP>
+						<OP OP_ID="1">
+							<OP_Intention>X</OP_Intention>
+							<OP_Datum>01.01.2022</OP_Datum>
+							<OP_OPS_Version>2022</OP_OPS_Version>
+							<Residualstatus>
+								<Lokale_Beurteilung_Residualstatus>RX</Lokale_Beurteilung_Residualstatus>
+							</Residualstatus>
+						</OP>
+					</Menge_OP>
+				</Meldung>
+				<Meldung Melder_ID="1" Meldung_ID="2">
+					<Meldedatum>01.01.2021</Meldedatum>
+					<Tumorzuordnung Tumor_ID="1">
+					</Tumorzuordnung>
+					<Menge_OP>
+						<OP OP_ID="1">
+							<OP_Intention>X</OP_Intention>
+							<OP_Datum>01.01.2022</OP_Datum>
+							<OP_OPS_Version>2022</OP_OPS_Version>
+							<Residualstatus>
+								<Lokale_Beurteilung_Residualstatus>RX</Lokale_Beurteilung_Residualstatus>
+							</Residualstatus>
+						</OP>
+					</Menge_OP>
+				</Meldung>
+            </Menge_Meldung>
+        </Patient>
+        <Patient>
+            <Patienten_Stammdaten Patient_ID="2">
+                <Patienten_Geschlecht>M</Patienten_Geschlecht>
+                <Patienten_Geburtsdatum>01.01.1986</Patienten_Geburtsdatum>
+            </Patienten_Stammdaten>
+            <Menge_Meldung>
+				<Meldung Melder_ID="1" Meldung_ID="3">
+					<Meldedatum>01.01.2021</Meldedatum>
+					<Tumorzuordnung Tumor_ID="1">
+					</Tumorzuordnung>
+					<Menge_OP>
+						<OP OP_ID="1">
+							<OP_Intention>X</OP_Intention>
+							<OP_Datum>01.01.2022</OP_Datum>
+							<OP_OPS_Version>2022</OP_OPS_Version>
+							<Residualstatus>
+								<Lokale_Beurteilung_Residualstatus>RX</Lokale_Beurteilung_Residualstatus>
+							</Residualstatus>
+						</OP>
+					</Menge_OP>
+				</Meldung>
+            </Menge_Meldung>
+        </Patient>
+    </Menge_Patient>
+    <Menge_Melder>
+        <Melder Melder_ID="1">
+        </Melder>
+    </Menge_Melder>
+</ADT_GEKID>
