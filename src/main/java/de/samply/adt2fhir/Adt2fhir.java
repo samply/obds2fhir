@@ -8,6 +8,12 @@ import javax.xml.transform.*;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import net.sf.saxon.TransformerFactoryImpl;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.FileEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 
 
 public class Adt2fhir {
@@ -36,21 +42,24 @@ public class Adt2fhir {
         System.out.println("...done");
 
         System.out.print("Transforming to single Patients... ");
-        processXmlInput(INPUT_ADT, ADT2singleADTtransformer, "ADT", configReader);
+        processXmlFiles(INPUT_ADT, ADT2singleADTtransformer, configReader);
         System.out.println("...done");
+
         System.out.print("Transforming to FHIR... ");
-        processXmlInput(ADT_PATIENTS, ADT2MDStransformer, "singleADT", configReader, MDS2FHIRtransformer, true);
+        processXmlFiles(ADT_PATIENTS, ADT2MDStransformer, configReader, MDS2FHIRtransformer, true);
         System.out.println("...done");
-        //System.out.println("deleting temp file: " + singleADTFile.getAbsolutePath());
-        //singleADTFile.deleteOnExit();
+
+        System.out.print("posting fhir resources to blaze store...");
+        processXmlFiles(FHIR_PATIENTS, null, configReader);
+        System.out.println("...done");
     }
 
 
-    private static void processXmlInput (String inputData, Transformer transformer, String filetype, ConfigReader configReader){
-        processXmlInput (inputData, transformer, filetype, configReader, null, false);
+    private static void processXmlFiles (String inputData, Transformer transformer, ConfigReader configReader){
+        processXmlFiles (inputData, transformer, configReader, null, false);
     }
 
-    private static void processXmlInput (String inputData, Transformer transformer, String filetype, ConfigReader configReader, Transformer transformer2, Boolean transformWrittenResults){
+    private static void processXmlFiles (String inputData, Transformer transformer, ConfigReader configReader, Transformer transformer2, Boolean transformWrittenResults){
         //System.out.print("load "+ filetype + " files...");
         File fileFolder = new File(configReader.getFile_path() + inputData);
         File[] listOfFiles = fileFolder.listFiles();
@@ -60,23 +69,33 @@ public class Adt2fhir {
         else {
             for (File inputFile : listOfFiles) {
                 if (inputFile.isFile() & inputFile.getName().toLowerCase().endsWith(".xml")) {
-                    //System.out.print("processing file " + inputFile.getName() + "...");
-                    String combinedADTfile = null;
-                    try {
-                        combinedADTfile = new String(Files.readAllBytes(Paths.get(String.valueOf(inputFile))), StandardCharsets.UTF_8);
-                    } catch (IOException e) {
-                        System.out.print("ERROR: problem with file " + inputFile);
-                        e.printStackTrace();
-                    }
-                    try {
-                        String xmlResult = applyXslt(combinedADTfile, transformer);
-                        if(transformWrittenResults){
-                            applyXslt(xmlResult, transformer2);
-                            inputFile.deleteOnExit();
+                    if (transformer ==null){
+                        try {
+                            postToFhirStore(inputFile, configReader);
+                        } catch (IOException e) {
+                            System.out.print("ERROR - FHIR import: problem with file " + inputFile);
+                            e.printStackTrace();
                         }
-                    } catch (TransformerException | UnsupportedEncodingException e) {
-                        System.out.print("ERROR: problem with file " + inputFile);
-                        e.printStackTrace();
+                    }
+                    else {
+                        //System.out.print("processing file " + inputFile.getName() + "...");
+                        String combinedADTfile = null;
+                        try {
+                            combinedADTfile = new String(Files.readAllBytes(Paths.get(String.valueOf(inputFile))), StandardCharsets.UTF_8);
+                        } catch (IOException e) {
+                            System.out.print("ERROR - reading: problem with file " + inputFile);
+                            e.printStackTrace();
+                        }
+                        try {
+                            String xmlResult = applyXslt(combinedADTfile, transformer);
+                            if(transformWrittenResults){
+                                applyXslt(xmlResult, transformer2);
+                                inputFile.deleteOnExit();
+                            }
+                        } catch (TransformerException | UnsupportedEncodingException e) {
+                            System.out.print("ERROR - transformation: problem with file " + inputFile);
+                            e.printStackTrace();
+                        }
                     }
                 }
                 else {
@@ -86,6 +105,43 @@ public class Adt2fhir {
         }
     }
 
+    private static void postToFhirStore(File inputFile, ConfigReader configReader) throws IOException {
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+        HttpPost httppost = new HttpPost(configReader.getStore_path());
+
+        RequestConfig requestConfig = RequestConfig.copy(RequestConfig.DEFAULT)
+                //.setProxy(new HttpHost("XXX.XXX.XXX.XXX", 8080))
+                .build();
+        httppost.setConfig(requestConfig);
+
+        httppost.addHeader("content-type", "application/xml+fhir");
+
+        File file = new File(inputFile.toString());
+
+        FileEntity entity = new FileEntity(file);
+
+        httppost.setEntity(entity);
+
+        //System.out.println("executing request " + httppost.getRequestLine() + httppost.getConfig());
+        HttpResponse response = httpclient.execute(httppost);
+        //HttpEntity resEntity = response.getEntity();
+
+        //System.out.println(response.getStatusLine());
+        if (!response.getStatusLine().getReasonPhrase().equals("OK")) {;
+            System.out.println("Error - FHIR import: could not import file"+ inputFile.getName());
+        }
+        else {
+            inputFile.deleteOnExit();
+        }
+
+        httpclient.close();
+        /*
+        final Client client = ClientBuilder.newBuilder().register(MultiPartFeature.class).build();
+        WebTarget target = client.target("http://localhost:8080/resource/mydoc");
+
+        Response response = target.request().post(Entity.xml(inputFile));
+         */
+    }
 
 
     private static String applyXslt(String xmlString, Transformer adtPrime) throws TransformerException, UnsupportedEncodingException {

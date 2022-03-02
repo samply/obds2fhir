@@ -10,6 +10,7 @@ import java.util.Properties;
 public class ConfigReader {
     private static final String PROPERTY_FILE = "common.properties";
     public String file_path;
+    public String store_path;
 
     public void init() throws IOException {
         try {
@@ -21,6 +22,7 @@ public class ConfigReader {
                 throw new FileNotFoundException("property file '" + PROPERTY_FILE + "' not found in resouces");
             }
             this.file_path = prop.getProperty("file_path");
+            this.store_path = prop.getProperty("store_path");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -28,5 +30,8 @@ public class ConfigReader {
 
     public String getFile_path() {
         return file_path;
+    }
+    public String getStore_path() {
+        return store_path;
     }
 }
