@@ -8,6 +8,7 @@ import javax.xml.transform.*;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import net.sf.saxon.TransformerFactoryImpl;
+import net.sf.saxon.s9api.Processor;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;
@@ -23,14 +24,6 @@ public class Adt2fhir {
     private static final String FHIR_PATIENTS="/FHIR_Patients";
 
     public static void main(String[] args) throws TransformerConfigurationException {
-        System.out.print("initialize transformers... ");
-        final TransformerFactoryImpl factory = (TransformerFactoryImpl) TransformerFactory.newInstance("net.sf.saxon.TransformerFactoryImpl", null);
-
-        final Transformer ADT2singleADTtransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("toSinglePatients.xsl")));
-        final Transformer ADT2MDStransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("ADT2MDS_FHIR.xsl")));
-        final Transformer MDS2FHIRtransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("MDS2FHIR.xsl")));
-        System.out.println("...done");
-
         System.out.print("load configReader... ");
         ConfigReader configReader = new ConfigReader();
         try {
@@ -40,6 +33,18 @@ public class Adt2fhir {
             e.printStackTrace();
         }
         System.out.println("...done");
+
+        System.out.print("initialize transformers... ");
+        final TransformerFactoryImpl factory = (TransformerFactoryImpl) TransformerFactory.newInstance("net.sf.saxon.TransformerFactoryImpl", null);
+        net.sf.saxon.Configuration saxonConfig = factory.getConfiguration();
+        ((Processor) saxonConfig.getProcessor()).registerExtensionFunction(new PatientPseudonymizer());
+        final Transformer ADT2singleADTtransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("toSinglePatients.xsl")));
+        ADT2singleADTtransformer.setParameter("filepath", configReader.getFile_path());
+        final Transformer ADT2MDStransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("ADT2MDS_FHIR.xsl")));
+        final Transformer MDS2FHIRtransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("MDS2FHIR.xsl")));
+        MDS2FHIRtransformer.setParameter("filepath", configReader.getFile_path());
+        System.out.println("...done");
+
 
         System.out.print("Transforming to single Patients... ");
         processXmlFiles(INPUT_ADT, ADT2singleADTtransformer, configReader);
@@ -64,7 +69,7 @@ public class Adt2fhir {
         File fileFolder = new File(configReader.getFile_path() + inputData);
         File[] listOfFiles = fileFolder.listFiles();
         if (listOfFiles==null){
-            System.out.println(" ABORTING: empty 'InputADT' folder");
+            System.out.println("ABORTING: empty 'InputADT' folder");
         }
         else {
             for (File inputFile : listOfFiles) {
@@ -99,7 +104,7 @@ public class Adt2fhir {
                     }
                 }
                 else {
-                    System.out.print("\n\t\u001B[31m" + "skipping file:" + "\u001B[0m" + " '" + inputFile.getName() + "' - not a valid ADT/GEKID.xml");
+                    System.out.print("\n\t\u001B[31m" + "skipping file:" + "\u001B[0m" + " '" + inputFile.getName() + "' - not a valid xml file");
                 }
             }
         }
@@ -154,7 +159,6 @@ public class Adt2fhir {
             MemoryOutputURIResolver mem=new MemoryOutputURIResolver();*/
             /*factory.setAttribute("http://saxon.sf.net/feature/outputURIResolver", mem);
             factory.setAttribute("http://saxon.sf.net/feature/allow-external-functions", new Boolean(true));*/
-
             adtPrime.transform(xmlSource, transformed);
             String output = outputWriter.toString();
 

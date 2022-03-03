@@ -2,14 +2,15 @@
 <xsl:stylesheet xmlns="http://www.mds.de/namespace"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xsi="http://www.mds.de/namespace MDS_Suchmodell_v4.xsd"
-    exclude-result-prefixes="#default" 
+    xmlns:hash="java:de.samply.adt2fhir"
+    exclude-result-prefixes="#default"
     version="2.0"
     xpath-default-namespace="http://www.gekid.de/namespace">
-    
+
     <xsl:output encoding="UTF-8" indent="yes" method="xml"/>
     <xsl:output omit-xml-declaration="no" indent="yes"/>
     <xsl:strip-space elements="*"/>
-    
+
 <!--    This xsl file transforms ADT xml files (ADT_GEKID_v2.1.1-dktk_v0.1.2 and ADT_GEKID_v2.1.1) to the DKTK searchmodel structure (MDS_Suchmodell_v4) combine with aditional ADT elements
         MDS + additional Structure (entities) generated from ADT:
             Patient
@@ -34,40 +35,41 @@
             <xsl:apply-templates select="node()| @*"/>
         </Patienten>
     </xsl:template>
-    
-    
+
+
     <!--Generate first Level PATIENT entity (Elements: Geschlecht | Geburtsdatum | Datum_des_letztbekannten_Vitalstatus | Vitalstatus | DKTK_ID | DKTK_LOCAL_ID | DKTK_Einwilligung_erfolgt | Upload_Zeitpunkt_ZS_Antwort | Upload_Zeitpunkt_ZS_Erfolgt )-->
     <xsl:template match="Patient">
         <Patient>
             <xsl:attribute name="Patient_ID">
-                <xsl:value-of select="Patienten_Stammdaten/@Patient_ID"/>
-            </xsl:attribute>
-            <Geschlecht>
-                <xsl:choose><xsl:when test="Patienten_Stammdaten/Patienten_Geschlecht = 'D'">S</xsl:when>
-                <xsl:otherwise><xsl:value-of select="Patienten_Stammdaten/Patienten_Geschlecht"/></xsl:otherwise></xsl:choose>
-            </Geschlecht>
-            <xsl:if test="Patienten_Stammdaten/Patienten_Geburtsdatum"><Geburtsdatum><xsl:value-of select="Patienten_Stammdaten/Patienten_Geburtsdatum"/></Geburtsdatum></xsl:if>
-            <xsl:choose>
-                <xsl:when test="./Patienten_Stammdaten/Vitalstatus_Datum"><Datum_des_letztbekannten_Vitalstatus><xsl:value-of select="./Patienten_Stammdaten/Vitalstatus_Datum"/></Datum_des_letztbekannten_Vitalstatus></xsl:when>
-                <xsl:when test="Menge_Meldung/Meldung/Menge_Verlauf/Verlauf/Untersuchungsdatum_Verlauf | Menge_Meldung/Meldung/Tumorzuordnung/Diagnosedatum"><xsl:copy-of select="xsi:Datum_des_letztbekannten_Vitalstatus(Menge_Meldung)"/></xsl:when>
-            </xsl:choose>
-            <xsl:choose>
-                <xsl:when test="Patienten_Stammdaten/Vitalstatus='verstorben'"><Vitalstatus>verstorben</Vitalstatus></xsl:when>
-                <xsl:when test="Patienten_Stammdaten/Vitalstatus='lebend'"><Vitalstatus >lebend</Vitalstatus></xsl:when>
-                <xsl:when test="Menge_Meldung/Meldung/Menge_Verlauf/Verlauf/Tod"><Vitalstatus>verstorben</Vitalstatus></xsl:when>
-                <xsl:when test="not(Menge_Meldung/Meldung/Menge_Verlauf/Verlauf/Tod)"><Vitalstatus >lebend</Vitalstatus></xsl:when>
-            </xsl:choose>
-            <DKTK_ID>PLACEHOLDER</DKTK_ID>
-            <DKTK_LOCAL_ID><xsl:value-of select="Patienten_Stammdaten/@Patient_ID"/></DKTK_LOCAL_ID>
-            <xsl:choose>
-                <xsl:when test="Patienten_Stammdaten/DKTK_Einwilligung_erfolgt='ja'"><DKTK_Einwilligung_erfolgt>true</DKTK_Einwilligung_erfolgt></xsl:when>
-                <xsl:when test="Patienten_Stammdaten/DKTK_Einwilligung_erfolgt='true'"><DKTK_Einwilligung_erfolgt>true</DKTK_Einwilligung_erfolgt></xsl:when>
-                <xsl:otherwise><DKTK_Einwilligung_erfolgt>false</DKTK_Einwilligung_erfolgt></xsl:otherwise>
-            </xsl:choose>
-            <Upload_Zeitpunkt_ZS_Antwort>PLACEHOLDER</Upload_Zeitpunkt_ZS_Antwort>
-            <Upload_Zeitpunkt_ZS_Erfolg>PLACEHOLDER</Upload_Zeitpunkt_ZS_Erfolg>
-            
-            <!--pass children entities SAMPLE and DIAGNOSIS for further processing-->
+                <!--<xsl:value-of select="Patienten_Stammdaten/@Patient_ID"/>-->
+                <xsl:value-of select="hash:pseudonymize(Patienten_Stammdaten/@Patient_ID)"/>
+        </xsl:attribute>
+        <Geschlecht>
+            <xsl:choose><xsl:when test="Patienten_Stammdaten/Patienten_Geschlecht = 'D'">S</xsl:when>
+            <xsl:otherwise><xsl:value-of select="Patienten_Stammdaten/Patienten_Geschlecht"/></xsl:otherwise></xsl:choose>
+        </Geschlecht>
+        <xsl:if test="Patienten_Stammdaten/Patienten_Geburtsdatum"><Geburtsdatum><xsl:value-of select="Patienten_Stammdaten/Patienten_Geburtsdatum"/></Geburtsdatum></xsl:if>
+        <xsl:choose>
+            <xsl:when test="./Patienten_Stammdaten/Vitalstatus_Datum"><Datum_des_letztbekannten_Vitalstatus><xsl:value-of select="./Patienten_Stammdaten/Vitalstatus_Datum"/></Datum_des_letztbekannten_Vitalstatus></xsl:when>
+            <xsl:when test="Menge_Meldung/Meldung/Menge_Verlauf/Verlauf/Untersuchungsdatum_Verlauf | Menge_Meldung/Meldung/Tumorzuordnung/Diagnosedatum"><xsl:copy-of select="xsi:Datum_des_letztbekannten_Vitalstatus(Menge_Meldung)"/></xsl:when>
+        </xsl:choose>
+        <xsl:choose>
+            <xsl:when test="Patienten_Stammdaten/Vitalstatus='verstorben'"><Vitalstatus>verstorben</Vitalstatus></xsl:when>
+            <xsl:when test="Patienten_Stammdaten/Vitalstatus='lebend'"><Vitalstatus >lebend</Vitalstatus></xsl:when>
+            <xsl:when test="Menge_Meldung/Meldung/Menge_Verlauf/Verlauf/Tod"><Vitalstatus>verstorben</Vitalstatus></xsl:when>
+            <xsl:when test="not(Menge_Meldung/Meldung/Menge_Verlauf/Verlauf/Tod)"><Vitalstatus >lebend</Vitalstatus></xsl:when>
+        </xsl:choose>
+        <DKTK_ID>PLACEHOLDER</DKTK_ID>
+        <DKTK_LOCAL_ID><xsl:value-of select="Patienten_Stammdaten/@Patient_ID"/></DKTK_LOCAL_ID>
+        <xsl:choose>
+            <xsl:when test="Patienten_Stammdaten/DKTK_Einwilligung_erfolgt='ja'"><DKTK_Einwilligung_erfolgt>true</DKTK_Einwilligung_erfolgt></xsl:when>
+            <xsl:when test="Patienten_Stammdaten/DKTK_Einwilligung_erfolgt='true'"><DKTK_Einwilligung_erfolgt>true</DKTK_Einwilligung_erfolgt></xsl:when>
+            <xsl:otherwise><DKTK_Einwilligung_erfolgt>false</DKTK_Einwilligung_erfolgt></xsl:otherwise>
+        </xsl:choose>
+        <Upload_Zeitpunkt_ZS_Antwort>PLACEHOLDER</Upload_Zeitpunkt_ZS_Antwort>
+        <Upload_Zeitpunkt_ZS_Erfolg>PLACEHOLDER</Upload_Zeitpunkt_ZS_Erfolg>
+
+        <!--pass children entities SAMPLE and DIAGNOSIS for further processing-->
             <xsl:if test="./Menge_Meldung/Meldung/Menge_Biomaterial/Biomaterial"><xsl:apply-templates select="./Menge_Meldung/Meldung/Menge_Biomaterial/Biomaterial"></xsl:apply-templates></xsl:if>
             <xsl:choose>
                 <xsl:when test="./Menge_Meldung/Meldung/Diagnose">
@@ -94,8 +96,8 @@
             </xsl:choose>
         </Patient>
     </xsl:template>
-    
-    
+
+
     <!--Generate second Level SAMPLE entity (Elements: Entnahmedatum | Patienten_mit_Biomaterial | Fixierungsart | Probentyp | Probenart )-->
     <xsl:template match="Biomaterial">
         <Sample>
@@ -117,8 +119,8 @@
             <Probenart><xsl:value-of select="Probenart"/></Probenart>
         </Sample>
     </xsl:template>
-    
-    
+
+
     <!--Generate second Level DIAGNOSIS entity (Elements: Alter_bei_Erstdiagnose | Tumor_Diagnosedatum | Diagnose | ICD-Katalog_Version )-->
     <xsl:template match="Menge_Meldung" mode="withIds">
         <xsl:param name="Tumor_Id"></xsl:param>
@@ -131,7 +133,7 @@
                 <xsl:otherwise><xsl:value-of select="$Tumor_Meldung[1]/Tumorzuordnung/Diagnosedatum"/></xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        
+
         <Diagnosis>
             <xsl:attribute name="Diagnosis_ID" select="$Tumor_Id"/>
             <xsl:if test="$Diagnosis_Meldung"><!-- dont create those elements if no Diagnose is delivered -->
@@ -153,7 +155,7 @@
                 <xsl:if test="$Diagnosis_Meldung"><!-- dont create those elements if no Diagnose is delivered -->
                     <Lokalisation><xsl:value-of select="$Diagnosis_Meldung/Primaertumor_Topographie_ICD_O"/></Lokalisation>
                     <ICD-O_Katalog_Topographie_Version><xsl:value-of select="$Diagnosis_Meldung/Primaertumor_Topographie_ICD_O_Version"/></ICD-O_Katalog_Topographie_Version>
-                    <Seitenlokalisation><xsl:value-of select="$Diagnosis_Meldung/Seitenlokalisation"/></Seitenlokalisation>                
+                    <Seitenlokalisation><xsl:value-of select="$Diagnosis_Meldung/Seitenlokalisation"/></Seitenlokalisation>
                 </xsl:if>
                 <!--Initiate all TUMOR child nodes-->
                 <xsl:apply-templates select="$Diagnosis_Meldung"><xsl:with-param name="Tumor_Id" select="$Tumor_Id"/></xsl:apply-templates>
@@ -184,7 +186,7 @@
             </Tumor>
         </Diagnosis>
     </xsl:template>
-    
+
     <xsl:template match="Diagnose">
         <xsl:param name="Tumor_Id"/>
         <xsl:for-each select="cTNM|pTNM">
@@ -233,7 +235,7 @@
                          <xsl:otherwise><xsl:value-of select="./Meldung/Tumorzuordnung[not(@Tumor_ID)]/Diagnosedatum"/></xsl:otherwise>
                      </xsl:choose>
                  </xsl:variable>
-                 
+
                  <Diagnosis>
                      <xsl:element name="Alter_bei_Erstdiagnose">
                          <xsl:variable name="geb" select="number(replace(../Patienten_Stammdaten/Patienten_Geburtsdatum,'\d\d\.\d\d\.(\d\d\d\d)$','$1'))"/>
@@ -246,22 +248,22 @@
                      </xsl:element>
                      <Tumor_Diagnosedatum><xsl:apply-templates select="$diagnoseDatum"/></Tumor_Diagnosedatum>
                      <xsl:apply-templates select="./Meldung/Diagnose[not(@Tumor_ID)]/Primaertumor_ICD_Code | ./Meldung/Diagnose[not(@Tumor_ID)]/Primaertumor_ICD_Version"/>
-                     
+
                      <!--Generate third Level TUMOR entity (Elements:  Lokalisation | ICD-O_Katalog_Topographie_Version |  Seitenlokalisation ) -->
                      <Tumor>
                          <Lokalisation><xsl:value-of select="./Meldung/Diagnose[not(@Tumor_ID)]/Primaertumor_Topographie_ICD_O"/></Lokalisation>
                          <ICD-O_Katalog_Topographie_Version><xsl:value-of select="./Meldung/Diagnose[not(@Tumor_ID)]/Primaertumor_Topographie_ICD_O_Version"/></ICD-O_Katalog_Topographie_Version>
-                         <Seitenlokalisation><xsl:value-of select="./Meldung/Diagnose[not(@Tumor_ID)]/Seitenlokalisation"/></Seitenlokalisation>                
-                         
+                         <Seitenlokalisation><xsl:value-of select="./Meldung/Diagnose[not(@Tumor_ID)]/Seitenlokalisation"/></Seitenlokalisation>
+
                          <!--Initiate all TUMOR child nodes-->
                          <xsl:apply-templates select="./Meldung/Diagnose[not(@Tumor_ID)]/Menge_Histologie/Histologie | ./Meldung/Diagnose[not(@Tumor_ID)]/Menge_FM/Fernmetastase | ./Meldung/Diagnose[not(@Tumor_ID)]/cTNM | ./Meldung/Diagnose[not(@Tumor_ID)]/pTNM | Meldung[not(./Tumorzuordnung/@Tumor_ID)]/Menge_OP/OP |Meldung[not(./Tumorzuordnung/@Tumor_ID)]/Menge_ST/ST | Meldung[not(./Tumorzuordnung/@Tumor_ID)]/Menge_SYST/SYST |Meldung[not(./Tumorzuordnung/@Tumor_ID)]/Menge_Verlauf/Verlauf"/>
-                         
+
                      </Tumor>
                  </Diagnosis>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-    
+
     <!--Generate fourth Level HISTOLOGY entity (Elements:  Morphologie | ICD-O_Katalog_Morphologie_Version |  Grading ) -->
     <xsl:template match="Histologie">
         <xsl:param name="counter"/>
@@ -287,8 +289,8 @@
              </Histology>
         </xsl:if>
     </xsl:template>
-    
-    
+
+
     <!--Generate fourth Level METASTASIS entity (Elements:  Datum_diagnostische_Sicherung | Lokalisation_Fernmetastasen |  Fernmetastasen_vorhanden ) -->
     <xsl:template match="Fernmetastase">
         <xsl:param name="counter"/>
@@ -305,8 +307,8 @@
           </Metastasis>
         </xsl:if>
    </xsl:template>
-    
-    
+
+
     <!--Generate fourth Level TNM entity (Elements:  TNM-m-Symbol | TNM-T |  TNM-N | TNM-M | TNM-Version | Datum_der_TNM-Dokumentation-Datum_Befund | c-p-u-Präfix_T | c-p-u-Präfix_N | c-p-u-Präfix_M | TNM-r-Symbol | TNM-y-Symbol ) -->
     <xsl:template match="pTNM">
         <TNM>
@@ -337,7 +339,7 @@
             <xsl:if test="TNM_Pn"><TNM-Pn><xsl:value-of select="TNM_Pn"/></TNM-Pn></xsl:if>
         </TNM>
     </xsl:template>
-    
+
     <xsl:template match="cTNM">
         <TNM>
             <xsl:attribute name="TNM_ID">
@@ -367,7 +369,7 @@
             <xsl:if test="TNM_Pn"><TNM-Pn><xsl:value-of select="TNM_Pn"/></TNM-Pn></xsl:if>
         </TNM>
     </xsl:template>
-    
+
     <xsl:template match="TNM">
         <TNM>
             <xsl:attribute name="TNM_ID">
@@ -422,15 +424,15 @@
             <xsl:if test="Verlauf_Tumorstatus_Fernmetastasen"><!--Lymphknoten-Rezidiv+ zugehöriges Datum-->
                 <Fernmetastasen><xsl:value-of select="Verlauf_Tumorstatus_Fernmetastasen"/></Fernmetastasen>
             </xsl:if>
-            
+
             <xsl:if test="Gesamtbeurteilung_Tumorstatus"><Ansprechen_im_Verlauf><xsl:value-of select="Gesamtbeurteilung_Tumorstatus"/></Ansprechen_im_Verlauf></xsl:if><!--Ansprechen_im_Verlauf-->
             <!--<xsl:apply-templates select="./Menge_Verlauf/Verlauf/Gesamtbeurteilung_Tumorstatus"></xsl:apply-templates><!-\-Ansprechen_innerhalb_der_letzten_3_Monate TODO-\->
             <xsl:apply-templates select="./Menge_Verlauf/Verlauf/Untersuchungsdatum_Verlauf"></xsl:apply-templates><!-\-Datum_des_letztbekannten_Verlaufs TODO-\->-->
-            
-            <Datum_Verlauf><xsl:apply-templates select="Untersuchungsdatum_Verlauf/node()"/></Datum_Verlauf>
-            
 
-            
+            <Datum_Verlauf><xsl:apply-templates select="Untersuchungsdatum_Verlauf/node()"/></Datum_Verlauf>
+
+
+
             <xsl:choose>
                 <xsl:when test="TNM/@TNM_ID"><xsl:apply-templates select="TNM[
                     not(@TNM_ID=following::TNM[../../../Tumorzuordnung/@Tumor_ID=$Tumor_Id]/@TNM_ID) and 
@@ -458,7 +460,7 @@
             </xsl:for-each>
         </Verlauf>
     </xsl:template>
-    
+
     <xsl:template match="OP">
         <xsl:param name="Tumor_Id"/>
         <xsl:variable name="attribute">
@@ -474,7 +476,7 @@
             <xsl:apply-templates select="Menge_OPS/OP_OPS"/>
             <xsl:apply-templates select="OP_OPS_Version"/>
             <xsl:apply-templates select="Residualstatus"/>
-            
+
             <xsl:choose>
                 <xsl:when test="TNM/@TNM_ID"><xsl:apply-templates select="TNM[
                     not(@TNM_ID=following::TNM[../../../Tumorzuordnung/@Tumor_ID=$Tumor_Id]/@TNM_ID) and 
@@ -496,7 +498,7 @@
             </xsl:choose>
         </OP>
     </xsl:template>
-    
+
     <xsl:template match="ST">
         <ST>
             <xsl:attribute name="ST_ID">
@@ -510,15 +512,15 @@
             </xsl:attribute>
             <xsl:apply-templates select="ST_Intention"></xsl:apply-templates>
             <xsl:apply-templates select="ST_Stellung_OP"></xsl:apply-templates>
-            
+
             <xsl:apply-templates select="Menge_Bestrahlung"/>
             <xsl:apply-templates select="ST_Ende_Grund"/>
             <xsl:apply-templates select="Residualstatus"/>
             <xsl:apply-templates select="Menge_Nebenwirkung"/>
         </ST>
     </xsl:template>
-    
-    
+
+
     <xsl:template match="SYST">
         <SYST>
             <xsl:attribute name="SYST_ID">
@@ -542,14 +544,14 @@
             <xsl:apply-templates select="Menge_Substanz"/>
         </SYST>
     </xsl:template>
-    
+
     <!-- Sub functions -->
-    
+
     <xsl:template match="Menge_Nebenwirkung">
             <xsl:apply-templates select="ST_Nebenwirkung"/>
             <xsl:apply-templates select="SYST_Nebenwirkung"/>
     </xsl:template>
-    
+
     <xsl:template match="ST_Nebenwirkung">
         <ST_Nebenwirkung>
             <xsl:if test="Nebenwirkung_Grad"><Nebenwirkung_Grad><xsl:value-of select="Nebenwirkung_Grad"/></Nebenwirkung_Grad></xsl:if>
@@ -557,7 +559,7 @@
             <xsl:if test="Nebenwirkung_Version"><Nebenwirkung_Version><xsl:value-of select="Nebenwirkung_Version"/></Nebenwirkung_Version></xsl:if>
         </ST_Nebenwirkung>
     </xsl:template>
-    
+
     <xsl:template match="SYST_Nebenwirkung">
         <SYST_Nebenwirkung>
             <xsl:if test="Nebenwirkung_Grad"><Nebenwirkung_Grad><xsl:value-of select="Nebenwirkung_Grad"/></Nebenwirkung_Grad></xsl:if>
@@ -565,32 +567,32 @@
             <xsl:if test="Nebenwirkung_Version"><Nebenwirkung_Version><xsl:value-of select="Nebenwirkung_Version"/></Nebenwirkung_Version></xsl:if>
         </SYST_Nebenwirkung>
     </xsl:template>
-    
+
     <xsl:template match="Menge_Therapieart">
             <xsl:apply-templates select="SYST_Therapieart"/>
     </xsl:template>
-    
+
     <xsl:template match="Tod">
         <Tod>
             <xsl:apply-templates select="Sterbedatum | Tod_tumorbedingt | Menge_Todesursache"></xsl:apply-templates>
         </Tod>
     </xsl:template>
-    
+
     <xsl:template match="Menge_Todesursache">
             <xsl:apply-templates select="Todesursache_ICD | Todesursache_ICD_Version"></xsl:apply-templates>
     </xsl:template>
-    
+
     <xsl:template match="Residualstatus">
         <xsl:if test="Lokale_Beurteilung_Residualstatus | Gesamtbeurteilung_Residualstatus">
            <xsl:if test="Lokale_Beurteilung_Residualstatus"><Lokale_Beurteilung_Resttumor><xsl:value-of select="Lokale_Beurteilung_Residualstatus"/></Lokale_Beurteilung_Resttumor></xsl:if>
            <xsl:if test="Gesamtbeurteilung_Residualstatus"><Gesamtbeurteilung_Resttumor><xsl:value-of select="Gesamtbeurteilung_Residualstatus"/></Gesamtbeurteilung_Resttumor></xsl:if>
         </xsl:if>
     </xsl:template>
-    
+
     <xsl:template match="Menge_Bestrahlung">
             <xsl:apply-templates select="Bestrahlung"></xsl:apply-templates>
     </xsl:template>
-    
+
     <xsl:template match="Bestrahlung">
         <Bestrahlung>
             <xsl:if test="ST_Zielgebiet"><ST_Zielgebiet><xsl:value-of select="ST_Zielgebiet"/></ST_Zielgebiet></xsl:if>
@@ -602,28 +604,28 @@
             <xsl:apply-templates select="ST_Einzeldosis"/>
         </Bestrahlung>
     </xsl:template>
-    
+
     <xsl:template match="ST_Gesamtdosis">
         <ST_Gesamtdosis>
             <xsl:if test="Dosis"><Dosis><xsl:value-of select="Dosis"/></Dosis></xsl:if>
             <xsl:if test="Einheit"><Einheit><xsl:value-of select="Einheit"/></Einheit></xsl:if>
         </ST_Gesamtdosis>
     </xsl:template>
-    
+
     <xsl:template match="ST_Einzeldosis">
         <ST_Einzeldosis>
             <xsl:if test="Dosis"><Dosis><xsl:value-of select="Dosis"/></Dosis></xsl:if>
             <xsl:if test="Einheit"><Einheit><xsl:value-of select="Einheit"/></Einheit></xsl:if>
         </ST_Einzeldosis>
     </xsl:template>
-    
+
     <xsl:template match="Menge_Substanz">
         <xsl:apply-templates select="SYST_Substanz"/>
     </xsl:template>
-    
+
     <!--!!!!!!!!!!STRUCTURE TRANSFORMATION COMPLETED!!!!!!!!!!-->
-    
-    
+
+
     <!--Rename elements according to MDS-->
     <xsl:template match="Patienten_Geburtsdatum">
         <Geburtsdatum>
@@ -780,7 +782,7 @@
             <xsl:apply-templates select="node() | @*"/>
         </SYST_Substanz>
     </xsl:template>
-    
+
     <!-- remove ADT Namespace -->
     <xsl:template match="OP_OPS">
         <OP_OPS>
@@ -827,14 +829,14 @@
             <xsl:apply-templates select="node() | @*"/>
         </Todesursache_ICD_Version>
     </xsl:template>
-    
-    
-    
+
+
+
     <!--Remove unnescessary parents-->
     <xsl:template match="Patienten_Stammdaten  | ADT_GEKID | Menge_Verlauf | Menge_OP | Menge_ST | Menge_SYST | Menge_Biomaterial ">
         <xsl:apply-templates select="*"/>
     </xsl:template>
-    
+
     <xsl:template match="Absender"/>
     <xsl:template match="Menge_Frueherer_Name"/>
     <xsl:template match="Menge_Adresse"/>
@@ -848,8 +850,8 @@
     <xsl:template match="KrankenkassenNr"/>
     <xsl:template match="Menge_Melder"/>
     <xsl:template match="Menge_Fruehere_Tumorerkrankung"/>
-    
-    
+
+
     <!--!!!!!!!!!!FUNCTION DEFINITIONS!!!!!!!!!!-->
     <xsl:function name="xsi:Datum_des_letztbekannten_Vitalstatus">
         <xsl:param name="meldungen"/>
@@ -870,7 +872,7 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:function>
-    
+
     <xsl:function name="xsi:DatumID">
         <xsl:param name="datum"/>
         <xsl:variable name="day" select="string(replace($datum,'(\d\d\.)\d\d\.\d\d\d\d$','$1'))"/>
@@ -885,5 +887,5 @@
         </xsl:choose>
         <xsl:value-of select="number(string(replace($datum,'\d\d\.\d\d\.(\d\d\d\d)$','$1')))*8"/>
     </xsl:function>
-  
+
 </xsl:stylesheet>
