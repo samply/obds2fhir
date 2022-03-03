@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<xsl:stylesheet xmlns="http://hl7.org/fhir" xmlns:mds2fhir="https://github.com/samply/adt2fhir/blob/main/MDS_FHIR2FHIR" xmlns:dktk="http://dktk.dkfz.de" xmlns:saxon="http://saxon.sf.net" xmlns:xalan="http://xml.apache.org/xalan" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" exclude-result-prefixes="xs xsi dktk saxon xalan mds2fhir #default" version="2.0" xpath-default-namespace="http://www.mds.de/namespace">
+<xsl:stylesheet
+        xmlns="http://hl7.org/fhir"
+        xmlns:mds2fhir="https://github.com/samply/adt2fhir/blob/main/MDS_FHIR2FHIR"
+        xmlns:dktk="http://dktk.dkfz.de"
+        xmlns:saxon="http://saxon.sf.net"
+        xmlns:xalan="http://xml.apache.org/xalan"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+        exclude-result-prefixes="xs xsi dktk saxon xalan mds2fhir #default"
+        version="2.0"
+        xpath-default-namespace="http://www.mds.de/namespace">
 
     <!-- Settings-->
     <!-- System für lokale Identifier-->
@@ -10,6 +21,7 @@
     <xsl:output encoding="UTF-8" indent="yes" method="xml" />
     <xsl:output omit-xml-declaration="yes" indent="yes" />
     <xsl:strip-space elements="*" />
+    <xsl:param name="filepath" />
 
     <xsl:template match="/">
 
@@ -22,7 +34,7 @@
 
     <xsl:template match="Patient" mode="patient">
         <xsl:variable name="Patient_ID" select="@Patient_ID" />
-        <xsl:result-document href="file:/adt2fhir/clinical_data/FHIR_Patients/Bundle_{$Patient_ID}.xml">
+        <xsl:result-document href="file:{$filepath}/FHIR_Patients/Bundle_{$Patient_ID}.xml">
         <Bundle xmlns="http://hl7.org/fhir">
             <id value="{generate-id()}" />
             <type value="transaction" />
@@ -43,9 +55,7 @@
                             </type>
                             <value value="{./DKTK_LOCAL_ID}"/>
                         </identifier>
-                        <xsl:if test="./Verlauf/Tod">
-                        <decasedDateTime value="{mds2fhir:transformDate(./Verlauf/Tod/Sterbedatum)}"/>
-                        </xsl:if>
+                        <xsl:if test="./Verlauf/Tod"><decasedDateTime value="{mds2fhir:transformDate(./Verlauf/Tod/Sterbedatum)}"/></xsl:if>
                         <gender>
                             <xsl:choose>
                                 <xsl:when test="./Geschlecht='M'">
@@ -62,7 +72,7 @@
                                 </xsl:otherwise>
                             </xsl:choose>
                         </gender>
-                        <birthDate value="{mds2fhir:transformDate(./Geburtsdatum)}" />
+                        <xsl:if test="./Geburtsdatum"><birthDate value="{mds2fhir:transformDate(./Geburtsdatum)}" /></xsl:if>
                     </Patient>
                 </resource>
                 <request>
@@ -88,7 +98,7 @@
                         <subject>
                             <reference value="Patient/{$Patient_ID}" />
                         </subject>
-                        <effectiveDateTime value="{mds2fhir:transformDate(./Datum_des_letztbekannten_Vitalstatus)}" />
+                        <xsl:if test="./Datum_des_letztbekannten_Vitalstatus"><effectiveDateTime value="{mds2fhir:transformDate(./Datum_des_letztbekannten_Vitalstatus)}" /></xsl:if>
                         <valueCodeableConcept>
                             <coding>
                                 <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VitalstatusCS" />
@@ -204,9 +214,11 @@
                 <subject>
                   <reference value="Patient/{$Patient_ID}"/>
                 </subject>
-                <collection>
-                  <collectedDateTime value="{mds2fhir:transformDate(./Entnahmedatum)}"/>
-                </collection>
+                <xsl:if test="./Entnahmedatum">
+                  <collection>
+                    <collectedDateTime value="{mds2fhir:transformDate(./Entnahmedatum)}"/>
+                  </collection>
+                </xsl:if>
               </Specimen>
             </resource>
             <request>
@@ -236,8 +248,10 @@
                     </xsl:for-each>
                     <code>
                         <coding>
-                            <system value="{mds2fhir:getICDType(./ICD-Katalog_Version)}" />
-                            <version value="{mds2fhir:getVersionYear(./ICD-Katalog_Version)}" />
+                            <xsl:if test="./ICD-Katalog_Version">
+                                <system value="{mds2fhir:getICDType(./ICD-Katalog_Version)}" />
+                                <version value="{mds2fhir:getVersionYear(./ICD-Katalog_Version)}" />
+                            </xsl:if>
                             <code value="{./Diagnose}" />
                         </coding>
                     </code>
@@ -261,7 +275,7 @@
                         <system value="http://unitsofmeasure.org" />
                         <code value="a" />
                     </onsetAge>
-                    <recordedDate value="{mds2fhir:transformDate(./Tumor_Diagnosedatum)}" />
+                    <xsl:if test="./Tumor_Diagnosedatum"><recordedDate value="{mds2fhir:transformDate(./Tumor_Diagnosedatum)}" /></xsl:if>
                     <xsl:for-each select="./Tumor/TNM">
                     <stage>
                         <assessment>
@@ -383,12 +397,8 @@
                     </subject>
                     <xsl:if test="./Systemische_Therapie_Beginn or ./Systemische_Therapie_Ende">
                         <effectivePeriod>
-                            <xsl:if test="./Systemische_Therapie_Beginn">
-                                <start value="{mds2fhir:transformDate(./Systemische_Therapie_Beginn)}" />
-                            </xsl:if>
-                            <xsl:if test="./Systemische_Therapie_Ende">
-                                <end value="{mds2fhir:transformDate(./Systemische_Therapie_Ende)}" />
-                            </xsl:if>
+                            <xsl:if test="./Systemische_Therapie_Beginn"><start value="{mds2fhir:transformDate(./Systemische_Therapie_Beginn)}" /></xsl:if>
+                            <xsl:if test="./Systemische_Therapie_Ende"><end value="{mds2fhir:transformDate(./Systemische_Therapie_Ende)}" /></xsl:if>
                         </effectivePeriod>
                     </xsl:if>
                     <reasonReference>
@@ -640,12 +650,8 @@
                     </subject>
                     <xsl:if test="./ST_Beginn_Datum or ./ST_Ende_Datum">
                         <performedPeriod>
-                            <xsl:if test="./ST_Beginn_Datum">
-                                <start value="{mds2fhir:transformDate(./ST_Beginn_Datum)}" />
-                            </xsl:if>
-                            <xsl:if test="./ST_Ende_Datum">
-                                <end value="{mds2fhir:transformDate(./ST_Ende_Datum)}" />
-                            </xsl:if>
+                            <xsl:if test="./ST_Beginn_Datum"><start value="{mds2fhir:transformDate(./ST_Beginn_Datum)}" /></xsl:if>
+                            <xsl:if test="./ST_Ende_Datum"><end value="{mds2fhir:transformDate(./ST_Ende_Datum)}" /></xsl:if>
                         </performedPeriod>
                     </xsl:if>
                     <reasonReference>
@@ -765,7 +771,7 @@
                     <subject>
                         <reference value="Patient/{$Patient_ID}" />
                     </subject>
-                    <effectiveDateTime value="{mds2fhir:transformDate(./Datum_Verlauf)}" />
+                    <xsl:if test="./Datum_Verlauf"><effectiveDateTime value="{mds2fhir:transformDate(./Datum_Verlauf)}" /></xsl:if>
                     <problem>
                         <reference value="Condition/{$Diagnosis_ID}" />
                     </problem>
@@ -835,7 +841,7 @@
                     <subject>
                         <reference value="Patient/{$Patient_ID}" />
                     </subject>
-                    <effectiveDateTime value="{mds2fhir:transformDate(./Datum_Verlauf)}" />
+                    <xsl:if test="./Datum_Verlauf"><effectiveDateTime value="{mds2fhir:transformDate(./Datum_Verlauf)}" /></xsl:if>
                     <valueCodeableConcept>
                         <coding>
                             <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VerlaufLokalerTumorstatusCS" />
@@ -867,7 +873,7 @@
                     <subject>
                         <reference value="Patient/{$Patient_ID}" />
                     </subject>
-                    <effectiveDateTime value="{mds2fhir:transformDate(./Datum_Verlauf)}" />
+                    <xsl:if test="./Datum_Verlauf"><effectiveDateTime value="{mds2fhir:transformDate(./Datum_Verlauf)}" /></xsl:if>
                     <valueCodeableConcept>
                         <coding>
                             <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VerlaufTumorstatusLymphknotenCS" />
@@ -899,7 +905,7 @@
                     <subject>
                         <reference value="Patient/{$Patient_ID}" />
                     </subject>
-                    <effectiveDateTime value="{mds2fhir:transformDate(./Datum_Verlauf)}" />
+                    <xsl:if test="./Datum_Verlauf"><effectiveDateTime value="{mds2fhir:transformDate(./Datum_Verlauf)}" /></xsl:if>
                     <valueCodeableConcept>
                         <coding>
                             <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VerlaufTumorstatusFernmetastasenCS" />
@@ -931,7 +937,7 @@
                     <subject>
                         <reference value="Patient/{$Patient_ID}" />
                     </subject>
-                    <effectiveDateTime value="{mds2fhir:transformDate(./Datum_Verlauf)}" />
+                    <xsl:if test="./Datum_Verlauf"><effectiveDateTime value="{mds2fhir:transformDate(./Datum_Verlauf)}" /></xsl:if>
                     <valueCodeableConcept>
                         <coding>
                             <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/GesamtbeurteilungTumorstatusCS" />
@@ -1008,7 +1014,7 @@
                     <subject>
                         <reference value="Patient/{$Patient_ID}" />
                     </subject>
-                    <effectiveDateTime value="{mds2fhir:transformDate(./Datum_der_TNM-Dokumentation-Datum_Befund)}" />
+                    <xsl:if test="./Datum_der_TNM-Dokumentation-Datum_Befund"><effectiveDateTime value="{mds2fhir:transformDate(./Datum_der_TNM-Dokumentation-Datum_Befund)}" /></xsl:if>
                     <xsl:if test="./UICC_Stadium">
                         <valueCodeableConcept>
                             <coding>
@@ -1178,7 +1184,7 @@
                     <subject>
                         <reference value="Patient/{$Patient_ID}" />
                     </subject>
-                    <effectiveDateTime value="{mds2fhir:transformDate($Datum_Verlauf)}" />
+                    <xsl:if test="./$Datum_Verlauf"><effectiveDateTime value="{mds2fhir:transformDate($Datum_Verlauf)}" /></xsl:if>
                     <xsl:if test="./Fernmetastasen_vorhanden">
                     <valueCodeableConcept>
                         <coding>
@@ -1233,7 +1239,7 @@
                     <subject>
                         <reference value="Patient/{$Patient_ID}" />
                     </subject>
-                    <effectiveDateTime value="{mds2fhir:transformDate(./FM_Diagnosedatum)}" />
+                    <xsl:if test="./FM_Diagnosedatum"><effectiveDateTime value="{mds2fhir:transformDate(./FM_Diagnosedatum)}" /></xsl:if>
                     <valueCodeableConcept>
                         <coding>
                             <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/JNUCS" />
