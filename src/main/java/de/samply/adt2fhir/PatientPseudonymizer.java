@@ -15,7 +15,12 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
 
     @Override
     public net.sf.saxon.value.SequenceType[] getArgumentTypes() {
-        return new net.sf.saxon.value.SequenceType[] { net.sf.saxon.value.SequenceType.SINGLE_STRING };
+        return new net.sf.saxon.value.SequenceType[] {
+                net.sf.saxon.value.SequenceType.SINGLE_STRING,
+                net.sf.saxon.value.SequenceType.SINGLE_STRING,
+                net.sf.saxon.value.SequenceType.SINGLE_STRING,
+                net.sf.saxon.value.SequenceType.SINGLE_STRING,
+                net.sf.saxon.value.SequenceType.SINGLE_STRING };
     }
 
     @Override
@@ -34,11 +39,13 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
 
             @Override
             public Sequence call(XPathContext ctx, Sequence[] args) throws XPathException {
-                String output = null;
-
-                String input = args[0].iterate().next().getStringValue();
-                output =  DigestUtils.sha256Hex(input);//TODO create patientlist call
-
+                String output = "";
+                String gender = args[0].iterate().next().getStringValue();
+                String prename = args[1].iterate().next().getStringValue();
+                String surname = args[2].iterate().next().getStringValue();
+                String birthname = args[3].iterate().next().getStringValue();
+                String brithdate = args[4].iterate().next().getStringValue();
+                output =  DigestUtils.sha256Hex(gender+prename+surname+birthname+brithdate).substring(0, 32);//TODO create patientlist call
                 return StringValue.makeStringValue(output);
             }
 
