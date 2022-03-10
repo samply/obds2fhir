@@ -38,13 +38,14 @@ public class Adt2fhir {
         final TransformerFactoryImpl factory = (TransformerFactoryImpl) TransformerFactory.newInstance("net.sf.saxon.TransformerFactoryImpl", null);
         net.sf.saxon.Configuration saxonConfig = factory.getConfiguration();
         ((Processor) saxonConfig.getProcessor()).registerExtensionFunction(new PatientPseudonymizer());
+        ((Processor) saxonConfig.getProcessor()).registerExtensionFunction(new UniqueIdGenerator());
+
         final Transformer ADT2singleADTtransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("toSinglePatients.xsl")));
         ADT2singleADTtransformer.setParameter("filepath", configReader.getFile_path());
         final Transformer ADT2MDStransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("ADT2MDS_FHIR.xsl")));
         final Transformer MDS2FHIRtransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("MDS2FHIR.xsl")));
         MDS2FHIRtransformer.setParameter("filepath", configReader.getFile_path());
         System.out.println("...done");
-
 
         System.out.print("Transforming to single Patients... ");
         processXmlFiles(INPUT_ADT, ADT2singleADTtransformer, configReader);

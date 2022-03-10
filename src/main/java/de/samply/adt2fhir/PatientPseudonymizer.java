@@ -45,7 +45,7 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
                 String surname = args[2].iterate().next().getStringValue();
                 String birthname = args[3].iterate().next().getStringValue();
                 String brithdate = args[4].iterate().next().getStringValue();
-                output =  DigestUtils.sha256Hex(gender+prename+surname+birthname+brithdate).substring(0, 32);//TODO create patientlist call
+                output =  DigestUtils.sha256Hex(gender+prename+surname+birthname+brithdate);//TODO create patientlist call
                 return StringValue.makeStringValue(output);
             }
 

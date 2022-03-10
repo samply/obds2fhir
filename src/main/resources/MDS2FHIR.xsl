@@ -8,6 +8,7 @@
         xmlns:xs="http://www.w3.org/2001/XMLSchema"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+        xmlns:hash="java:de.samply.adt2fhir"
         exclude-result-prefixes="xs xsi dktk saxon xalan mds2fhir #default"
         version="2.0"
         xpath-default-namespace="http://www.mds.de/namespace">
@@ -34,6 +35,7 @@
 
     <xsl:template match="Patient" mode="patient">
         <xsl:variable name="Patient_ID" select="@Patient_ID" />
+        <xsl:variable name="Vitalstatus_ID" select="hash:hash($Patient_ID, 'vitalstatus', '')" />
         <xsl:result-document href="file:{$filepath}/FHIR_Patients/Bundle_{$Patient_ID}.xml">
         <Bundle xmlns="http://hl7.org/fhir">
             <id value="{generate-id()}" />
@@ -81,10 +83,10 @@
                 </request>
             </entry>
             <entry>
-                <fullUrl value="http://example.com/Observation/{$Patient_ID}-vitalstatus" />
+                <fullUrl value="http://example.com/Observation/{$Vitalstatus_ID}" />
                 <resource>
                     <Observation>
-                        <id value="{$Patient_ID}-vitalstatus" />
+                        <id value="{$Vitalstatus_ID}" />
                         <meta>
                             <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Vitalstatus" />
                         </meta>
@@ -109,7 +111,7 @@
                 </resource>
                 <request>
                     <method value="PUT" />
-                    <url value="Observation/{$Patient_ID}-vitalstatus" />
+                    <url value="Observation/{$Vitalstatus_ID}" />
                 </request>
             </entry>
 
@@ -341,12 +343,12 @@
                     </xsl:if>
                     <xsl:if test="./Lokale_Beurteilung_Resttumor">
                         <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-LokaleResidualstatus">
-                            <reference value="Observation/{mds2fhir:getID('','', generate-id(./Lokale_Beurteilung_Resttumor))}" />
+                            <reference value="Observation/{mds2fhir:getID(hash:hash($Patient_ID, $Diagnosis_ID , concat(./Lokale_Beurteilung_Resttumor, $System_Therapy_ID)),'', generate-id(./Lokale_Beurteilung_Resttumor))}" />
                         </extension>
                     </xsl:if>
                     <xsl:if test="./Gesamtbeurteilung_Resttumor">
                         <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-GesamtbeurteilungResidualstatus">
-                            <reference value="Observation/{mds2fhir:getID('','', generate-id(./Gesamtbeurteilung_Resttumor))}" />
+                            <reference value="Observation/{mds2fhir:getID(hash:hash($Patient_ID, $Diagnosis_ID , concat(./Gesamtbeurteilung_Resttumor, $System_Therapy_ID)),'', generate-id(./Gesamtbeurteilung_Resttumor))}" />
                         </extension>
                     </xsl:if>
                     <xsl:choose>
@@ -414,7 +416,7 @@
         </entry>
 
         <xsl:for-each select="./SYST_Nebenwirkung">
-            <xsl:variable name="Nebenwirkung_ID" select="mds2fhir:getID('', '', generate-id())" as="xs:string" />
+            <xsl:variable name="Nebenwirkung_ID" select="mds2fhir:getID('./@Nebenwirkung_ID', '', generate-id())" as="xs:string" />
             <entry>
                 <fullUrl value="http://example.com/AdverseEvent/{$Nebenwirkung_ID}" />
                 <resource>
@@ -443,10 +445,10 @@
 
         <xsl:if test="./Gesamtbeurteilung_Resttumor">
         <entry>
-            <fullUrl value="http://example.com/Observation/{mds2fhir:getID('','', generate-id(./Gesamtbeurteilung_Resttumor))}" />
+            <fullUrl value="http://example.com/Observation/{mds2fhir:getID(hash:hash($Patient_ID, $Diagnosis_ID , concat(./Gesamtbeurteilung_Resttumor, $System_Therapy_ID)),'', generate-id(./Gesamtbeurteilung_Resttumor))}" />
             <resource>
                 <Observation xmlns="http://hl7.org/fhir">
-                    <id value="{mds2fhir:getID('','', generate-id(./Gesamtbeurteilung_Resttumor))}" />
+                    <id value="{mds2fhir:getID(hash:hash($Patient_ID, $Diagnosis_ID , concat(./Gesamtbeurteilung_Resttumor, $System_Therapy_ID)),'', generate-id(./Gesamtbeurteilung_Resttumor))}" />
                     <meta>
                         <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-GesamtbeurteilungResidualstatus" />
                     </meta>
@@ -470,16 +472,16 @@
             </resource>
             <request>
                 <method value="PUT" />
-                <url value="Observation/{mds2fhir:getID('','', generate-id(./Gesamtbeurteilung_Resttumor))}" />
+                <url value="Observation/{mds2fhir:getID(hash:hash($Patient_ID, $Diagnosis_ID , concat(./Gesamtbeurteilung_Resttumor, $System_Therapy_ID)),'', generate-id(./Gesamtbeurteilung_Resttumor))}" />
             </request>
         </entry>
     </xsl:if>
     <xsl:if test="./Lokale_Beurteilung_Resttumor">
         <entry>
-            <fullUrl value="http://example.com/Observation/{mds2fhir:getID('','', generate-id(./Lokale_Beurteilung_Resttumor))}" />
+            <fullUrl value="http://example.com/Observation/{mds2fhir:getID(hash:hash($Patient_ID, $Diagnosis_ID , concat(./Lokale_Beurteilung_Resttumor, $System_Therapy_ID)),'', generate-id(./Lokale_Beurteilung_Resttumor))}" />
             <resource>
                 <Observation xmlns="http://hl7.org/fhir">
-                    <id value="{mds2fhir:getID('','', generate-id(./Lokale_Beurteilung_Resttumor))}" />
+                    <id value="{mds2fhir:getID(hash:hash($Patient_ID, $Diagnosis_ID , concat(./Lokale_Beurteilung_Resttumor, $System_Therapy_ID)),'', generate-id(./Lokale_Beurteilung_Resttumor))}" />
                     <meta>
                         <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-LokaleBeurteilungResidualstatus" />
                     </meta>
@@ -503,7 +505,7 @@
             </resource>
             <request>
                 <method value="PUT" />
-                <url value="Observation/{mds2fhir:getID('','', generate-id(./Lokale_Beurteilung_Resttumor))}" />
+                <url value="Observation/{mds2fhir:getID(hash:hash($Patient_ID, $Diagnosis_ID , concat(./Lokale_Beurteilung_Resttumor, $System_Therapy_ID)),'', generate-id(./Lokale_Beurteilung_Resttumor))}" />
             </request>
         </entry>
     </xsl:if>
@@ -594,6 +596,7 @@
             </request>
         </entry>
 
+        <xsl:variable name="Radiation_Therapy_ID" select="mds2fhir:getID(./@ST_ID,'', generate-id())" as="xs:string" />
         <xsl:for-each select="./Bestrahlung">
         <xsl:variable name="Single_Radiation_Therapy_ID" select="mds2fhir:getID('',mds2fhir:transformDate(./ST_Beginn_Datum), generate-id())" as="xs:string" />
         <entry>
@@ -1280,7 +1283,7 @@
         <xsl:param name="Patient_ID" />
 
         <xsl:variable name="Histology_ID" select="mds2fhir:getID(./@Histology_ID, mds2fhir:transformDate(./Tumor_Histologiedatum), generate-id())" as="xs:string" />
-        <xsl:variable name="Grading_ID" select="mds2fhir:getID(concat(./@Histology_ID,'grading'), '', generate-id())" as="xs:string"/>
+        <xsl:variable name="Grading_ID" select="mds2fhir:getID(hash:hash(./@Histology_ID,'grading',''), '', generate-id())" as="xs:string"/>
 
         <entry>
             <fullUrl value="http://example.com/Observation/{$Histology_ID}" />
