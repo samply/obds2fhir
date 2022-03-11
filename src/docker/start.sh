@@ -11,3 +11,5 @@ if [ -d "/clinical_data/FHIR_Patients" ]; then
 	else echo "create folder /clinical_data/FHIR_Patients/"
 	exit
 fi
+
+java -jar /usr/local/bin/adt2fhir.jar

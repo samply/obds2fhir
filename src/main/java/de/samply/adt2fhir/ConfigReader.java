@@ -1,21 +1,27 @@
 package de.samply.adt2fhir;
 
-import javax.xml.transform.TransformerException;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Date;
+import java.io.*;
 import java.util.Properties;
 
 public class ConfigReader {
-    private static final String PROPERTY_FILE = "common.properties";
+    private static final String PROPERTY_FILE = "adt2fhir.properties";
     public String file_path;
     public String store_path;
 
     public void init() throws IOException {
         try {
             Properties prop = new Properties();
-            InputStream inputStream = ConfigReader.class.getClassLoader().getResourceAsStream(PROPERTY_FILE);
+            InputStream inputStream =null;
+            //try loading docker configuration
+            //("adt2fhir.properties");
+            File file = new File("/etc/samply/"+PROPERTY_FILE);
+            if (file.isFile()){
+                inputStream =new FileInputStream(file);
+            }
+            else {
+                //no docker, try project configuration
+                inputStream = ConfigReader.class.getClassLoader().getResourceAsStream(PROPERTY_FILE);//TODO Filereader,1. in etc/samply, 2. asStream
+            }
             if (inputStream != null) {
                 prop.load(inputStream);
             } else {

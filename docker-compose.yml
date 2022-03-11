@@ -5,6 +5,7 @@ volumes:
 services:
   adt2fhir:
     image: adt2fhir
+    #image: docker.verbis.dkfz.de/ccp/adt2fhir:test
     #build this image locally using the Dockerfile "docker build -t adt2fhir ."
     volumes:
       - ./clinical_data:/adt2fhir/clinical_data

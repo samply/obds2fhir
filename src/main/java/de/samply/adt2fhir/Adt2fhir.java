@@ -70,7 +70,7 @@ public class Adt2fhir {
         File fileFolder = new File(configReader.getFile_path() + inputData);
         File[] listOfFiles = fileFolder.listFiles();
         if (listOfFiles==null){
-            System.out.println("ABORTING: empty 'InputADT' folder");
+            System.out.println("ABORTING: empty "+ fileFolder +" folder");
         }
         else {
             for (File inputFile : listOfFiles) {
