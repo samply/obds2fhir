@@ -9,3 +9,5 @@ services:
     #build this image locally using the Dockerfile "docker build -t adt2fhir ."
     volumes:
       - ./clinical_data:/adt2fhir/clinical_data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
