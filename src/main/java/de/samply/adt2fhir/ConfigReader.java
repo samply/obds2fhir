@@ -20,7 +20,7 @@ public class ConfigReader {
             }
             else {
                 //no docker, try project configuration
-                inputStream = ConfigReader.class.getClassLoader().getResourceAsStream(PROPERTY_FILE);//TODO Filereader,1. in etc/samply, 2. asStream
+                inputStream = ConfigReader.class.getClassLoader().getResourceAsStream(PROPERTY_FILE);
             }
             if (inputStream != null) {
                 prop.load(inputStream);

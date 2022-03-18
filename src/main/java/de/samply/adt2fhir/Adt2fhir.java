@@ -67,10 +67,10 @@ public class Adt2fhir {
 
     private static void processXmlFiles (String inputData, Transformer transformer, ConfigReader configReader, Transformer transformer2, Boolean transformWrittenResults){
         //System.out.print("load "+ filetype + " files...");
-        File fileFolder = new File(configReader.getFile_path() + inputData);
-        File[] listOfFiles = fileFolder.listFiles();
+        File fileDir = new File(configReader.getFile_path() + inputData);
+        File[] listOfFiles = fileDir.listFiles();
         if (listOfFiles==null){
-            System.out.println("ABORTING: empty "+ fileFolder +" folder");
+            System.out.println("ABORTING: empty "+ fileDir +" dir");
         }
         else {
             for (File inputFile : listOfFiles) {
@@ -114,7 +114,6 @@ public class Adt2fhir {
     private static void postToFhirStore(File inputFile, ConfigReader configReader) throws IOException {
         CloseableHttpClient httpclient = HttpClients.createDefault();
         HttpPost httppost = new HttpPost(configReader.getStore_path());
-
         RequestConfig requestConfig = RequestConfig.copy(RequestConfig.DEFAULT)
                 //.setProxy(new HttpHost("XXX.XXX.XXX.XXX", 8080))
                 .build();
