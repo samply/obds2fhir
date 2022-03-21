@@ -416,7 +416,7 @@
         </entry>
 
         <xsl:for-each select="./SYST_Nebenwirkung">
-            <xsl:variable name="Nebenwirkung_ID" select="mds2fhir:getID('./@Nebenwirkung_ID', '', generate-id())" as="xs:string" />
+            <xsl:variable name="Nebenwirkung_ID" select="mds2fhir:getID(./@Nebenwirkung_ID, '', generate-id())" as="xs:string" />
             <entry>
                 <fullUrl value="http://example.com/AdverseEvent/{$Nebenwirkung_ID}" />
                 <resource>

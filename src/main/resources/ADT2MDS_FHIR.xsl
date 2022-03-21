@@ -624,12 +624,12 @@
         <xsl:param name="Patient_Id"/>
         <xsl:param name="Tumor_Id"/>
         <xsl:param name="Therapy_Id"/>
-        <xsl:apply-templates select="ST_Nebenwirkung">
+        <xsl:apply-templates select="ST_Nebenwirkung[not(concat(Nebenwirkung_Grad,Nebenwirkung_Art,Nebenwirkung_Version)=following-sibling::*/concat(Nebenwirkung_Grad,Nebenwirkung_Art,Nebenwirkung_Version))]">
                 <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
             <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
             <xsl:with-param name="Therapy_Id" select="$Therapy_Id"/>
             </xsl:apply-templates>
-            <xsl:apply-templates select="SYST_Nebenwirkung">
+        <xsl:apply-templates select="SYST_Nebenwirkung[not(concat(Nebenwirkung_Grad,Nebenwirkung_Art,Nebenwirkung_Version)=following-sibling::*/concat(Nebenwirkung_Grad,Nebenwirkung_Art,Nebenwirkung_Version))]">
                 <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                 <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
                 <xsl:with-param name="Therapy_Id" select="$Therapy_Id"/>
