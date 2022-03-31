@@ -1034,19 +1034,19 @@
                             </coding>
                         </valueCodeableConcept>
                     </xsl:if>
-                    <xsl:if test="./c-p-u-Präfix_T and ./TNM-T">
+                    <xsl:if test="./TNM-T">
                         <component>
                             <code>
                                 <coding>
                                     <system value="http://loinc.org" />
                                     <code>
                                         <xsl:choose>
-                                            <xsl:when test="./c-p-u-Präfix_T=('c', 'u')">
-                                                <xsl:attribute name="value">21905-5</xsl:attribute>
-                                            </xsl:when>
                                             <xsl:when test="./c-p-u-Präfix_T='p'">
                                                 <xsl:attribute name="value">21899-0</xsl:attribute>
                                             </xsl:when>
+                                            <xsl:otherwise>
+                                                <xsl:attribute name="value">21905-5</xsl:attribute>
+                                            </xsl:otherwise>
                                         </xsl:choose>
                                     </code>
                                 </coding>
@@ -1059,19 +1059,19 @@
                             </valueCodeableConcept>
                         </component>
                     </xsl:if>
-                    <xsl:if test="./c-p-u-Präfix_N and ./TNM-N">
+                    <xsl:if test="./TNM-N">
                         <component>
                             <code>
                                 <coding>
                                     <system value="http://loinc.org" />
                                     <code>
                                         <xsl:choose>
-                                            <xsl:when test="./c-p-u-Präfix_N=('c', 'u')">
-                                                <xsl:attribute name="value">201906-3</xsl:attribute>
-                                            </xsl:when>
                                             <xsl:when test="./c-p-u-Präfix_N='p'">
                                                 <xsl:attribute name="value">21900-6</xsl:attribute>
                                             </xsl:when>
+                                            <xsl:otherwise>
+                                                <xsl:attribute name="value">201906-3</xsl:attribute>
+                                            </xsl:otherwise>
                                     </xsl:choose>
                                     </code>
                                 </coding>
@@ -1084,19 +1084,19 @@
                             </valueCodeableConcept>
                         </component>
                     </xsl:if>
-                    <xsl:if test="./c-p-u-Präfix_M and ./TNM-M">
+                    <xsl:if test="./TNM-M">
                         <component>
                             <code>
                                 <coding>
                                     <system value="http://loinc.org" />
                                     <code>
                                         <xsl:choose>
-                                            <xsl:when test="./c-p-u-Präfix_M=('c', 'u')">
-                                                <xsl:attribute name="value">21907-1</xsl:attribute>
-                                            </xsl:when>
                                             <xsl:when test="./c-p-u-Präfix_M='p'">
                                                 <xsl:attribute name="value">21901-4</xsl:attribute>
                                             </xsl:when>
+                                            <xsl:otherwise>
+                                                <xsl:attribute name="value">21907-1</xsl:attribute>
+                                            </xsl:otherwise>
                                     </xsl:choose>
                                     </code>
                                 </coding>
