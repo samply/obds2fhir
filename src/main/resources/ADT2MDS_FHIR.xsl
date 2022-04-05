@@ -163,9 +163,9 @@
             <Tumor>
                 <xsl:attribute name="Tumor_ID" select="hash:hash($Patient_Id, $Tumor_Id, '')"/>
                 <xsl:if test="$Diagnosis_Meldung"><!-- dont create those elements if no Diagnose is delivered -->
-                    <Lokalisation><xsl:value-of select="$Diagnosis_Meldung/Primaertumor_Topographie_ICD_O"/></Lokalisation>
-                    <ICD-O_Katalog_Topographie_Version><xsl:value-of select="$Diagnosis_Meldung/Primaertumor_Topographie_ICD_O_Version"/></ICD-O_Katalog_Topographie_Version>
-                    <Seitenlokalisation><xsl:value-of select="$Diagnosis_Meldung/Seitenlokalisation"/></Seitenlokalisation>
+                    <xsl:if test="$Diagnosis_Meldung/Primaertumor_Topographie_ICD_O"><Lokalisation><xsl:value-of select="$Diagnosis_Meldung/Primaertumor_Topographie_ICD_O"/></Lokalisation></xsl:if>
+                    <xsl:if test="$Diagnosis_Meldung/Primaertumor_Topographie_ICD_O_Version"><ICD-O_Katalog_Topographie_Version><xsl:value-of select="$Diagnosis_Meldung/Primaertumor_Topographie_ICD_O_Version"/></ICD-O_Katalog_Topographie_Version></xsl:if>
+                    <xsl:if test="$Diagnosis_Meldung/Seitenlokalisation"><Seitenlokalisation><xsl:value-of select="$Diagnosis_Meldung/Seitenlokalisation"/></Seitenlokalisation></xsl:if>
                 </xsl:if>
                 <!--Initiate all TUMOR child nodes-->
                 <xsl:apply-templates select="$Diagnosis_Meldung">
@@ -276,7 +276,7 @@
         </xsl:for-each>
         <xsl:for-each select="Menge_FM/Fernmetastase">
             <xsl:apply-templates select=".[
-                not(concat(FM_Diagnosedatum,FM_Lokalisation)=following::*/Fernmetastase[../../../../../Patienten_Stammdaten/@Patient_ID=$Patient_Id and ../../@Tumor_ID=$Tumor_Id]/concat(FM_Diagnosedatum,FM_Lokalisation))]">
+                not(concat(FM_Diagnosedatum,FM_Lokalisation)=following::*/Fernmetastase/concat(FM_Diagnosedatum,FM_Lokalisation))]">
                 <xsl:with-param name="counter"><xsl:value-of select="count(preceding-sibling::Fernmetastase[concat(FM_Diagnosedatum,FM_Lokalisation)=current()/concat(FM_Diagnosedatum,FM_Lokalisation)])" /></xsl:with-param>
                 <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                 <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
@@ -499,7 +499,7 @@
             </xsl:choose>
             <xsl:for-each select="Menge_FM/Fernmetastase">
                 <xsl:apply-templates select=".[
-                    not(concat(FM_Diagnosedatum,FM_Lokalisation)=following::Fernmetastase[../../../../../../Patienten_Stammdaten/@Patient_ID=$Patient_Id and ../../../../Tumorzuordnung/@Tumor_ID=$Tumor_Id]/concat(FM_Diagnosedatum,FM_Lokalisation))]">
+                    not(concat(FM_Diagnosedatum,FM_Lokalisation)=following::*/Fernmetastase/concat(FM_Diagnosedatum,FM_Lokalisation))]">
                     <xsl:with-param name="counter"><xsl:value-of select="count(preceding-sibling::Fernmetastase[concat(FM_Diagnosedatum,FM_Lokalisation)=current()/concat(FM_Diagnosedatum,FM_Lokalisation)])" /></xsl:with-param>
                     <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                     <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
