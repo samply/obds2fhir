@@ -15,7 +15,8 @@
 
     <!-- Settings-->
     <!-- System für lokale Identifier-->
-    <xsl:variable name="Lokal_DKTK_ID_Pat_System">http://dktk.dkfz.de/fhir/onco/core/CodeSystem/PseudonymArtCS</xsl:variable>
+    <xsl:param name="identifier_system" />
+    <xsl:variable name="Lokal_DKTK_ID_Pat_System"><xsl:value-of select="$identifier_system"/></xsl:variable>
 
     <!-- Ende Settings -->
 

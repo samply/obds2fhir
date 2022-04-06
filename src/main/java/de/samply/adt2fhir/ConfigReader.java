@@ -7,6 +7,7 @@ public class ConfigReader {
     private static final String PROPERTY_FILE = "adt2fhir.properties";
     public String file_path;
     public String store_path;
+    public String identifier_system;
 
     public void init() throws IOException {
         try {
@@ -29,6 +30,7 @@ public class ConfigReader {
             }
             this.file_path = prop.getProperty("file_path");
             this.store_path = prop.getProperty("store_path");
+            this.identifier_system = prop.getProperty("identifier_system");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -39,5 +41,8 @@ public class ConfigReader {
     }
     public String getStore_path() {
         return store_path;
+    }
+    public String getIdentifier_system() {
+        return identifier_system;
     }
 }

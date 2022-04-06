@@ -55,6 +55,7 @@ public class Adt2fhir {
         final Transformer ADT2MDStransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("ADT2MDS_FHIR.xsl")));
         final Transformer MDS2FHIRtransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("MDS2FHIR.xsl")));
         MDS2FHIRtransformer.setParameter("filepath", configReader.getFile_path());
+        MDS2FHIRtransformer.setParameter("identifier_system", configReader.getIdentifier_system());
         System.out.println(ANSI_GREEN+"...done"+ANSI_RESET);
 
         System.out.println("Transforming to single Patients... \n");
