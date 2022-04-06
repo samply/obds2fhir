@@ -41,7 +41,7 @@ public class UniqueIdGenerator extends ExtensionFunctionDefinition {
                 String patient = args[0].iterate().next().getStringValue();
                 String diagnosis = args[1].iterate().next().getStringValue();
                 String id = args[2].iterate().next().getStringValue();
-                output =  DigestUtils.sha256Hex(patient+diagnosis+id).substring(32);//TODO create patientlist call
+                output =  DigestUtils.sha256Hex(patient+diagnosis+id).substring(32);
                 return StringValue.makeStringValue(output);
             }
 
