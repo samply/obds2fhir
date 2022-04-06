@@ -1,15 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<xsl:stylesheet xmlns="http://hl7.org/fhir" xmlns:mds2fhir="https://github.com/samply/adt2fhir/blob/main/MDS_FHIR2FHIR" xmlns:dktk="http://dktk.dkfz.de" xmlns:saxon="http://saxon.sf.net" xmlns:xalan="http://xml.apache.org/xalan" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" exclude-result-prefixes="xs xsi dktk saxon xalan mds2fhir #default" version="2.0" xpath-default-namespace="http://www.mds.de/namespace">
+<xsl:stylesheet
+        xmlns="http://hl7.org/fhir"
+        xmlns:mds2fhir="https://github.com/samply/adt2fhir/blob/main/MDS_FHIR2FHIR"
+        xmlns:dktk="http://dktk.dkfz.de"
+        xmlns:saxon="http://saxon.sf.net"
+        xmlns:xalan="http://xml.apache.org/xalan"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+        xmlns:hash="java:de.samply.adt2fhir"
+        exclude-result-prefixes="xs xsi dktk saxon xalan mds2fhir #default"
+        version="2.0"
+        xpath-default-namespace="http://www.mds.de/namespace">
 
     <!-- Settings-->
     <!-- System für lokale Identifier-->
-    <xsl:variable name="Lokal_DKTK_ID_Pat_System">http://dktk.dkfz.de/fhir/onco/core/CodeSystem/PseudonymArtCS</xsl:variable>
+    <xsl:param name="identifier_system" />
+    <xsl:variable name="Lokal_DKTK_ID_Pat_System"><xsl:value-of select="$identifier_system"/></xsl:variable>
 
     <!-- Ende Settings -->
 
     <xsl:output encoding="UTF-8" indent="yes" method="xml" />
     <xsl:output omit-xml-declaration="yes" indent="yes" />
     <xsl:strip-space elements="*" />
+    <xsl:param name="filepath" />
 
     <xsl:template match="/">
 
@@ -22,7 +36,8 @@
 
     <xsl:template match="Patient" mode="patient">
         <xsl:variable name="Patient_ID" select="@Patient_ID" />
-        <xsl:result-document href="./Bundle_{$Patient_ID}.xml">
+        <xsl:variable name="Vitalstatus_ID" select="hash:hash($Patient_ID, 'vitalstatus', '')" />
+        <xsl:result-document href="file:{$filepath}/FHIR_Patients/Bundle_{$Patient_ID}.xml">
         <Bundle xmlns="http://hl7.org/fhir">
             <id value="{generate-id()}" />
             <type value="transaction" />
@@ -43,15 +58,13 @@
                             </type>
                             <value value="{./DKTK_LOCAL_ID}"/>
                         </identifier>
-                        <xsl:if test="./Verlauf/Tod">
-                        <decasedDateTime value="{mds2fhir:transformDate(./Verlauf/Tod/Sterbedatum)}"/>
-                        </xsl:if>
+                        <xsl:if test="./Verlauf/Tod"><decasedDateTime value="{mds2fhir:transformDate(./Verlauf/Tod/Sterbedatum)}"/></xsl:if>
                         <gender>
                             <xsl:choose>
                                 <xsl:when test="./Geschlecht='M'">
                                     <xsl:attribute name="value">male</xsl:attribute>
                                 </xsl:when>
-                                <xsl:when test="./Geschlecht='F'">
+                                <xsl:when test="./Geschlecht='F' or ./Geschlecht='W'">
                                     <xsl:attribute name="value">female</xsl:attribute>
                                 </xsl:when>
                                 <xsl:when test="./Geschlecht='S'">
@@ -62,7 +75,7 @@
                                 </xsl:otherwise>
                             </xsl:choose>
                         </gender>
-                        <birthDate value="{mds2fhir:transformDate(./Geburtsdatum)}" />
+                        <xsl:if test="./Geburtsdatum"><birthDate value="{mds2fhir:transformDate(./Geburtsdatum)}" /></xsl:if>
                     </Patient>
                 </resource>
                 <request>
@@ -71,10 +84,10 @@
                 </request>
             </entry>
             <entry>
-                <fullUrl value="http://example.com/Observation/{$Patient_ID}-vitalstatus" />
+                <fullUrl value="http://example.com/Observation/{$Vitalstatus_ID}" />
                 <resource>
                     <Observation>
-                        <id value="{$Patient_ID}-vitalstatus" />
+                        <id value="{$Vitalstatus_ID}" />
                         <meta>
                             <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Vitalstatus" />
                         </meta>
@@ -88,7 +101,7 @@
                         <subject>
                             <reference value="Patient/{$Patient_ID}" />
                         </subject>
-                        <effectiveDateTime value="{mds2fhir:transformDate(./Datum_des_letztbekannten_Vitalstatus)}" />
+                        <xsl:if test="./Datum_des_letztbekannten_Vitalstatus"><effectiveDateTime value="{mds2fhir:transformDate(./Datum_des_letztbekannten_Vitalstatus)}" /></xsl:if>
                         <valueCodeableConcept>
                             <coding>
                                 <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VitalstatusCS" />
@@ -99,7 +112,7 @@
                 </resource>
                 <request>
                     <method value="PUT" />
-                    <url value="Observation/{$Patient_ID}-vitalstatus" />
+                    <url value="Observation/{$Vitalstatus_ID}" />
                 </request>
             </entry>
 
@@ -114,7 +127,8 @@
             </xsl:apply-templates>
 
         </Bundle>
-    </xsl:result-document>
+        </xsl:result-document>
+    
     </xsl:template>
 
     <xsl:template match="Sample" mode="sample">
@@ -204,9 +218,11 @@
                 <subject>
                   <reference value="Patient/{$Patient_ID}"/>
                 </subject>
-                <collection>
-                  <collectedDateTime value="{mds2fhir:transformDate(./Entnahmedatum)}"/>
-                </collection>
+                <xsl:if test="./Entnahmedatum">
+                  <collection>
+                    <collectedDateTime value="{mds2fhir:transformDate(./Entnahmedatum)}"/>
+                  </collection>
+                </xsl:if>
               </Specimen>
             </resource>
             <request>
@@ -230,14 +246,16 @@
                     <xsl:for-each select="./Tumor/Metastasis">
                         <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-Fernmetastasen">
                             <valueReference>
-                                <reference value="Observation/{mds2fhir:getID(./@Metastasis_ID, '', generate-id())}" />
+                                <reference value="Observation/{mds2fhir:getID(./@Metastasis_ID, mds2fhir:transformDate(./Datum_diagnostische_Sicherung), generate-id())}" />
                             </valueReference>
                         </extension>
                     </xsl:for-each>
                     <code>
                         <coding>
-                            <system value="{mds2fhir:getICDType(./ICD-Katalog_Version)}" />
-                            <version value="{mds2fhir:getVersionYear(./ICD-Katalog_Version)}" />
+                            <xsl:if test="./ICD-Katalog_Version">
+                                <system value="{mds2fhir:getICDType(./ICD-Katalog_Version)}" />
+                                <version value="{mds2fhir:getVersionYear(./ICD-Katalog_Version)}" />
+                            </xsl:if>
                             <code value="{./Diagnose}" />
                         </coding>
                     </code>
@@ -261,7 +279,7 @@
                         <system value="http://unitsofmeasure.org" />
                         <code value="a" />
                     </onsetAge>
-                    <recordedDate value="{mds2fhir:transformDate(./Tumor_Diagnosedatum)}" />
+                    <xsl:if test="./Tumor_Diagnosedatum"><recordedDate value="{mds2fhir:transformDate(./Tumor_Diagnosedatum)}" /></xsl:if>
                     <xsl:for-each select="./Tumor/TNM">
                     <stage>
                         <assessment>
@@ -326,12 +344,12 @@
                     </xsl:if>
                     <xsl:if test="./Lokale_Beurteilung_Resttumor">
                         <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-LokaleResidualstatus">
-                            <reference value="Observation/{mds2fhir:getID('','', generate-id(./Lokale_Beurteilung_Resttumor))}" />
+                            <reference value="Observation/{mds2fhir:getID(hash:hash($Patient_ID, $Diagnosis_ID , concat(./Lokale_Beurteilung_Resttumor, $System_Therapy_ID)),'', generate-id(./Lokale_Beurteilung_Resttumor))}" />
                         </extension>
                     </xsl:if>
                     <xsl:if test="./Gesamtbeurteilung_Resttumor">
                         <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-GesamtbeurteilungResidualstatus">
-                            <reference value="Observation/{mds2fhir:getID('','', generate-id(./Gesamtbeurteilung_Resttumor))}" />
+                            <reference value="Observation/{mds2fhir:getID(hash:hash($Patient_ID, $Diagnosis_ID , concat(./Gesamtbeurteilung_Resttumor, $System_Therapy_ID)),'', generate-id(./Gesamtbeurteilung_Resttumor))}" />
                         </extension>
                     </xsl:if>
                     <xsl:choose>
@@ -383,12 +401,8 @@
                     </subject>
                     <xsl:if test="./Systemische_Therapie_Beginn or ./Systemische_Therapie_Ende">
                         <effectivePeriod>
-                            <xsl:if test="./Systemische_Therapie_Beginn">
-                                <start value="{mds2fhir:transformDate(./Systemische_Therapie_Beginn)}" />
-                            </xsl:if>
-                            <xsl:if test="./Systemische_Therapie_Ende">
-                                <end value="{mds2fhir:transformDate(./Systemische_Therapie_Ende)}" />
-                            </xsl:if>
+                            <xsl:if test="./Systemische_Therapie_Beginn"><start value="{mds2fhir:transformDate(./Systemische_Therapie_Beginn)}" /></xsl:if>
+                            <xsl:if test="./Systemische_Therapie_Ende"><end value="{mds2fhir:transformDate(./Systemische_Therapie_Ende)}" /></xsl:if>
                         </effectivePeriod>
                     </xsl:if>
                     <reasonReference>
@@ -403,7 +417,7 @@
         </entry>
 
         <xsl:for-each select="./SYST_Nebenwirkung">
-            <xsl:variable name="Nebenwirkung_ID" select="mds2fhir:getID('', '', generate-id())" as="xs:string" />
+            <xsl:variable name="Nebenwirkung_ID" select="mds2fhir:getID(./@Nebenwirkung_ID, '', generate-id())" as="xs:string" />
             <entry>
                 <fullUrl value="http://example.com/AdverseEvent/{$Nebenwirkung_ID}" />
                 <resource>
@@ -432,10 +446,10 @@
 
         <xsl:if test="./Gesamtbeurteilung_Resttumor">
         <entry>
-            <fullUrl value="http://example.com/Observation/{mds2fhir:getID('','', generate-id(./Gesamtbeurteilung_Resttumor))}" />
+            <fullUrl value="http://example.com/Observation/{mds2fhir:getID(hash:hash($Patient_ID, $Diagnosis_ID , concat(./Gesamtbeurteilung_Resttumor, $System_Therapy_ID)),'', generate-id(./Gesamtbeurteilung_Resttumor))}" />
             <resource>
                 <Observation xmlns="http://hl7.org/fhir">
-                    <id value="{mds2fhir:getID('','', generate-id(./Gesamtbeurteilung_Resttumor))}" />
+                    <id value="{mds2fhir:getID(hash:hash($Patient_ID, $Diagnosis_ID , concat(./Gesamtbeurteilung_Resttumor, $System_Therapy_ID)),'', generate-id(./Gesamtbeurteilung_Resttumor))}" />
                     <meta>
                         <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-GesamtbeurteilungResidualstatus" />
                     </meta>
@@ -459,16 +473,16 @@
             </resource>
             <request>
                 <method value="PUT" />
-                <url value="Observation/{mds2fhir:getID('','', generate-id(./Gesamtbeurteilung_Resttumor))}" />
+                <url value="Observation/{mds2fhir:getID(hash:hash($Patient_ID, $Diagnosis_ID , concat(./Gesamtbeurteilung_Resttumor, $System_Therapy_ID)),'', generate-id(./Gesamtbeurteilung_Resttumor))}" />
             </request>
         </entry>
     </xsl:if>
     <xsl:if test="./Lokale_Beurteilung_Resttumor">
         <entry>
-            <fullUrl value="http://example.com/Observation/{mds2fhir:getID('','', generate-id(./Lokale_Beurteilung_Resttumor))}" />
+            <fullUrl value="http://example.com/Observation/{mds2fhir:getID(hash:hash($Patient_ID, $Diagnosis_ID , concat(./Lokale_Beurteilung_Resttumor, $System_Therapy_ID)),'', generate-id(./Lokale_Beurteilung_Resttumor))}" />
             <resource>
                 <Observation xmlns="http://hl7.org/fhir">
-                    <id value="{mds2fhir:getID('','', generate-id(./Lokale_Beurteilung_Resttumor))}" />
+                    <id value="{mds2fhir:getID(hash:hash($Patient_ID, $Diagnosis_ID , concat(./Lokale_Beurteilung_Resttumor, $System_Therapy_ID)),'', generate-id(./Lokale_Beurteilung_Resttumor))}" />
                     <meta>
                         <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-LokaleBeurteilungResidualstatus" />
                     </meta>
@@ -492,7 +506,7 @@
             </resource>
             <request>
                 <method value="PUT" />
-                <url value="Observation/{mds2fhir:getID('','', generate-id(./Lokale_Beurteilung_Resttumor))}" />
+                <url value="Observation/{mds2fhir:getID(hash:hash($Patient_ID, $Diagnosis_ID , concat(./Lokale_Beurteilung_Resttumor, $System_Therapy_ID)),'', generate-id(./Lokale_Beurteilung_Resttumor))}" />
             </request>
         </entry>
     </xsl:if>
@@ -583,6 +597,7 @@
             </request>
         </entry>
 
+        <xsl:variable name="Radiation_Therapy_ID" select="mds2fhir:getID(./@ST_ID,'', generate-id())" as="xs:string" />
         <xsl:for-each select="./Bestrahlung">
         <xsl:variable name="Single_Radiation_Therapy_ID" select="mds2fhir:getID('',mds2fhir:transformDate(./ST_Beginn_Datum), generate-id())" as="xs:string" />
         <entry>
@@ -640,12 +655,8 @@
                     </subject>
                     <xsl:if test="./ST_Beginn_Datum or ./ST_Ende_Datum">
                         <performedPeriod>
-                            <xsl:if test="./ST_Beginn_Datum">
-                                <start value="{mds2fhir:transformDate(./ST_Beginn_Datum)}" />
-                            </xsl:if>
-                            <xsl:if test="./ST_Ende_Datum">
-                                <end value="{mds2fhir:transformDate(./ST_Ende_Datum)}" />
-                            </xsl:if>
+                            <xsl:if test="./ST_Beginn_Datum"><start value="{mds2fhir:transformDate(./ST_Beginn_Datum)}" /></xsl:if>
+                            <xsl:if test="./ST_Ende_Datum"><end value="{mds2fhir:transformDate(./ST_Ende_Datum)}" /></xsl:if>
                         </performedPeriod>
                     </xsl:if>
                     <reasonReference>
@@ -765,7 +776,7 @@
                     <subject>
                         <reference value="Patient/{$Patient_ID}" />
                     </subject>
-                    <effectiveDateTime value="{mds2fhir:transformDate(./Datum_Verlauf)}" />
+                    <xsl:if test="./Datum_Verlauf"><effectiveDateTime value="{mds2fhir:transformDate(./Datum_Verlauf)}" /></xsl:if>
                     <problem>
                         <reference value="Condition/{$Diagnosis_ID}" />
                     </problem>
@@ -786,7 +797,7 @@
                 <xsl:for-each select="./Metastasis">
                     <finding>
                         <itemReference>
-                            <reference value="Observation/{mds2fhir:getID('', '', generate-id())}" />
+                            <reference value="Observation/{mds2fhir:getID(./@Metastasis_ID, mds2fhir:transformDate(./Datum_diagnostische_Sicherung), generate-id())}" />
                         </itemReference>
                     </finding>
                 </xsl:for-each>
@@ -817,134 +828,142 @@
                 <url value="ClinicalImpression/{$Progress_ID}" />
             </request>
         </entry>
-        <entry>
-            <fullUrl value="http://example.com/Observation/{$Lokales_Rezidiv_ID}" />
-            <resource>
-                <Observation xmlns="http://hl7.org/fhir">
-                    <id value="{$Lokales_Rezidiv_ID}" />
-                    <meta>
-                        <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-LokalerTumorstatus" />
-                    </meta>
-                    <status value="final" />
-                    <code>
-                        <coding>
-                            <system value="http://loinc.org" />
-                            <code value="LA4583-6" />
-                        </coding>
-                    </code>
-                    <subject>
-                        <reference value="Patient/{$Patient_ID}" />
-                    </subject>
-                    <effectiveDateTime value="{mds2fhir:transformDate(./Datum_Verlauf)}" />
-                    <valueCodeableConcept>
-                        <coding>
-                            <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VerlaufLokalerTumorstatusCS" />
-                            <code value="{./Lokales-regionäres_Rezidiv}" />
-                        </coding>
-                    </valueCodeableConcept>
-                </Observation>
-            </resource>
-            <request>
-                <method value="PUT" />
-                <url value="Observation/{$Lokales_Rezidiv_ID}" />
-            </request>
-        </entry>
-        <entry>
-            <fullUrl value="http://example.com/Observation/{$Lym_Rezidiv_ID}" />
-            <resource>
-                <Observation xmlns="http://hl7.org/fhir">
-                    <id value="{$Lym_Rezidiv_ID}" />
-                    <meta>
-                        <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-TumorstatusLymphknoten" />
-                    </meta>
-                    <status value="final" />
-                    <code>
-                        <coding>
-                            <system value="http://loinc.org" />
-                            <code value="LA4370-8" />
-                        </coding>
-                    </code>
-                    <subject>
-                        <reference value="Patient/{$Patient_ID}" />
-                    </subject>
-                    <effectiveDateTime value="{mds2fhir:transformDate(./Datum_Verlauf)}" />
-                    <valueCodeableConcept>
-                        <coding>
-                            <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VerlaufTumorstatusLymphknotenCS" />
-                            <code value="{./Lymphknoten-Rezidiv}" />
-                        </coding>
-                    </valueCodeableConcept>
-                </Observation>
-            </resource>
-            <request>
-                <method value="PUT" />
-                <url value="Observation/{$Lym_Rezidiv_ID}" />
-            </request>
-        </entry>
-        <entry>
-            <fullUrl value="http://example.com/Observation/{$Fernmetastasen_ID}" />
-            <resource>
-                <Observation xmlns="http://hl7.org/fhir">
-                    <id value="{$Fernmetastasen_ID}" />
-                    <meta>
-                        <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-TumorstatusFernmetastasen" />
-                    </meta>
-                    <status value="final" />
-                    <code>
-                        <coding>
-                            <system value="http://loinc.org" />
-                            <code value="LA4226-2" />
-                        </coding>
-                    </code>
-                    <subject>
-                        <reference value="Patient/{$Patient_ID}" />
-                    </subject>
-                    <effectiveDateTime value="{mds2fhir:transformDate(./Datum_Verlauf)}" />
-                    <valueCodeableConcept>
-                        <coding>
-                            <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VerlaufTumorstatusFernmetastasenCS" />
-                                    <code value="{./Fernmetastasen}" />
-                        </coding>
-                    </valueCodeableConcept>
-                </Observation>
-            </resource>
-            <request>
-                <method value="PUT" />
-                <url value="Observation/{$Fernmetastasen_ID}" />
-            </request>
-        </entry>
-        <entry>
-            <fullUrl value="http://example.com/Observation/{$Ansprechen_ID}" />
-            <resource>
-                <Observation xmlns="http://hl7.org/fhir">
-                    <id value="{$Ansprechen_ID}" />
-                    <meta>
-                        <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-GesamtbeurteilungTumorstatus" />
-                    </meta>
-                    <status value="final" />
-                    <code>
-                        <coding>
-                            <system value="http://loinc.org" />
-                            <code value="21976-6" />
-                        </coding>
-                    </code>
-                    <subject>
-                        <reference value="Patient/{$Patient_ID}" />
-                    </subject>
-                    <effectiveDateTime value="{mds2fhir:transformDate(./Datum_Verlauf)}" />
-                    <valueCodeableConcept>
-                        <coding>
-                            <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/GesamtbeurteilungTumorstatusCS" />
-                            <code value="{./Ansprechen_im_Verlauf}" />
-                        </coding>
-                    </valueCodeableConcept>
-                </Observation>
-            </resource>
-            <request>
-                <method value="PUT" />
-                <url value="Observation/{$Ansprechen_ID}" />
-            </request>
-        </entry>
+        <xsl:if test="./Lokales-regionäres_Rezidiv">
+            <entry>
+                <fullUrl value="http://example.com/Observation/{$Lokales_Rezidiv_ID}" />
+                <resource>
+                    <Observation xmlns="http://hl7.org/fhir">
+                        <id value="{$Lokales_Rezidiv_ID}" />
+                        <meta>
+                            <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-LokalerTumorstatus" />
+                        </meta>
+                        <status value="final" />
+                        <code>
+                            <coding>
+                                <system value="http://loinc.org" />
+                                <code value="LA4583-6" />
+                            </coding>
+                        </code>
+                        <subject>
+                            <reference value="Patient/{$Patient_ID}" />
+                        </subject>
+                        <xsl:if test="./Datum_Verlauf"><effectiveDateTime value="{mds2fhir:transformDate(./Datum_Verlauf)}" /></xsl:if>
+                        <valueCodeableConcept>
+                            <coding>
+                                <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VerlaufLokalerTumorstatusCS" />
+                                <code value="{./Lokales-regionäres_Rezidiv}" />
+                            </coding>
+                        </valueCodeableConcept>
+                    </Observation>
+                </resource>
+                <request>
+                    <method value="PUT" />
+                    <url value="Observation/{$Lokales_Rezidiv_ID}" />
+                </request>
+            </entry>
+        </xsl:if>
+        <xsl:if test="./Lymphknoten-Rezidiv">
+            <entry>
+                <fullUrl value="http://example.com/Observation/{$Lym_Rezidiv_ID}" />
+                <resource>
+                    <Observation xmlns="http://hl7.org/fhir">
+                        <id value="{$Lym_Rezidiv_ID}" />
+                        <meta>
+                            <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-TumorstatusLymphknoten" />
+                        </meta>
+                        <status value="final" />
+                        <code>
+                            <coding>
+                                <system value="http://loinc.org" />
+                                <code value="LA4370-8" />
+                            </coding>
+                        </code>
+                        <subject>
+                            <reference value="Patient/{$Patient_ID}" />
+                        </subject>
+                        <xsl:if test="./Datum_Verlauf"><effectiveDateTime value="{mds2fhir:transformDate(./Datum_Verlauf)}" /></xsl:if>
+                        <valueCodeableConcept>
+                            <coding>
+                                <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VerlaufTumorstatusLymphknotenCS" />
+                                <code value="{./Lymphknoten-Rezidiv}" />
+                            </coding>
+                        </valueCodeableConcept>
+                    </Observation>
+                </resource>
+                <request>
+                    <method value="PUT" />
+                    <url value="Observation/{$Lym_Rezidiv_ID}" />
+                </request>
+            </entry>
+        </xsl:if>
+        <xsl:if test="./Fernmetastasen">
+            <entry>
+                <fullUrl value="http://example.com/Observation/{$Fernmetastasen_ID}" />
+                <resource>
+                    <Observation xmlns="http://hl7.org/fhir">
+                        <id value="{$Fernmetastasen_ID}" />
+                        <meta>
+                            <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-TumorstatusFernmetastasen" />
+                        </meta>
+                        <status value="final" />
+                        <code>
+                            <coding>
+                                <system value="http://loinc.org" />
+                                <code value="LA4226-2" />
+                            </coding>
+                        </code>
+                        <subject>
+                            <reference value="Patient/{$Patient_ID}" />
+                        </subject>
+                        <xsl:if test="./Datum_Verlauf"><effectiveDateTime value="{mds2fhir:transformDate(./Datum_Verlauf)}" /></xsl:if>
+                        <valueCodeableConcept>
+                            <coding>
+                                <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VerlaufTumorstatusFernmetastasenCS" />
+                                <code value="{./Fernmetastasen}" />
+                            </coding>
+                        </valueCodeableConcept>
+                    </Observation>
+                </resource>
+                <request>
+                    <method value="PUT" />
+                    <url value="Observation/{$Fernmetastasen_ID}" />
+                </request>
+            </entry>
+        </xsl:if>
+        <xsl:if test="./Ansprechen_im_Verlauf">
+            <entry>
+                <fullUrl value="http://example.com/Observation/{$Ansprechen_ID}" />
+                <resource>
+                    <Observation xmlns="http://hl7.org/fhir">
+                        <id value="{$Ansprechen_ID}" />
+                        <meta>
+                            <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-GesamtbeurteilungTumorstatus" />
+                        </meta>
+                        <status value="final" />
+                        <code>
+                            <coding>
+                                <system value="http://loinc.org" />
+                                <code value="21976-6" />
+                            </coding>
+                        </code>
+                        <subject>
+                            <reference value="Patient/{$Patient_ID}" />
+                        </subject>
+                        <xsl:if test="./Datum_Verlauf"><effectiveDateTime value="{mds2fhir:transformDate(./Datum_Verlauf)}" /></xsl:if>
+                        <valueCodeableConcept>
+                            <coding>
+                                <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/GesamtbeurteilungTumorstatusCS" />
+                                <code value="{./Ansprechen_im_Verlauf}" />
+                            </coding>
+                        </valueCodeableConcept>
+                    </Observation>
+                </resource>
+                <request>
+                    <method value="PUT" />
+                    <url value="Observation/{$Ansprechen_ID}" />
+                </request>
+            </entry>
+        </xsl:if>
         <xsl:apply-templates select="./Histology">
             <xsl:with-param name="Patient_ID" select="$Patient_ID" />
         </xsl:apply-templates>
@@ -970,45 +989,44 @@
             <resource>
                 <Observation>
                     <id value="{$TNM_ID}" />
-                    <xsl:if test="./gesamtpraefix and ./gesamtpraefix !=''">
                     <meta>
                         <xsl:choose>
-                            <xsl:when test="./gesamtpraefix='c'">
-                                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-TNMc" />
-                            </xsl:when>
-                            <xsl:when test="./gesamtpraefix='p'">
+                            <xsl:when test="./gesamtpraefix='p' or ./c-p-u-Präfix_T='p' or ./c-p-u-Präfix_N='p' or ./c-p-u-Präfix_M='p'">
                                 <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-TNMp" />
                             </xsl:when>
+                            <xsl:otherwise>
+                                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-TNMc" />
+                            </xsl:otherwise>
                         </xsl:choose>
                     </meta>
-                </xsl:if>
                     <status value="final" />
                     <code>
                         <xsl:choose>
-                            <xsl:when test="./gesamtpraefix and ./gesamtpraefix !=''">
-                            <coding>
-                                <system value="http://loinc.org" />
-                                <code>
-                                    <xsl:choose>
-                                        <xsl:when  test="./gesamtpraefix='c'">
-                                            <xsl:attribute name="value">21908-9</xsl:attribute>
-                                        </xsl:when>
-                                        <xsl:when test="./gesamtpraefix='p'">
-                                            <xsl:attribute name="value">21902-2</xsl:attribute>
-                                        </xsl:when>
-                                    </xsl:choose>
-                                </code>
-                            </coding>
+                            <xsl:when test="./gesamtpraefix='p' or ./c-p-u-Präfix_T='p' or ./c-p-u-Präfix_N='p' or ./c-p-u-Präfix_M='p'">
+                                <coding>
+                                    <system value="http://loinc.org" />
+                                    <code>
+                                        <xsl:attribute name="value">21902-2</xsl:attribute>
+                                    </code>
+                                </coding>
                             </xsl:when>
-                        <xsl:otherwise>
-                            <text value= "TNM ohne Angabe ob klinisch oder pthologisch"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
+                            <xsl:when test="./gesamtpraefix='c' or ./c-p-u-Präfix_T='c' or ./c-p-u-Präfix_N='c' or ./c-p-u-Präfix_M='c'">
+                                <coding>
+                                    <system value="http://loinc.org" />
+                                    <code>
+                                        <xsl:attribute name="value">21908-9</xsl:attribute>
+                                    </code>
+                                </coding>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <text value= "TNM ohne Angabe ob klinisch oder pthologisch"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
                     </code>
                     <subject>
                         <reference value="Patient/{$Patient_ID}" />
                     </subject>
-                    <effectiveDateTime value="{mds2fhir:transformDate(./Datum_der_TNM-Dokumentation-Datum_Befund)}" />
+                    <xsl:if test="./Datum_der_TNM-Dokumentation-Datum_Befund"><effectiveDateTime value="{mds2fhir:transformDate(./Datum_der_TNM-Dokumentation-Datum_Befund)}" /></xsl:if>
                     <xsl:if test="./UICC_Stadium">
                         <valueCodeableConcept>
                             <coding>
@@ -1017,75 +1035,81 @@
                             </coding>
                         </valueCodeableConcept>
                     </xsl:if>
-                    <component>
-                        <code>
-                            <coding>
-                                <system value="http://loinc.org" />
-                                <code>
-                                    <xsl:choose>
-                                    <xsl:when test="./c-p-u-Präfix_T='c'">
-                                        <xsl:attribute name="value">21905-5</xsl:attribute>
-                                    </xsl:when>
-                                    <xsl:when test="./c-p-u-Präfix_T='p'">
-                                        <xsl:attribute name="value">21899-0</xsl:attribute>
-                                    </xsl:when>
-                                </xsl:choose>
-                                </code> 
-                            </coding>
-                        </code>
-                        <valueCodeableConcept>
-                            <coding>
-                                <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMTCS" />
-                                <code value="{./TNM-T}" />
-                            </coding>
-                        </valueCodeableConcept>
-                    </component>
-                    <component>
-                        <code>
-                            <coding>
-                                <system value="http://loinc.org" />
-                                <code>
-                                    <xsl:choose>
-                                    <xsl:when test="./c-p-u-Präfix_N='c'">
-                                        <xsl:attribute name="value">201906-3</xsl:attribute>
-                                    </xsl:when>
-                                    <xsl:when test="./c-p-u-Präfix_N='p'">
-                                        <xsl:attribute name="value">21900-6</xsl:attribute>
-                                    </xsl:when>
-                                </xsl:choose>
-                                </code> 
-                            </coding>
-                        </code>
-                        <valueCodeableConcept>
-                            <coding>
-                                <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMNCS" />
-                                <code value="{./TNM-N}" />
-                            </coding>
-                        </valueCodeableConcept>
-                    </component>
-                    <component>
-                        <code>
-                            <coding>
-                                <system value="http://loinc.org" />
-                                <code>
-                                    <xsl:choose>
-                                    <xsl:when test="./c-p-u-Präfix_M='c'">
-                                        <xsl:attribute name="value">21907-1</xsl:attribute>
-                                    </xsl:when>
-                                    <xsl:when test="./c-p-u-Präfix_M='p'">
-                                        <xsl:attribute name="value">21901-4</xsl:attribute>
-                                    </xsl:when>
-                                </xsl:choose>
-                                </code> 
-                            </coding>
-                        </code>
-                        <valueCodeableConcept>
-                            <coding>
-                                <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMMCS" />
-                                <code value="{./TNM-M}" />
-                            </coding>
-                        </valueCodeableConcept>
-                    </component>
+                    <xsl:if test="./TNM-T">
+                        <component>
+                            <code>
+                                <coding>
+                                    <system value="http://loinc.org" />
+                                    <code>
+                                        <xsl:choose>
+                                            <xsl:when test="./c-p-u-Präfix_T='p'">
+                                                <xsl:attribute name="value">21899-0</xsl:attribute>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <xsl:attribute name="value">21905-5</xsl:attribute>
+                                            </xsl:otherwise>
+                                        </xsl:choose>
+                                    </code>
+                                </coding>
+                            </code>
+                            <valueCodeableConcept>
+                                <coding>
+                                    <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMTCS" />
+                                    <code value="{./TNM-T}" />
+                                </coding>
+                            </valueCodeableConcept>
+                        </component>
+                    </xsl:if>
+                    <xsl:if test="./TNM-N">
+                        <component>
+                            <code>
+                                <coding>
+                                    <system value="http://loinc.org" />
+                                    <code>
+                                        <xsl:choose>
+                                            <xsl:when test="./c-p-u-Präfix_N='p'">
+                                                <xsl:attribute name="value">21900-6</xsl:attribute>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <xsl:attribute name="value">201906-3</xsl:attribute>
+                                            </xsl:otherwise>
+                                    </xsl:choose>
+                                    </code>
+                                </coding>
+                            </code>
+                            <valueCodeableConcept>
+                                <coding>
+                                    <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMNCS" />
+                                    <code value="{./TNM-N}" />
+                                </coding>
+                            </valueCodeableConcept>
+                        </component>
+                    </xsl:if>
+                    <xsl:if test="./TNM-M">
+                        <component>
+                            <code>
+                                <coding>
+                                    <system value="http://loinc.org" />
+                                    <code>
+                                        <xsl:choose>
+                                            <xsl:when test="./c-p-u-Präfix_M='p'">
+                                                <xsl:attribute name="value">21901-4</xsl:attribute>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <xsl:attribute name="value">21907-1</xsl:attribute>
+                                            </xsl:otherwise>
+                                    </xsl:choose>
+                                    </code>
+                                </coding>
+                            </code>
+                            <valueCodeableConcept>
+                                <coding>
+                                    <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMMCS" />
+                                    <code value="{./TNM-M}" />
+                                </coding>
+                            </valueCodeableConcept>
+                        </component>
+                    </xsl:if>
                     <component>
                         <code>
                             <coding>
@@ -1159,7 +1183,7 @@
         <xsl:param name="Patient_ID" />
         <xsl:param name="Datum_Verlauf"/>
 
-        <xsl:variable name="Metastasis_ID" select="mds2fhir:getID(./@Metastasis_ID, '', generate-id())" as="xs:string" />
+        <xsl:variable name="Metastasis_ID" select="mds2fhir:getID(./@Metastasis_ID, mds2fhir:transformDate(./Datum_diagnostische_Sicherung), generate-id())" as="xs:string" />
         <entry>
             <fullUrl value="http://example.com/Observation/{$Metastasis_ID}" />
             <resource>
@@ -1178,7 +1202,7 @@
                     <subject>
                         <reference value="Patient/{$Patient_ID}" />
                     </subject>
-                    <effectiveDateTime value="{mds2fhir:transformDate($Datum_Verlauf)}" />
+                    <xsl:if test="./$Datum_Verlauf"><effectiveDateTime value="{mds2fhir:transformDate($Datum_Verlauf)}" /></xsl:if>
                     <xsl:if test="./Fernmetastasen_vorhanden">
                     <valueCodeableConcept>
                         <coding>
@@ -1233,7 +1257,7 @@
                     <subject>
                         <reference value="Patient/{$Patient_ID}" />
                     </subject>
-                    <effectiveDateTime value="{mds2fhir:transformDate(./FM_Diagnosedatum)}" />
+                    <xsl:if test="./FM_Diagnosedatum"><effectiveDateTime value="{mds2fhir:transformDate(./FM_Diagnosedatum)}" /></xsl:if>
                     <valueCodeableConcept>
                         <coding>
                             <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/JNUCS" />
@@ -1260,7 +1284,7 @@
         <xsl:param name="Patient_ID" />
 
         <xsl:variable name="Histology_ID" select="mds2fhir:getID(./@Histology_ID, mds2fhir:transformDate(./Tumor_Histologiedatum), generate-id())" as="xs:string" />
-        <xsl:variable name="Grading_ID" select="mds2fhir:getID(concat(./@Histology_ID,'grading'), '', generate-id())" as="xs:string"/>
+        <xsl:variable name="Grading_ID" select="mds2fhir:getID(hash:hash(./@Histology_ID,'grading',''), '', generate-id())" as="xs:string"/>
 
         <entry>
             <fullUrl value="http://example.com/Observation/{$Histology_ID}" />
@@ -1318,7 +1342,7 @@
                     <valueCodeableConcept>
                         <coding>
                             <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/GradingCS" />
-                            <code value="{./Grading}" />
+                            <xsl:if test="./Grading"><code value="{./Grading}" /></xsl:if>
                         </coding>
                     </valueCodeableConcept>
                 </Observation>
