@@ -130,6 +130,7 @@ public class Adt2fhir {
                         }
                     }
                 }
+                else if (inputFile.isFile() & inputFile.getName().toLowerCase().endsWith(".gitignore")) {}
                 else {
                     System.out.print("\n\t\u001B[31m" + "skipping file:" + "\u001B[0m" + " '" + inputFile.getName() + "' - not a valid xml file");
                 }
