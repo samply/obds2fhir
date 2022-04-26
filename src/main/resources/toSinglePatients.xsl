@@ -10,10 +10,11 @@
     <xsl:output omit-xml-declaration="no" indent="yes"/>
     <xsl:strip-space elements="*"/>
     <xsl:param name="filepath" />
+    <xsl:param name="customPrefix" />
 
     <xsl:template match="/ADT_GEKID">
         <xsl:for-each select="Menge_Patient/Patient">
-            <xsl:result-document method="xml" href="file:{$filepath}/ADT_Patients/Patient_{Patienten_Stammdaten/@Patient_ID}.xml">
+            <xsl:result-document method="xml" href="file:{$filepath}/ADT_Patients/Patient_{$customPrefix}{Patienten_Stammdaten/@Patient_ID}.xml">
             <!--<xsl:result-document method="xml" href="Patient_{Patienten_Stammdaten/@Patient_ID}.xml">-->
                 <ADT_GEKID Schema_Version="2.2.1">
                     <xsl:copy-of select="/ADT_GEKID/@*" />

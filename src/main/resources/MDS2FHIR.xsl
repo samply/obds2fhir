@@ -24,6 +24,7 @@
     <xsl:output omit-xml-declaration="yes" indent="yes" />
     <xsl:strip-space elements="*" />
     <xsl:param name="filepath" />
+    <xsl:param name="customPrefix" />
 
     <xsl:template match="/">
 
@@ -37,7 +38,7 @@
     <xsl:template match="Patient" mode="patient">
         <xsl:variable name="Patient_ID" select="@Patient_ID" />
         <xsl:variable name="Vitalstatus_ID" select="hash:hash($Patient_ID, 'vitalstatus', '')" />
-        <xsl:result-document href="file:{$filepath}/FHIR_Patients/Bundle_{$Patient_ID}.xml">
+        <xsl:result-document href="file:{$filepath}/FHIR_Patients/Bundle_{$customPrefix}{$Patient_ID}.xml">
         <Bundle xmlns="http://hl7.org/fhir">
             <id value="{generate-id()}" />
             <type value="transaction" />

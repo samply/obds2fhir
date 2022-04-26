@@ -8,6 +8,8 @@ public class ConfigReader {
     public String file_path;
     public String store_path;
     public String identifier_system;
+    public String mainzelliste_url;
+    public String mainzelliste_apikey;
 
     public void init() throws IOException {
         try {
@@ -31,6 +33,8 @@ public class ConfigReader {
             this.file_path = prop.getProperty("file_path");
             this.store_path = prop.getProperty("store_path");
             this.identifier_system = prop.getProperty("identifier_system");
+            this.mainzelliste_url = prop.getProperty("mainzelliste_url");
+            this.mainzelliste_apikey = prop.getProperty("mainzelliste_apikey");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -44,5 +48,9 @@ public class ConfigReader {
     }
     public String getIdentifier_system() {
         return identifier_system;
+    }
+    public String getMainzelliste_url() { return mainzelliste_url; }
+    public String getMainzelliste_apikey() {
+        return mainzelliste_apikey;
     }
 }

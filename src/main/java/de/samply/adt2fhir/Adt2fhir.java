@@ -47,7 +47,9 @@ public class Adt2fhir {
         System.out.print("initialize transformers... ");
         final TransformerFactoryImpl factory = (TransformerFactoryImpl) TransformerFactory.newInstance("net.sf.saxon.TransformerFactoryImpl", null);
         net.sf.saxon.Configuration saxonConfig = factory.getConfiguration();
-        ((Processor) saxonConfig.getProcessor()).registerExtensionFunction(new PatientPseudonymizer());
+        PatientPseudonymizer patientPseudonymizer = new PatientPseudonymizer();
+        patientPseudonymizer.setConfigReader(configReader);
+        ((Processor) saxonConfig.getProcessor()).registerExtensionFunction(patientPseudonymizer);
         ((Processor) saxonConfig.getProcessor()).registerExtensionFunction(new UniqueIdGenerator());
 
         final Transformer ADT2singleADTtransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("toSinglePatients.xsl")));
@@ -95,9 +97,9 @@ public class Adt2fhir {
         else {
             int counter=1;
             for (File inputFile : listOfFiles) {
-                System.out.println("\u001B[AFile "+counter+" of "+listOfFiles.length);
-                counter+=1;
                 if (inputFile.isFile() & inputFile.getName().toLowerCase().endsWith(".xml")) {
+                    System.out.println("\u001B[AFile "+counter+" of "+(listOfFiles.length-1));
+                    counter+=1;
                     if (transformer ==null){
                         try {
                             postToFhirStore(inputFile, httppost);
@@ -109,17 +111,19 @@ public class Adt2fhir {
                     }
                     else {
                         //System.out.print("processing file " + inputFile.getName() + "...");
-                        String combinedADTfile = null;
+                        String inputXml = null;
                         try {
-                            combinedADTfile = new String(Files.readAllBytes(Paths.get(String.valueOf(inputFile))), StandardCharsets.UTF_8);
+                            inputXml = new String(Files.readAllBytes(Paths.get(String.valueOf(inputFile))), StandardCharsets.UTF_8);
                         } catch (IOException e) {
                             counter-=1;
                             System.out.print("ERROR - reading: problem with file " + inputFile);
                             e.printStackTrace();
                         }
                         try {
-                            String xmlResult = applyXslt(combinedADTfile, transformer);
+                            transformer.setParameter("customPrefix", inputFile.getName());
+                            String xmlResult = applyXslt(inputXml, transformer);
                             if(transformWrittenResults){
+                                transformer2.setParameter("customPrefix", inputFile.getName());
                                 applyXslt(xmlResult, transformer2);
                                 inputFile.deleteOnExit();
                             }
