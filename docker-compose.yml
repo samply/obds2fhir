@@ -7,6 +7,12 @@ services:
     image: docker.verbis.dkfz.de/ccp/adt2fhir:test
     #image: adt2fhir
     #build this image locally using the Dockerfile "docker build -t adt2fhir ."
+    environment:
+      FILE_PATH: "/adt2fhir/clinical_data"
+      STORE_PATH: "http://host.docker.internal:8090/fhir"
+      IDENTIFIER_SYSTEM: "http://dktk.dkfz.de/fhir/onco/core/CodeSystem/PseudonymArtCS"
+      MAINZELLIST_URL: "http://host.docker.internal:8080"
+      MAINZELLIST_APIKEY: "pleaseChangeMe"
     volumes:
       - ./clinical_data:/adt2fhir/clinical_data
     extra_hosts:
