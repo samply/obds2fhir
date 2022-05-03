@@ -18,13 +18,13 @@
     <xsl:param name="identifier_system" />
     <xsl:variable name="Lokal_DKTK_ID_Pat_System"><xsl:value-of select="$identifier_system"/></xsl:variable>
 
-    <!-- Ende Settings -->
-
     <xsl:output encoding="UTF-8" indent="yes" method="xml" />
     <xsl:output omit-xml-declaration="yes" indent="yes" />
     <xsl:strip-space elements="*" />
     <xsl:param name="filepath" />
     <xsl:param name="customPrefix" />
+
+    <!-- Ende Settings -->
 
     <xsl:template match="/">
 
@@ -38,7 +38,7 @@
     <xsl:template match="Patient" mode="patient">
         <xsl:variable name="Patient_ID" select="@Patient_ID" />
         <xsl:variable name="Vitalstatus_ID" select="hash:hash($Patient_ID, 'vitalstatus', '')" />
-        <xsl:result-document href="file:{$filepath}/FHIR_Patients/Bundle_{$customPrefix}{$Patient_ID}.xml">
+        <xsl:result-document href="file:{$filepath}/FHIR_Patients/FHIR_{$customPrefix}">
         <Bundle xmlns="http://hl7.org/fhir">
             <id value="{generate-id()}" />
             <type value="transaction" />
@@ -263,8 +263,8 @@
                     <bodySite>
                         <coding>
                             <system value="urn:oid:2.16.840.1.113883.6.43.1" />
-                            <version value="{./Tumor/ICD-O_Katalog_Topographie_Version}" />
-                            <code value="{./Tumor/Lokalisation}" />
+                            <xsl:if test="./Tumor/ICD-O_Katalog_Topographie_Version">"<version value="{./Tumor/ICD-O_Katalog_Topographie_Version}" /></xsl:if>
+                            <xsl:if test="./Tumor/Lokalisation"><code value="{./Tumor/Lokalisation}" /></xsl:if>
                         </coding>
                         <coding>
                             <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SeitenlokalisationCS" />
@@ -600,7 +600,7 @@
 
         <xsl:variable name="Radiation_Therapy_ID" select="mds2fhir:getID(./@ST_ID,'', generate-id())" as="xs:string" />
         <xsl:for-each select="./Bestrahlung">
-        <xsl:variable name="Single_Radiation_Therapy_ID" select="mds2fhir:getID('',mds2fhir:transformDate(./ST_Beginn_Datum), generate-id())" as="xs:string" />
+        <xsl:variable name="Single_Radiation_Therapy_ID" select="mds2fhir:getID(./@Betrahlung_ID,mds2fhir:transformDate(./ST_Beginn_Datum), generate-id())" as="xs:string" />
         <entry>
             <fullUrl value="http://example.com/Procedure/{$Single_Radiation_Therapy_ID}" />
             <resource>
@@ -759,11 +759,11 @@
         <xsl:param name="Tumor_ID" />
         <xsl:param name="Patient_ID" />
         <xsl:param name="Diagnosis_ID" />
-        <xsl:variable name="Progress_ID" select="mds2fhir:getID(./@Progress_ID, '', generate-id())" as="xs:string" />
-        <xsl:variable name="Lym_Rezidiv_ID" select="mds2fhir:getID('', '', generate-id(./Lymphknoten-Rezidiv))" as="xs:string"/>
-        <xsl:variable name="Fernmetastasen_ID" select="mds2fhir:getID('', '', generate-id(./Fernmetastasen))" as="xs:string"/>
-        <xsl:variable name="Lokales_Rezidiv_ID" select="mds2fhir:getID('', '', generate-id(./Lokales-regionäres_Rezidiv))" as="xs:string"/>
-        <xsl:variable name="Ansprechen_ID" select="mds2fhir:getID('', '', generate-id(./Ansprechen_im_Verlauf))" as="xs:string"/>
+        <xsl:variable name="Progress_ID" select="mds2fhir:getID(./@Verlauf_ID, '', generate-id())" as="xs:string" />
+        <xsl:variable name="Lym_Rezidiv_ID" select="hash:hash($Progress_ID, ./Lymphknoten-Rezidiv, 'yrz')" as="xs:string"/>
+        <xsl:variable name="Fernmetastasen_ID" select="hash:hash($Progress_ID, ./Fernmetastasen, 'fmn')" as="xs:string"/>
+        <xsl:variable name="Lokales_Rezidiv_ID" select="hash:hash($Progress_ID, ./Lokales-regionäres_Rezidiv, 'krz')" as="xs:string"/>
+        <xsl:variable name="Ansprechen_ID" select="hash:hash($Progress_ID, ./Ansprechen_im_Verlauf, 'asp')" as="xs:string"/>
 
         <entry>
             <fullUrl value="http://example.com/ClinicalImpression/{$Progress_ID}" />
@@ -1239,7 +1239,7 @@
     <xsl:template match="Fernmetastase">
         <xsl:param name="Patient_ID" />
 
-        <xsl:variable name="Metastasis_ID" select="mds2fhir:getID('', '', generate-id())" as="xs:string" />
+        <xsl:variable name="Metastasis_ID" select="mds2fhir:getID('TODOtest', '', generate-id())" as="xs:string" />
         <entry>
             <fullUrl value="http://example.com/Observation/{$Metastasis_ID}" />
             <resource>
@@ -1285,7 +1285,7 @@
         <xsl:param name="Patient_ID" />
 
         <xsl:variable name="Histology_ID" select="mds2fhir:getID(./@Histology_ID, mds2fhir:transformDate(./Tumor_Histologiedatum), generate-id())" as="xs:string" />
-        <xsl:variable name="Grading_ID" select="mds2fhir:getID(hash:hash(./@Histology_ID,'grading',''), '', generate-id())" as="xs:string"/>
+        <xsl:variable name="Grading_ID" select="mds2fhir:getID(hash:hash($Patient_ID, ./@Histology_ID,'grading'), '', generate-id())" as="xs:string"/>
 
         <entry>
             <fullUrl value="http://example.com/Observation/{$Histology_ID}" />
@@ -1308,8 +1308,8 @@
                     <valueCodeableConcept>
                         <coding>
                             <system value="urn:oid:2.16.840.1.113883.6.43.1" />
-                            <version value="{./ICD-O_Katalog_Morphologie_Version}" />
-                            <code value="{./Morphologie}" />
+                            <xsl:if test="./ICD-O_Katalog_Morphologie_Version"><version value="{./ICD-O_Katalog_Morphologie_Version}" /></xsl:if>
+                            <xsl:if test="./Morphologie"><code value="{./Morphologie}" /></xsl:if>
                         </coding>
                     </valueCodeableConcept>
                     <hasMember>

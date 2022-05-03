@@ -2,6 +2,7 @@
 <xsl:stylesheet 
     xmlns="http://www.gekid.de/namespace"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:hash="java:de.samply.adt2fhir"
     exclude-result-prefixes="#default" 
     version="2.0"
     xpath-default-namespace="http://www.gekid.de/namespace">
@@ -14,7 +15,7 @@
 
     <xsl:template match="/ADT_GEKID">
         <xsl:for-each select="Menge_Patient/Patient">
-            <xsl:result-document method="xml" href="file:{$filepath}/ADT_Patients/Patient_{$customPrefix}{Patienten_Stammdaten/@Patient_ID}.xml">
+            <xsl:result-document method="xml" href="file:{$filepath}/ADT_Patients/Patient_{hash:hash(Patienten_Stammdaten/@Patient_ID,'','')}_{$customPrefix}.xml">
             <!--<xsl:result-document method="xml" href="Patient_{Patienten_Stammdaten/@Patient_ID}.xml">-->
                 <ADT_GEKID Schema_Version="2.2.1">
                     <xsl:copy-of select="/ADT_GEKID/@*" />
