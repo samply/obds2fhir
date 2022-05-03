@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import de.pseudonymisierung.mainzelliste.client.*;
-import java.io.*;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -31,7 +31,11 @@ import org.apache.http.util.EntityUtils;
 public class PatientPseudonymizer extends ExtensionFunctionDefinition {
     private String mainzelliste_url;
     private String mainzelliste_apikey;
-    private boolean anonymize;
+    private boolean anonymize=false;
+    private MainzellisteConnection mainzellisteConnection;
+    private Session session;
+    private AddPatientToken token;
+    private CloseableHttpClient httpclient;
 
     @Override
     public net.sf.saxon.value.SequenceType[] getArgumentTypes() {
@@ -66,7 +70,7 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
                 String birthname = args[3].iterate().next().getStringValue();
                 String brithdate = args[4].iterate().next().getStringValue();
 
-                if (mainzelliste_url.isEmpty()) {
+                if (anonymize) {
                     output = DigestUtils.sha256Hex(gender + prename + surname + birthname + brithdate).substring(32);
                 } else {
                     try {
@@ -84,10 +88,6 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
     private String pseudonymizationCall(String gender, String prename, String surname, String birthname, String brithdate) throws URISyntaxException, MainzellisteNetworkException, InvalidSessionException, IOException {
         String pseudonym="";
         String[] brithdateParts = brithdate.split("[.]");
-        MainzellisteConnection mainzellisteConnection = new MainzellisteConnection(mainzelliste_url, mainzelliste_apikey);
-        Session session = mainzellisteConnection.createSession();
-        AddPatientToken token = new AddPatientToken();
-        token.addIdType("pid");
         String addPatientToken = session.getToken(token);
         HttpPost httppost = new HttpPost(mainzelliste_url+"/patients?tokenId="+addPatientToken);
         httppost.addHeader("content-type", "application/x-www-form-urlencoded");
@@ -104,13 +104,11 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
         //idat.add(new BasicNameValuePair("ort", ""));
         idat.add(new BasicNameValuePair("sureness", "true"));
         httppost.setEntity(new UrlEncodedFormEntity(idat, HTTP.UTF_8));
-        CloseableHttpClient httpclient = HttpClients.createDefault();
         HttpResponse response = httpclient.execute(httppost);
         if (response.getStatusLine().getStatusCode()!=201) {
-            System.out.println("Error - Pseudonymization response: " +  response.getStatusLine().getStatusCode());
+            System.out.println("ERROR - Pseudonymization response: " +  response.getStatusLine().getStatusCode());
         }
         String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
-        httpclient.close();
 
         JsonArray ids = new Gson ().fromJson(responseBody, JsonArray.class);
         if(!ids.isEmpty()){
@@ -120,8 +118,22 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
         return pseudonym;
     }
 
-    public void setConfigReader (ConfigReader configReader){
+    public void initialize (ConfigReader configReader){
         this.mainzelliste_url=configReader.getMainzelliste_url();
         this.mainzelliste_apikey=configReader.getMainzelliste_apikey();
+        if (mainzelliste_apikey.isEmpty()){
+            this.anonymize=true;
+        }else {
+            this.anonymize=false;
+            try {
+                this.mainzellisteConnection = new MainzellisteConnection(mainzelliste_url, mainzelliste_apikey);
+                this.session = mainzellisteConnection.createSession();
+                this.token = new AddPatientToken();
+                this.token.addIdType("pid");
+                this.httpclient = HttpClients.createDefault();
+            } catch (URISyntaxException | MainzellisteNetworkException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }

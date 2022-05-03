@@ -15,8 +15,6 @@ public class ConfigReader {
         try {
             Properties prop = new Properties();
             InputStream inputStream =null;
-            //try loading docker configuration
-            //("adt2fhir.properties");
             File file = new File("/etc/samply/"+PROPERTY_FILE);
             if (file.isFile()){
                 inputStream =new FileInputStream(file);
