@@ -4,11 +4,13 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Base64;
 import javax.xml.transform.*;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import net.sf.saxon.TransformerFactoryImpl;
 import net.sf.saxon.s9api.Processor;
+import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;
@@ -36,12 +38,6 @@ public class Adt2fhir {
             System.out.println(" failed");
             e.printStackTrace();
         }
-        HttpPost httppost = new HttpPost(configReader.getStore_path());
-        RequestConfig requestConfig = RequestConfig.copy(RequestConfig.DEFAULT)
-                //.setProxy(new HttpHost("XXX.XXX.XXX.XXX", 8080))
-                .build();
-        httppost.setConfig(requestConfig);
-        httppost.addHeader("content-type", "application/xml+fhir");
         System.out.println(ANSI_GREEN+"...done"+ANSI_RESET);
 
         System.out.print("initialize transformers... ");
@@ -73,6 +69,10 @@ public class Adt2fhir {
         stopTime = System.nanoTime();
         System.out.println(ANSI_GREEN+"...done "+ANSI_RESET+(stopTime - startTime)/1000000000+ " seconds");
 
+        HttpPost httppost = new HttpPost(configReader.getStore_path());
+        RequestConfig requestConfig = RequestConfig.copy(RequestConfig.DEFAULT).build();
+        httppost.setConfig(requestConfig);
+        httppost.addHeader("content-type", "application/xml+fhir");
 
         startTime = System.nanoTime();
         System.out.println("posting fhir resources to blaze store...\n");

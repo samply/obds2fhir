@@ -417,7 +417,7 @@
             </request>
         </entry>
 
-        <xsl:for-each select="./SYST_Nebenwirkung">
+        <!--<xsl:for-each select="./SYST_Nebenwirkung">
             <xsl:variable name="Nebenwirkung_ID" select="mds2fhir:getID(./@Nebenwirkung_ID, '', generate-id())" as="xs:string" />
             <entry>
                 <fullUrl value="http://example.com/AdverseEvent/{$Nebenwirkung_ID}" />
@@ -443,7 +443,7 @@
                     <url value="AdverseEvent/{$Nebenwirkung_ID}" />
                 </request>
             </entry>
-        </xsl:for-each>
+        </xsl:for-each>-->
 
         <xsl:if test="./Gesamtbeurteilung_Resttumor">
         <entry>
@@ -585,11 +585,11 @@
                     </xsl:if>
                     </outcome>
                 </xsl:if>
-                <xsl:for-each select="./ST_Nebenwirkung">
+                <!--<xsl:for-each select="./ST_Nebenwirkung">
                     <complication>
                         <text value="./Nebenwirkung_Art"/>
                     </complication>
-                </xsl:for-each>
+                </xsl:for-each>-->
                 </Procedure>
             </resource>
             <request>
@@ -760,10 +760,10 @@
         <xsl:param name="Patient_ID" />
         <xsl:param name="Diagnosis_ID" />
         <xsl:variable name="Progress_ID" select="mds2fhir:getID(./@Verlauf_ID, '', generate-id())" as="xs:string" />
-        <xsl:variable name="Lym_Rezidiv_ID" select="hash:hash($Progress_ID, ./Lymphknoten-Rezidiv, 'yrz')" as="xs:string"/>
-        <xsl:variable name="Fernmetastasen_ID" select="hash:hash($Progress_ID, ./Fernmetastasen, 'fmn')" as="xs:string"/>
-        <xsl:variable name="Lokales_Rezidiv_ID" select="hash:hash($Progress_ID, ./Lokales-regionäres_Rezidiv, 'krz')" as="xs:string"/>
-        <xsl:variable name="Ansprechen_ID" select="hash:hash($Progress_ID, ./Ansprechen_im_Verlauf, 'asp')" as="xs:string"/>
+        <xsl:variable name="Lym_Rezidiv_ID"><xsl:if test="./Lymphknoten-Rezidiv"><xsl:value-of select="hash:hash($Progress_ID, ./Lymphknoten-Rezidiv, 'yrz')"/></xsl:if></xsl:variable>
+        <xsl:variable name="Fernmetastasen_ID"><xsl:if test="./Fernmetastasen"><xsl:value-of select="hash:hash($Progress_ID, ./Fernmetastasen, 'fmn')"/></xsl:if></xsl:variable>
+        <xsl:variable name="Lokales_Rezidiv_ID"><xsl:if test="./Lokales-regionäres_Rezidiv"><xsl:value-of select="hash:hash($Progress_ID, ./Lokales-regionäres_Rezidiv, 'krz')"/></xsl:if></xsl:variable>
+        <xsl:variable name="Ansprechen_ID"><xsl:if test="./Ansprechen_im_Verlauf"><xsl:value-of select="hash:hash($Progress_ID, ./Ansprechen_im_Verlauf, 'asp')"/></xsl:if></xsl:variable>
 
         <entry>
             <fullUrl value="http://example.com/ClinicalImpression/{$Progress_ID}" />
@@ -802,26 +802,34 @@
                         </itemReference>
                     </finding>
                 </xsl:for-each>
+            <xsl:if test="$Lokales_Rezidiv_ID != ''">
                 <finding>
-                <itemReference>
-                    <reference value="Observation/{$Lokales_Rezidiv_ID}" />
-                </itemReference>
-            </finding>
-            <finding>
-                <itemReference>
-                    <reference value="Observation/{$Lym_Rezidiv_ID}" />
-                </itemReference>
-            </finding>
-            <finding>
-                <itemReference>
-                    <reference value="Observation/{$Fernmetastasen_ID}" />
-                </itemReference>
-            </finding>
-            <finding>
-                <itemReference>
-                    <reference value="Observation/{$Ansprechen_ID}" />
-                </itemReference>
-            </finding>
+                    <itemReference>
+                        <reference value="Observation/{$Lokales_Rezidiv_ID}" />
+                    </itemReference>
+                </finding>
+            </xsl:if>
+            <xsl:if test="$Lym_Rezidiv_ID != ''">
+                <finding>
+                    <itemReference>
+                        <reference value="Observation/{$Lym_Rezidiv_ID}" />
+                    </itemReference>
+                </finding>
+            </xsl:if>
+            <xsl:if test="$Fernmetastasen_ID != ''">
+                <finding>
+                    <itemReference>
+                        <reference value="Observation/{$Fernmetastasen_ID}" />
+                    </itemReference>
+                </finding>
+            </xsl:if>
+            <xsl:if test="$Ansprechen_ID != ''">
+                <finding>
+                    <itemReference>
+                        <reference value="Observation/{$Ansprechen_ID}" />
+                    </itemReference>
+                </finding>
+            </xsl:if>
                 </ClinicalImpression>
             </resource>
             <request>
