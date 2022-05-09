@@ -17,6 +17,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.FileEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 
 
 public class Adt2fhir {
@@ -165,6 +166,7 @@ public class Adt2fhir {
         //System.out.println(response.getStatusLine());
         if (!response.getStatusLine().getReasonPhrase().equals("OK")) {;
             System.out.println("Error - FHIR import: could not import file"+ inputFile.getName());
+            System.out.println(EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8));
         }
         else {
             inputFile.deleteOnExit();
