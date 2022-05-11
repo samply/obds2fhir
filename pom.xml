@@ -6,7 +6,7 @@
 
     <groupId>de.samply.common</groupId>
     <artifactId>adt2fhir</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -55,7 +55,7 @@
         <dependency>
             <groupId>net.sf.saxon</groupId>
             <artifactId>Saxon-HE</artifactId>
-            <version>9.8.0-15</version>
+            <version>11.3</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
