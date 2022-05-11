@@ -134,6 +134,9 @@ public class Adt2fhir {
                                 applyXslt(xmlResult, transformer2);
                                 inputFile.deleteOnExit();
                             }
+                            else {
+                                inputFile.renameTo(new File(configReader.getFile_path()+"/Processed/"+inputFile.getName()));
+                            }
                         } catch (UnsupportedEncodingException | TransformerException | RuntimeException e) {
                             counter-=1;
                             System.out.print("ERROR - transformation: problem with file " + inputFile);
