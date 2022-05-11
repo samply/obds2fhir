@@ -1,6 +1,9 @@
 package de.samply.adt2fhir;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class ConfigReader {
@@ -25,8 +28,6 @@ public class ConfigReader {
             }
             if (inputStream != null) {
                 prop.load(inputStream);
-            } else {
-                throw new FileNotFoundException("property file '" + PROPERTY_FILE + "' not found in resouces");
             }
             this.file_path = prop.getProperty("file_path");
             this.store_path = prop.getProperty("store_path");

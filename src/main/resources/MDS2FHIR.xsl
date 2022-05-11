@@ -345,12 +345,16 @@
                     </xsl:if>
                     <xsl:if test="./Lokale_Beurteilung_Resttumor">
                         <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-LokaleResidualstatus">
-                            <reference value="Observation/{mds2fhir:getID(hash:hash($Patient_ID, $Diagnosis_ID , concat(./Lokale_Beurteilung_Resttumor, $System_Therapy_ID)),'', generate-id(./Lokale_Beurteilung_Resttumor))}" />
+                            <valueReference>
+                                <reference value="Observation/{mds2fhir:getID(hash:hash($Patient_ID, $Diagnosis_ID , concat(./Lokale_Beurteilung_Resttumor, $System_Therapy_ID)),'', generate-id(./Lokale_Beurteilung_Resttumor))}" />
+                            </valueReference>
                         </extension>
                     </xsl:if>
                     <xsl:if test="./Gesamtbeurteilung_Resttumor">
                         <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-GesamtbeurteilungResidualstatus">
-                            <reference value="Observation/{mds2fhir:getID(hash:hash($Patient_ID, $Diagnosis_ID , concat(./Gesamtbeurteilung_Resttumor, $System_Therapy_ID)),'', generate-id(./Gesamtbeurteilung_Resttumor))}" />
+                            <valueReference>
+                                <reference value="Observation/{mds2fhir:getID(hash:hash($Patient_ID, $Diagnosis_ID , concat(./Gesamtbeurteilung_Resttumor, $System_Therapy_ID)),'', generate-id(./Gesamtbeurteilung_Resttumor))}" />
+                            </valueReference>
                         </extension>
                     </xsl:if>
                     <xsl:choose>
