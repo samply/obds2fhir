@@ -15,6 +15,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.FileEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 
 
 public class Adt2fhir {
@@ -27,7 +28,7 @@ public class Adt2fhir {
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_GREEN = "\u001B[32m";
 
-    public static void main(String[] args) throws TransformerConfigurationException, IOException {
+    public static void main(String[] args) {
         System.out.print("load configuration... ");
         ConfigReader configReader = new ConfigReader();
         try {
@@ -36,40 +37,54 @@ public class Adt2fhir {
             System.out.println(" failed");
             e.printStackTrace();
         }
-        HttpPost httppost = new HttpPost(configReader.getStore_path());
-        RequestConfig requestConfig = RequestConfig.copy(RequestConfig.DEFAULT)
-                //.setProxy(new HttpHost("XXX.XXX.XXX.XXX", 8080))
-                .build();
-        httppost.setConfig(requestConfig);
-        httppost.addHeader("content-type", "application/xml+fhir");
         System.out.println(ANSI_GREEN+"...done"+ANSI_RESET);
 
         System.out.print("initialize transformers... ");
         final TransformerFactoryImpl factory = (TransformerFactoryImpl) TransformerFactory.newInstance("net.sf.saxon.TransformerFactoryImpl", null);
         net.sf.saxon.Configuration saxonConfig = factory.getConfiguration();
-        ((Processor) saxonConfig.getProcessor()).registerExtensionFunction(new PatientPseudonymizer());
+        PatientPseudonymizer patientPseudonymizer = new PatientPseudonymizer();
+        patientPseudonymizer.initialize(configReader);
+        ((Processor) saxonConfig.getProcessor()).registerExtensionFunction(patientPseudonymizer);
         ((Processor) saxonConfig.getProcessor()).registerExtensionFunction(new UniqueIdGenerator());
 
-        final Transformer ADT2singleADTtransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("toSinglePatients.xsl")));
-        ADT2singleADTtransformer.setParameter("filepath", configReader.getFile_path());
-        final Transformer ADT2MDStransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("ADT2MDS_FHIR.xsl")));
-        final Transformer MDS2FHIRtransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("MDS2FHIR.xsl")));
-        MDS2FHIRtransformer.setParameter("filepath", configReader.getFile_path());
-        MDS2FHIRtransformer.setParameter("identifier_system", configReader.getIdentifier_system());
+        Transformer ADT2singleADTtransformer = null;
+        Transformer ADT2MDStransformer = null;
+        Transformer MDS2FHIRtransformer = null;
+        try {
+            ADT2singleADTtransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("toSinglePatients.xsl")));
+            ADT2singleADTtransformer.setParameter("filepath", configReader.getFile_path());
+            ADT2MDStransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("ADT2MDS_FHIR.xsl")));
+            MDS2FHIRtransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("MDS2FHIR.xsl")));
+            MDS2FHIRtransformer.setParameter("filepath", configReader.getFile_path());
+            MDS2FHIRtransformer.setParameter("identifier_system", configReader.getIdentifier_system());
+        } catch (TransformerConfigurationException e) {
+            System.out.print("Transformer configurtaion error");
+        }
         System.out.println(ANSI_GREEN+"...done"+ANSI_RESET);
 
+        long startTime = System.nanoTime();
         System.out.println("Transforming to single Patients... \n");
         processXmlFiles(INPUT_ADT, ADT2singleADTtransformer, configReader);
-        System.out.println(ANSI_GREEN+"...done"+ANSI_RESET);
+        long stopTime = System.nanoTime();
+        System.out.println(ANSI_GREEN+"...done "+ANSI_RESET+(stopTime - startTime)/1000000000+ " seconds");
 
+
+        startTime = System.nanoTime();
         System.out.println("Transforming to FHIR... \n");
         processXmlFiles(ADT_PATIENTS, ADT2MDStransformer, configReader, MDS2FHIRtransformer, true);
-        System.out.println(ANSI_GREEN+"...done"+ANSI_RESET);
+        stopTime = System.nanoTime();
+        System.out.println(ANSI_GREEN+"...done "+ANSI_RESET+(stopTime - startTime)/1000000000+ " seconds");
 
+        HttpPost httppost = new HttpPost(configReader.getStore_path());
+        RequestConfig requestConfig = RequestConfig.copy(RequestConfig.DEFAULT).build();
+        httppost.setConfig(requestConfig);
+        httppost.addHeader("content-type", "application/xml+fhir");
 
+        startTime = System.nanoTime();
         System.out.println("posting fhir resources to blaze store...\n");
         processXmlFiles(FHIR_PATIENTS, null, configReader, httppost);
-        System.out.println(ANSI_GREEN+"...done"+ANSI_RESET);
+        stopTime = System.nanoTime();
+        System.out.println(ANSI_GREEN+"...done "+ANSI_RESET+(stopTime - startTime)/1000000000+ " seconds");
 
     }
 
@@ -93,11 +108,12 @@ public class Adt2fhir {
             System.out.println("ABORTING: empty "+ fileDir +" dir");
         }
         else {
-            int counter=1;
+            int counter=0;
             for (File inputFile : listOfFiles) {
-                System.out.println("\u001B[AFile "+counter+" of "+listOfFiles.length);
-                counter+=1;
+                //System.out.println(inputFile);
                 if (inputFile.isFile() & inputFile.getName().toLowerCase().endsWith(".xml")) {
+                    counter+=1;
+                    System.out.println("\u001B[AFile " + counter + " of " + (listOfFiles.length-1) + " / Filename: " + inputFile);
                     if (transformer ==null){
                         try {
                             postToFhirStore(inputFile, httppost);
@@ -109,24 +125,29 @@ public class Adt2fhir {
                     }
                     else {
                         //System.out.print("processing file " + inputFile.getName() + "...");
-                        String combinedADTfile = null;
+                        String inputFileString = null;
                         try {
-                            combinedADTfile = new String(Files.readAllBytes(Paths.get(String.valueOf(inputFile))), StandardCharsets.UTF_8);
+                            inputFileString = new String(Files.readAllBytes(Paths.get(String.valueOf(inputFile))), StandardCharsets.UTF_8);
                         } catch (IOException e) {
                             counter-=1;
                             System.out.print("ERROR - reading: problem with file " + inputFile);
                             e.printStackTrace();
                         }
                         try {
-                            String xmlResult = applyXslt(combinedADTfile, transformer);
+                            transformer.setParameter("customPrefix", counter);
+                            String xmlResult = applyXslt(inputFileString, transformer);
                             if(transformWrittenResults){
+                                transformer2.setParameter("customPrefix", inputFile.getName());
                                 applyXslt(xmlResult, transformer2);
                                 inputFile.deleteOnExit();
                             }
-                        } catch (TransformerException | UnsupportedEncodingException e) {
+                            else {
+                                inputFile.renameTo(new File(configReader.getFile_path()+"/Processed/"+inputFile.getName()));
+                            }
+                        } catch (UnsupportedEncodingException | TransformerException | RuntimeException e) {
                             counter-=1;
                             System.out.print("ERROR - transformation: problem with file " + inputFile);
-                            e.printStackTrace();
+                            //e.printStackTrace();
                         }
                     }
                 }
@@ -153,6 +174,7 @@ public class Adt2fhir {
         //System.out.println(response.getStatusLine());
         if (!response.getStatusLine().getReasonPhrase().equals("OK")) {;
             System.out.println("Error - FHIR import: could not import file"+ inputFile.getName());
+            System.out.println(EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8));
         }
         else {
             inputFile.deleteOnExit();
@@ -169,19 +191,12 @@ public class Adt2fhir {
     }
 
 
-    private static String applyXslt(String xmlString, Transformer adtPrime) throws TransformerException, UnsupportedEncodingException {
-            Source xmlSource = new StreamSource(new ByteArrayInputStream(xmlString.getBytes(StandardCharsets.UTF_8.name())));
-            Writer outputWriter = new StringWriter();
-            StreamResult transformed = new StreamResult(outputWriter);
-
-            /*ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream("file.zip"));
-            factory.setAttribute("http://saxon.sf.net/feature/outputURIResolver", new ZipOutputURIReslover(zipOut))
-            MemoryOutputURIResolver mem=new MemoryOutputURIResolver();*/
-            /*factory.setAttribute("http://saxon.sf.net/feature/outputURIResolver", mem);
-            factory.setAttribute("http://saxon.sf.net/feature/allow-external-functions", new Boolean(true));*/
-            adtPrime.transform(xmlSource, transformed);
-            String output = outputWriter.toString();
-
+    private static String applyXslt(String xmlString, Transformer transformer) throws UnsupportedEncodingException, TransformerException {
+        Source xmlSource = new StreamSource(new ByteArrayInputStream(xmlString.getBytes(StandardCharsets.UTF_8.name())));
+        Writer outputWriter = new StringWriter();
+        StreamResult transformed = new StreamResult(outputWriter);
+        transformer.transform(xmlSource, transformed);
+        String output = outputWriter.toString();
             return output;
     }
 
