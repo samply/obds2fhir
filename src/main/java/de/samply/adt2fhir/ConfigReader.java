@@ -1,6 +1,9 @@
 package de.samply.adt2fhir;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class ConfigReader {
@@ -8,13 +11,13 @@ public class ConfigReader {
     public String file_path;
     public String store_path;
     public String identifier_system;
+    public String mainzelliste_url;
+    public String mainzelliste_apikey;
 
     public void init() throws IOException {
         try {
             Properties prop = new Properties();
             InputStream inputStream =null;
-            //try loading docker configuration
-            //("adt2fhir.properties");
             File file = new File("/etc/samply/"+PROPERTY_FILE);
             if (file.isFile()){
                 inputStream =new FileInputStream(file);
@@ -25,12 +28,12 @@ public class ConfigReader {
             }
             if (inputStream != null) {
                 prop.load(inputStream);
-            } else {
-                throw new FileNotFoundException("property file '" + PROPERTY_FILE + "' not found in resouces");
             }
             this.file_path = prop.getProperty("file_path");
             this.store_path = prop.getProperty("store_path");
             this.identifier_system = prop.getProperty("identifier_system");
+            this.mainzelliste_url = prop.getProperty("mainzelliste_url");
+            this.mainzelliste_apikey = prop.getProperty("mainzelliste_apikey");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -44,5 +47,9 @@ public class ConfigReader {
     }
     public String getIdentifier_system() {
         return identifier_system;
+    }
+    public String getMainzelliste_url() { return mainzelliste_url; }
+    public String getMainzelliste_apikey() {
+        return mainzelliste_apikey;
     }
 }
