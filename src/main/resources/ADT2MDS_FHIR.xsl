@@ -41,7 +41,7 @@
     <xsl:template match="Patient">
         <Patient>
             <xsl:variable name="Patient_Id" select="Patienten_Stammdaten/@Patient_ID"/>
-            <xsl:variable name="Patient_Pseudonym" select="xsi:Pseudonymize(Patienten_Stammdaten/Patienten_Geschlecht, Patienten_Stammdaten/Patienten_Vornamen, Patienten_Stammdaten/Patienten_Nachname, Patienten_Stammdaten/Patienten_Geburtsname, Patienten_Stammdaten/Patienten_Geburtsdatum)"/>
+            <xsl:variable name="Patient_Pseudonym" select="xsi:Pseudonymize(Patienten_Stammdaten/Patienten_Geschlecht, Patienten_Stammdaten/Patienten_Vornamen, Patienten_Stammdaten/Patienten_Nachname, Patienten_Stammdaten/Patienten_Geburtsname, Patienten_Stammdaten/Patienten_Geburtsdatum, Patienten_Stammdaten/@Patient_ID)"/>
             <xsl:attribute name="Patient_ID">
                 <!--<xsl:value-of select="Patienten_Stammdaten/@Patient_ID"/>-->
                 <xsl:value-of select="hash:hash($Patient_Id,'','')"/>
@@ -994,7 +994,8 @@
         <xsl:param name="surname"/>
         <xsl:param name="birthname"/>
         <xsl:param name="brithdate"/>
-        <xsl:value-of select="hash:pseudonymize(xsi:ReplaceEmpty($gender), xsi:ReplaceEmpty($prename), xsi:ReplaceEmpty($surname), xsi:ReplaceEmpty($birthname), xsi:ReplaceEmpty($brithdate))"/>
+        <xsl:param name="identifier"/>
+        <xsl:value-of select="hash:pseudonymize(xsi:ReplaceEmpty($gender), xsi:ReplaceEmpty($prename), xsi:ReplaceEmpty($surname), xsi:ReplaceEmpty($birthname), xsi:ReplaceEmpty($brithdate), xsi:ReplaceEmpty($identifier))"/>
     </xsl:function>
     
     <xsl:function name="xsi:ReplaceEmpty">

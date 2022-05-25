@@ -1,4 +1,4 @@
-ARG OPENJDK_VERSION=8u332-slim
+ARG OPENJDK_VERSION=8u332-jre-slim
 FROM openjdk:${OPENJDK_VERSION}
 ADD target/adt2fhir*jar-with-dependencies.jar   /usr/local/bin/adt2fhir.jar
 ADD src/docker/adt2fhir.properties              /etc/samply/

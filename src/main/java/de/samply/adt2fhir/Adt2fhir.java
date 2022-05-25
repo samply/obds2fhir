@@ -28,7 +28,7 @@ public class Adt2fhir {
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_GREEN = "\u001B[32m";
 
-    public static void main(String[] args) throws TransformerConfigurationException, IOException {
+    public static void main(String[] args) {
         System.out.print("load configuration... ");
         ConfigReader configReader = new ConfigReader();
         try {
@@ -47,12 +47,19 @@ public class Adt2fhir {
         ((Processor) saxonConfig.getProcessor()).registerExtensionFunction(patientPseudonymizer);
         ((Processor) saxonConfig.getProcessor()).registerExtensionFunction(new UniqueIdGenerator());
 
-        final Transformer ADT2singleADTtransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("toSinglePatients.xsl")));
-        ADT2singleADTtransformer.setParameter("filepath", configReader.getFile_path());
-        final Transformer ADT2MDStransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("ADT2MDS_FHIR.xsl")));
-        final Transformer MDS2FHIRtransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("MDS2FHIR.xsl")));
-        MDS2FHIRtransformer.setParameter("filepath", configReader.getFile_path());
-        MDS2FHIRtransformer.setParameter("identifier_system", configReader.getIdentifier_system());
+        Transformer ADT2singleADTtransformer = null;
+        Transformer ADT2MDStransformer = null;
+        Transformer MDS2FHIRtransformer = null;
+        try {
+            ADT2singleADTtransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("toSinglePatients.xsl")));
+            ADT2singleADTtransformer.setParameter("filepath", configReader.getFile_path());
+            ADT2MDStransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("ADT2MDS_FHIR.xsl")));
+            MDS2FHIRtransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("MDS2FHIR.xsl")));
+            MDS2FHIRtransformer.setParameter("filepath", configReader.getFile_path());
+            MDS2FHIRtransformer.setParameter("identifier_system", configReader.getIdentifier_system());
+        } catch (TransformerConfigurationException e) {
+            System.out.print("Transformer configurtaion error");
+        }
         System.out.println(ANSI_GREEN+"...done"+ANSI_RESET);
 
         long startTime = System.nanoTime();
@@ -106,7 +113,7 @@ public class Adt2fhir {
                 //System.out.println(inputFile);
                 if (inputFile.isFile() & inputFile.getName().toLowerCase().endsWith(".xml")) {
                     counter+=1;
-                    System.out.println("\u001B[AFile "+counter+" of "+(listOfFiles.length-1));
+                    System.out.println("\u001B[AFile " + counter + " of " + (listOfFiles.length-1) + " / Filename: " + inputFile);
                     if (transformer ==null){
                         try {
                             postToFhirStore(inputFile, httppost);
@@ -118,9 +125,9 @@ public class Adt2fhir {
                     }
                     else {
                         //System.out.print("processing file " + inputFile.getName() + "...");
-                        String inputXml = null;
+                        String inputFileString = null;
                         try {
-                            inputXml = new String(Files.readAllBytes(Paths.get(String.valueOf(inputFile))), StandardCharsets.UTF_8);
+                            inputFileString = new String(Files.readAllBytes(Paths.get(String.valueOf(inputFile))), StandardCharsets.UTF_8);
                         } catch (IOException e) {
                             counter-=1;
                             System.out.print("ERROR - reading: problem with file " + inputFile);
@@ -128,7 +135,7 @@ public class Adt2fhir {
                         }
                         try {
                             transformer.setParameter("customPrefix", counter);
-                            String xmlResult = applyXslt(inputXml, transformer);
+                            String xmlResult = applyXslt(inputFileString, transformer);
                             if(transformWrittenResults){
                                 transformer2.setParameter("customPrefix", inputFile.getName());
                                 applyXslt(xmlResult, transformer2);
