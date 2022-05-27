@@ -10,8 +10,8 @@ do
 sed -i "s|{file_path}|${FILE_PATH:-/adt2fhir/clinical_data}|"                                                         $file
 sed -i "s|{store_path}|${STORE_PATH:-http://host.docker.internal:8090/fhir}|"                                         $file
 sed -i "s|{identifier_system}|${IDENTIFIER_SYSTEM:-http://dktk.dkfz.de/fhir/onco/core/CodeSystem/PseudonymArtCS}|"    $file
-sed -i "s|{mainzelliste_url}|${MAINZELLIST_URL:-http://host.docker.internal:8080}|"                                   $file
-sed -i "s|{mainzelliste_apikey}|${MAINZELLIST_APIKEY}|"                                                               $file
+sed -i "s|{mainzelliste_url}|${MAINZELLISTE_URL:-http://host.docker.internal:8080}|"                                  $file
+sed -i "s|{mainzelliste_apikey}|${MAINZELLISTE_APIKEY}|"                                                              $file
 done
 
 if [ -d "/clinical_data/InputADT" ]; then
