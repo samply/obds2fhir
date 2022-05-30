@@ -96,7 +96,7 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
         HttpPost httppost = createHttpPost(prename, surname, birthname, brithdateParts[0], brithdateParts[1], brithdateParts[2]);
         HttpResponse response = httpclient.execute(httppost);
         if (response.getStatusLine().getStatusCode()==401) {
-            createMainzellisteConnection();
+            createMainzellisteSession();
             this.addPatientToken = session.getToken(token);
             response = httpclient.execute(new HttpPost(mainzelliste_url+"/patients?tokenId="+addPatientToken));
             System.out.println("Creating new session");
@@ -105,7 +105,7 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
             this.httpclient = HttpClients.createDefault();
             httppost = createHttpPost(preprocessIDAT(prename), preprocessIDAT(surname), preprocessIDAT(birthname), brithdateParts[0], brithdateParts[1], brithdateParts[2]);
             response = httpclient.execute(httppost);
-            System.out.println("\u001B[A"+"\u001B[100C" + "Unallowed character in patient "+ identifier + " ... autocorrected");
+            System.out.println("\u001B[A"+"\u001B[100C" + "Unallowed character in patient "+ identifier + " ... autocorrected\n");
         }
         if (response.getStatusLine().getStatusCode()!=201) {
             System.out.println("ERROR - Pseudonymization response: " +  response.getStatusLine().getStatusCode());
@@ -120,26 +120,27 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
         return pseudonym;
     }
 
-    public void initialize (ConfigReader configReader){
-        this.mainzelliste_url=configReader.getMainzelliste_url();
-        this.mainzelliste_apikey=configReader.getMainzelliste_apikey();
-        if (mainzelliste_apikey.isEmpty()){
-            this.anonymize=true;
-        }else {
+    public void initialize (ConfigReader configReader, boolean pseudonymize){
+        if (pseudonymize){
             this.anonymize=false;
+            this.mainzelliste_url=configReader.getMainzelliste_url();
+            this.mainzelliste_apikey=configReader.getMainzelliste_apikey();
             try {
                 this.mainzellisteConnection = new MainzellisteConnection(mainzelliste_url, mainzelliste_apikey);
                 this.token = new AddPatientToken();
                 this.token.addIdType("pid");
                 this.httpclient = HttpClients.createDefault();
-                createMainzellisteConnection();
+                createMainzellisteSession();
             } catch (URISyntaxException | MainzellisteNetworkException | InvalidSessionException e) {
                 throw new RuntimeException(e);
             }
         }
+        else {
+            this.anonymize=true;
+        }
     }
 
-    private void createMainzellisteConnection() throws InvalidSessionException, MainzellisteNetworkException {
+    private void createMainzellisteSession() throws InvalidSessionException, MainzellisteNetworkException {
         this.session = mainzellisteConnection.createSession();
     }
 

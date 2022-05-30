@@ -10,7 +10,9 @@ import javax.xml.transform.stream.StreamSource;
 import net.sf.saxon.TransformerFactoryImpl;
 import net.sf.saxon.s9api.Processor;
 import org.apache.http.HttpResponse;
+import org.apache.http.NoHttpResponseException;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.FileEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -20,16 +22,17 @@ import org.apache.http.util.EntityUtils;
 
 public class Adt2fhir {
 
-    private static final String INPUT_ADT="/InputADT";
-    private static final String ADT_PATIENTS="/ADT_Patients";
-    private static final String FHIR_PATIENTS="/FHIR_Patients";
+    private static final String INPUT_ADT="/InputADT/";
+    private static final String ADT_PATIENTS="/ADT_Patients/";
+    private static final String FHIR_PATIENTS="/FHIR_Patients/";
+    private static final String PROCESSED="/Processed/";
 
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_RED = "\u001B[31m";
-    public static final String ANSI_GREEN = "\u001B[32m";
+    private static final String ANSI_RESET = "\u001B[0m";
+    private static final String ANSI_RED = "\u001B[31m";
+    private static final String ANSI_GREEN = "\u001B[32m";
 
     public static void main(String[] args) {
-        System.out.print("load configuration... ");
+        System.out.println("load configuration... ");
         ConfigReader configReader = new ConfigReader();
         try {
             configReader.init();
@@ -37,13 +40,20 @@ public class Adt2fhir {
             System.out.println(" failed");
             e.printStackTrace();
         }
+        boolean pseudonymize = false;
+        if (!configReader.getMainzelliste_apikey().isEmpty()){
+            pseudonymize = checkConnections("Mainzelliste", configReader.getMainzelliste_url());
+        } else {
+            System.out.println("missing Mainzelliste Apikey - Skipping relevant processes");
+        }
+        boolean FHIRimport = checkConnections("Blaze FHIR Server", configReader.getStore_path()+"?_count=0");
         System.out.println(ANSI_GREEN+"...done"+ANSI_RESET);
 
         System.out.print("initialize transformers... ");
         final TransformerFactoryImpl factory = (TransformerFactoryImpl) TransformerFactory.newInstance("net.sf.saxon.TransformerFactoryImpl", null);
         net.sf.saxon.Configuration saxonConfig = factory.getConfiguration();
         PatientPseudonymizer patientPseudonymizer = new PatientPseudonymizer();
-        patientPseudonymizer.initialize(configReader);
+        patientPseudonymizer.initialize(configReader, pseudonymize);
         ((Processor) saxonConfig.getProcessor()).registerExtensionFunction(patientPseudonymizer);
         ((Processor) saxonConfig.getProcessor()).registerExtensionFunction(new UniqueIdGenerator());
 
@@ -58,7 +68,7 @@ public class Adt2fhir {
             MDS2FHIRtransformer.setParameter("filepath", configReader.getFile_path());
             MDS2FHIRtransformer.setParameter("identifier_system", configReader.getIdentifier_system());
         } catch (TransformerConfigurationException e) {
-            System.out.print("Transformer configurtaion error");
+            System.out.print("Transformer configuration error");
         }
         System.out.println(ANSI_GREEN+"...done"+ANSI_RESET);
 
@@ -75,17 +85,18 @@ public class Adt2fhir {
         stopTime = System.nanoTime();
         System.out.println(ANSI_GREEN+"...done "+ANSI_RESET+(stopTime - startTime)/1000000000+ " seconds");
 
-        HttpPost httppost = new HttpPost(configReader.getStore_path());
-        RequestConfig requestConfig = RequestConfig.copy(RequestConfig.DEFAULT).build();
-        httppost.setConfig(requestConfig);
-        httppost.addHeader("content-type", "application/xml+fhir");
+        if (FHIRimport){
+            HttpPost httppost = new HttpPost(configReader.getStore_path());
+            RequestConfig requestConfig = RequestConfig.copy(RequestConfig.DEFAULT).build();
+            httppost.setConfig(requestConfig);
+            httppost.addHeader("content-type", "application/xml+fhir");
 
-        startTime = System.nanoTime();
-        System.out.println("posting fhir resources to blaze store...\n");
-        processXmlFiles(FHIR_PATIENTS, null, configReader, httppost);
-        stopTime = System.nanoTime();
-        System.out.println(ANSI_GREEN+"...done "+ANSI_RESET+(stopTime - startTime)/1000000000+ " seconds");
-
+            startTime = System.nanoTime();
+            System.out.println("posting fhir resources to blaze store...\n");
+            processXmlFiles(FHIR_PATIENTS, null, configReader, httppost);
+            stopTime = System.nanoTime();
+            System.out.println(ANSI_GREEN+"...done "+ANSI_RESET+(stopTime - startTime)/1000000000+ " seconds");
+        }
     }
 
 
@@ -113,7 +124,7 @@ public class Adt2fhir {
                 //System.out.println(inputFile);
                 if (inputFile.isFile() & inputFile.getName().toLowerCase().endsWith(".xml")) {
                     counter+=1;
-                    System.out.println("\u001B[AFile " + counter + " of " + (listOfFiles.length-1) + " / Filename: " + inputFile);
+                    System.out.println("\u001B[AFile " + counter + " of " + (listOfFiles.length) + " / Filename: " + inputFile);
                     if (transformer ==null){
                         try {
                             postToFhirStore(inputFile, httppost);
@@ -142,7 +153,7 @@ public class Adt2fhir {
                                 inputFile.deleteOnExit();
                             }
                             else {
-                                inputFile.renameTo(new File(configReader.getFile_path()+"/Processed/"+inputFile.getName()));
+                                inputFile.renameTo(new File(configReader.getFile_path() + PROCESSED + inputFile.getName()));
                             }
                         } catch (UnsupportedEncodingException | TransformerException | RuntimeException e) {
                             counter-=1;
@@ -162,16 +173,9 @@ public class Adt2fhir {
     private static void postToFhirStore(File inputFile, HttpPost httppost) throws IOException {
         CloseableHttpClient httpclient = HttpClients.createDefault();
         File file = new File(inputFile.toString());
-
         FileEntity entity = new FileEntity(file);
-
         httppost.setEntity(entity);
-
-        //System.out.println("executing request " + httppost.getRequestLine() + httppost.getConfig());
         HttpResponse response = httpclient.execute(httppost);
-        //HttpEntity resEntity = response.getEntity();
-
-        //System.out.println(response.getStatusLine());
         if (!response.getStatusLine().getReasonPhrase().equals("OK")) {;
             System.out.println("Error - FHIR import: could not import file"+ inputFile.getName());
             System.out.println(EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8));
@@ -179,15 +183,7 @@ public class Adt2fhir {
         else {
             inputFile.deleteOnExit();
         }
-
         httpclient.close();
-
-        /*
-        final Client client = ClientBuilder.newBuilder().register(MultiPartFeature.class).build();
-        WebTarget target = client.target("http://localhost:8080/resource/mydoc");
-
-        Response response = target.request().post(Entity.xml(inputFile));
-         */
     }
 
 
@@ -200,4 +196,32 @@ public class Adt2fhir {
             return output;
     }
 
+    private static boolean checkConnections(String servicename, String URL) {
+        boolean serviceAvailable = false;
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+        HttpResponse httpResponse = null;
+        HttpGet httpGetRequest = null;
+        if (URL != null && !URL.isEmpty()) {
+            httpGetRequest = new HttpGet(URL);
+            try {
+                httpResponse = httpclient.execute(httpGetRequest);
+                if (httpResponse.getStatusLine().getReasonPhrase().equals("OK") || httpResponse.getStatusLine().getStatusCode()==200) {
+                    System.out.println(servicename + " is accessible: " + URL);
+                    serviceAvailable = true;
+                }
+                else {
+                    System.out.println(servicename + " is NOT accessible: " + URL);
+                }
+                httpclient.close();
+            } catch (NoHttpResponseException e){
+                System.out.println("Error: NoHttpResponseException while trying to access " + servicename + " at " + URL + " - Skipping relevant processes");
+            } catch (IOException e) {
+                System.out.println("Error: RuntimeException while trying to access " + servicename + " at " + URL + " - Skipping relevant processes");
+            }
+        }
+        else {
+            System.out.println(servicename + " url not specified. Skipping relevant processes");
+        }
+        return serviceAvailable;
+    }
 }
