@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 export FILES_TO_PARSE="/etc/samply/adt2fhir.properties"
 
@@ -22,6 +22,6 @@ for dir in $directories; do
     mkdir /adt2fhir/clinical_data/$dir/
   fi
 done
-echo -e "\u001B[32m...done\u001B[0m"
+echo -e "\x1b[32m...done\x1b[39m"
 
 java -jar /usr/local/bin/adt2fhir.jar
