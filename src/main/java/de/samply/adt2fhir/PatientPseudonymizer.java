@@ -31,7 +31,6 @@ import org.apache.http.util.EntityUtils;
 
 public class PatientPseudonymizer extends ExtensionFunctionDefinition {
     private String mainzelliste_url;
-    private String mainzelliste_apikey;
     private boolean anonymize=false;
     private MainzellisteConnection mainzellisteConnection;
     private Session session;
@@ -65,7 +64,7 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
         return new ExtensionFunctionCall() {
 
             @Override
-            public Sequence call(XPathContext ctx, Sequence[] args) throws XPathException {
+            public Sequence call(XPathContext ctx, Sequence[] args) {
                 String output = "";
                 String gender = args[0].iterate().next().getStringValue();
                 String prename = args[1].iterate().next().getStringValue();
@@ -124,7 +123,7 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
         if (pseudonymize){
             this.anonymize=false;
             this.mainzelliste_url=configReader.getMainzelliste_url();
-            this.mainzelliste_apikey=configReader.getMainzelliste_apikey();
+            String mainzelliste_apikey=configReader.getMainzelliste_apikey();
             try {
                 this.mainzellisteConnection = new MainzellisteConnection(mainzelliste_url, mainzelliste_apikey);
                 this.token = new AddPatientToken();
@@ -144,11 +143,11 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
         this.session = mainzellisteConnection.createSession();
     }
 
-    private HttpPost createHttpPost (String prename, String surname, String birthname, String brithday, String brithmonth, String brithyear) throws UnsupportedEncodingException {
+    private HttpPost createHttpPost (String prename, String surname, String birthname, String brithday, String brithmonth, String brithyear) {
         HttpPost httppost= new HttpPost(mainzelliste_url+"/patients?tokenId="+addPatientToken);
         httppost.addHeader("content-type", "application/x-www-form-urlencoded");
         httppost.addHeader("mainzellisteApiVersion", "3.2");
-        List<NameValuePair> idat = new ArrayList<NameValuePair>();
+        List<NameValuePair> idat = new ArrayList<>();
         //idat.add(new BasicNameValuePair("gender", gender));
         idat.add(new BasicNameValuePair("vorname", prename));
         idat.add(new BasicNameValuePair("nachname", surname));
@@ -159,7 +158,7 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
         //idat.add(new BasicNameValuePair("plz", ""));
         //idat.add(new BasicNameValuePair("ort", ""));
         idat.add(new BasicNameValuePair("sureness", "true"));
-        httppost.setEntity(new UrlEncodedFormEntity(idat, HTTP.UTF_8));
+        httppost.setEntity(new UrlEncodedFormEntity(idat, StandardCharsets.UTF_8));
         return httppost;
     }
 
