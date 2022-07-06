@@ -5,8 +5,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import de.pseudonymisierung.mainzelliste.client.*;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
 import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,6 @@ import net.sf.saxon.lib.ExtensionFunctionCall;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
 import net.sf.saxon.om.Sequence;
 import net.sf.saxon.om.StructuredQName;
-import net.sf.saxon.trans.XPathException;
 import net.sf.saxon.value.SequenceType;
 import net.sf.saxon.value.StringValue;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -26,7 +26,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
 public class PatientPseudonymizer extends ExtensionFunctionDefinition {
@@ -127,10 +126,15 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
             try {
                 this.mainzellisteConnection = new MainzellisteConnection(mainzelliste_url, mainzelliste_apikey);
                 this.token = new AddPatientToken();
+                AuditTrailLog auditTrailLog = new AuditTrailLog();
+                auditTrailLog.setUsername("adt2fhir");
+                auditTrailLog.setRemoteSystem(String.valueOf(InetAddress.getLocalHost()));
+                auditTrailLog.setReasonForChange("Add Patient");
+                this.token.setAuditTrailLog(auditTrailLog);
                 this.token.addIdType(configReader.getIdtype());
                 this.httpclient = HttpClients.createDefault();
                 createMainzellisteSession();
-            } catch (URISyntaxException | MainzellisteNetworkException | InvalidSessionException e) {
+            } catch (URISyntaxException | MainzellisteNetworkException | InvalidSessionException | UnknownHostException e) {
                 throw new RuntimeException(e);
             }
         }
