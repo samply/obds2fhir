@@ -1,4 +1,5 @@
 .idea/*
+./clinical_data/*
 target
 *.properties
 clinical_data/*

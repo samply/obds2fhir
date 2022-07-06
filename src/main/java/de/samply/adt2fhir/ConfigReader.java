@@ -13,6 +13,7 @@ public class ConfigReader {
     public String identifier_system;
     public String mainzelliste_url;
     public String mainzelliste_apikey;
+    public String idtype;
 
     public void init() throws IOException {
         try {
@@ -34,6 +35,7 @@ public class ConfigReader {
             this.identifier_system = prop.getProperty("identifier_system");
             this.mainzelliste_url = prop.getProperty("mainzelliste_url");
             this.mainzelliste_apikey = prop.getProperty("mainzelliste_apikey");
+            this.idtype = prop.getProperty("idtype");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -51,5 +53,8 @@ public class ConfigReader {
     public String getMainzelliste_url() { return mainzelliste_url; }
     public String getMainzelliste_apikey() {
         return mainzelliste_apikey;
+    }
+    public String getIdtype() {
+        return idtype;
     }
 }

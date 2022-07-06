@@ -127,7 +127,7 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
             try {
                 this.mainzellisteConnection = new MainzellisteConnection(mainzelliste_url, mainzelliste_apikey);
                 this.token = new AddPatientToken();
-                this.token.addIdType("locallyUniqueId");
+                this.token.addIdType(configReader.getIdtype());
                 this.httpclient = HttpClients.createDefault();
                 createMainzellisteSession();
             } catch (URISyntaxException | MainzellisteNetworkException | InvalidSessionException e) {
