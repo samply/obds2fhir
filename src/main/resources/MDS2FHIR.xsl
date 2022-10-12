@@ -276,6 +276,9 @@
                         <subject>
                             <reference value="Patient/{$Patient_ID}" />
                         </subject>
+                        <xsl:if test="./Tumor_Diagnosedatum">
+                            <onsetDateTime value="{mds2fhir:transformDate(./Tumor_Diagnosedatum)}" />
+                        </xsl:if>
                         <onsetAge>
                             <value value="{./Alter_bei_Erstdiagnose}" />
                             <unit value="Jahre" />
