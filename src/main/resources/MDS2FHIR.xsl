@@ -278,14 +278,8 @@
                         </subject>
                         <xsl:if test="./Tumor_Diagnosedatum">
                             <onsetDateTime value="{mds2fhir:transformDate(./Tumor_Diagnosedatum)}" />
+                            <recordedDate value="{mds2fhir:transformDate(./Tumor_Diagnosedatum)}" />
                         </xsl:if>
-                        <onsetAge>
-                            <value value="{./Alter_bei_Erstdiagnose}" />
-                            <unit value="Jahre" />
-                            <system value="http://unitsofmeasure.org" />
-                            <code value="a" />
-                        </onsetAge>
-                        <xsl:if test="./Tumor_Diagnosedatum"><recordedDate value="{mds2fhir:transformDate(./Tumor_Diagnosedatum)}" /></xsl:if>
                         <xsl:for-each select="./Tumor/TNM">
                         <stage>
                             <assessment>
