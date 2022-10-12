@@ -266,10 +266,12 @@
                                 <xsl:if test="./Tumor/ICD-O_Katalog_Topographie_Version">"<version value="{./Tumor/ICD-O_Katalog_Topographie_Version}" /></xsl:if>
                                 <xsl:if test="./Tumor/Lokalisation"><code value="{./Tumor/Lokalisation}" /></xsl:if>
                             </coding>
-                            <coding>
-                                <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SeitenlokalisationCS" />
-                                <code value="{./Tumor/Seitenlokalisation}" />
-                            </coding>
+                            <xsl:if test="./Tumor/Lokalisation">
+                                <coding>
+                                    <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SeitenlokalisationCS" />
+                                    <code value="{./Tumor/Seitenlokalisation}" />
+                                </coding>
+                            </xsl:if>
                         </bodySite>
                         <subject>
                             <reference value="Patient/{$Patient_ID}" />
@@ -394,8 +396,8 @@
                     <medicationCodeableConcept>
                     <xsl:choose>
                         <xsl:when test="./SYST_Substanz">
-                        <text value="{./SYST_Substanz}" />
-                    </xsl:when>
+                            <text value="{./SYST_Substanz}" />
+                        </xsl:when>
                         <xsl:otherwise>
                             <text value="Keine Angabe zur Substanz" />
                         </xsl:otherwise>
