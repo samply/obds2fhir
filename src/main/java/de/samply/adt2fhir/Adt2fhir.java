@@ -30,6 +30,7 @@ public class Adt2fhir {
     private static final String ANSI_RESET = "\u001B[0m";
     private static final String ANSI_RED = "\u001B[31m";
     private static final String ANSI_GREEN = "\u001B[32m";
+    private static final String DONE = ANSI_GREEN+"...done "+ANSI_RESET;
 
     public static void main(String[] args) {
         System.out.println("load configuration... ");
@@ -47,7 +48,7 @@ public class Adt2fhir {
             System.out.println("missing Mainzelliste Apikey - Skipping relevant processes");
         }
         boolean FHIRimport = checkConnections("Blaze FHIR Server", configReader.getStore_path()+"?_count=0");
-        System.out.println(ANSI_GREEN+"...done"+ANSI_RESET);
+        System.out.println(DONE);
 
         System.out.print("initialize transformers... ");
         final TransformerFactoryImpl factory = (TransformerFactoryImpl) TransformerFactory.newInstance("net.sf.saxon.TransformerFactoryImpl", null);
@@ -70,20 +71,20 @@ public class Adt2fhir {
         } catch (TransformerConfigurationException e) {
             System.out.print("Transformer configuration error");
         }
-        System.out.println(ANSI_GREEN+"...done"+ANSI_RESET);
+        System.out.println(DONE);
 
         long startTime = System.nanoTime();
         System.out.println("Transforming to single Patients... \n");
         processXmlFiles(INPUT_ADT, ADT2singleADTtransformer, configReader);
         long stopTime = System.nanoTime();
-        System.out.println(ANSI_GREEN+"...done "+ANSI_RESET+(stopTime - startTime)/1000000000+ " seconds");
+        System.out.println(DONE+(stopTime - startTime)/1000000000+ " seconds");
 
 
         startTime = System.nanoTime();
         System.out.println("Transforming to FHIR... \n");
         processXmlFiles(ADT_PATIENTS, ADT2MDStransformer, configReader, MDS2FHIRtransformer, true);
         stopTime = System.nanoTime();
-        System.out.println(ANSI_GREEN+"...done "+ANSI_RESET+(stopTime - startTime)/1000000000+ " seconds");
+        System.out.println(DONE+(stopTime - startTime)/1000000000+ " seconds");
 
         if (FHIRimport){
             HttpPost httppost = new HttpPost(configReader.getStore_path());
@@ -95,7 +96,7 @@ public class Adt2fhir {
             System.out.println("posting fhir resources to blaze store...\n");
             processXmlFiles(FHIR_PATIENTS, null, configReader, httppost);
             stopTime = System.nanoTime();
-            System.out.println(ANSI_GREEN+"...done "+ANSI_RESET+(stopTime - startTime)/1000000000+ " seconds");
+            System.out.println(DONE+(stopTime - startTime)/1000000000+ " seconds");
         }
     }
 
@@ -138,7 +139,7 @@ public class Adt2fhir {
                         //System.out.print("processing file " + inputFile.getName() + "...");
                         String inputFileString = null;
                         try {
-                            inputFileString = new String(Files.readAllBytes(Paths.get(String.valueOf(inputFile))), StandardCharsets.UTF_8);
+                            inputFileString = Files.readString(Paths.get(String.valueOf(inputFile)));
                         } catch (IOException e) {
                             counter-=1;
                             System.out.print("ERROR - reading: problem with file " + inputFile);
@@ -162,7 +163,9 @@ public class Adt2fhir {
                         }
                     }
                 }
-                else if (inputFile.isFile() & inputFile.getName().toLowerCase().endsWith(".gitignore")) {}
+                else if (inputFile.isFile() & inputFile.getName().toLowerCase().endsWith(".gitignore")) {
+                    //do nothing
+                }
                 else {
                     System.out.print("\n\t\u001B[31m" + "skipping file:" + "\u001B[0m" + " '" + inputFile.getName() + "' - not a valid xml file");
                 }
@@ -176,7 +179,7 @@ public class Adt2fhir {
         FileEntity entity = new FileEntity(file);
         httppost.setEntity(entity);
         HttpResponse response = httpclient.execute(httppost);
-        if (!response.getStatusLine().getReasonPhrase().equals("OK")) {;
+        if (!response.getStatusLine().getReasonPhrase().equals("OK")) {
             System.out.println("Error - FHIR import: could not import file"+ inputFile.getName());
             System.out.println(EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8));
         }
@@ -192,15 +195,14 @@ public class Adt2fhir {
         Writer outputWriter = new StringWriter();
         StreamResult transformed = new StreamResult(outputWriter);
         transformer.transform(xmlSource, transformed);
-        String output = outputWriter.toString();
-            return output;
+        return outputWriter.toString();
     }
 
     private static boolean checkConnections(String servicename, String URL) {
         boolean serviceAvailable = false;
         CloseableHttpClient httpclient = HttpClients.createDefault();
-        HttpResponse httpResponse = null;
-        HttpGet httpGetRequest = null;
+        HttpResponse httpResponse;
+        HttpGet httpGetRequest;
         if (URL != null && !URL.isEmpty()) {
             httpGetRequest = new HttpGet(URL);
             try {

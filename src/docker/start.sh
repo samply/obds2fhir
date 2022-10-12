@@ -10,6 +10,7 @@ for file in $FILES_TO_PARSE; do
   sed -i "s|{identifier_system}|${IDENTIFIER_SYSTEM:-http://dktk.dkfz.de/fhir/onco/core/CodeSystem/PseudonymArtCS}|" $file
   sed -i "s|{mainzelliste_url}|${MAINZELLISTE_URL:-http://host.docker.internal:8080}|" $file
   sed -i "s|{mainzelliste_apikey}|${MAINZELLISTE_APIKEY}|" $file
+  sed -i "s|{idtype}|${IDTYPE}|" $file
 done
 
 echo "Checking required input and output directories..."

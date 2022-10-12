@@ -51,7 +51,7 @@ java -jar adt2fhir-*version-number*-jar-with-dependencies.jar
 #####Java - Notes:
 Set the configuration in ```/src/main/resources/adt2fhir.properties```:
 
-see **Docker - Notes**
+please refer **Docker - Notes**
 
 ###Manual - deprecated:
 
