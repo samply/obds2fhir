@@ -1100,7 +1100,7 @@
                                                 <xsl:attribute name="value">21900-6</xsl:attribute>
                                             </xsl:when>
                                             <xsl:otherwise>
-                                                <xsl:attribute name="value">201906-3</xsl:attribute>
+                                                <xsl:attribute name="value">21906-3</xsl:attribute>
                                             </xsl:otherwise>
                                     </xsl:choose>
                                     </code>
