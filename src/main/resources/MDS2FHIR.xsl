@@ -266,7 +266,7 @@
                                 <xsl:if test="./Tumor/ICD-O_Katalog_Topographie_Version">"<version value="{./Tumor/ICD-O_Katalog_Topographie_Version}" /></xsl:if>
                                 <xsl:if test="./Tumor/Lokalisation"><code value="{./Tumor/Lokalisation}" /></xsl:if>
                             </coding>
-                            <xsl:if test="./Tumor/Lokalisation">
+                            <xsl:if test="./Tumor/Seitenlokalisation">
                                 <coding>
                                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SeitenlokalisationCS" />
                                     <code value="{./Tumor/Seitenlokalisation}" />
@@ -1449,7 +1449,7 @@
     <xsl:function name="mds2fhir:getICDType">
         <xsl:param name="version" />
         <xsl:choose>
-            <xsl:when test="contains($version,'GM')">http://fhir.de/CodeSystem/dimdi/icd-10-gm</xsl:when>
+            <xsl:when test="contains($version,'GM')">http://fhir.de/CodeSystem/bfarm/icd-10-gm</xsl:when>
             <xsl:when test="contains($version,'WHO')">http://hl7.org/fhir/sid/icd-10</xsl:when>
         </xsl:choose>
     </xsl:function>
