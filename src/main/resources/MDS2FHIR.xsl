@@ -266,7 +266,7 @@
                                 <xsl:if test="./Tumor/ICD-O_Katalog_Topographie_Version">"<version value="{./Tumor/ICD-O_Katalog_Topographie_Version}" /></xsl:if>
                                 <xsl:if test="./Tumor/Lokalisation"><code value="{./Tumor/Lokalisation}" /></xsl:if>
                             </coding>
-                            <xsl:if test="./Tumor/Lokalisation">
+                            <xsl:if test="./Tumor/Seitenlokalisation">
                                 <coding>
                                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SeitenlokalisationCS" />
                                     <code value="{./Tumor/Seitenlokalisation}" />
