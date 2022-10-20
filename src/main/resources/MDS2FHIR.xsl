@@ -1449,7 +1449,7 @@
     <xsl:function name="mds2fhir:getICDType">
         <xsl:param name="version" />
         <xsl:choose>
-            <xsl:when test="contains($version,'GM')">http://fhir.de/CodeSystem/dimdi/icd-10-gm</xsl:when>
+            <xsl:when test="contains($version,'GM')">http://fhir.de/CodeSystem/bfarm/icd-10-gm</xsl:when>
             <xsl:when test="contains($version,'WHO')">http://hl7.org/fhir/sid/icd-10</xsl:when>
         </xsl:choose>
     </xsl:function>
