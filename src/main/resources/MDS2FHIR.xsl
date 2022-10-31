@@ -38,6 +38,7 @@
     <xsl:template match="Patient" mode="patient">
         <xsl:variable name="Patient_ID" select="@Patient_ID" />
         <xsl:variable name="Vitalstatus_ID" select="hash:hash($Patient_ID, 'vitalstatus', '')" />
+        <xsl:variable name="Organization_ID" select="hash:hash(./Organisation, 'organization', '')" />
         <xsl:result-document href="file:{$filepath}/FHIR_Patients/FHIR_{$customPrefix}">
         <Bundle xmlns="http://hl7.org/fhir">
             <id value="{generate-id()}" />
@@ -77,6 +78,11 @@
                             </xsl:choose>
                         </gender>
                         <xsl:if test="./Geburtsdatum"><birthDate value="{mds2fhir:transformDate(./Geburtsdatum)}" /></xsl:if>
+                        <xsl:if test="./Organisation != ''">
+                            <managingOrganization>
+                                <reference value="Organization/{$Organization_ID}" />
+                            </managingOrganization>
+                        </xsl:if>
                     </Patient>
                 </resource>
                 <request>
@@ -84,6 +90,24 @@
                     <url value="Patient/{$Patient_ID}" />
                 </request>
             </entry>
+            <xsl:if test="./Organisation != ''">
+                <entry>
+                    <fullUrl value="http://example.com/Organization/{$Organization_ID}" />
+                    <resource>
+                        <Organization>
+                            <id value="{$Organization_ID}" />
+                            <meta>
+                                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Organization-Organisation" />
+                            </meta>
+                            <name value="{./Organisation}" />
+                        </Organization>
+                    </resource>
+                    <request>
+                        <method value="PUT" />
+                        <url value="Organization/{$Organization_ID}" />
+                    </request>
+                </entry>
+            </xsl:if>
             <entry>
                 <fullUrl value="http://example.com/Observation/{$Vitalstatus_ID}" />
                 <resource>
