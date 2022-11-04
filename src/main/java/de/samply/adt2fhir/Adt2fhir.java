@@ -4,6 +4,10 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import javax.xml.transform.*;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
@@ -14,6 +18,9 @@ import org.apache.http.NoHttpResponseException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.conn.ssl.SSLContextBuilder;
+import org.apache.http.conn.ssl.TrustAllStrategy;
 import org.apache.http.entity.FileEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -43,11 +50,11 @@ public class Adt2fhir {
         }
         boolean pseudonymize = false;
         if (!configReader.getMainzelliste_apikey().isEmpty()){
-            pseudonymize = checkConnections("Mainzelliste", configReader.getMainzelliste_url());
+            pseudonymize = checkConnections("Mainzelliste", configReader.getMainzelliste_url(), configReader);
         } else {
             System.out.println("missing Mainzelliste Apikey - Skipping relevant processes");
         }
-        boolean FHIRimport = checkConnections("Blaze FHIR Server", configReader.getStore_path()+"?_count=0");
+        boolean FHIRimport = checkConnections("Blaze FHIR Server", configReader.getStore_path()+"?_count=0", configReader);
         System.out.println(DONE);
 
         System.out.print("initialize transformers... ");
@@ -90,7 +97,9 @@ public class Adt2fhir {
             HttpPost httppost = new HttpPost(configReader.getStore_path());
             RequestConfig requestConfig = RequestConfig.copy(RequestConfig.DEFAULT).build();
             httppost.setConfig(requestConfig);
+            String encoding = Base64.getEncoder().encodeToString((configReader.getStore_auth()).getBytes());
             httppost.addHeader("content-type", "application/xml+fhir");
+            httppost.addHeader("Authorization", "Basic " + encoding);
 
             startTime = System.nanoTime();
             System.out.println("posting fhir resources to blaze store...\n");
@@ -128,7 +137,7 @@ public class Adt2fhir {
                     System.out.println("\u001B[AFile " + counter + " of " + (listOfFiles.length) + " / Filename: " + inputFile);
                     if (transformer ==null){
                         try {
-                            postToFhirStore(inputFile, httppost);
+                            postToFhirStore(inputFile, httppost, configReader);
                         } catch (IOException e) {
                             counter-=1;
                             System.out.print("ERROR - FHIR import: problem with file " + inputFile);
@@ -173,8 +182,13 @@ public class Adt2fhir {
         }
     }
 
-    private static void postToFhirStore(File inputFile, HttpPost httppost) throws IOException {
-        CloseableHttpClient httpclient = HttpClients.createDefault();
+    private static void postToFhirStore(File inputFile, HttpPost httppost, ConfigReader configReader) throws IOException {
+        CloseableHttpClient httpclient = null;
+        try {
+            httpclient = getHttpClient(configReader.getSsl_certificate_validation());
+        } catch (NoSuchAlgorithmException | KeyStoreException | KeyManagementException e) {
+            throw new RuntimeException(e);
+        }
         File file = new File(inputFile.toString());
         FileEntity entity = new FileEntity(file);
         httppost.setEntity(entity);
@@ -198,13 +212,33 @@ public class Adt2fhir {
         return outputWriter.toString();
     }
 
-    private static boolean checkConnections(String servicename, String URL) {
+    private static CloseableHttpClient getHttpClient(Boolean secure) throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
+        CloseableHttpClient httpclient = null;
+        if (!secure){
+            httpclient = HttpClients.custom()
+                    .setSSLContext(new SSLContextBuilder().loadTrustMaterial(null, TrustAllStrategy.INSTANCE).build())
+                    .setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE).build();
+        }
+        else {
+            httpclient = HttpClients.createDefault();
+        }
+        return httpclient;
+    }
+
+    private static boolean checkConnections(String servicename, String URL, ConfigReader configReader) {
         boolean serviceAvailable = false;
-        CloseableHttpClient httpclient = HttpClients.createDefault();
+        CloseableHttpClient httpclient = null;
+        try {
+            httpclient = getHttpClient(configReader.getSsl_certificate_validation());
+        } catch (NoSuchAlgorithmException | KeyStoreException | KeyManagementException e) {
+            throw new RuntimeException(e);
+        }
         HttpResponse httpResponse;
         HttpGet httpGetRequest;
         if (URL != null && !URL.isEmpty()) {
             httpGetRequest = new HttpGet(URL);
+            String encoding = Base64.getEncoder().encodeToString((configReader.getStore_auth()).getBytes());
+            httpGetRequest.addHeader("Authorization", "Basic " + encoding);
             try {
                 httpResponse = httpclient.execute(httpGetRequest);
                 if (httpResponse.getStatusLine().getReasonPhrase().equals("OK") || httpResponse.getStatusLine().getStatusCode()==200) {
@@ -212,7 +246,7 @@ public class Adt2fhir {
                     serviceAvailable = true;
                 }
                 else {
-                    System.out.println(servicename + " is NOT accessible: " + URL);
+                    System.out.println(servicename + " is NOT accessible: " + URL + httpResponse.getStatusLine());
                 }
                 httpclient.close();
             } catch (NoHttpResponseException e){
