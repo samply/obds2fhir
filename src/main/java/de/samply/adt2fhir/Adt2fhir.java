@@ -214,7 +214,7 @@ public class Adt2fhir {
 
     private static CloseableHttpClient getHttpClient(Boolean secure) throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
         CloseableHttpClient httpclient = null;
-        if (!secure){
+        if (!secure){//experimental feature, do not set ssl_certificate_validation=false
             httpclient = HttpClients.custom()
                     .setSSLContext(new SSLContextBuilder().loadTrustMaterial(null, TrustAllStrategy.INSTANCE).build())
                     .setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE).build();
