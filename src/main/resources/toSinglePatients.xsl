@@ -22,6 +22,9 @@
                     <Menge_Patient>
                         <xsl:copy-of select="../@* | ." />
                     </Menge_Patient>
+                    <Menge_Melder>
+                        <xsl:copy-of select="/ADT_GEKID/Menge_Melder/Melder"/>
+                    </Menge_Melder>
                 </ADT_GEKID>
                 </xsl:result-document>
         </xsl:for-each>

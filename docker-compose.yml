@@ -10,12 +10,15 @@ services:
     environment:
       FILE_PATH: "/adt2fhir/clinical_data"
       STORE_PATH: "http://host.docker.internal:8090/fhir"
+      STORE_AUTH: ""
       IDENTIFIER_SYSTEM: "http://dktk.dkfz.de/fhir/onco/core/CodeSystem/PseudonymArtCS"
       MAINZELLISTE_URL: "http://host.docker.internal:8080"
       MAINZELLISTE_APIKEY: "pleaseChangeMe"
       IDTYPE: "pid"
+      SSL_CERTIFICATE_VALIDATION: "true"
     volumes:
       - ./clinical_data:/adt2fhir/clinical_data
+      - /etc/bridgehead/traefik-tls:/.../:ro
     #in case you run a separate docker-compose.yml
     extra_hosts:
       - "host.docker.internal:host-gateway"

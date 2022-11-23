@@ -152,12 +152,12 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
         httppost.addHeader("content-type", "application/x-www-form-urlencoded");
         httppost.addHeader("mainzellisteApiVersion", "3.2");
         List<NameValuePair> idat = new ArrayList<>();
-        idat.add(new BasicNameValuePair("Vorname", prename));
-        idat.add(new BasicNameValuePair("Nachname", surname));
-        idat.add(new BasicNameValuePair("Fruehere_Namen", formername));
-        idat.add(new BasicNameValuePair("Geburtstag", brithday));
-        idat.add(new BasicNameValuePair("Geburtsmonat", brithmonth));
-        idat.add(new BasicNameValuePair("Geburtsjahr", brithyear));
+        idat.add(new BasicNameValuePair("vorname", prename));
+        idat.add(new BasicNameValuePair("nachname", surname));
+        idat.add(new BasicNameValuePair("fruehere_Namen", formername));
+        idat.add(new BasicNameValuePair("geburtstag", brithday));
+        idat.add(new BasicNameValuePair("geburtsmonat", brithmonth));
+        idat.add(new BasicNameValuePair("geburtsjahr", brithyear));
         idat.add(new BasicNameValuePair("gender", gender));
         idat.add(new BasicNameValuePair("sureness", "true"));
 
