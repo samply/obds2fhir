@@ -70,6 +70,9 @@
             </xsl:choose>
             <Upload_Zeitpunkt_ZS_Antwort>PLACEHOLDER</Upload_Zeitpunkt_ZS_Antwort>
             <Upload_Zeitpunkt_ZS_Erfolg>PLACEHOLDER</Upload_Zeitpunkt_ZS_Erfolg>
+            <Organisation>
+                <xsl:value-of select="/ADT_GEKID/Menge_Melder/Melder[./@Melder_ID=/ADT_GEKID/Menge_Patient/Patient/Menge_Meldung/Meldung[1]/@Melder_ID]/Melder_KH_Abt_Station_Praxis"></xsl:value-of>
+            </Organisation>
 
         <!--pass children entities SAMPLE and DIAGNOSIS for further processing-->
             <xsl:if test="./Menge_Meldung/Meldung/Menge_Biomaterial/Biomaterial">

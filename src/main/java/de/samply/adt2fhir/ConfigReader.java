@@ -10,10 +10,12 @@ public class ConfigReader {
     private static final String PROPERTY_FILE = "adt2fhir.properties";
     public String file_path;
     public String store_path;
+    public String store_auth;
     public String identifier_system;
     public String mainzelliste_url;
     public String mainzelliste_apikey;
     public String idtype;
+    public boolean ssl_certificate_validation;
 
     public void init() throws IOException {
         try {
@@ -32,10 +34,12 @@ public class ConfigReader {
             }
             this.file_path = prop.getProperty("file_path");
             this.store_path = prop.getProperty("store_path");
+            this.store_auth = prop.getProperty("store_auth");
             this.identifier_system = prop.getProperty("identifier_system");
             this.mainzelliste_url = prop.getProperty("mainzelliste_url");
             this.mainzelliste_apikey = prop.getProperty("mainzelliste_apikey");
             this.idtype = prop.getProperty("idtype");
+            this.ssl_certificate_validation = Boolean.parseBoolean(prop.getProperty("ssl_certificate_validation"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -47,6 +51,9 @@ public class ConfigReader {
     public String getStore_path() {
         return store_path;
     }
+    public String getStore_auth() {
+        return store_auth;
+    }
     public String getIdentifier_system() {
         return identifier_system;
     }
@@ -56,5 +63,8 @@ public class ConfigReader {
     }
     public String getIdtype() {
         return idtype;
+    }
+    public Boolean getSsl_certificate_validation() {
+        return ssl_certificate_validation;
     }
 }
