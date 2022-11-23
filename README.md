@@ -2,7 +2,7 @@
 
 Using the two XSLT files (/src/main/resources/ADT2MDS_FHIR.xsl and /src/main/resources/MDS2FHIR.xsl), XML Files 
 conforming to ADT/GEKID (/src/main/resources/ ADT_GEKID_v2.1.*x*-dktk_v1.0.0.xsd ) can be transformed into FHIR 
-resources conforming to [de.dktk.oncology 1.0.4](https://simplifier.net/packages/de.dktk.oncology/1.0.4).
+resources conforming to [de.dktk.oncology 1.2.0](https://simplifier.net/packages/de.dktk.oncology/1.2.0).
 
 
 ##Usage
