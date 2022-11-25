@@ -38,7 +38,7 @@
     <xsl:template match="Patient" mode="patient">
         <xsl:variable name="Patient_ID" select="@Patient_ID" />
         <xsl:variable name="Vitalstatus_ID" select="hash:hash($Patient_ID, 'vitalstatus', '')" />
-        <xsl:variable name="Organization_ID" select="hash:hash(./Organisation, 'organization', '')" />
+        <xsl:variable name="Organization_ID" select="hash:hash(./Organisationen/Organisation, 'organization', '')" />
         <xsl:result-document href="file:{$filepath}/FHIR_Patients/FHIR_{$customPrefix}">
         <Bundle xmlns="http://hl7.org/fhir">
             <id value="{generate-id()}" />
@@ -60,7 +60,17 @@
                             </type>
                             <value value="{./DKTK_LOCAL_ID}"/>
                         </identifier>
-                        <xsl:if test="./Verlauf/Tod"><decasedDateTime value="{mds2fhir:transformDate(./Verlauf/Tod/Sterbedatum)}"/></xsl:if>
+                        <xsl:for-each select="./Organisationen/Abteilung">
+                            <identifier>
+                                <type>
+                                    <coding>
+                                        <system value="https://fhir/HKI_Organization"/>
+                                        <code value="{.}"/>
+                                    </coding>
+                                </type>
+                            </identifier>
+                        </xsl:for-each>
+                        <xsl:if test="./Vitalstatus='verstorben'"><deceasedDateTime value="{mds2fhir:transformDate(./Datum_des_letztbekannten_Vitalstatus)}"/></xsl:if>
                         <gender>
                             <xsl:choose>
                                 <xsl:when test="./Geschlecht='M'">
@@ -78,7 +88,7 @@
                             </xsl:choose>
                         </gender>
                         <xsl:if test="./Geburtsdatum"><birthDate value="{mds2fhir:transformDate(./Geburtsdatum)}" /></xsl:if>
-                        <xsl:if test="./Organisation != ''">
+                        <xsl:if test="./Organisationen/Organisation != ''">
                             <managingOrganization>
                                 <reference value="Organization/{$Organization_ID}" />
                             </managingOrganization>
@@ -87,10 +97,13 @@
                 </resource>
                 <request>
                     <method value="PUT" />
+                    <xsl:if test="./Vitalstatus = 'lebend'">
+                        <ifNoneMatch value="*"/>
+                    </xsl:if>
                     <url value="Patient/{$Patient_ID}" />
                 </request>
             </entry>
-            <xsl:if test="./Organisation != ''">
+            <xsl:if test="./Organisationen/Organisation != ''">
                 <entry>
                     <fullUrl value="http://example.com/Organization/{$Organization_ID}" />
                     <resource>
@@ -99,11 +112,12 @@
                             <meta>
                                 <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Organization-Organisation" />
                             </meta>
-                            <name value="{./Organisation}" />
+                            <name value="{./Organisationen/Organisation}" />
                         </Organization>
                     </resource>
                     <request>
                         <method value="PUT" />
+                        <ifNoneMatch value="*"/>
                         <url value="Organization/{$Organization_ID}" />
                     </request>
                 </entry>
@@ -137,6 +151,9 @@
                 </resource>
                 <request>
                     <method value="PUT" />
+                    <xsl:if test="./Vitalstatus = 'lebend'">
+                        <ifNoneMatch value="*"/>
+                    </xsl:if>
                     <url value="Observation/{$Vitalstatus_ID}" />
                 </request>
             </entry>
