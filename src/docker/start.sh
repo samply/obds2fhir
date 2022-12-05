@@ -13,10 +13,11 @@ for file in $FILES_TO_PARSE; do
   sed -i "s|{mainzelliste_apikey}|${MAINZELLISTE_APIKEY}|" $file
   sed -i "s|{idtype}|${IDTYPE}|" $file
   sed -i "s|{ssl_certificate_validation}|${SSL_CERTIFICATE_VALIDATION:-true}|" $file
+  sed -i "s|{add_departments}|${ADD_DEPARTMENTS:-false}|" $file
 done
 
 echo "Checking required input and output directories..."
-directories="InputADT ADT_Patients FHIR_Patients Processed"
+directories="InputADT Processed tmp tmp/ADT_Patients tmp/FHIR_Patients tmp/erroneous"
 for dir in $directories; do
   if [ -d "/adt2fhir/clinical_data/$dir" ]; then
     echo "$dir exists"
