@@ -38,8 +38,7 @@
     <xsl:template match="Patient" mode="patient">
         <xsl:variable name="Patient_ID" select="@Patient_ID" />
         <xsl:variable name="Vitalstatus_ID" select="hash:hash($Patient_ID, 'vitalstatus', '')" />
-        <xsl:variable name="Organization_ID" select="hash:hash(./Organisation, 'organization', '')" />
-        <xsl:result-document href="file:{$filepath}/FHIR_Patients/FHIR_{$customPrefix}">
+        <xsl:result-document href="file:{$filepath}/tmp/FHIR_Patients/FHIR_{$customPrefix}">
         <Bundle xmlns="http://hl7.org/fhir">
             <id value="{generate-id()}" />
             <type value="transaction" />
@@ -60,7 +59,7 @@
                             </type>
                             <value value="{./DKTK_LOCAL_ID}"/>
                         </identifier>
-                        <xsl:if test="./Verlauf/Tod"><decasedDateTime value="{mds2fhir:transformDate(./Verlauf/Tod/Sterbedatum)}"/></xsl:if>
+                        <!--<xsl:if test="./Vitalstatus='verstorben'"><deceasedDateTime value="{mds2fhir:transformDate(./Datum_des_letztbekannten_Vitalstatus)}"/></xsl:if>-->
                         <gender>
                             <xsl:choose>
                                 <xsl:when test="./Geschlecht='M'">
@@ -78,66 +77,11 @@
                             </xsl:choose>
                         </gender>
                         <xsl:if test="./Geburtsdatum"><birthDate value="{mds2fhir:transformDate(./Geburtsdatum)}" /></xsl:if>
-                        <xsl:if test="./Organisation != ''">
-                            <managingOrganization>
-                                <reference value="Organization/{$Organization_ID}" />
-                            </managingOrganization>
-                        </xsl:if>
                     </Patient>
                 </resource>
                 <request>
                     <method value="PUT" />
                     <url value="Patient/{$Patient_ID}" />
-                </request>
-            </entry>
-            <xsl:if test="./Organisation != ''">
-                <entry>
-                    <fullUrl value="http://example.com/Organization/{$Organization_ID}" />
-                    <resource>
-                        <Organization>
-                            <id value="{$Organization_ID}" />
-                            <meta>
-                                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Organization-Organisation" />
-                            </meta>
-                            <name value="{./Organisation}" />
-                        </Organization>
-                    </resource>
-                    <request>
-                        <method value="PUT" />
-                        <url value="Organization/{$Organization_ID}" />
-                    </request>
-                </entry>
-            </xsl:if>
-            <entry>
-                <fullUrl value="http://example.com/Observation/{$Vitalstatus_ID}" />
-                <resource>
-                    <Observation>
-                        <id value="{$Vitalstatus_ID}" />
-                        <meta>
-                            <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Vitalstatus" />
-                        </meta>
-                        <status value="registered" />
-                        <code>
-                            <coding>
-                                <system value="http://loinc.org" />
-                                <code value="75186-7" />
-                            </coding>
-                        </code>
-                        <subject>
-                            <reference value="Patient/{$Patient_ID}" />
-                        </subject>
-                        <xsl:if test="./Datum_des_letztbekannten_Vitalstatus"><effectiveDateTime value="{mds2fhir:transformDate(./Datum_des_letztbekannten_Vitalstatus)}" /></xsl:if>
-                        <valueCodeableConcept>
-                            <coding>
-                                <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VitalstatusCS" />
-                                <code value="{./Vitalstatus}" />
-                            </coding>
-                        </valueCodeableConcept>
-                    </Observation>
-                </resource>
-                <request>
-                    <method value="PUT" />
-                    <url value="Observation/{$Vitalstatus_ID}" />
                 </request>
             </entry>
 
@@ -152,6 +96,81 @@
             </xsl:apply-templates>
 
         </Bundle>
+        </xsl:result-document>
+
+        <xsl:result-document href="file:{$filepath}/tmp/FHIR_Patients/FHIR_batch_{$customPrefix}">
+            <Bundle xmlns="http://hl7.org/fhir">
+                <id value="{generate-id()}" />
+                <type value="batch" />
+                <entry>
+                    <fullUrl value="http://example.com/Observation/{$Vitalstatus_ID}" />
+                    <resource>
+                        <Observation>
+                            <id value="{$Vitalstatus_ID}" />
+                            <meta>
+                                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Vitalstatus" />
+                            </meta>
+                            <status value="registered" />
+                            <code>
+                                <coding>
+                                    <system value="http://loinc.org" />
+                                    <code value="75186-7" />
+                                </coding>
+                            </code>
+                            <subject>
+                                <reference value="Patient/{$Patient_ID}" />
+                            </subject>
+                            <xsl:if test="./Datum_des_letztbekannten_Vitalstatus"><effectiveDateTime value="{mds2fhir:transformDate(./Datum_des_letztbekannten_Vitalstatus)}" /></xsl:if>
+                            <valueCodeableConcept>
+                                <coding>
+                                    <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VitalstatusCS" />
+                                    <code value="{./Vitalstatus}" />
+                                </coding>
+                            </valueCodeableConcept>
+                        </Observation>
+                    </resource>
+                    <request>
+                        <method value="PUT" />
+                        <xsl:if test="not(./Vitalstatus = 'verstorben')">
+                            <ifNoneMatch value="*"/>
+                        </xsl:if>
+                        <url value="Observation/{$Vitalstatus_ID}" />
+                    </request>
+                </entry>
+                <xsl:for-each select="./Organisationen/Abteilung">
+                    <xsl:variable name="Encounter_ID" select="hash:hash($Patient_ID, ., '')"/>
+                    <entry>
+                        <fullUrl value="http://example.com/Encounter/{$Encounter_ID}" />
+                        <resource>
+                            <Encounter>
+                                <id value="{$Encounter_ID}" />
+                                <meta>
+                                    <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Encounter-Fall" />
+                                </meta>
+                                <identifier>
+                                    <system value="http://dktk.dkfz.de/fhir/sid/hki-department"/>
+                                    <value value="{.}"/>
+                                </identifier>
+                                <status value="finished" />
+                                <class>
+                                    <system value="http://terminology.hl7.org/CodeSystem/v3-ActCode" />
+                                    <code value="VR" />
+                                    <display value="virtual" />
+                                </class>
+                                <subject>
+                                    <reference value="Patient/{$Patient_ID}" />
+                                </subject>
+                            </Encounter>
+                        </resource>
+                        <request>
+                            <method value="PUT" />
+                            <ifNoneMatch value="*"/>
+                            <url value="Encounter/{$Encounter_ID}" />
+                        </request>
+                    </entry>
+                </xsl:for-each>
+            </Bundle>
+
         </xsl:result-document>
     
     </xsl:template>

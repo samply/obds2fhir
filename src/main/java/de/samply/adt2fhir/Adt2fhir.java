@@ -30,8 +30,9 @@ import org.apache.http.util.EntityUtils;
 public class Adt2fhir {
 
     private static final String INPUT_ADT="/InputADT/";
-    private static final String ADT_PATIENTS="/ADT_Patients/";
-    private static final String FHIR_PATIENTS="/FHIR_Patients/";
+    private static final String ADT_PATIENTS="/tmp/ADT_Patients/";
+    private static final String FHIR_PATIENTS="/tmp/FHIR_Patients/";
+    private static final String ERRONEOUS="/tmp/erroneous";
     private static final String PROCESSED="/Processed/";
 
     private static final String ANSI_RESET = "\u001B[0m";
@@ -72,6 +73,7 @@ public class Adt2fhir {
             ADT2singleADTtransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("toSinglePatients.xsl")));
             ADT2singleADTtransformer.setParameter("filepath", configReader.getFile_path());
             ADT2MDStransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("ADT2MDS_FHIR.xsl")));
+            ADT2MDStransformer.setParameter("add_department", configReader.getAdd_departments());
             MDS2FHIRtransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("MDS2FHIR.xsl")));
             MDS2FHIRtransformer.setParameter("filepath", configReader.getFile_path());
             MDS2FHIRtransformer.setParameter("identifier_system", configReader.getIdentifier_system());
@@ -196,6 +198,7 @@ public class Adt2fhir {
         if (!response.getStatusLine().getReasonPhrase().equals("OK")) {
             System.out.println("Error - FHIR import: could not import file"+ inputFile.getName());
             System.out.println(EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8));
+            inputFile.renameTo(new File(configReader.getFile_path()+ERRONEOUS));
         }
         else {
             inputFile.deleteOnExit();

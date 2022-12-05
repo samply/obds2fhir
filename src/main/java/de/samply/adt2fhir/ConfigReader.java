@@ -16,6 +16,7 @@ public class ConfigReader {
     public String mainzelliste_apikey;
     public String idtype;
     public boolean ssl_certificate_validation;
+    public boolean add_departments;
 
     public void init() throws IOException {
         try {
@@ -40,6 +41,7 @@ public class ConfigReader {
             this.mainzelliste_apikey = prop.getProperty("mainzelliste_apikey");
             this.idtype = prop.getProperty("idtype");
             this.ssl_certificate_validation = Boolean.parseBoolean(prop.getProperty("ssl_certificate_validation"));
+            this.add_departments = Boolean.parseBoolean(prop.getProperty("add_departments"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -67,4 +69,5 @@ public class ConfigReader {
     public Boolean getSsl_certificate_validation() {
         return ssl_certificate_validation;
     }
+    public Boolean getAdd_departments(){return add_departments;}
 }
