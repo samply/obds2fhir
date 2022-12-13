@@ -10,11 +10,12 @@ services:
     environment:
       FILE_PATH: "/adt2fhir/clinical_data"
       STORE_PATH: "http://host.docker.internal:8090/fhir"
-      STORE_AUTH: ""
+      STORE_AUTH: "user:password"
       IDENTIFIER_SYSTEM: "http://dktk.dkfz.de/fhir/onco/core/CodeSystem/PseudonymArtCS"
       MAINZELLISTE_URL: "http://host.docker.internal:8080"
       MAINZELLISTE_APIKEY: "pleaseChangeMe"
       IDTYPE: "pid"
+      SALT: "createLocalCustomSalt"
       SSL_CERTIFICATE_VALIDATION: "true"
       ADD_DEPARTMENTS: "false"
     volumes:
