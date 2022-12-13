@@ -48,7 +48,7 @@
                     <Patient>
                         <id value="{$Patient_ID}" />
                         <meta>
-                            <profile value="https://fhir.bbmri.de/StructureDefinition/Patient" />
+                            <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Patient-Patient" />
                         </meta>
                         <identifier>
                             <type>
