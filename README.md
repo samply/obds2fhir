@@ -1,65 +1,63 @@
-# adt2fhir
+# ADT2FHIR
 
 Using the two XSLT files (/src/main/resources/ADT2MDS_FHIR.xsl and /src/main/resources/MDS2FHIR.xsl), XML Files 
 conforming to ADT/GEKID (/src/main/resources/ ADT_GEKID_v2.1.*x*-dktk_v1.0.0.xsd ) can be transformed into FHIR 
 resources conforming to [de.dktk.oncology 1.2.0](https://simplifier.net/packages/de.dktk.oncology/1.2.0).
 
 
-##Usage
+## Usage
 
-The main method transforms ADT/GEKID conform data into FHIR bundles and posts them to a FHIR server (```store_path``` in ```adt2fhir.properties```).
+The main method transforms ADT/GEKID conform data into FHIR bundles.
 Therefore, put your ADT/GEKID data in the input directory ```/clincial_data/Input_Patients```. 
-Additionally, you need an accessible FHIR server running (e.g. see https://github.com/samply/blaze)
+Optionally, you can (1) pseudonymize (e.g. see [Mainzelliste](https://bitbucket.org/medicalinformatics/mainzelliste)) and (2) import the data in a FHIR server (e.g. see [Blaze](https://github.com/samply/blaze)).
 
-You can run the transformation using Docker, Java or manually.
+The tool ADT2FHIR is desinged as docker-compose application.
 
 
-###Docker
+### Docker
 
 To run ADT2FHIR, put the ADT/GEKID xml files in ```/clinical_data/Input_ADT/``` and run:
 ```sh
-docker-compose pull
 docker-compose up
 ```
-#####Docker - Notes:
 
-Set the configuration in ```/src/docker/adt2fhir.properties```:
+You need at least docker-compose version `1.29.2`.
+The configuration is set in the ```docker-compose.yml``` file and is preconfigured as far as possible (you probably won't need to set **#commented** parameters):
 
-```file_path``` defines the directory of the clinical data on the docker host.
-You can use the default value, which then mounts the ```clinical_data``` directory to docker.
+###### Environment:
 
-```store_path``` defines the BLAZE FHIR server import URL.
+```file_path``` defines the directory of the clinical ADT/GEKID data in the docker container.
+There souldn't be a reason to change this.
+
+```store_path``` defines the URL of the FHIR server API.
 You can use the default value, when using the default BLAZE server (https://github.com/samply/blaze).
+
+```store_auth``` sets the FHIR server authentication. *Leave it empty if there is no authentication.*
 
 ```identifier_system``` defines the system of the FHIR identifiers.
 You can use the default value or set your own system URL.
 
+```mainzelliste_url``` for pseudonymization in the transformation step; sets the URL of the pseudonymization service. *Leave it empty if there is no pseudonymization.*
 
-###Java
+```mainzelliste_apikey``` sets the pseudonymization service authentication. *Leave it empty if there is no pseudonymization.*
 
-To run ADT2FHIR, put the ADT/GEKID xml files in ```/clinical_data/Input_ADT/``` and run:
+```idtype``` sets the pseudonym type. *Leave it empty if there is no pseudonymization.*
 
-```sh
-mvn clean install
-```
-The file **adt2fhir-** *version-number* **-jar-with-dependencies.jar** is then generated in your target folder and can be used via:
+```salt``` defines a random additional input for the hashing applied in generating the FHIR ids from ADT/GEKID. **Please do change this** 
 
+```ssl_certificate_validation``` can be set to false **IF** your FHIR server is only accessible via https and you do **NOT** have a valid SSL certificate. Not recommended!
 
-```sh
-java -jar adt2fhir-*version-number*-jar-with-dependencies.jar
-```
-#####Java - Notes:
-Set the configuration in ```/src/main/resources/adt2fhir.properties```:
+```add_departments``` can be set to true if you want to add the departments that commited the patient report (=ADT/GEKID Melder). *Probably not  necessary*.
 
-please refer **Docker - Notes**
+###### Volumes:
 
-###Manual - deprecated:
+```./clinical_data:/adt2fhir/clinical_data``` You can use the default value, which then mounts the host ```clinical_data``` directory to the docker container.
 
-For a manual transformation check out the branch **main_original**. 
+```/etc/bridgehead/traefik-tls:/.../:ro``` If you use https, please set the correct certificate path here.
 
-First apply ADT2MDS_FHIR.xsl to your ADT.xml data, then MDS2FHIR.xsl to the results of the first transformation.
-You can download the Saxon XSL processor [here](http://saxon.sourceforge.net/#F10HE) (Java Version). Unpack and find the JAR called saxon-he-[version].jar
-Call the JAR from the command line: ´java -jar path/to/jar/saxon-he-[version].jar -s:sorceFile.xml -xsl:tranformationFile.xsl`. Additional documentation can be found [here](https://www.saxonica.com/documentation/index.html#!using-xsl/commandline).
+###### Network - extra_hosts:
+``"host.docker.internal:host-gateway"`` If you run ADT2FHIR in an additional docker-compose file on the same host and you are not managing the docker network yourself, then use this configuration to enable access to other services (FHIR server; pseudonymization service).
+
 
 ## Notes
 
@@ -69,8 +67,8 @@ Call the JAR from the command line: ´java -jar path/to/jar/saxon-he-[version].j
 
 You should modify the identifier system (replace http://dktk.dkfz.de/fhir/onco/core/CodeSystem/PseudonymArtCS with
 a local URL). You can just make one up (or use the default), but note that this URL will be used as Identifier.system
-in the resulting FHIR Patient resources (Identifer.value will be a **hash** based on patient master data - will
-be replaced by Mainzelliste pseudonymization).
+in the resulting FHIR Patient resources (Identifer.value will be (A) a **hash** based on patient master data or if pseudonymization 
+is configured (B) be replaced by Mainzelliste pseudonym).
 
 Since ids are required in FHIR but optional in the ADT/GEKID XML schema, they are generated via content hashing
 if not present. However, it is recommended to provide all optinal ids in the importet ADT/GEKID XML files.
