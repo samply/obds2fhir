@@ -5,21 +5,19 @@ volumes:
 services:
   adt2fhir:
     image: docker.verbis.dkfz.de/ccp/adt2fhir:main
-    #image: adt2fhir
-    #build this image locally using the Dockerfile "docker build -t adt2fhir ."
     environment:
-      FILE_PATH: "/adt2fhir/clinical_data"
+      #FILE_PATH: "/adt2fhir/clinical_data"
       STORE_PATH: "http://host.docker.internal:8090/fhir"
-      STORE_AUTH: ""
+      #STORE_AUTH: "user:password"
       IDENTIFIER_SYSTEM: "http://dktk.dkfz.de/fhir/onco/core/CodeSystem/PseudonymArtCS"
-      MAINZELLISTE_URL: "http://host.docker.internal:8080"
-      MAINZELLISTE_APIKEY: "pleaseChangeMe"
-      IDTYPE: "pid"
-      SSL_CERTIFICATE_VALIDATION: "true"
-      ADD_DEPARTMENTS: "false"
+      #MAINZELLISTE_URL: "http://host.docker.internal:8080"
+      #MAINZELLISTE_APIKEY: "pleaseChangeMe"
+      #IDTYPE: "pid"
+      SALT: "createLocalCustomSalt"
+      #SSL_CERTIFICATE_VALIDATION: "true"
+      #ADD_DEPARTMENTS: "false"
     volumes:
       - ./clinical_data:/adt2fhir/clinical_data
-      - /etc/bridgehead/traefik-tls:/.../:ro
-    #in case you run a separate docker-compose.yml
+      #- /etc/bridgehead/traefik-tls:/.../:ro
     extra_hosts:
       - "host.docker.internal:host-gateway"

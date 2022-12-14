@@ -11,7 +11,7 @@ import net.sf.saxon.value.StringValue;
 import org.apache.commons.codec.digest.DigestUtils;
 
 public class UniqueIdGenerator extends ExtensionFunctionDefinition {
-
+private String salt;
 
     @Override
     public SequenceType[] getArgumentTypes() {
@@ -38,13 +38,17 @@ public class UniqueIdGenerator extends ExtensionFunctionDefinition {
             @Override
             public Sequence call(XPathContext ctx, Sequence[] args) throws XPathException {
                 String output = "";
-                String patient = args[0].iterate().next().getStringValue();
-                String diagnosis = args[1].iterate().next().getStringValue();
-                String id = args[2].iterate().next().getStringValue();
-                output =  DigestUtils.sha256Hex(patient+diagnosis+id).substring(48);
+                String var1 = args[0].iterate().next().getStringValue();
+                String var2 = args[1].iterate().next().getStringValue();
+                String var3 = args[2].iterate().next().getStringValue();
+                output = DigestUtils.sha256Hex(var1+var2+var3+salt).substring(48);
                 return StringValue.makeStringValue(output);
             }
 
         };
+    }
+
+    public void initialize(ConfigReader configReader) {
+        salt=configReader.getSalt();
     }
 }
