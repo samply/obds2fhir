@@ -36,6 +36,7 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
     private AddPatientToken token;
     private String addPatientToken;
     private CloseableHttpClient httpclient;
+    private String salt;
 
     @Override
     public net.sf.saxon.value.SequenceType[] getArgumentTypes() {
@@ -73,7 +74,7 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
                 String identifier = args[5].iterate().next().getStringValue();
 
                 if (anonymize) {
-                    output = DigestUtils.sha256Hex(gender + prename + surname + formername + brithdate + identifier).substring(32);
+                    output = DigestUtils.sha256Hex(gender + prename + surname + formername + brithdate + identifier + salt).substring(32);
                 } else {
                     try {
                         output=pseudonymizationCall(gender, prename, surname, formername, brithdate, identifier);
@@ -140,6 +141,7 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
         }
         else {
             this.anonymize=true;
+            this.salt=configReader.getSalt();
         }
     }
 
