@@ -12,6 +12,7 @@ for file in $FILES_TO_PARSE; do
   sed -i "s|{mainzelliste_url}|${MAINZELLISTE_URL:-http://host.docker.internal:8080}|" $file
   sed -i "s|{mainzelliste_apikey}|${MAINZELLISTE_APIKEY}|" $file
   sed -i "s|{idtype}|${IDTYPE}|" $file
+  sed -i "s|{salt}|${SALT:-createLocalCustomSalt}|" $file
   sed -i "s|{ssl_certificate_validation}|${SSL_CERTIFICATE_VALIDATION:-true}|" $file
   sed -i "s|{add_departments}|${ADD_DEPARTMENTS:-false}|" $file
 done

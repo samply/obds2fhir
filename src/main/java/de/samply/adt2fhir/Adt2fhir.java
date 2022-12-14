@@ -64,7 +64,9 @@ public class Adt2fhir {
         PatientPseudonymizer patientPseudonymizer = new PatientPseudonymizer();
         patientPseudonymizer.initialize(configReader, pseudonymize);
         ((Processor) saxonConfig.getProcessor()).registerExtensionFunction(patientPseudonymizer);
-        ((Processor) saxonConfig.getProcessor()).registerExtensionFunction(new UniqueIdGenerator());
+        UniqueIdGenerator uniqueIdGenerator = new UniqueIdGenerator();
+        uniqueIdGenerator.initialize(configReader);
+        ((Processor) saxonConfig.getProcessor()).registerExtensionFunction(uniqueIdGenerator);
 
         Transformer ADT2singleADTtransformer = null;
         Transformer ADT2MDStransformer = null;
