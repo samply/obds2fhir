@@ -2,4 +2,4 @@
 ./clinical_data/*
 target
 *.properties
-clinical_data/*
+docker-compose.override.yml
