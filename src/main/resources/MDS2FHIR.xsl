@@ -303,6 +303,7 @@
                                 <code value="{./Diagnose}" />
                             </coding>
                         </code>
+<!--                            TODO desired coding?<xsl:if test="./Diagnose_Text"><code><text value="{./Diagnose_Text}" /></code></xsl:if>-->
                         <bodySite>
                             <coding>
                                 <system value="urn:oid:2.16.840.1.113883.6.43.1" />
@@ -397,6 +398,13 @@
                             <valueReference>
                                 <reference value="Observation/{mds2fhir:getID(hash:hash($Patient_ID, $Diagnosis_ID , concat(./Gesamtbeurteilung_Resttumor, $System_Therapy_ID)),'', generate-id(./Gesamtbeurteilung_Resttumor))}" />
                             </valueReference>
+                        </extension>
+                    </xsl:if>
+                    <xsl:if test="./Systemische_Therapie_Protokoll">
+                        <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-SystemischeTherapieProtokoll">
+                            <valueCodeableConcept>
+                                <text value="{./Systemische_Therapie_Protokoll}" />
+                            </valueCodeableConcept>
                         </extension>
                     </xsl:if>
                     <xsl:choose>
@@ -580,6 +588,7 @@
                     <meta>
                         <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Procedure-Strahlentherapie" />
                     </meta>
+<!--                    TODO: Betrahlungen abdecken; Datum ergänzen-->
                     <xsl:if test="./Strahlentherapie_Stellung_zu_operativer_Therapie">
                         <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-StellungZurOp">
                             <valueCodeableConcept>
@@ -772,6 +781,7 @@
                     <subject>
                         <reference value="Patient/{$Patient_ID}" />
                     </subject>
+                    <xsl:if test="./OP_Datum"><performedDateTime value="{mds2fhir:transformDate(./OP_Datum)}" /></xsl:if>
                     <reasonReference>
                         <reference value="Condition/{$Diagnosis_ID}" />
                     </reasonReference>
@@ -799,10 +809,12 @@
 
         <xsl:apply-templates select="./Histology">
             <xsl:with-param name="Patient_ID" select="$Patient_ID" />
+            <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
         </xsl:apply-templates>
 
         <xsl:apply-templates select="./TNM">
             <xsl:with-param name="Patient_ID" select="$Patient_ID" />
+            <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
         </xsl:apply-templates>
 
     </xsl:template>
@@ -945,6 +957,9 @@
                         <subject>
                             <reference value="Patient/{$Patient_ID}" />
                         </subject>
+                        <focus>
+                            <reference value="Condition/{$Diagnosis_ID}"/>
+                        </focus>
                         <xsl:if test="./Datum_Verlauf"><effectiveDateTime value="{mds2fhir:transformDate(./Datum_Verlauf)}" /></xsl:if>
                         <valueCodeableConcept>
                             <coding>
@@ -979,6 +994,9 @@
                         <subject>
                             <reference value="Patient/{$Patient_ID}" />
                         </subject>
+                        <focus>
+                            <reference value="Condition/{$Diagnosis_ID}"/>
+                        </focus>
                         <xsl:if test="./Datum_Verlauf"><effectiveDateTime value="{mds2fhir:transformDate(./Datum_Verlauf)}" /></xsl:if>
                         <valueCodeableConcept>
                             <coding>
@@ -1033,10 +1051,12 @@
         </xsl:if>
         <xsl:apply-templates select="./Histology">
             <xsl:with-param name="Patient_ID" select="$Patient_ID" />
+            <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
         </xsl:apply-templates>
 
         <xsl:apply-templates select="./TNM">
             <xsl:with-param name="Patient_ID" select="$Patient_ID" />
+            <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
         </xsl:apply-templates>
 
         <xsl:apply-templates select="./Metastasis">
@@ -1343,12 +1363,14 @@
                     <focus>
                         <reference value="Condition/{$Diagnosis_ID}"/>
                     </focus>
+                    <xsl:if test="./Tumor_Histologiedatum"><effectiveDateTime value="{mds2fhir:transformDate(./Tumor_Histologiedatum)}" /></xsl:if>
                     <valueCodeableConcept>
                         <coding>
                             <system value="urn:oid:2.16.840.1.113883.6.43.1" />
                             <xsl:if test="./ICD-O_Katalog_Morphologie_Version"><version value="{./ICD-O_Katalog_Morphologie_Version}" /></xsl:if>
                             <xsl:if test="./Morphologie"><code value="{./Morphologie}" /></xsl:if>
                         </coding>
+<!--                        TODO desired coding?<xsl:if test="./Morphologie_Freitext"><text value="{./Morphologie_Freitext}" /></xsl:if>-->
                     </valueCodeableConcept>
                     <hasMember>
                         <reference value="Observation/{$Grading_ID}" />
