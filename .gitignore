@@ -1,5 +1,5 @@
 .idea/*
-./clinical_data/*
+/clinical_data/*
 target
 *.properties
 docker-compose.override.yml
