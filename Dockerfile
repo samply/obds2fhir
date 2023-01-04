@@ -5,6 +5,7 @@ ADD src/docker/adt2fhir.properties              /etc/samply/
 
 ADD src/docker/start.sh                         /adt2fhir/
 RUN chmod +x                                    /adt2fhir/start.sh
+RUN apk upgrade
 #RUN	apt-get update && apt-get install -y curl iputils-ping wget
 ENTRYPOINT ["adt2fhir/start.sh"]
 RUN echo adt2fhir

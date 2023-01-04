@@ -1370,7 +1370,7 @@
                             <xsl:if test="./ICD-O_Katalog_Morphologie_Version"><version value="{./ICD-O_Katalog_Morphologie_Version}" /></xsl:if>
                             <xsl:if test="./Morphologie"><code value="{./Morphologie}" /></xsl:if>
                         </coding>
-<!--                        TODO desired coding?<xsl:if test="./Morphologie_Freitext"><text value="{./Morphologie_Freitext}" /></xsl:if>-->
+                        <xsl:if test="./Morphologie_Freitext"><text value="{./Morphologie_Freitext}" /></xsl:if>
                     </valueCodeableConcept>
                     <hasMember>
                         <reference value="Observation/{$Grading_ID}" />
