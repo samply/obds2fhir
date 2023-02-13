@@ -619,7 +619,7 @@
                     </category>
                     <code>
                         <coding>
-                            <system value="http://fhir.de/CodeSystem/dimdi/ops"/>
+                            <system value="http://fhir.de/CodeSystem/bfarm/ops"/>
                             <code value="8-52"/>
                             <display value="Strahlentherapie"/>
                         </coding>
@@ -661,77 +661,77 @@
 
         <xsl:variable name="Radiation_Therapy_ID" select="mds2fhir:getID(./@ST_ID,'', generate-id())" as="xs:string" />
         <xsl:for-each select="./Bestrahlung">
-        <xsl:variable name="Single_Radiation_Therapy_ID" select="mds2fhir:getID(./@Betrahlung_ID,mds2fhir:transformDate(./ST_Beginn_Datum), generate-id())" as="xs:string" />
-        <entry>
-            <fullUrl value="http://example.com/Procedure/{$Single_Radiation_Therapy_ID}" />
-            <resource>
-                <Procedure>
-                    <id value="{$Single_Radiation_Therapy_ID}" />
-                    <meta>
-                        <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Procedure-Strahlentherapie" />
-                    </meta>
-                    <partOf>
-                        <reference value="Procedure/{$Radiation_Therapy_ID}"/>
-                    </partOf>
-                    <xsl:choose>
-                        <xsl:when test="./ST_Ende_Datum">
-                            <xsl:choose>
-                                <xsl:when test="ST_Ende_Grund='E'">
-                                    <status value="completed" />
-                                </xsl:when>
-                                <xsl:when test="ST_Ende_Grund='U'">
-                                    <status value="unknown" />
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <status value="stopped" />
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:choose>
-                                <xsl:when test="./ST_Beginn_Datum">
-                                    <status value="in-progress" />
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <status value="preparation" />
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                    <category>
-                        <coding>
-                            <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTTherapieartCS" />
-                            <code value="ST" />
-                            <display value="Strahlentherapie" />
-                        </coding>
-                    </category>
-                    <code>
-                        <coding>
-                            <system value="http://fhir.de/CodeSystem/dimdi/ops"/>
-                            <code value="8-52"/>
-                            <display value="Strahlentherapie"/>
-                        </coding>
-                    </code>
-                    <subject>
-                        <reference value="Patient/{$Patient_ID}" />
-                    </subject>
-                    <xsl:if test="./ST_Beginn_Datum or ./ST_Ende_Datum">
-                        <performedPeriod>
-                            <xsl:if test="./ST_Beginn_Datum"><start value="{mds2fhir:transformDate(./ST_Beginn_Datum)}" /></xsl:if>
-                            <xsl:if test="./ST_Ende_Datum"><end value="{mds2fhir:transformDate(./ST_Ende_Datum)}" /></xsl:if>
-                        </performedPeriod>
-                    </xsl:if>
-                    <reasonReference>
-                        <reference  value="Condition/{$Diagnosis_ID}" />
-                    </reasonReference>
-                </Procedure>
-            </resource>
-            <request>
-                <method value="PUT" />
-                <url value="Procedure/{$Single_Radiation_Therapy_ID}" />
-            </request>
-        </entry>
-    </xsl:for-each>
+            <xsl:variable name="Single_Radiation_Therapy_ID" select="mds2fhir:getID(./@Betrahlung_ID,mds2fhir:transformDate(./ST_Beginn_Datum), generate-id())" as="xs:string" />
+            <entry>
+                <fullUrl value="http://example.com/Procedure/{$Single_Radiation_Therapy_ID}" />
+                <resource>
+                    <Procedure>
+                        <id value="{$Single_Radiation_Therapy_ID}" />
+                        <meta>
+                            <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Procedure-Strahlentherapie" />
+                        </meta>
+                        <partOf>
+                            <reference value="Procedure/{$Radiation_Therapy_ID}"/>
+                        </partOf>
+                        <xsl:choose>
+                            <xsl:when test="./ST_Ende_Datum">
+                                <xsl:choose>
+                                    <xsl:when test="ST_Ende_Grund='E'">
+                                        <status value="completed" />
+                                    </xsl:when>
+                                    <xsl:when test="ST_Ende_Grund='U'">
+                                        <status value="unknown" />
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <status value="stopped" />
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:choose>
+                                    <xsl:when test="./ST_Beginn_Datum">
+                                        <status value="in-progress" />
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <status value="preparation" />
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                        <category>
+                            <coding>
+                                <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTTherapieartCS" />
+                                <code value="ST" />
+                                <display value="Strahlentherapie" />
+                            </coding>
+                        </category>
+                        <code>
+                            <coding>
+                                <system value="http://fhir.de/CodeSystem/dimdi/ops"/>
+                                <code value="8-52"/>
+                                <display value="Strahlentherapie"/>
+                            </coding>
+                        </code>
+                        <subject>
+                            <reference value="Patient/{$Patient_ID}" />
+                        </subject>
+                        <xsl:if test="./ST_Beginn_Datum or ./ST_Ende_Datum">
+                            <performedPeriod>
+                                <xsl:if test="./ST_Beginn_Datum"><start value="{mds2fhir:transformDate(./ST_Beginn_Datum)}" /></xsl:if>
+                                <xsl:if test="./ST_Ende_Datum"><end value="{mds2fhir:transformDate(./ST_Ende_Datum)}" /></xsl:if>
+                            </performedPeriod>
+                        </xsl:if>
+                        <reasonReference>
+                            <reference  value="Condition/{$Diagnosis_ID}" />
+                        </reasonReference>
+                    </Procedure>
+                </resource>
+                <request>
+                    <method value="PUT" />
+                    <url value="Procedure/{$Single_Radiation_Therapy_ID}" />
+                </request>
+            </entry>
+        </xsl:for-each>
 
     </xsl:template>
 
@@ -770,7 +770,7 @@
                     <code>
                         <xsl:for-each select="./OP_OPS">
                             <coding>
-                                <system value="http://fhir.de/CodeSystem/dimdi/ops" />
+                                <system value="http://fhir.de/CodeSystem/bfarm/ops" />
                                 <xsl:if test="../../OP_OPS_Version">
                                 <version value="{../../OP_OPS_Version}"/>
                             </xsl:if>
