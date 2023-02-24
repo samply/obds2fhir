@@ -4,7 +4,7 @@ volumes:
 
 services:
   adt2fhir:
-    image: docker.verbis.dkfz.de/ccp/adt2fhir:develop
+    image: docker.verbis.dkfz.de/ccp/adt2fhir:main
     environment:
       #FILE_PATH: "/adt2fhir/clinical_data"
       STORE_PATH: "http://host.docker.internal:8090/fhir"

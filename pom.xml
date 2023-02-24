@@ -6,7 +6,7 @@
 
     <groupId>de.samply.common</groupId>
     <artifactId>adt2fhir</artifactId>
-    <version>1.2.2-SNAPSHOT</version>
+    <version>1.2.3</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -71,6 +71,17 @@
             <groupId>de.pseudonymisierung</groupId>
             <artifactId>mainzelliste-client</artifactId>
             <version>2.1.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.codehaus.jettison</groupId>
+                    <artifactId>jettison</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.jettison</groupId>
+            <artifactId>jettison</artifactId>
+            <version>1.5.3</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
