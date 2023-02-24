@@ -389,14 +389,14 @@
                     <xsl:if test="./Lokale_Beurteilung_Resttumor">
                         <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-LokaleResidualstatus">
                             <valueReference>
-                                <reference value="Observation/{mds2fhir:getID(hash:hash($Patient_ID, $Diagnosis_ID , concat(./Lokale_Beurteilung_Resttumor, $System_Therapy_ID)),'', generate-id(./Lokale_Beurteilung_Resttumor))}" />
+                                <reference value="Observation/{mds2fhir:getID(hash:hash($Patient_ID, $Diagnosis_ID , concat(./Lokale_Beurteilung_Resttumor, $System_Therapy_ID, 'lokal')),'', generate-id(./Lokale_Beurteilung_Resttumor))}" />
                             </valueReference>
                         </extension>
                     </xsl:if>
                     <xsl:if test="./Gesamtbeurteilung_Resttumor">
                         <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-GesamtbeurteilungResidualstatus">
                             <valueReference>
-                                <reference value="Observation/{mds2fhir:getID(hash:hash($Patient_ID, $Diagnosis_ID , concat(./Gesamtbeurteilung_Resttumor, $System_Therapy_ID)),'', generate-id(./Gesamtbeurteilung_Resttumor))}" />
+                                <reference value="Observation/{mds2fhir:getID(hash:hash($Patient_ID, $Diagnosis_ID , concat(./Gesamtbeurteilung_Resttumor, $System_Therapy_ID, 'gesamt')),'', generate-id(./Gesamtbeurteilung_Resttumor))}" />
                             </valueReference>
                         </extension>
                     </xsl:if>
@@ -501,10 +501,11 @@
 
         <xsl:if test="./Gesamtbeurteilung_Resttumor">
         <entry>
-            <fullUrl value="http://example.com/Observation/{mds2fhir:getID(hash:hash($Patient_ID, $Diagnosis_ID , concat(./Gesamtbeurteilung_Resttumor, $System_Therapy_ID)),'', generate-id(./Gesamtbeurteilung_Resttumor))}" />
+            <xsl:variable name="Gesamtbeurteilung_Resttumor_ID" select="mds2fhir:getID(hash:hash($Patient_ID, $Diagnosis_ID , concat(./Gesamtbeurteilung_Resttumor, $System_Therapy_ID, 'gesamt')),'', generate-id(./Gesamtbeurteilung_Resttumor))"/>
+            <fullUrl value="http://example.com/Observation/{$Gesamtbeurteilung_Resttumor_ID}" />
             <resource>
                 <Observation xmlns="http://hl7.org/fhir">
-                    <id value="{mds2fhir:getID(hash:hash($Patient_ID, $Diagnosis_ID , concat(./Gesamtbeurteilung_Resttumor, $System_Therapy_ID)),'', generate-id(./Gesamtbeurteilung_Resttumor))}" />
+                    <id value="{$Gesamtbeurteilung_Resttumor_ID}" />
                     <meta>
                         <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-GesamtbeurteilungResidualstatus" />
                     </meta>
@@ -531,16 +532,17 @@
             </resource>
             <request>
                 <method value="PUT" />
-                <url value="Observation/{mds2fhir:getID(hash:hash($Patient_ID, $Diagnosis_ID , concat(./Gesamtbeurteilung_Resttumor, $System_Therapy_ID)),'', generate-id(./Gesamtbeurteilung_Resttumor))}" />
+                <url value="Observation/{$Gesamtbeurteilung_Resttumor_ID}" />
             </request>
         </entry>
     </xsl:if>
     <xsl:if test="./Lokale_Beurteilung_Resttumor">
         <entry>
-            <fullUrl value="http://example.com/Observation/{mds2fhir:getID(hash:hash($Patient_ID, $Diagnosis_ID , concat(./Lokale_Beurteilung_Resttumor, $System_Therapy_ID)),'', generate-id(./Lokale_Beurteilung_Resttumor))}" />
+            <xsl:variable name="Lokale_Beurteilung_Resttumor_ID" select="mds2fhir:getID(hash:hash($Patient_ID, $Diagnosis_ID , concat(./Lokale_Beurteilung_Resttumor, $System_Therapy_ID, 'lokal')),'', generate-id(./Lokale_Beurteilung_Resttumor))"/>
+            <fullUrl value="http://example.com/Observation/{$Lokale_Beurteilung_Resttumor_ID}" />
             <resource>
                 <Observation xmlns="http://hl7.org/fhir">
-                    <id value="{mds2fhir:getID(hash:hash($Patient_ID, $Diagnosis_ID , concat(./Lokale_Beurteilung_Resttumor, $System_Therapy_ID)),'', generate-id(./Lokale_Beurteilung_Resttumor))}" />
+                    <id value="{$Lokale_Beurteilung_Resttumor_ID}" />
                     <meta>
                         <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-LokaleBeurteilungResidualstatus" />
                     </meta>
@@ -567,7 +569,7 @@
             </resource>
             <request>
                 <method value="PUT" />
-                <url value="Observation/{mds2fhir:getID(hash:hash($Patient_ID, $Diagnosis_ID , concat(./Lokale_Beurteilung_Resttumor, $System_Therapy_ID)),'', generate-id(./Lokale_Beurteilung_Resttumor))}" />
+                <url value="Observation/{$Lokale_Beurteilung_Resttumor_ID}" />
             </request>
         </entry>
     </xsl:if>
@@ -785,6 +787,7 @@
                     <reasonReference>
                         <reference value="Condition/{$Diagnosis_ID}" />
                     </reasonReference>
+                    <xsl:if test="./Lokale_Beurteilung_Resttumor or ./Gesamtbeurteilung_Resttumor">
                     <outcome>
                         <xsl:if test="./Lokale_Beurteilung_Resttumor">
                         <coding>
@@ -799,6 +802,7 @@
                         </coding>
                     </xsl:if>
                     </outcome>
+                    </xsl:if>
                 </Procedure>
             </resource>
             <request>
@@ -1525,9 +1529,10 @@
 
     <xsl:function name="mds2fhir:transformDate">
         <xsl:param name="date" />
-        <xsl:variable name="day" select="substring($date, 1,2)" as="xs:string" />
-        <xsl:variable name="month" select="substring($date, 4, 2)" as="xs:string" />
-        <xsl:variable name="year" select="substring($date, 7, 4)" as="xs:string" />
+        <xsl:variable name="fixedDate" select="mds2fhir:autocorrectDate($date)"/>
+        <xsl:variable name="day" select="substring($fixedDate, 1,2)" as="xs:string" />
+        <xsl:variable name="month" select="substring($fixedDate, 4, 2)" as="xs:string" />
+        <xsl:variable name="year" select="substring($fixedDate, 7, 4)" as="xs:string" />
         <xsl:choose>
             <xsl:when test="$day='00'">
                 <xsl:choose>
@@ -1541,6 +1546,26 @@
             </xsl:when>
             <xsl:otherwise>
                 <xsl:value-of select="concat($year,'-',$month,'-',$day)" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+
+    <xsl:function name="mds2fhir:autocorrectDate">
+        <xsl:param name="date"/>
+        <xsl:choose>
+            <xsl:when test="matches($date, '^\d{4}')">
+                <xsl:value-of select="concat('00.00.', $date)"/>
+            </xsl:when>
+            <xsl:when test="matches($date, '^\d{2}\.\d{4}')">
+                <xsl:value-of select="concat('00.', $date)"/>
+            </xsl:when>
+            <xsl:when test="matches($date, '^\d{2}\.\d{2}\.\d{4}')">
+                <xsl:value-of select="$date"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:message terminate="yes">ERROR: wrong date format:
+                    <xsl:value-of select="$date"/>
+                </xsl:message>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:function>
