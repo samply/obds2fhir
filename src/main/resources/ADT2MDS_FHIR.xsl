@@ -131,12 +131,12 @@
                 </xsl:variable>
                 <xsl:value-of select="concat('bio', hash:hash($Patient_Id, '', string-join($attribute, '')))" />
             </xsl:attribute>
-            <Entnahmedatum><xsl:value-of select="Entnahmedatum"/></Entnahmedatum>
+            <xsl:if test="Entnahmedatum"><Entnahmedatum><xsl:value-of select="Entnahmedatum"/></Entnahmedatum></xsl:if>
             <xsl:if test="Patienten_mit_Biomaterial='ja' or Patienten_mit_Biomaterial='Ja' or Patienten_mit_Biomaterial='true'"><Patienten_mit_Biomaterial>true</Patienten_mit_Biomaterial></xsl:if>
             <xsl:if test="Patienten_mit_Biomaterial='nein' or Patienten_mit_Biomaterial='Nein' or Patienten_mit_Biomaterial='false'"><Patienten_mit_Biomaterial>false</Patienten_mit_Biomaterial></xsl:if>
-            <Fixierungsart><xsl:value-of select="Fixierungsart"/></Fixierungsart>
-            <Probentyp><xsl:value-of select="Probentyp"/></Probentyp>
-            <Probenart><xsl:value-of select="Probenart"/></Probenart>
+            <xsl:if test="Fixierungsart"><Fixierungsart><xsl:value-of select="Fixierungsart"/></Fixierungsart></xsl:if>
+            <xsl:if test="Probentyp"><Probentyp><xsl:value-of select="Probentyp"/></Probentyp></xsl:if>
+            <xsl:if test="Probenart"><Probenart><xsl:value-of select="Probenart"/></Probenart></xsl:if>
         </Sample>
     </xsl:template>
 
