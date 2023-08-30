@@ -1,22 +1,5 @@
 #!/usr/bin/env sh
 
-export FILES_TO_PARSE="/etc/samply/adt2fhir.properties"
-
-set -e
-
-for file in $FILES_TO_PARSE; do
-  sed -i "s|{file_path}|${FILE_PATH:-/adt2fhir/clinical_data}|" $file
-  sed -i "s|{store_path}|${STORE_PATH:-http://host.docker.internal:8090/fhir}|" $file
-  sed -i "s|{store_auth}|${STORE_AUTH}|" $file
-  sed -i "s|{identifier_system}|${IDENTIFIER_SYSTEM:-http://dktk.dkfz.de/fhir/onco/core/CodeSystem/PseudonymArtCS}|" $file
-  sed -i "s|{mainzelliste_url}|${MAINZELLISTE_URL:-http://host.docker.internal:8080}|" $file
-  sed -i "s|{mainzelliste_apikey}|${MAINZELLISTE_APIKEY}|" $file
-  sed -i "s|{idtype}|${IDTYPE}|" $file
-  sed -i "s|{salt}|${SALT:-createLocalCustomSalt}|" $file
-  sed -i "s|{ssl_certificate_validation}|${SSL_CERTIFICATE_VALIDATION:-true}|" $file
-  sed -i "s|{add_departments}|${ADD_DEPARTMENTS:-false}|" $file
-done
-
 echo "Checking required input and output directories..."
 directories="InputADT Processed tmp tmp/ADT_Patients tmp/FHIR_Patients tmp/erroneous"
 for dir in $directories; do
@@ -29,4 +12,4 @@ for dir in $directories; do
 done
 echo -e "\x1b[32m...done\x1b[39m"
 
-java -jar /usr/local/bin/adt2fhir.jar
+java -jar /adt2fhir/adt2fhir.jar

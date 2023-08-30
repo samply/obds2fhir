@@ -41,31 +41,22 @@ public class Adt2fhir {
     private static final String DONE = ANSI_GREEN+"...done "+ANSI_RESET;
 
     public static void main(String[] args) {
-        System.out.println("load configuration... ");
-        ConfigReader configReader = new ConfigReader();
-        try {
-            configReader.init();
-        } catch (IOException e) {
-            System.out.println(" failed");
-            e.printStackTrace();
-        }
         boolean pseudonymize = false;
-        if (!configReader.getMainzelliste_apikey().isEmpty()){
-            pseudonymize = checkConnections("Mainzelliste", configReader.getMainzelliste_url(), configReader);
+        if (!System.getenv("MAINZELLISTE_APIKEY").isEmpty()){
+            pseudonymize = checkConnections("Mainzelliste", System.getenv("MAINZELLISTE_URL"));
         } else {
             System.out.println("missing Mainzelliste Apikey - Skipping relevant processes");
         }
-        boolean FHIRimport = checkConnections("Blaze FHIR Server", configReader.getStore_path()+"?_count=0", configReader);
+        boolean FHIRimport = checkConnections("Blaze FHIR Server", System.getenv("STORE_PATH") + "?_count=0");
         System.out.println(DONE);
 
         System.out.print("initialize transformers... ");
         final TransformerFactoryImpl factory = (TransformerFactoryImpl) TransformerFactory.newInstance("net.sf.saxon.TransformerFactoryImpl", null);
         net.sf.saxon.Configuration saxonConfig = factory.getConfiguration();
         PatientPseudonymizer patientPseudonymizer = new PatientPseudonymizer();
-        patientPseudonymizer.initialize(configReader, pseudonymize);
+        patientPseudonymizer.initialize(pseudonymize);
         ((Processor) saxonConfig.getProcessor()).registerExtensionFunction(patientPseudonymizer);
         UniqueIdGenerator uniqueIdGenerator = new UniqueIdGenerator();
-        uniqueIdGenerator.initialize(configReader);
         ((Processor) saxonConfig.getProcessor()).registerExtensionFunction(uniqueIdGenerator);
 
         Transformer ADT2singleADTtransformer = null;
@@ -73,12 +64,12 @@ public class Adt2fhir {
         Transformer MDS2FHIRtransformer = null;
         try {
             ADT2singleADTtransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("toSinglePatients.xsl")));
-            ADT2singleADTtransformer.setParameter("filepath", configReader.getFile_path());
+            ADT2singleADTtransformer.setParameter("filepath", System.getenv("FILE_PATH"));
             ADT2MDStransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("ADT2MDS_FHIR.xsl")));
-            ADT2MDStransformer.setParameter("add_department", configReader.getAdd_departments());
+            ADT2MDStransformer.setParameter("add_department", System.getenv("ADD_DEPARTMENTS"));
             MDS2FHIRtransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("MDS2FHIR.xsl")));
-            MDS2FHIRtransformer.setParameter("filepath", configReader.getFile_path());
-            MDS2FHIRtransformer.setParameter("identifier_system", configReader.getIdentifier_system());
+            MDS2FHIRtransformer.setParameter("filepath", System.getenv("FILE_PATH"));
+            MDS2FHIRtransformer.setParameter("identifier_system", System.getenv("IDENTIFIER_SYSTEM"));
         } catch (TransformerConfigurationException e) {
             System.out.print("Transformer configuration error");
         }
@@ -86,48 +77,48 @@ public class Adt2fhir {
 
         long startTime = System.nanoTime();
         System.out.println("Transforming to single Patients... \n");
-        processXmlFiles(INPUT_ADT, ADT2singleADTtransformer, configReader);
+        processXmlFiles(INPUT_ADT, ADT2singleADTtransformer);
         long stopTime = System.nanoTime();
         System.out.println(DONE+(stopTime - startTime)/1000000000+ " seconds");
 
 
         startTime = System.nanoTime();
         System.out.println("Transforming to FHIR... \n");
-        processXmlFiles(ADT_PATIENTS, ADT2MDStransformer, configReader, MDS2FHIRtransformer, true);
+        processXmlFiles(ADT_PATIENTS, ADT2MDStransformer, MDS2FHIRtransformer, true);
         stopTime = System.nanoTime();
         System.out.println(DONE+(stopTime - startTime)/1000000000+ " seconds");
 
         if (FHIRimport){
-            HttpPost httppost = new HttpPost(configReader.getStore_path());
+            HttpPost httppost = new HttpPost(System.getenv("STORE_PATH"));
             RequestConfig requestConfig = RequestConfig.copy(RequestConfig.DEFAULT).build();
             httppost.setConfig(requestConfig);
-            String encoding = Base64.getEncoder().encodeToString((configReader.getStore_auth()).getBytes());
+            String encoding = Base64.getEncoder().encodeToString((System.getenv("STORE_AUTH")).getBytes());
             httppost.addHeader("content-type", "application/xml+fhir");
             httppost.addHeader("Authorization", "Basic " + encoding);
 
             startTime = System.nanoTime();
             System.out.println("posting fhir resources to blaze store...\n");
-            processXmlFiles(FHIR_PATIENTS, null, configReader, httppost);
+            processXmlFiles(FHIR_PATIENTS, null, httppost);
             stopTime = System.nanoTime();
             System.out.println(DONE+(stopTime - startTime)/1000000000+ " seconds");
         }
     }
 
 
-    private static void processXmlFiles (String inputData, Transformer transformer, ConfigReader configReader){
-        processXmlFiles (inputData, transformer, configReader, null, false, null);
+    private static void processXmlFiles (String inputData, Transformer transformer){
+        processXmlFiles (inputData, transformer, null, false, null);
     }
 
-    private static void processXmlFiles (String inputData, Transformer transformer, ConfigReader configReader, Transformer transformer2, Boolean transformWrittenResults){
-        processXmlFiles (inputData, transformer, configReader, transformer2, transformWrittenResults, null);
+    private static void processXmlFiles (String inputData, Transformer transformer, Transformer transformer2, Boolean transformWrittenResults){
+        processXmlFiles (inputData, transformer, transformer2, transformWrittenResults, null);
     }
 
-    private static void processXmlFiles (String inputData, Transformer transformer, ConfigReader configReader, HttpPost httppost){
-        processXmlFiles (inputData, transformer, configReader, null, false, httppost);
+    private static void processXmlFiles (String inputData, Transformer transformer, HttpPost httppost){
+        processXmlFiles (inputData, transformer, null, false, httppost);
     }
-    private static void processXmlFiles (String inputData, Transformer transformer, ConfigReader configReader, Transformer transformer2, Boolean transformWrittenResults, HttpPost httppost ){
+    private static void processXmlFiles (String inputData, Transformer transformer, Transformer transformer2, Boolean transformWrittenResults, HttpPost httppost ){
         //System.out.print("load "+ filetype + " files...");
-        File fileDir = new File(configReader.getFile_path() + inputData);
+        File fileDir = new File(System.getenv("FILE_PATH") + inputData);
         File[] listOfFiles = fileDir.listFiles();
         if (listOfFiles==null){
             System.out.println("ABORTING: empty "+ fileDir +" dir");
@@ -141,7 +132,7 @@ public class Adt2fhir {
                     System.out.println("\u001B[AFile " + counter + " of " + (listOfFiles.length) + " / Filename: " + inputFile);
                     if (transformer ==null){
                         try {
-                            postToFhirStore(inputFile, httppost, configReader);
+                            postToFhirStore(inputFile, httppost);
                         } catch (IOException e) {
                             counter-=1;
                             System.out.print("ERROR - FHIR import: problem with file " + inputFile);
@@ -167,7 +158,7 @@ public class Adt2fhir {
                                 inputFile.deleteOnExit();
                             }
                             else {
-                                inputFile.renameTo(new File(configReader.getFile_path() + PROCESSED + inputFile.getName()));
+                                inputFile.renameTo(new File(System.getenv("FILE_PATH") + PROCESSED + inputFile.getName()));
                             }
                         } catch (UnsupportedEncodingException | TransformerException | RuntimeException e) {
                             counter-=1;
@@ -186,10 +177,10 @@ public class Adt2fhir {
         }
     }
 
-    private static void postToFhirStore(File inputFile, HttpPost httppost, ConfigReader configReader) throws IOException {
+    private static void postToFhirStore(File inputFile, HttpPost httppost) throws IOException {
         CloseableHttpClient httpclient = null;
         try {
-            httpclient = getHttpClient(configReader.getSsl_certificate_validation());
+            httpclient = getHttpClient(Boolean.parseBoolean(System.getenv("SSL_CERTIFICATE_VALIDATION")));
         } catch (NoSuchAlgorithmException | KeyStoreException | KeyManagementException e) {
             throw new RuntimeException(e);
         }
@@ -200,7 +191,7 @@ public class Adt2fhir {
         if (!response.getStatusLine().getReasonPhrase().equals("OK")) {
             System.out.println("Error - FHIR import: could not import file"+ inputFile.getName());
             System.out.println(EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8));
-            inputFile.renameTo(new File(configReader.getFile_path()+ERRONEOUS));
+            inputFile.renameTo(new File(System.getenv("FILE_PATH") + ERRONEOUS));
         }
         else {
             inputFile.deleteOnExit();
@@ -217,9 +208,9 @@ public class Adt2fhir {
         return outputWriter.toString();
     }
 
-    private static CloseableHttpClient getHttpClient(Boolean secure) throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
+    private static CloseableHttpClient getHttpClient(Boolean sslVerification) throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
         CloseableHttpClient httpclient = null;
-        if (!secure){//experimental feature, do not set ssl_certificate_validation=false
+        if (!sslVerification){//experimental feature, do not set ssl_certificate_validation=false
             httpclient = HttpClients.custom()
                     .setSSLContext(new SSLContextBuilder().loadTrustMaterial(null, TrustAllStrategy.INSTANCE).build())
                     .setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE).build();
@@ -230,11 +221,11 @@ public class Adt2fhir {
         return httpclient;
     }
 
-    private static boolean checkConnections(String servicename, String URL, ConfigReader configReader) {
+    private static boolean checkConnections(String servicename, String URL) {
         boolean serviceAvailable = false;
         CloseableHttpClient httpclient = null;
         try {
-            httpclient = getHttpClient(configReader.getSsl_certificate_validation());
+            httpclient = getHttpClient(Boolean.parseBoolean(System.getenv("SSL_CERTIFICATE_VALIDATION")));
         } catch (NoSuchAlgorithmException | KeyStoreException | KeyManagementException e) {
             throw new RuntimeException(e);
         }
@@ -242,7 +233,7 @@ public class Adt2fhir {
         HttpGet httpGetRequest;
         if (URL != null && !URL.isEmpty()) {
             httpGetRequest = new HttpGet(URL);
-            String encoding = Base64.getEncoder().encodeToString((configReader.getStore_auth()).getBytes());
+            String encoding = Base64.getEncoder().encodeToString(System.getenv("STORE_AUTH").getBytes());
             httpGetRequest.addHeader("Authorization", "Basic " + encoding);
             try {
                 httpResponse = httpclient.execute(httpGetRequest);
