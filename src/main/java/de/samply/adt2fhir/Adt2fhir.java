@@ -48,7 +48,6 @@ public class Adt2fhir {
             System.out.println("missing Mainzelliste Apikey - Skipping relevant processes");
         }
         boolean FHIRimport = checkConnections("Blaze FHIR Server", System.getenv("STORE_PATH") + "?_count=0");
-        System.out.println(DONE);
 
         System.out.print("initialize transformers... ");
         final TransformerFactoryImpl factory = (TransformerFactoryImpl) TransformerFactory.newInstance("net.sf.saxon.TransformerFactoryImpl", null);
@@ -105,18 +104,18 @@ public class Adt2fhir {
     }
 
 
-    private static void processXmlFiles (String inputData, Transformer transformer){
+    public static void processXmlFiles (String inputData, Transformer transformer){
         processXmlFiles (inputData, transformer, null, false, null);
     }
 
-    private static void processXmlFiles (String inputData, Transformer transformer, Transformer transformer2, Boolean transformWrittenResults){
+    public static void processXmlFiles (String inputData, Transformer transformer, Transformer transformer2, Boolean transformWrittenResults){
         processXmlFiles (inputData, transformer, transformer2, transformWrittenResults, null);
     }
 
-    private static void processXmlFiles (String inputData, Transformer transformer, HttpPost httppost){
+    public static void processXmlFiles (String inputData, Transformer transformer, HttpPost httppost){
         processXmlFiles (inputData, transformer, null, false, httppost);
     }
-    private static void processXmlFiles (String inputData, Transformer transformer, Transformer transformer2, Boolean transformWrittenResults, HttpPost httppost ){
+    public static void processXmlFiles (String inputData, Transformer transformer, Transformer transformer2, Boolean transformWrittenResults, HttpPost httppost ){
         //System.out.print("load "+ filetype + " files...");
         File fileDir = new File(System.getenv("FILE_PATH") + inputData);
         File[] listOfFiles = fileDir.listFiles();
