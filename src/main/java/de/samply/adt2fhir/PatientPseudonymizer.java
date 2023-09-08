@@ -119,11 +119,11 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
         return pseudonym;
     }
 
-    public void initialize (ConfigReader configReader, boolean pseudonymize){
+    public void initialize (boolean pseudonymize){
         if (pseudonymize){
             this.anonymize=false;
-            this.mainzelliste_url=configReader.getMainzelliste_url();
-            String mainzelliste_apikey=configReader.getMainzelliste_apikey();
+            this.mainzelliste_url=System.getenv("MAINZELLISTE_URL");
+            String mainzelliste_apikey=System.getenv("MAINZELLISTE_APIKEY");
             try {
                 this.mainzellisteConnection = new MainzellisteConnection(mainzelliste_url, mainzelliste_apikey);
                 this.token = new AddPatientToken();
@@ -132,7 +132,7 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
                 auditTrailLog.setRemoteSystem(String.valueOf(InetAddress.getLocalHost()));
                 auditTrailLog.setReasonForChange("Add Patient");
                 this.token.setAuditTrailLog(auditTrailLog);
-                this.token.addIdType(configReader.getIdtype());
+                this.token.addIdType(System.getenv("IDTYPE"));
                 this.httpclient = HttpClients.createDefault();
                 createMainzellisteSession();
             } catch (URISyntaxException | MainzellisteNetworkException | InvalidSessionException | UnknownHostException e) {
@@ -141,7 +141,7 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
         }
         else {
             this.anonymize=true;
-            this.salt=configReader.getSalt();
+            this.salt=System.getenv("SALT");
         }
     }
 

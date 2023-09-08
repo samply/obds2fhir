@@ -323,8 +323,8 @@
                             <reference value="Patient/{$Patient_ID}" />
                         </subject>
                         <xsl:if test="./Tumor_Diagnosedatum">
-                            <onsetDateTime value="{mds2fhir:transformDate(./Tumor_Diagnosedatum)}" />
-                            <recordedDate value="{mds2fhir:transformDate(./Tumor_Diagnosedatum)}" />
+                            <onsetDateTime value="{mds2fhir:transformDateBlazebug(./Tumor_Diagnosedatum)}" />
+                            <recordedDate value="{mds2fhir:transformDateBlazebug(./Tumor_Diagnosedatum)}" />
                         </xsl:if>
                         <xsl:for-each select="./Tumor/TNM">
                         <stage>
@@ -1528,6 +1528,29 @@
 			" />
     </xsl:function>
 
+
+    <xsl:function name="mds2fhir:transformDateBlazebug">
+        <xsl:param name="date" />
+        <xsl:variable name="fixedDate" select="mds2fhir:autocorrectDate($date)"/>
+        <xsl:variable name="day" select="substring($fixedDate, 1,2)" as="xs:string" />
+        <xsl:variable name="month" select="substring($fixedDate, 4, 2)" as="xs:string" />
+        <xsl:variable name="year" select="substring($fixedDate, 7, 4)" as="xs:string" />
+        <xsl:choose>
+            <xsl:when test="$day='00'">
+                <xsl:choose>
+                    <xsl:when test="$month='00'">
+                        <xsl:value-of select="concat($year,'-01-01')" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="concat($year,'-',$month,'-01')" />
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="concat($year,'-',$month,'-',$day)" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
 
     <xsl:function name="mds2fhir:transformDate">
         <xsl:param name="date" />
