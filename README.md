@@ -26,28 +26,31 @@ The configuration is set in the ```docker-compose.yml``` file and is preconfigur
 
 ###### Environment:
 
-```file_path``` defines the directory of the clinical ADT/GEKID data in the docker container.
-There souldn't be a reason to change this.
+Set the environment variables either directly in Java oder via docker compose (start with the default values from the Dockerfile):
 
-```store_path``` defines the URL of the FHIR server API.
+
+```FILE_PATH``` defines the directory of the clinical ADT/GEKID data in the docker container.
+There souldn't be a reason to change this for docker.
+
+```STORE_PATH``` defines the URL of the FHIR server API.
 You can use the default value, when using the default BLAZE server (https://github.com/samply/blaze).
 
-```store_auth``` sets the FHIR server authentication. *Leave it empty if there is no authentication.*
+```STORE_AUTH``` sets the FHIR server authentication. *Leave it empty if there is no authentication.*
 
-```identifier_system``` defines the system of the FHIR identifiers.
+```IDENTIFIER_SYSTEM``` defines the system of the FHIR identifiers.
 You can use the default value or set your own system URL.
 
-```mainzelliste_url``` for pseudonymization in the transformation step; sets the URL of the pseudonymization service. *Leave it empty if there is no pseudonymization.*
+```MAINZELLISTE_URL``` for pseudonymization in the transformation step; sets the URL of the pseudonymization service. *Leave it empty if there is no pseudonymization.*
 
-```mainzelliste_apikey``` sets the pseudonymization service authentication. *Leave it empty if there is no pseudonymization.*
+```MAINZELLISTE_APIKEY``` sets the pseudonymization service authentication. *Leave it empty if there is no pseudonymization.*
 
-```idtype``` sets the pseudonym type. *Leave it empty if there is no pseudonymization.*
+```IDTYPE``` sets the pseudonym type. *Leave it empty if there is no pseudonymization.*
 
-```salt``` defines a random additional input for the hashing applied in generating the FHIR ids from ADT/GEKID. **Please do change this** 
+```SALT``` defines a random additional input for the hashing applied in generating the FHIR ids from ADT/GEKID. **Please do change this** 
 
-```ssl_certificate_validation``` can be set to false **IF** your FHIR server is only accessible via https and you do **NOT** have a valid SSL certificate. Not recommended!
+```SSL_CERTIFICATE_VALIDATION``` can be set to false **IF** your FHIR server is only accessible via https and you do **NOT** have a valid SSL certificate. Not recommended!
 
-```add_departments``` can be set to true if you want to add the departments that commited the patient report (=ADT/GEKID Melder). *Probably not  necessary*.
+```ADD_DEPARTMENTS``` can be set to true if you want to add the departments that commited the patient report (=ADT/GEKID Melder). *Probably not  necessary*.
 
 ###### Volumes:
 

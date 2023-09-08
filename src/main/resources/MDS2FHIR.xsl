@@ -40,7 +40,7 @@
         <xsl:variable name="Vitalstatus_ID" select="hash:hash($Patient_ID, 'vitalstatus', '')" />
         <xsl:result-document href="file:{$filepath}/tmp/FHIR_Patients/FHIR_{$customPrefix}">
         <Bundle xmlns="http://hl7.org/fhir">
-            <id value="{generate-id()}" />
+            <id value="{substring($customPrefix, 9, 16)}" />
             <type value="transaction" />
             <entry>
                 <fullUrl value="http://example.com/Patient/{$Patient_ID}" />
@@ -100,7 +100,7 @@
 
         <xsl:result-document href="file:{$filepath}/tmp/FHIR_Patients/FHIR_batch_{$customPrefix}">
             <Bundle xmlns="http://hl7.org/fhir">
-                <id value="{generate-id()}" />
+                <id value="{substring($customPrefix, 9, 16)}" />
                 <type value="batch" />
                 <entry>
                     <fullUrl value="http://example.com/Observation/{$Vitalstatus_ID}" />
@@ -309,7 +309,7 @@
                         <bodySite>
                             <coding>
                                 <system value="urn:oid:2.16.840.1.113883.6.43.1" />
-                                <xsl:if test="./Tumor/ICD-O_Katalog_Topographie_Version">"<version value="{./Tumor/ICD-O_Katalog_Topographie_Version}" /></xsl:if>
+                                <xsl:if test="./Tumor/ICD-O_Katalog_Topographie_Version"><version value="{./Tumor/ICD-O_Katalog_Topographie_Version}" /></xsl:if>
                                 <xsl:if test="./Tumor/Lokalisation"><code value="{./Tumor/Lokalisation}" /></xsl:if>
                             </coding>
                             <xsl:if test="./Tumor/Seitenlokalisation">
@@ -323,8 +323,8 @@
                             <reference value="Patient/{$Patient_ID}" />
                         </subject>
                         <xsl:if test="./Tumor_Diagnosedatum">
-                            <onsetDateTime value="{mds2fhir:transformDate(./Tumor_Diagnosedatum)}" />
-                            <recordedDate value="{mds2fhir:transformDate(./Tumor_Diagnosedatum)}" />
+                            <onsetDateTime value="{mds2fhir:transformDateBlazebug(./Tumor_Diagnosedatum)}" />
+                            <recordedDate value="{mds2fhir:transformDateBlazebug(./Tumor_Diagnosedatum)}" />
                         </xsl:if>
                         <xsl:for-each select="./Tumor/TNM">
                         <stage>
@@ -1528,6 +1528,29 @@
 			" />
     </xsl:function>
 
+
+    <xsl:function name="mds2fhir:transformDateBlazebug">
+        <xsl:param name="date" />
+        <xsl:variable name="fixedDate" select="mds2fhir:autocorrectDate($date)"/>
+        <xsl:variable name="day" select="substring($fixedDate, 1,2)" as="xs:string" />
+        <xsl:variable name="month" select="substring($fixedDate, 4, 2)" as="xs:string" />
+        <xsl:variable name="year" select="substring($fixedDate, 7, 4)" as="xs:string" />
+        <xsl:choose>
+            <xsl:when test="$day='00'">
+                <xsl:choose>
+                    <xsl:when test="$month='00'">
+                        <xsl:value-of select="concat($year,'-01-01')" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="concat($year,'-',$month,'-01')" />
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="concat($year,'-',$month,'-',$day)" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
 
     <xsl:function name="mds2fhir:transformDate">
         <xsl:param name="date" />

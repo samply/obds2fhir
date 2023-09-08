@@ -11,7 +11,7 @@ import net.sf.saxon.value.StringValue;
 import org.apache.commons.codec.digest.DigestUtils;
 
 public class UniqueIdGenerator extends ExtensionFunctionDefinition {
-private String salt;
+private String salt = System.getenv("SALT");
 
     @Override
     public SequenceType[] getArgumentTypes() {
@@ -46,9 +46,5 @@ private String salt;
             }
 
         };
-    }
-
-    public void initialize(ConfigReader configReader) {
-        salt=configReader.getSalt();
     }
 }

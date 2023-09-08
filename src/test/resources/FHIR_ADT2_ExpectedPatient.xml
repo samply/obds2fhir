@@ -1,0 +1,2700 @@
+<Bundle xmlns="http://hl7.org/fhir" xmlns:hash="java:de.samply.adt2fhir">
+   <id value="159e9710bd1eeef9"/>
+   <type value="transaction"/>
+   <entry>
+      <fullUrl value="http://example.com/Patient/159e9710bd1eeef9"/>
+      <resource>
+         <Patient>
+            <id value="159e9710bd1eeef9"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Patient-Patient"/>
+            </meta>
+            <identifier>
+               <type>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/PseudonymArtCS"/>
+                     <code value="Lokal"/>
+                  </coding>
+               </type>
+               <value value="548353e32639d79fa1c3cf7a6eebab65"/>
+            </identifier>
+            <gender value="male"/>
+            <birthDate value="1980-07-03"/>
+         </Patient>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Patient/159e9710bd1eeef9"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Specimen/bio99b19ab6072b0888"/>
+      <resource>
+         <Specimen>
+            <id value="bio99b19ab6072b0888"/>
+            <meta>
+               <profile value="https://fhir.bbmri.de/StructureDefinition/Specimen"/>
+            </meta>
+            <type>
+               <coding>
+                  <system value="https://fhir.bbmri.de/CodeSystem/SampleMaterialType"/>
+                  <code value="liquid-other"/>
+               </coding>
+            </type>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <collection>
+               <collectedDateTime value="2021-07-16"/>
+            </collection>
+         </Specimen>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Specimen/bio99b19ab6072b0888"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Condition/digf41ddcacd3052a7a"/>
+      <resource>
+         <Condition>
+            <id value="digf41ddcacd3052a7a"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Condition-Primaerdiagnose"/>
+            </meta>
+            <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-Fernmetastasen">
+               <valueReference>
+                  <reference value="Observation/fm83634c0b3d77fcbd"/>
+               </valueReference>
+            </extension>
+            <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-Fernmetastasen">
+               <valueReference>
+                  <reference value="Observation/fm29e94fc11b609eef"/>
+               </valueReference>
+            </extension>
+            <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-Fernmetastasen">
+               <valueReference>
+                  <reference value="Observation/fm98c470cdb1b32233"/>
+               </valueReference>
+            </extension>
+            <code>
+               <coding>
+                  <system value="http://fhir.de/CodeSystem/bfarm/icd-10-gm"/>
+                  <version value="2004"/>
+                  <code value="C61"/>
+               </coding>
+               <text value="Primaertumor_Diagnosetext0"/>
+            </code>
+            <bodySite>
+               <coding>
+                  <system value="urn:oid:2.16.840.1.113883.6.43.1"/>
+                  <version value="31"/>
+                  <code value="C61.0"/>
+               </coding>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SeitenlokalisationCS"/>
+                  <code value="L"/>
+               </coding>
+            </bodySite>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <onsetDateTime value="2021-03-12"/>
+            <recordedDate value="2021-03-12"/>
+            <stage>
+               <assessment>
+                  <reference value="Observation/ctnmefab1cbf56d7ebe0"/>
+               </assessment>
+            </stage>
+            <stage>
+               <assessment>
+                  <reference value="Observation/ptnmee2d8a29a4a9c876"/>
+               </assessment>
+            </stage>
+            <evidence>
+               <detail>
+                  <reference value="Observation/histefab1cbf56d7ebe0"/>
+               </detail>
+               <detail>
+                  <reference value="Observation/histee2d8a29a4a9c876"/>
+               </detail>
+            </evidence>
+         </Condition>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Condition/digf41ddcacd3052a7a"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/histefab1cbf56d7ebe0"/>
+      <resource>
+         <Observation>
+            <id value="histefab1cbf56d7ebe0"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Histologie"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="59847-4"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <focus>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </focus>
+            <effectiveDateTime value="2021-03-14"/>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="urn:oid:2.16.840.1.113883.6.43.1"/>
+                  <version value="31"/>
+                  <code value="8140/3"/>
+               </coding>
+               <text value="Morphologie_Freitext0"/>
+            </valueCodeableConcept>
+            <hasMember>
+               <reference value="Observation/1c1ceee01c3e9a93"/>
+            </hasMember>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/histefab1cbf56d7ebe0"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/1c1ceee01c3e9a93"/>
+      <resource>
+         <Observation>
+            <id value="1c1ceee01c3e9a93"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Grading"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="59542-1"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <focus>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </focus>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/GradingCS"/>
+                  <code value="1"/>
+               </coding>
+            </valueCodeableConcept>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/1c1ceee01c3e9a93"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/histee2d8a29a4a9c876"/>
+      <resource>
+         <Observation>
+            <id value="histee2d8a29a4a9c876"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Histologie"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="59847-4"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <focus>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </focus>
+            <effectiveDateTime value="2021-03-14"/>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="urn:oid:2.16.840.1.113883.6.43.1"/>
+                  <version value="31"/>
+                  <code value="8147/3"/>
+               </coding>
+               <text value="Morphologie_Freitext0"/>
+            </valueCodeableConcept>
+            <hasMember>
+               <reference value="Observation/82f1e7ad1eb186cf"/>
+            </hasMember>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/histee2d8a29a4a9c876"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/82f1e7ad1eb186cf"/>
+      <resource>
+         <Observation>
+            <id value="82f1e7ad1eb186cf"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Grading"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="59542-1"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <focus>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </focus>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/GradingCS"/>
+                  <code value="1"/>
+               </coding>
+            </valueCodeableConcept>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/82f1e7ad1eb186cf"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/fm83634c0b3d77fcbd"/>
+      <resource>
+         <Observation>
+            <id value="fm83634c0b3d77fcbd"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Fernmetastasen"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="21907-1"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <focus>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </focus>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/JNUCS"/>
+                  <code value="ja"/>
+               </coding>
+            </valueCodeableConcept>
+            <bodySite>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/FMLokalisationCS"/>
+                  <code value="BRA"/>
+               </coding>
+            </bodySite>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/fm83634c0b3d77fcbd"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/fm29e94fc11b609eef"/>
+      <resource>
+         <Observation>
+            <id value="fm29e94fc11b609eef"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Fernmetastasen"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="21907-1"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <focus>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </focus>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/JNUCS"/>
+                  <code value="ja"/>
+               </coding>
+            </valueCodeableConcept>
+            <bodySite>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/FMLokalisationCS"/>
+                  <code value="PUL"/>
+               </coding>
+            </bodySite>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/fm29e94fc11b609eef"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/fm98c470cdb1b32233"/>
+      <resource>
+         <Observation>
+            <id value="fm98c470cdb1b32233"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Fernmetastasen"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="21907-1"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <focus>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </focus>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/JNUCS"/>
+                  <code value="ja"/>
+               </coding>
+            </valueCodeableConcept>
+            <bodySite>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/FMLokalisationCS"/>
+                  <code value="OSS"/>
+               </coding>
+            </bodySite>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/fm98c470cdb1b32233"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/ctnmefab1cbf56d7ebe0"/>
+      <resource>
+         <Observation>
+            <id value="ctnmefab1cbf56d7ebe0"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-TNMc"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="21908-9"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <focus>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </focus>
+            <effectiveDateTime value="2021-03-16"/>
+            <component>
+               <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-TNMcpuPraefix">
+                  <valueCodeableConcept>
+                     <coding>
+                        <code value="c"/>
+                     </coding>
+                  </valueCodeableConcept>
+               </extension>
+               <extension/>
+               <code>
+                  <coding>
+                     <system value="http://loinc.org"/>
+                     <code value="21905-5"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMTCS"/>
+                     <code value="4e"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+            <component>
+               <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-TNMcpuPraefix">
+                  <valueCodeableConcept>
+                     <coding>
+                        <code value="c"/>
+                     </coding>
+                  </valueCodeableConcept>
+               </extension>
+               <extension/>
+               <code>
+                  <coding>
+                     <system value="http://loinc.org"/>
+                     <code value="21906-3"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMNCS"/>
+                     <code value="(sn)(mol+)"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+            <component>
+               <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-TNMcpuPraefix">
+                  <valueCodeableConcept>
+                     <coding>
+                        <code value="c"/>
+                     </coding>
+                  </valueCodeableConcept>
+               </extension>
+               <extension/>
+               <code>
+                  <coding>
+                     <system value="http://loinc.org"/>
+                     <code value="21907-1"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMMCS"/>
+                     <code value="2(cy-)"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="http://loinc.org"/>
+                     <code value="59479-6"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMySymbolCS"/>
+                     <code value="y"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="http://loinc.org"/>
+                     <code value="21983-2"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMrSymbolCS"/>
+                     <code value="r"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="http://loinc.org"/>
+                     <code value="42030-7"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMmSymbolCS"/>
+                     <code value="2"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/ctnmefab1cbf56d7ebe0"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/ptnmee2d8a29a4a9c876"/>
+      <resource>
+         <Observation>
+            <id value="ptnmee2d8a29a4a9c876"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-TNMp"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="21902-2"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <focus>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </focus>
+            <effectiveDateTime value="1991-03-16"/>
+            <component>
+               <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-TNMcpuPraefix">
+                  <valueCodeableConcept>
+                     <coding>
+                        <code value="p"/>
+                     </coding>
+                  </valueCodeableConcept>
+               </extension>
+               <extension/>
+               <code>
+                  <coding>
+                     <system value="http://loinc.org"/>
+                     <code value="21899-0"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMTCS"/>
+                     <code value="4e"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+            <component>
+               <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-TNMcpuPraefix">
+                  <valueCodeableConcept>
+                     <coding>
+                        <code value="p"/>
+                     </coding>
+                  </valueCodeableConcept>
+               </extension>
+               <extension/>
+               <code>
+                  <coding>
+                     <system value="http://loinc.org"/>
+                     <code value="21900-6"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMNCS"/>
+                     <code value="(sn)(mol+)"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+            <component>
+               <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-TNMcpuPraefix">
+                  <valueCodeableConcept>
+                     <coding>
+                        <code value="p"/>
+                     </coding>
+                  </valueCodeableConcept>
+               </extension>
+               <extension/>
+               <code>
+                  <coding>
+                     <system value="http://loinc.org"/>
+                     <code value="21901-4"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMMCS"/>
+                     <code value="2(cy-)"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="http://loinc.org"/>
+                     <code value="59479-6"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMySymbolCS"/>
+                     <code value="y"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="http://loinc.org"/>
+                     <code value="21983-2"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMrSymbolCS"/>
+                     <code value="r"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="http://loinc.org"/>
+                     <code value="42030-7"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMmSymbolCS"/>
+                     <code value="2"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/ptnmee2d8a29a4a9c876"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Procedure/opefab1cbf56d7ebe0"/>
+      <resource>
+         <Procedure>
+            <id value="opefab1cbf56d7ebe0"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Procedure-Operation"/>
+            </meta>
+            <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-OPIntention">
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/OPIntentionCS"/>
+                     <code value="K"/>
+                  </coding>
+               </valueCodeableConcept>
+            </extension>
+            <status value="completed"/>
+            <category>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTTherapieartCS"/>
+                  <code value="OP"/>
+                  <display value="Operation"/>
+               </coding>
+            </category>
+            <code>
+               <coding>
+                  <system value="http://fhir.de/CodeSystem/bfarm/ops"/>
+                  <code value="8-030.0"/>
+               </coding>
+               <coding>
+                  <system value="http://fhir.de/CodeSystem/bfarm/ops"/>
+                  <code value="8-030.1"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <performedDateTime value="2021-04-01"/>
+            <reasonReference>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </reasonReference>
+            <outcome>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/LokaleBeurteilungResidualstatusCS"/>
+                  <code value="R1"/>
+               </coding>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/GesamtbeurteilungResidualstatusCS"/>
+                  <code value="R1"/>
+               </coding>
+            </outcome>
+         </Procedure>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Procedure/opefab1cbf56d7ebe0"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/hist76fec93e8ce09af6"/>
+      <resource>
+         <Observation>
+            <id value="hist76fec93e8ce09af6"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Histologie"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="59847-4"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <focus>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </focus>
+            <effectiveDateTime value="2021-04-03"/>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="urn:oid:2.16.840.1.113883.6.43.1"/>
+                  <version value="31"/>
+                  <code value="8140/3"/>
+               </coding>
+               <text value="Morphologie_Freitext2"/>
+            </valueCodeableConcept>
+            <hasMember>
+               <reference value="Observation/5927c59b7bc19a26"/>
+            </hasMember>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/hist76fec93e8ce09af6"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/5927c59b7bc19a26"/>
+      <resource>
+         <Observation>
+            <id value="5927c59b7bc19a26"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Grading"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="59542-1"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <focus>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </focus>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/GradingCS"/>
+                  <code value="2"/>
+               </coding>
+            </valueCodeableConcept>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/5927c59b7bc19a26"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/tnm76fec93e8ce09af6"/>
+      <resource>
+         <Observation>
+            <id value="tnm76fec93e8ce09af6"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-TNMp"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="21902-2"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <focus>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </focus>
+            <effectiveDateTime value="2021-04-04"/>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/UiccstadiumCS"/>
+                  <version value="6"/>
+                  <code value="0"/>
+               </coding>
+            </valueCodeableConcept>
+            <component>
+               <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-TNMcpuPraefix">
+                  <valueCodeableConcept>
+                     <coding>
+                        <code value="p"/>
+                     </coding>
+                  </valueCodeableConcept>
+               </extension>
+               <extension/>
+               <code>
+                  <coding>
+                     <system value="http://loinc.org"/>
+                     <code value="21899-0"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMTCS"/>
+                     <code value="4e"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+            <component>
+               <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-TNMcpuPraefix">
+                  <valueCodeableConcept>
+                     <coding>
+                        <code value="p"/>
+                     </coding>
+                  </valueCodeableConcept>
+               </extension>
+               <extension/>
+               <code>
+                  <coding>
+                     <system value="http://loinc.org"/>
+                     <code value="21900-6"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMNCS"/>
+                     <code value="(sn)(mol+)"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+            <component>
+               <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-TNMcpuPraefix">
+                  <valueCodeableConcept>
+                     <coding>
+                        <code value="p"/>
+                     </coding>
+                  </valueCodeableConcept>
+               </extension>
+               <extension/>
+               <code>
+                  <coding>
+                     <system value="http://loinc.org"/>
+                     <code value="21901-4"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMMCS"/>
+                     <code value="2(cy-)"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="http://loinc.org"/>
+                     <code value="59479-6"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMySymbolCS"/>
+                     <code value="y"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="http://loinc.org"/>
+                     <code value="21983-2"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMrSymbolCS"/>
+                     <code value="r"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="http://loinc.org"/>
+                     <code value="42030-7"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMmSymbolCS"/>
+                     <code value="TNM_m_Symbol2"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/tnm76fec93e8ce09af6"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Procedure/opee2d8a29a4a9c876"/>
+      <resource>
+         <Procedure>
+            <id value="opee2d8a29a4a9c876"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Procedure-Operation"/>
+            </meta>
+            <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-OPIntention">
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/OPIntentionCS"/>
+                     <code value="K"/>
+                  </coding>
+               </valueCodeableConcept>
+            </extension>
+            <status value="completed"/>
+            <category>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTTherapieartCS"/>
+                  <code value="OP"/>
+                  <display value="Operation"/>
+               </coding>
+            </category>
+            <code/>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <performedDateTime value="2021-04-09"/>
+            <reasonReference>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </reasonReference>
+            <outcome>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/LokaleBeurteilungResidualstatusCS"/>
+                  <code value="R1"/>
+               </coding>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/GesamtbeurteilungResidualstatusCS"/>
+                  <code value="R1"/>
+               </coding>
+            </outcome>
+         </Procedure>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Procedure/opee2d8a29a4a9c876"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/hist720fbb38bf6d3bce"/>
+      <resource>
+         <Observation>
+            <id value="hist720fbb38bf6d3bce"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Histologie"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="59847-4"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <focus>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </focus>
+            <effectiveDateTime value="2021-04-09"/>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="urn:oid:2.16.840.1.113883.6.43.1"/>
+                  <version value="31"/>
+                  <code value="8140/3"/>
+               </coding>
+               <text value="Morphologie_Freitext3"/>
+            </valueCodeableConcept>
+            <hasMember>
+               <reference value="Observation/f87b9b639f11aeba"/>
+            </hasMember>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/hist720fbb38bf6d3bce"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/f87b9b639f11aeba"/>
+      <resource>
+         <Observation>
+            <id value="f87b9b639f11aeba"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Grading"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="59542-1"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <focus>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </focus>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/GradingCS"/>
+                  <code value="2"/>
+               </coding>
+            </valueCodeableConcept>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/f87b9b639f11aeba"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/tnm720fbb38bf6d3bce"/>
+      <resource>
+         <Observation>
+            <id value="tnm720fbb38bf6d3bce"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-TNMc"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="21908-9"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <focus>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </focus>
+            <effectiveDateTime value="2021-04-12"/>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/UiccstadiumCS"/>
+                  <version value="6"/>
+                  <code value="2"/>
+               </coding>
+            </valueCodeableConcept>
+            <component>
+               <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-TNMcpuPraefix">
+                  <valueCodeableConcept>
+                     <coding>
+                        <code value="c"/>
+                     </coding>
+                  </valueCodeableConcept>
+               </extension>
+               <extension/>
+               <code>
+                  <coding>
+                     <system value="http://loinc.org"/>
+                     <code value="21905-5"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMTCS"/>
+                     <code value="4e"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+            <component>
+               <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-TNMcpuPraefix">
+                  <valueCodeableConcept>
+                     <coding>
+                        <code value="c"/>
+                     </coding>
+                  </valueCodeableConcept>
+               </extension>
+               <extension/>
+               <code>
+                  <coding>
+                     <system value="http://loinc.org"/>
+                     <code value="21906-3"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMNCS"/>
+                     <code value="(sn)(mol+)"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+            <component>
+               <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-TNMcpuPraefix">
+                  <valueCodeableConcept>
+                     <coding>
+                        <code value="c"/>
+                     </coding>
+                  </valueCodeableConcept>
+               </extension>
+               <extension/>
+               <code>
+                  <coding>
+                     <system value="http://loinc.org"/>
+                     <code value="21907-1"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMMCS"/>
+                     <code value="2(cy-)"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="http://loinc.org"/>
+                     <code value="59479-6"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMySymbolCS"/>
+                     <code value="y"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="http://loinc.org"/>
+                     <code value="21983-2"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMrSymbolCS"/>
+                     <code value="r"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="http://loinc.org"/>
+                     <code value="42030-7"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMmSymbolCS"/>
+                     <code value="TNM_m_Symbol3"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/tnm720fbb38bf6d3bce"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Procedure/stefab1cbf56d7ebe0"/>
+      <resource>
+         <Procedure>
+            <id value="stefab1cbf56d7ebe0"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Procedure-Strahlentherapie"/>
+            </meta>
+            <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-StellungZurOp">
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTStellungOPCS"/>
+                     <code value="O"/>
+                  </coding>
+               </valueCodeableConcept>
+            </extension>
+            <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-SYSTIntention">
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTIntentionCS"/>
+                     <code value="K"/>
+                  </coding>
+               </valueCodeableConcept>
+            </extension>
+            <status value="unknown"/>
+            <category>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTTherapieartCS"/>
+                  <code value="ST"/>
+                  <display value="Strahlentherapie"/>
+               </coding>
+            </category>
+            <code>
+               <coding>
+                  <system value="http://fhir.de/CodeSystem/bfarm/ops"/>
+                  <code value="8-52"/>
+                  <display value="Strahlentherapie"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <reasonReference>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </reasonReference>
+            <outcome>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/LokaleBeurteilungResidualstatusCS"/>
+                  <code value="R1"/>
+               </coding>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/GesamtbeurteilungResidualstatusCS"/>
+                  <code value="R0"/>
+               </coding>
+            </outcome>
+         </Procedure>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Procedure/stefab1cbf56d7ebe0"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Procedure/sts23568c25a81e1c82-0"/>
+      <resource>
+         <Procedure>
+            <id value="sts23568c25a81e1c82-0"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Procedure-Strahlentherapie"/>
+            </meta>
+            <partOf>
+               <reference value="Procedure/stefab1cbf56d7ebe0"/>
+            </partOf>
+            <status value="stopped"/>
+            <category>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTTherapieartCS"/>
+                  <code value="ST"/>
+                  <display value="Strahlentherapie"/>
+               </coding>
+            </category>
+            <code>
+               <coding>
+                  <system value="http://fhir.de/CodeSystem/dimdi/ops"/>
+                  <code value="8-52"/>
+                  <display value="Strahlentherapie"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <performedPeriod>
+               <start value="2021-04-10"/>
+               <end value="2021-04-12"/>
+            </performedPeriod>
+            <reasonReference>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </reasonReference>
+         </Procedure>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Procedure/sts23568c25a81e1c82-0"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Procedure/stsbf762c7d92688ed5-0"/>
+      <resource>
+         <Procedure>
+            <id value="stsbf762c7d92688ed5-0"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Procedure-Strahlentherapie"/>
+            </meta>
+            <partOf>
+               <reference value="Procedure/stefab1cbf56d7ebe0"/>
+            </partOf>
+            <status value="stopped"/>
+            <category>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTTherapieartCS"/>
+                  <code value="ST"/>
+                  <display value="Strahlentherapie"/>
+               </coding>
+            </category>
+            <code>
+               <coding>
+                  <system value="http://fhir.de/CodeSystem/dimdi/ops"/>
+                  <code value="8-52"/>
+                  <display value="Strahlentherapie"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <performedPeriod>
+               <start value="2021-04-15"/>
+               <end value="2021-04-20"/>
+            </performedPeriod>
+            <reasonReference>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </reasonReference>
+         </Procedure>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Procedure/stsbf762c7d92688ed5-0"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Procedure/stee2d8a29a4a9c876"/>
+      <resource>
+         <Procedure>
+            <id value="stee2d8a29a4a9c876"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Procedure-Strahlentherapie"/>
+            </meta>
+            <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-StellungZurOp">
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTStellungOPCS"/>
+                     <code value="O"/>
+                  </coding>
+               </valueCodeableConcept>
+            </extension>
+            <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-SYSTIntention">
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTIntentionCS"/>
+                     <code value="K"/>
+                  </coding>
+               </valueCodeableConcept>
+            </extension>
+            <status value="unknown"/>
+            <category>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTTherapieartCS"/>
+                  <code value="ST"/>
+                  <display value="Strahlentherapie"/>
+               </coding>
+            </category>
+            <code>
+               <coding>
+                  <system value="http://fhir.de/CodeSystem/bfarm/ops"/>
+                  <code value="8-52"/>
+                  <display value="Strahlentherapie"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <reasonReference>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </reasonReference>
+            <outcome>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/LokaleBeurteilungResidualstatusCS"/>
+                  <code value="R0"/>
+               </coding>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/GesamtbeurteilungResidualstatusCS"/>
+                  <code value="R0"/>
+               </coding>
+            </outcome>
+         </Procedure>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Procedure/stee2d8a29a4a9c876"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Procedure/sts6d1d21fcb1ba02d0-0"/>
+      <resource>
+         <Procedure>
+            <id value="sts6d1d21fcb1ba02d0-0"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Procedure-Strahlentherapie"/>
+            </meta>
+            <partOf>
+               <reference value="Procedure/stee2d8a29a4a9c876"/>
+            </partOf>
+            <status value="stopped"/>
+            <category>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTTherapieartCS"/>
+                  <code value="ST"/>
+                  <display value="Strahlentherapie"/>
+               </coding>
+            </category>
+            <code>
+               <coding>
+                  <system value="http://fhir.de/CodeSystem/dimdi/ops"/>
+                  <code value="8-52"/>
+                  <display value="Strahlentherapie"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <performedPeriod>
+               <start value="2021-05-01"/>
+               <end value="2021-05-04"/>
+            </performedPeriod>
+            <reasonReference>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </reasonReference>
+         </Procedure>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Procedure/sts6d1d21fcb1ba02d0-0"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Procedure/sts67716a09c21b786a-0"/>
+      <resource>
+         <Procedure>
+            <id value="sts67716a09c21b786a-0"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Procedure-Strahlentherapie"/>
+            </meta>
+            <partOf>
+               <reference value="Procedure/stee2d8a29a4a9c876"/>
+            </partOf>
+            <status value="stopped"/>
+            <category>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTTherapieartCS"/>
+                  <code value="ST"/>
+                  <display value="Strahlentherapie"/>
+               </coding>
+            </category>
+            <code>
+               <coding>
+                  <system value="http://fhir.de/CodeSystem/dimdi/ops"/>
+                  <code value="8-52"/>
+                  <display value="Strahlentherapie"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <performedPeriod>
+               <start value="2021-05-09"/>
+               <end value="2021-05-14"/>
+            </performedPeriod>
+            <reasonReference>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </reasonReference>
+         </Procedure>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Procedure/sts67716a09c21b786a-0"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/MedicationStatement/systefab1cbf56d7ebe0"/>
+      <resource>
+         <MedicationStatement>
+            <id value="systefab1cbf56d7ebe0"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-MedicationStatement-Systemtherapie"/>
+            </meta>
+            <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-StellungZurOp">
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTStellungOPCS"/>
+                     <code value="O"/>
+                  </coding>
+               </valueCodeableConcept>
+            </extension>
+            <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-SYSTIntention">
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTIntentionCS"/>
+                     <code value="K"/>
+                  </coding>
+               </valueCodeableConcept>
+            </extension>
+            <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-LokaleResidualstatus">
+               <valueReference>
+                  <reference value="Observation/7bbdf622fb906969"/>
+               </valueReference>
+            </extension>
+            <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-GesamtbeurteilungResidualstatus">
+               <valueReference>
+                  <reference value="Observation/adcba4c554247d04"/>
+               </valueReference>
+            </extension>
+            <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-SystemischeTherapieProtokoll">
+               <valueCodeableConcept>
+                  <text value="SYST_Protokoll0"/>
+               </valueCodeableConcept>
+            </extension>
+            <status value="stopped"/>
+            <category>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTTherapieartCS"/>
+                  <code value="CH"/>
+               </coding>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTTherapieartCS"/>
+                  <code value="CH"/>
+               </coding>
+            </category>
+            <medicationCodeableConcept>
+               <text value="SYST_Substanz0 SYST_Substanz1"/>
+            </medicationCodeableConcept>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <effectivePeriod>
+               <start value="2021-06-12"/>
+               <end value="2021-06-21"/>
+            </effectivePeriod>
+            <reasonReference>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </reasonReference>
+         </MedicationStatement>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="MedicationStatement/systefab1cbf56d7ebe0"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/adcba4c554247d04"/>
+      <resource>
+         <Observation>
+            <id value="adcba4c554247d04"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-GesamtbeurteilungResidualstatus"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="81169-5"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <focus>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </focus>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/GesamtbeurteilungResidualstatusCS"/>
+                  <code value="R1"/>
+               </coding>
+            </valueCodeableConcept>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/adcba4c554247d04"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/7bbdf622fb906969"/>
+      <resource>
+         <Observation>
+            <id value="7bbdf622fb906969"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-LokaleBeurteilungResidualstatus"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="84892-9"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <focus>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </focus>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/LokaleBeurteilungResidualstatusCS"/>
+                  <code value="R0"/>
+               </coding>
+            </valueCodeableConcept>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/7bbdf622fb906969"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/MedicationStatement/systee2d8a29a4a9c876"/>
+      <resource>
+         <MedicationStatement>
+            <id value="systee2d8a29a4a9c876"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-MedicationStatement-Systemtherapie"/>
+            </meta>
+            <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-StellungZurOp">
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTStellungOPCS"/>
+                     <code value="O"/>
+                  </coding>
+               </valueCodeableConcept>
+            </extension>
+            <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-SYSTIntention">
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTIntentionCS"/>
+                     <code value="K"/>
+                  </coding>
+               </valueCodeableConcept>
+            </extension>
+            <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-LokaleResidualstatus">
+               <valueReference>
+                  <reference value="Observation/28d2c7de4e195f3b"/>
+               </valueReference>
+            </extension>
+            <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-GesamtbeurteilungResidualstatus">
+               <valueReference>
+                  <reference value="Observation/262e61f883fb2aa3"/>
+               </valueReference>
+            </extension>
+            <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-SystemischeTherapieProtokoll">
+               <valueCodeableConcept>
+                  <text value="SYST_Protokoll1"/>
+               </valueCodeableConcept>
+            </extension>
+            <status value="stopped"/>
+            <category>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTTherapieartCS"/>
+                  <code value="CH"/>
+               </coding>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTTherapieartCS"/>
+                  <code value="CH"/>
+               </coding>
+            </category>
+            <medicationCodeableConcept>
+               <text value="SYST_Substanz2 SYST_Substanz3"/>
+            </medicationCodeableConcept>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <effectivePeriod>
+               <start value="2021-07-02"/>
+               <end value="2021-07-18"/>
+            </effectivePeriod>
+            <reasonReference>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </reasonReference>
+         </MedicationStatement>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="MedicationStatement/systee2d8a29a4a9c876"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/262e61f883fb2aa3"/>
+      <resource>
+         <Observation>
+            <id value="262e61f883fb2aa3"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-GesamtbeurteilungResidualstatus"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="81169-5"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <focus>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </focus>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/GesamtbeurteilungResidualstatusCS"/>
+                  <code value="R0"/>
+               </coding>
+            </valueCodeableConcept>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/262e61f883fb2aa3"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/28d2c7de4e195f3b"/>
+      <resource>
+         <Observation>
+            <id value="28d2c7de4e195f3b"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-LokaleBeurteilungResidualstatus"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="84892-9"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <focus>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </focus>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/LokaleBeurteilungResidualstatusCS"/>
+                  <code value="R0"/>
+               </coding>
+            </valueCodeableConcept>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/28d2c7de4e195f3b"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/ClinicalImpression/vrlefab1cbf56d7ebe0"/>
+      <resource>
+         <ClinicalImpression>
+            <id value="vrlefab1cbf56d7ebe0"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-ClinicalImpression-Verlauf"/>
+            </meta>
+            <status value="completed"/>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <effectiveDateTime value="2021-06-12"/>
+            <problem>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </problem>
+            <finding>
+               <itemReference>
+                  <reference value="Observation/tnm4693d84457ea2168"/>
+               </itemReference>
+            </finding>
+            <finding>
+               <itemReference>
+                  <reference value="Observation/hist4693d84457ea2168"/>
+               </itemReference>
+            </finding>
+            <finding>
+               <itemReference>
+                  <reference value="Observation/fm579732ce1eafda28"/>
+               </itemReference>
+            </finding>
+            <finding>
+               <itemReference>
+                  <reference value="Observation/0c45f9fc9c31d343"/>
+               </itemReference>
+            </finding>
+            <finding>
+               <itemReference>
+                  <reference value="Observation/d90627d54d01a0f6"/>
+               </itemReference>
+            </finding>
+            <finding>
+               <itemReference>
+                  <reference value="Observation/5ae05c3a71aaae6f"/>
+               </itemReference>
+            </finding>
+            <finding>
+               <itemReference>
+                  <reference value="Observation/2551df78cee4337c"/>
+               </itemReference>
+            </finding>
+         </ClinicalImpression>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="ClinicalImpression/vrlefab1cbf56d7ebe0"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/0c45f9fc9c31d343"/>
+      <resource>
+         <Observation>
+            <id value="0c45f9fc9c31d343"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-LokalerTumorstatus"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="LA4583-6"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <focus>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </focus>
+            <effectiveDateTime value="2021-06-12"/>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VerlaufLokalerTumorstatusCS"/>
+                  <code value="K"/>
+               </coding>
+            </valueCodeableConcept>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/0c45f9fc9c31d343"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/d90627d54d01a0f6"/>
+      <resource>
+         <Observation>
+            <id value="d90627d54d01a0f6"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-TumorstatusLymphknoten"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="LA4370-8"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <focus>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </focus>
+            <effectiveDateTime value="2021-06-12"/>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VerlaufTumorstatusLymphknotenCS"/>
+                  <code value="K"/>
+               </coding>
+            </valueCodeableConcept>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/d90627d54d01a0f6"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/5ae05c3a71aaae6f"/>
+      <resource>
+         <Observation>
+            <id value="5ae05c3a71aaae6f"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-TumorstatusFernmetastasen"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="LA4226-2"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <focus>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </focus>
+            <effectiveDateTime value="2021-06-12"/>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VerlaufTumorstatusFernmetastasenCS"/>
+                  <code value="K"/>
+               </coding>
+            </valueCodeableConcept>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/5ae05c3a71aaae6f"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/2551df78cee4337c"/>
+      <resource>
+         <Observation>
+            <id value="2551df78cee4337c"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-GesamtbeurteilungTumorstatus"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="21976-6"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <focus>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </focus>
+            <effectiveDateTime value="2021-06-12"/>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/GesamtbeurteilungTumorstatusCS"/>
+                  <code value="V"/>
+               </coding>
+            </valueCodeableConcept>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/2551df78cee4337c"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/hist4693d84457ea2168"/>
+      <resource>
+         <Observation>
+            <id value="hist4693d84457ea2168"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Histologie"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="59847-4"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <focus>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </focus>
+            <effectiveDateTime value="2021-06-12"/>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="urn:oid:2.16.840.1.113883.6.43.1"/>
+                  <version value="31"/>
+                  <code value="8140/3"/>
+               </coding>
+               <text value="Morphologie_Freitext4"/>
+            </valueCodeableConcept>
+            <hasMember>
+               <reference value="Observation/5d63a01ff2b60044"/>
+            </hasMember>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/hist4693d84457ea2168"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/5d63a01ff2b60044"/>
+      <resource>
+         <Observation>
+            <id value="5d63a01ff2b60044"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Grading"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="59542-1"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <focus>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </focus>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/GradingCS"/>
+                  <code value="0"/>
+               </coding>
+            </valueCodeableConcept>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/5d63a01ff2b60044"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/tnm4693d84457ea2168"/>
+      <resource>
+         <Observation>
+            <id value="tnm4693d84457ea2168"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-TNMc"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="21908-9"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <focus>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </focus>
+            <effectiveDateTime value="2021-06-13"/>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/UiccstadiumCS"/>
+                  <version value="6"/>
+                  <code value="0"/>
+               </coding>
+            </valueCodeableConcept>
+            <component>
+               <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-TNMcpuPraefix">
+                  <valueCodeableConcept>
+                     <coding>
+                        <code value="c"/>
+                     </coding>
+                  </valueCodeableConcept>
+               </extension>
+               <extension/>
+               <code>
+                  <coding>
+                     <system value="http://loinc.org"/>
+                     <code value="21905-5"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMTCS"/>
+                     <code value="4e"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+            <component>
+               <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-TNMcpuPraefix">
+                  <valueCodeableConcept>
+                     <coding>
+                        <code value="c"/>
+                     </coding>
+                  </valueCodeableConcept>
+               </extension>
+               <extension/>
+               <code>
+                  <coding>
+                     <system value="http://loinc.org"/>
+                     <code value="21906-3"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMNCS"/>
+                     <code value="(sn)(mol+)"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+            <component>
+               <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-TNMcpuPraefix">
+                  <valueCodeableConcept>
+                     <coding>
+                        <code value="c"/>
+                     </coding>
+                  </valueCodeableConcept>
+               </extension>
+               <extension/>
+               <code>
+                  <coding>
+                     <system value="http://loinc.org"/>
+                     <code value="21907-1"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMMCS"/>
+                     <code value="2(cy-)"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="http://loinc.org"/>
+                     <code value="59479-6"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMySymbolCS"/>
+                     <code value="y"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="http://loinc.org"/>
+                     <code value="21983-2"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMrSymbolCS"/>
+                     <code value="r"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="http://loinc.org"/>
+                     <code value="42030-7"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMmSymbolCS"/>
+                     <code value="TNM_m_Symbol4"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/tnm4693d84457ea2168"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/fm579732ce1eafda28"/>
+      <resource>
+         <Observation>
+            <id value="fm579732ce1eafda28"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Fernmetastasen"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="21907-1"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <focus>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </focus>
+            <effectiveDateTime value="2021-06-12"/>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/JNUCS"/>
+                  <code value="ja"/>
+               </coding>
+            </valueCodeableConcept>
+            <bodySite>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/FMLokalisationCS"/>
+                  <code value="PUL"/>
+               </coding>
+            </bodySite>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/fm579732ce1eafda28"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/ClinicalImpression/vrl76fec93e8ce09af6"/>
+      <resource>
+         <ClinicalImpression>
+            <id value="vrl76fec93e8ce09af6"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-ClinicalImpression-Verlauf"/>
+            </meta>
+            <status value="completed"/>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <effectiveDateTime value="2021-08-11"/>
+            <problem>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </problem>
+            <finding>
+               <itemReference>
+                  <reference value="Observation/tnmc1a5e1637aa36d49"/>
+               </itemReference>
+            </finding>
+            <finding>
+               <itemReference>
+                  <reference value="Observation/histc1a5e1637aa36d49"/>
+               </itemReference>
+            </finding>
+            <finding>
+               <itemReference>
+                  <reference value="Observation/fme6f759ebc4eea484"/>
+               </itemReference>
+            </finding>
+            <finding>
+               <itemReference>
+                  <reference value="Observation/24caced9629e45fe"/>
+               </itemReference>
+            </finding>
+            <finding>
+               <itemReference>
+                  <reference value="Observation/7a234d7729ac0f24"/>
+               </itemReference>
+            </finding>
+            <finding>
+               <itemReference>
+                  <reference value="Observation/2184f4826981f5aa"/>
+               </itemReference>
+            </finding>
+            <finding>
+               <itemReference>
+                  <reference value="Observation/d360c023a3e29cdd"/>
+               </itemReference>
+            </finding>
+         </ClinicalImpression>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="ClinicalImpression/vrl76fec93e8ce09af6"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/24caced9629e45fe"/>
+      <resource>
+         <Observation>
+            <id value="24caced9629e45fe"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-LokalerTumorstatus"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="LA4583-6"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <focus>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </focus>
+            <effectiveDateTime value="2021-08-11"/>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VerlaufLokalerTumorstatusCS"/>
+                  <code value="K"/>
+               </coding>
+            </valueCodeableConcept>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/24caced9629e45fe"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/7a234d7729ac0f24"/>
+      <resource>
+         <Observation>
+            <id value="7a234d7729ac0f24"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-TumorstatusLymphknoten"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="LA4370-8"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <focus>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </focus>
+            <effectiveDateTime value="2021-08-11"/>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VerlaufTumorstatusLymphknotenCS"/>
+                  <code value="K"/>
+               </coding>
+            </valueCodeableConcept>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/7a234d7729ac0f24"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/2184f4826981f5aa"/>
+      <resource>
+         <Observation>
+            <id value="2184f4826981f5aa"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-TumorstatusFernmetastasen"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="LA4226-2"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <focus>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </focus>
+            <effectiveDateTime value="2021-08-11"/>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VerlaufTumorstatusFernmetastasenCS"/>
+                  <code value="K"/>
+               </coding>
+            </valueCodeableConcept>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/2184f4826981f5aa"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/d360c023a3e29cdd"/>
+      <resource>
+         <Observation>
+            <id value="d360c023a3e29cdd"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-GesamtbeurteilungTumorstatus"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="21976-6"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <focus>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </focus>
+            <effectiveDateTime value="2021-08-11"/>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/GesamtbeurteilungTumorstatusCS"/>
+                  <code value="V"/>
+               </coding>
+            </valueCodeableConcept>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/d360c023a3e29cdd"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/histc1a5e1637aa36d49"/>
+      <resource>
+         <Observation>
+            <id value="histc1a5e1637aa36d49"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Histologie"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="59847-4"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <focus>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </focus>
+            <effectiveDateTime value="2021-08-11"/>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="urn:oid:2.16.840.1.113883.6.43.1"/>
+                  <version value="31"/>
+                  <code value="8140/3"/>
+               </coding>
+               <text value="Morphologie_Freitext5"/>
+            </valueCodeableConcept>
+            <hasMember>
+               <reference value="Observation/0c56f2994fcba396"/>
+            </hasMember>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/histc1a5e1637aa36d49"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/0c56f2994fcba396"/>
+      <resource>
+         <Observation>
+            <id value="0c56f2994fcba396"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Grading"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="59542-1"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <focus>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </focus>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/GradingCS"/>
+                  <code value="0"/>
+               </coding>
+            </valueCodeableConcept>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/0c56f2994fcba396"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/tnmc1a5e1637aa36d49"/>
+      <resource>
+         <Observation>
+            <id value="tnmc1a5e1637aa36d49"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-TNMc"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="21908-9"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <focus>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </focus>
+            <effectiveDateTime value="2021-08-11"/>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/UiccstadiumCS"/>
+                  <version value="6"/>
+                  <code value="0"/>
+               </coding>
+            </valueCodeableConcept>
+            <component>
+               <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-TNMcpuPraefix">
+                  <valueCodeableConcept>
+                     <coding>
+                        <code value="c"/>
+                     </coding>
+                  </valueCodeableConcept>
+               </extension>
+               <extension/>
+               <code>
+                  <coding>
+                     <system value="http://loinc.org"/>
+                     <code value="21905-5"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMTCS"/>
+                     <code value="4e"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+            <component>
+               <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-TNMcpuPraefix">
+                  <valueCodeableConcept>
+                     <coding>
+                        <code value="c"/>
+                     </coding>
+                  </valueCodeableConcept>
+               </extension>
+               <extension/>
+               <code>
+                  <coding>
+                     <system value="http://loinc.org"/>
+                     <code value="21906-3"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMNCS"/>
+                     <code value="(sn)(mol+)"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+            <component>
+               <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-TNMcpuPraefix">
+                  <valueCodeableConcept>
+                     <coding>
+                        <code value="c"/>
+                     </coding>
+                  </valueCodeableConcept>
+               </extension>
+               <extension/>
+               <code>
+                  <coding>
+                     <system value="http://loinc.org"/>
+                     <code value="21907-1"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMMCS"/>
+                     <code value="2(cy-)"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="http://loinc.org"/>
+                     <code value="59479-6"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMySymbolCS"/>
+                     <code value="y"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="http://loinc.org"/>
+                     <code value="21983-2"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMrSymbolCS"/>
+                     <code value="r"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="http://loinc.org"/>
+                     <code value="42030-7"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMmSymbolCS"/>
+                     <code value="TNM_m_Symbol5"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/tnmc1a5e1637aa36d49"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/fme6f759ebc4eea484"/>
+      <resource>
+         <Observation>
+            <id value="fme6f759ebc4eea484"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Fernmetastasen"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="21907-1"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/159e9710bd1eeef9"/>
+            </subject>
+            <focus>
+               <reference value="Condition/digf41ddcacd3052a7a"/>
+            </focus>
+            <effectiveDateTime value="2021-08-11"/>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/JNUCS"/>
+                  <code value="ja"/>
+               </coding>
+            </valueCodeableConcept>
+            <bodySite>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/FMLokalisationCS"/>
+                  <code value="PUL"/>
+               </coding>
+            </bodySite>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/fme6f759ebc4eea484"/>
+      </request>
+   </entry>
+</Bundle>
