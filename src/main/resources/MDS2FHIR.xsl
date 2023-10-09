@@ -304,7 +304,7 @@
                                 </xsl:if>
                                 <code value="{./Diagnose}" />
                             </coding>
-                            <xsl:if test="./Diagnose_Text"><text value="{./Diagnose_Text}" /></xsl:if>
+                            <xsl:if test="./Diagnose_Text != ''"><text value="{./Diagnose_Text}" /></xsl:if>
                         </code>
                         <bodySite>
                             <coding>
@@ -327,7 +327,7 @@
                             <recordedDate value="{mds2fhir:transformDateBlazebug(./Tumor_Diagnosedatum)}" />
                         </xsl:if>
                         <xsl:for-each select="./Tumor/TNM">
-                            <xsl:if test="./Datum_der_TNM-Dokumentation-Datum_Befund">
+                            <xsl:if test="./Datum_der_TNM-Dokumentation-Datum_Befund !=''">
                                     <stage>
                                         <assessment>
                                             <reference value="Observation/{mds2fhir:getID(./@TNM_ID, mds2fhir:transformDate(./Datum_der_TNM-Dokumentation-Datum_Befund), generate-id())}" />
@@ -338,7 +338,7 @@
                         <evidence>
                             <xsl:for-each select="./Tumor/Histology">
                                 <detail>
-                                    <reference value="Observation/{mds2fhir:getID(./@Histology_ID,'',generate-id())}" />
+                                    <reference value="Observation/{mds2fhir:getID(./@Histology_ID, mds2fhir:transformDate(./Tumor_Histologiedatum),generate-id())}" />
                                 </detail>
                         </xsl:for-each>
                         </evidence>
@@ -855,7 +855,7 @@
                         <reference value="Condition/{$Diagnosis_ID}" />
                     </problem>
                     <xsl:for-each select="./TNM">
-                        <xsl:if test="./Datum_der_TNM-Dokumentation-Datum_Befund">
+                        <xsl:if test="./Datum_der_TNM-Dokumentation-Datum_Befund !=''">
                             <finding>
                                 <itemReference>
                                     <reference value="Observation/{mds2fhir:getID(./@TNM_ID, mds2fhir:transformDate(./Datum_der_TNM-Dokumentation-Datum_Befund), generate-id())}" />
@@ -1082,7 +1082,7 @@
     <xsl:template match="TNM">
         <xsl:param name="Patient_ID" />
         <xsl:param name="Diagnosis_ID" />
-        <xsl:if test="./Datum_der_TNM-Dokumentation-Datum_Befund">
+        <xsl:if test="./Datum_der_TNM-Dokumentation-Datum_Befund !=''">
             <xsl:variable name="TNM_ID" select="mds2fhir:getID(./@TNM_ID, mds2fhir:transformDate(./Datum_der_TNM-Dokumentation-Datum_Befund), generate-id())" as="xs:string" />
 
             <entry>
@@ -1130,7 +1130,7 @@
                         <focus>
                             <reference value="Condition/{$Diagnosis_ID}"/>
                         </focus>
-                        <xsl:if test="./Datum_der_TNM-Dokumentation-Datum_Befund"><effectiveDateTime value="{mds2fhir:transformDate(./Datum_der_TNM-Dokumentation-Datum_Befund)}" /></xsl:if>
+                        <xsl:if test="./Datum_der_TNM-Dokumentation-Datum_Befund !=''"><effectiveDateTime value="{mds2fhir:transformDate(./Datum_der_TNM-Dokumentation-Datum_Befund)}" /></xsl:if>
                         <xsl:if test="./UICC_Stadium">
                             <valueCodeableConcept>
                                 <coding>
@@ -1412,7 +1412,7 @@
                     <focus>
                         <reference value="Condition/{$Diagnosis_ID}"/>
                     </focus>
-                    <xsl:if test="./Tumor_Histologiedatum"><effectiveDateTime value="{mds2fhir:transformDate(./Tumor_Histologiedatum)}" /></xsl:if>
+                    <xsl:if test="./Tumor_Histologiedatum !=''"><effectiveDateTime value="{mds2fhir:transformDate(./Tumor_Histologiedatum)}" /></xsl:if>
                     <valueCodeableConcept>
                         <coding>
                             <system value="urn:oid:2.16.840.1.113883.6.43.1" />
@@ -1592,8 +1592,7 @@
                 <xsl:value-of select="$date"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:message terminate="yes">ERROR: wrong date format:
-                    <xsl:value-of select="$date"/>
+                <xsl:message terminate="yes">ERROR: wrong date format: "<xsl:value-of select="$date"/>" in node <xsl:value-of select="name($date/../.)"/>
                 </xsl:message>
             </xsl:otherwise>
         </xsl:choose>

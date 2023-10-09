@@ -300,7 +300,7 @@
     <xsl:template match="Histologie">
         <xsl:param name="Patient_Id"/>
         <xsl:param name="Tumor_Id"/>
-        <xsl:if test="Tumor_Histologiedatum">
+        <xsl:if test="Tumor_Histologiedatum !=''">
              <Histology>
                  <xsl:attribute name="Histology_ID">
                      <xsl:variable name="attribute">
@@ -347,97 +347,103 @@
     <xsl:template match="pTNM">
         <xsl:param name="Patient_Id"/>
         <xsl:param name="Tumor_Id"/>
-        <TNM>
-            <xsl:attribute name="TNM_ID">
-                <xsl:variable name="attribute">
-                    <xsl:choose>
-                        <xsl:when test="@TNM_ID"><xsl:value-of select="@TNM_ID"/></xsl:when>
-                        <xsl:otherwise><xsl:value-of select="'gen',concat(string-join(xsi:DatumID(TNM_Datum)),TNM_T,TNM_N,TNM_M,TNM_c_p_u_Praefix_T,TNM_c_p_u_Praefix_N,TNM_c_p_u_Praefix_M)"/></xsl:otherwise>
-                    </xsl:choose>
-                </xsl:variable>
-                <xsl:value-of select="concat('ptnm', hash:hash($Patient_Id, $Tumor_Id, string-join($attribute, '')))" />
-            </xsl:attribute>
-            <gesamtpraefix>p</gesamtpraefix>
-            <xsl:if test="TNM_m_Symbol"><TNM-m-Symbol><xsl:value-of select="TNM_m_Symbol"/></TNM-m-Symbol></xsl:if>
-            <xsl:if test="TNM_T"><TNM-T><xsl:value-of select="TNM_T"/></TNM-T></xsl:if>
-            <xsl:if test="TNM_N"><TNM-N><xsl:value-of select="TNM_N"/></TNM-N></xsl:if>
-            <xsl:if test="TNM_M"><TNM-M><xsl:value-of select="TNM_M"/></TNM-M></xsl:if>
-            <xsl:if test="TNM_Version"><TNM-Version><xsl:value-of select="TNM_Version"/></TNM-Version></xsl:if>
-            <xsl:if test="TNM_Datum"><Datum_der_TNM-Dokumentation-Datum_Befund><xsl:value-of select="TNM_Datum"/></Datum_der_TNM-Dokumentation-Datum_Befund></xsl:if>
-            <xsl:if test="TNM_c_p_u_Praefix_T"><c-p-u-Präfix_T><xsl:value-of select="TNM_c_p_u_Praefix_T"/></c-p-u-Präfix_T></xsl:if>
-            <xsl:if test="TNM_c_p_u_Praefix_N"><c-p-u-Präfix_N><xsl:value-of select="TNM_c_p_u_Praefix_N"/></c-p-u-Präfix_N></xsl:if>
-            <xsl:if test="TNM_c_p_u_Praefix_M"><c-p-u-Präfix_M><xsl:value-of select="TNM_c_p_u_Praefix_M"/></c-p-u-Präfix_M></xsl:if>
-            <xsl:if test="TNM_r_Symbol"><TNM-r-Symbol><xsl:value-of select="TNM_r_Symbol"/></TNM-r-Symbol></xsl:if>
-            <xsl:if test="TNM_y_Symbol"><TNM-y-Symbol><xsl:value-of select="TNM_y_Symbol"/></TNM-y-Symbol></xsl:if>
-            <xsl:if test="UICC"><UICC_Stadium><xsl:value-of select="UICC"/></UICC_Stadium></xsl:if>
-            <xsl:if test="TNM_L"><TNM-L><xsl:value-of select="TNM_L"/></TNM-L></xsl:if>
-            <xsl:if test="TNM_V"><TNM-V><xsl:value-of select="TNM_V"/></TNM-V></xsl:if>
-            <xsl:if test="TNM_Pn"><TNM-Pn><xsl:value-of select="TNM_Pn"/></TNM-Pn></xsl:if>
-        </TNM>
+        <xsl:if test="TNM_Datum !=''">
+            <TNM>
+                <xsl:attribute name="TNM_ID">
+                    <xsl:variable name="attribute">
+                        <xsl:choose>
+                            <xsl:when test="@TNM_ID"><xsl:value-of select="@TNM_ID"/></xsl:when>
+                            <xsl:otherwise><xsl:value-of select="'gen',concat(string-join(xsi:DatumID(TNM_Datum)),TNM_T,TNM_N,TNM_M,TNM_c_p_u_Praefix_T,TNM_c_p_u_Praefix_N,TNM_c_p_u_Praefix_M)"/></xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:variable>
+                    <xsl:value-of select="concat('ptnm', hash:hash($Patient_Id, $Tumor_Id, $attribute))" />
+                </xsl:attribute>
+                <gesamtpraefix>p</gesamtpraefix>
+                <xsl:if test="TNM_m_Symbol"><TNM-m-Symbol><xsl:value-of select="TNM_m_Symbol"/></TNM-m-Symbol></xsl:if>
+                <xsl:if test="TNM_T"><TNM-T><xsl:value-of select="TNM_T"/></TNM-T></xsl:if>
+                <xsl:if test="TNM_N"><TNM-N><xsl:value-of select="TNM_N"/></TNM-N></xsl:if>
+                <xsl:if test="TNM_M"><TNM-M><xsl:value-of select="TNM_M"/></TNM-M></xsl:if>
+                <xsl:if test="TNM_Version"><TNM-Version><xsl:value-of select="TNM_Version"/></TNM-Version></xsl:if>
+                <xsl:if test="TNM_Datum"><Datum_der_TNM-Dokumentation-Datum_Befund><xsl:value-of select="TNM_Datum"/></Datum_der_TNM-Dokumentation-Datum_Befund></xsl:if>
+                <xsl:if test="TNM_c_p_u_Praefix_T"><c-p-u-Präfix_T><xsl:value-of select="TNM_c_p_u_Praefix_T"/></c-p-u-Präfix_T></xsl:if>
+                <xsl:if test="TNM_c_p_u_Praefix_N"><c-p-u-Präfix_N><xsl:value-of select="TNM_c_p_u_Praefix_N"/></c-p-u-Präfix_N></xsl:if>
+                <xsl:if test="TNM_c_p_u_Praefix_M"><c-p-u-Präfix_M><xsl:value-of select="TNM_c_p_u_Praefix_M"/></c-p-u-Präfix_M></xsl:if>
+                <xsl:if test="TNM_r_Symbol"><TNM-r-Symbol><xsl:value-of select="TNM_r_Symbol"/></TNM-r-Symbol></xsl:if>
+                <xsl:if test="TNM_y_Symbol"><TNM-y-Symbol><xsl:value-of select="TNM_y_Symbol"/></TNM-y-Symbol></xsl:if>
+                <xsl:if test="UICC"><UICC_Stadium><xsl:value-of select="UICC"/></UICC_Stadium></xsl:if>
+                <xsl:if test="TNM_L"><TNM-L><xsl:value-of select="TNM_L"/></TNM-L></xsl:if>
+                <xsl:if test="TNM_V"><TNM-V><xsl:value-of select="TNM_V"/></TNM-V></xsl:if>
+                <xsl:if test="TNM_Pn"><TNM-Pn><xsl:value-of select="TNM_Pn"/></TNM-Pn></xsl:if>
+            </TNM>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template match="cTNM">
         <xsl:param name="Patient_Id"/>
         <xsl:param name="Tumor_Id"/>
-        <TNM>
-            <xsl:attribute name="TNM_ID">
-                <xsl:variable name="attribute">
-                  <xsl:choose>
-                      <xsl:when test="@TNM_ID"><xsl:value-of select="@TNM_ID"/></xsl:when>
-                      <xsl:otherwise><xsl:value-of select="'gen',concat(string-join(xsi:DatumID(TNM_Datum)),TNM_T,TNM_N,TNM_M,TNM_c_p_u_Praefix_T,TNM_c_p_u_Praefix_N,TNM_c_p_u_Praefix_M)"/></xsl:otherwise>
-                  </xsl:choose>
-                </xsl:variable>
-                <xsl:value-of select="concat('ctnm', hash:hash($Patient_Id, $Tumor_Id, string-join($attribute, '')))"/>
-            </xsl:attribute>
-            <gesamtpraefix>c</gesamtpraefix>
-            <xsl:if test="TNM_m_Symbol"><TNM-m-Symbol><xsl:value-of select="TNM_m_Symbol"/></TNM-m-Symbol></xsl:if>
-            <xsl:if test="TNM_T"><TNM-T><xsl:value-of select="TNM_T"/></TNM-T></xsl:if>
-            <xsl:if test="TNM_N"><TNM-N><xsl:value-of select="TNM_N"/></TNM-N></xsl:if>
-            <xsl:if test="TNM_M"><TNM-M><xsl:value-of select="TNM_M"/></TNM-M></xsl:if>
-            <xsl:if test="TNM_Version"><TNM-Version><xsl:value-of select="TNM_Version"/></TNM-Version></xsl:if>
-            <xsl:if test="TNM_Datum"><Datum_der_TNM-Dokumentation-Datum_Befund><xsl:value-of select="TNM_Datum"/></Datum_der_TNM-Dokumentation-Datum_Befund></xsl:if>
-            <xsl:if test="TNM_c_p_u_Praefix_T"><c-p-u-Präfix_T><xsl:value-of select="TNM_c_p_u_Praefix_T"/></c-p-u-Präfix_T></xsl:if>
-            <xsl:if test="TNM_c_p_u_Praefix_N"><c-p-u-Präfix_N><xsl:value-of select="TNM_c_p_u_Praefix_N"/></c-p-u-Präfix_N></xsl:if>
-            <xsl:if test="TNM_c_p_u_Praefix_M"><c-p-u-Präfix_M><xsl:value-of select="TNM_c_p_u_Praefix_M"/></c-p-u-Präfix_M></xsl:if>
-            <xsl:if test="TNM_r_Symbol"><TNM-r-Symbol><xsl:value-of select="TNM_r_Symbol"/></TNM-r-Symbol></xsl:if>
-            <xsl:if test="TNM_y_Symbol"><TNM-y-Symbol><xsl:value-of select="TNM_y_Symbol"/></TNM-y-Symbol></xsl:if>
-            <xsl:if test="UICC"><UICC_Stadium><xsl:value-of select="UICC"/></UICC_Stadium></xsl:if>
-            <xsl:if test="TNM_L"><TNM-L><xsl:value-of select="TNM_L"/></TNM-L></xsl:if>
-            <xsl:if test="TNM_V"><TNM-V><xsl:value-of select="TNM_V"/></TNM-V></xsl:if>
-            <xsl:if test="TNM_Pn"><TNM-Pn><xsl:value-of select="TNM_Pn"/></TNM-Pn></xsl:if>
-        </TNM>
+        <xsl:if test="TNM_Datum !=''">
+            <TNM>
+                <xsl:attribute name="TNM_ID">
+                    <xsl:variable name="attribute">
+                      <xsl:choose>
+                          <xsl:when test="@TNM_ID"><xsl:value-of select="@TNM_ID"/></xsl:when>
+                          <xsl:otherwise><xsl:value-of select="'gen',concat(string-join(xsi:DatumID(TNM_Datum)),TNM_T,TNM_N,TNM_M,TNM_c_p_u_Praefix_T,TNM_c_p_u_Praefix_N,TNM_c_p_u_Praefix_M)"/></xsl:otherwise>
+                      </xsl:choose>
+                    </xsl:variable>
+                    <xsl:value-of select="concat('ctnm', hash:hash($Patient_Id, $Tumor_Id, string-join($attribute, '')))"/>
+                </xsl:attribute>
+                <gesamtpraefix>c</gesamtpraefix>
+                <xsl:if test="TNM_m_Symbol"><TNM-m-Symbol><xsl:value-of select="TNM_m_Symbol"/></TNM-m-Symbol></xsl:if>
+                <xsl:if test="TNM_T"><TNM-T><xsl:value-of select="TNM_T"/></TNM-T></xsl:if>
+                <xsl:if test="TNM_N"><TNM-N><xsl:value-of select="TNM_N"/></TNM-N></xsl:if>
+                <xsl:if test="TNM_M"><TNM-M><xsl:value-of select="TNM_M"/></TNM-M></xsl:if>
+                <xsl:if test="TNM_Version"><TNM-Version><xsl:value-of select="TNM_Version"/></TNM-Version></xsl:if>
+                <xsl:if test="TNM_Datum"><Datum_der_TNM-Dokumentation-Datum_Befund><xsl:value-of select="TNM_Datum"/></Datum_der_TNM-Dokumentation-Datum_Befund></xsl:if>
+                <xsl:if test="TNM_c_p_u_Praefix_T"><c-p-u-Präfix_T><xsl:value-of select="TNM_c_p_u_Praefix_T"/></c-p-u-Präfix_T></xsl:if>
+                <xsl:if test="TNM_c_p_u_Praefix_N"><c-p-u-Präfix_N><xsl:value-of select="TNM_c_p_u_Praefix_N"/></c-p-u-Präfix_N></xsl:if>
+                <xsl:if test="TNM_c_p_u_Praefix_M"><c-p-u-Präfix_M><xsl:value-of select="TNM_c_p_u_Praefix_M"/></c-p-u-Präfix_M></xsl:if>
+                <xsl:if test="TNM_r_Symbol"><TNM-r-Symbol><xsl:value-of select="TNM_r_Symbol"/></TNM-r-Symbol></xsl:if>
+                <xsl:if test="TNM_y_Symbol"><TNM-y-Symbol><xsl:value-of select="TNM_y_Symbol"/></TNM-y-Symbol></xsl:if>
+                <xsl:if test="UICC"><UICC_Stadium><xsl:value-of select="UICC"/></UICC_Stadium></xsl:if>
+                <xsl:if test="TNM_L"><TNM-L><xsl:value-of select="TNM_L"/></TNM-L></xsl:if>
+                <xsl:if test="TNM_V"><TNM-V><xsl:value-of select="TNM_V"/></TNM-V></xsl:if>
+                <xsl:if test="TNM_Pn"><TNM-Pn><xsl:value-of select="TNM_Pn"/></TNM-Pn></xsl:if>
+            </TNM>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template match="TNM">
         <xsl:param name="Patient_Id"/>
         <xsl:param name="Tumor_Id"/>
-        <TNM>
-            <xsl:attribute name="TNM_ID">
-                <xsl:variable name="attribute">
-                   <xsl:choose>
-                       <xsl:when test="@TNM_ID"><xsl:value-of select="@TNM_ID"/></xsl:when>
-                       <xsl:otherwise><xsl:value-of select="'gen',concat(string-join(xsi:DatumID(TNM_Datum)),TNM_T,TNM_N,TNM_M,TNM_c_p_u_Praefix_T,TNM_c_p_u_Praefix_N,TNM_c_p_u_Praefix_M)"/></xsl:otherwise>
-                   </xsl:choose>
-                </xsl:variable>
-                <xsl:value-of select="concat('tnm', hash:hash($Patient_Id, $Tumor_Id, string-join($attribute, '')))" />
-            </xsl:attribute>
-            <gesamtpraefix></gesamtpraefix>
-            <xsl:if test="TNM_m_Symbol"><TNM-m-Symbol><xsl:value-of select="TNM_m_Symbol"/></TNM-m-Symbol></xsl:if>
-            <xsl:if test="TNM_T"><TNM-T><xsl:value-of select="TNM_T"/></TNM-T></xsl:if>
-            <xsl:if test="TNM_N"><TNM-N><xsl:value-of select="TNM_N"/></TNM-N></xsl:if>
-            <xsl:if test="TNM_M"><TNM-M><xsl:value-of select="TNM_M"/></TNM-M></xsl:if>
-            <xsl:if test="TNM_Version"><TNM-Version><xsl:value-of select="TNM_Version"/></TNM-Version></xsl:if>
-            <xsl:if test="TNM_Datum"><Datum_der_TNM-Dokumentation-Datum_Befund><xsl:value-of select="TNM_Datum"/></Datum_der_TNM-Dokumentation-Datum_Befund></xsl:if>
-            <xsl:if test="TNM_c_p_u_Praefix_T"><c-p-u-Präfix_T><xsl:value-of select="TNM_c_p_u_Praefix_T"/></c-p-u-Präfix_T></xsl:if>
-            <xsl:if test="TNM_c_p_u_Praefix_N"><c-p-u-Präfix_N><xsl:value-of select="TNM_c_p_u_Praefix_N"/></c-p-u-Präfix_N></xsl:if>
-            <xsl:if test="TNM_c_p_u_Praefix_M"><c-p-u-Präfix_M><xsl:value-of select="TNM_c_p_u_Praefix_M"/></c-p-u-Präfix_M></xsl:if>
-            <xsl:if test="TNM_r_Symbol"><TNM-r-Symbol><xsl:value-of select="TNM_r_Symbol"/></TNM-r-Symbol></xsl:if>
-            <xsl:if test="TNM_y_Symbol"><TNM-y-Symbol><xsl:value-of select="TNM_y_Symbol"/></TNM-y-Symbol></xsl:if>
-            <xsl:if test="UICC"><UICC_Stadium><xsl:value-of select="UICC"/></UICC_Stadium></xsl:if>
-            <xsl:if test="TNM_L"><TNM-L><xsl:value-of select="TNM_L"/></TNM-L></xsl:if>
-            <xsl:if test="TNM_V"><TNM-V><xsl:value-of select="TNM_V"/></TNM-V></xsl:if>
-            <xsl:if test="TNM_Pn"><TNM-Pn><xsl:value-of select="TNM_Pn"/></TNM-Pn></xsl:if>
-        </TNM>
+        <xsl:if test="TNM_Datum !=''">
+            <TNM>
+                <xsl:attribute name="TNM_ID">
+                    <xsl:variable name="attribute">
+                       <xsl:choose>
+                           <xsl:when test="@TNM_ID"><xsl:value-of select="@TNM_ID"/></xsl:when>
+                           <xsl:otherwise><xsl:value-of select="'gen',concat(string-join(xsi:DatumID(TNM_Datum)),TNM_T,TNM_N,TNM_M,TNM_c_p_u_Praefix_T,TNM_c_p_u_Praefix_N,TNM_c_p_u_Praefix_M)"/></xsl:otherwise>
+                       </xsl:choose>
+                    </xsl:variable>
+                    <xsl:value-of select="concat('tnm', hash:hash($Patient_Id, $Tumor_Id, $attribute))" />
+                </xsl:attribute>
+                <gesamtpraefix></gesamtpraefix>
+                <xsl:if test="TNM_m_Symbol"><TNM-m-Symbol><xsl:value-of select="TNM_m_Symbol"/></TNM-m-Symbol></xsl:if>
+                <xsl:if test="TNM_T"><TNM-T><xsl:value-of select="TNM_T"/></TNM-T></xsl:if>
+                <xsl:if test="TNM_N"><TNM-N><xsl:value-of select="TNM_N"/></TNM-N></xsl:if>
+                <xsl:if test="TNM_M"><TNM-M><xsl:value-of select="TNM_M"/></TNM-M></xsl:if>
+                <xsl:if test="TNM_Version"><TNM-Version><xsl:value-of select="TNM_Version"/></TNM-Version></xsl:if>
+                <xsl:if test="TNM_Datum"><Datum_der_TNM-Dokumentation-Datum_Befund><xsl:value-of select="TNM_Datum"/></Datum_der_TNM-Dokumentation-Datum_Befund></xsl:if>
+                <xsl:if test="TNM_c_p_u_Praefix_T"><c-p-u-Präfix_T><xsl:value-of select="TNM_c_p_u_Praefix_T"/></c-p-u-Präfix_T></xsl:if>
+                <xsl:if test="TNM_c_p_u_Praefix_N"><c-p-u-Präfix_N><xsl:value-of select="TNM_c_p_u_Praefix_N"/></c-p-u-Präfix_N></xsl:if>
+                <xsl:if test="TNM_c_p_u_Praefix_M"><c-p-u-Präfix_M><xsl:value-of select="TNM_c_p_u_Praefix_M"/></c-p-u-Präfix_M></xsl:if>
+                <xsl:if test="TNM_r_Symbol"><TNM-r-Symbol><xsl:value-of select="TNM_r_Symbol"/></TNM-r-Symbol></xsl:if>
+                <xsl:if test="TNM_y_Symbol"><TNM-y-Symbol><xsl:value-of select="TNM_y_Symbol"/></TNM-y-Symbol></xsl:if>
+                <xsl:if test="UICC"><UICC_Stadium><xsl:value-of select="UICC"/></UICC_Stadium></xsl:if>
+                <xsl:if test="TNM_L"><TNM-L><xsl:value-of select="TNM_L"/></TNM-L></xsl:if>
+                <xsl:if test="TNM_V"><TNM-V><xsl:value-of select="TNM_V"/></TNM-V></xsl:if>
+                <xsl:if test="TNM_Pn"><TNM-Pn><xsl:value-of select="TNM_Pn"/></TNM-Pn></xsl:if>
+            </TNM>
+        </xsl:if>
     </xsl:template>
 
     <!--Generate fourth Level VERLAUF entity (Elements:  Intention_OP | OP |  Intention_ST | Strahlentherapie | Strahlentherapie_Stellung_zu_operativer_Therapie | Intention_SYST | Chemotherapie | Immuntherapie | Hormontherapie | Knochenmarktransplantation | Weitere_Therapien | Sonstige_Therapieart | 

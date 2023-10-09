@@ -65,25 +65,26 @@ public class Adt2fhirTests {
     @Test
     @Order(2)
     public void comparePatient () throws IOException {
-        String result = System.getenv("FILE_PATH")+"tmp/FHIR_Patients/FHIR_ADT2_Testpatient.xml";
-        String expected = this.getClass().getClassLoader().getResource("FHIR_ADT2_ExpectedPatient.xml").getPath();
-        String resultString = Files.readString(Paths.get(String.valueOf(new File(result))));
-        String expectedString = Files.readString(Paths.get(String.valueOf(new File(expected))));
-        resultString=replaceAllIds(resultString);
-        expectedString=replaceAllIds(expectedString);
-        assertTrue(resultString.equals(expectedString));
+        String result = "tmp/FHIR_Patients/FHIR_ADT2_Testpatient.xml";
+        String expected = "FHIR_ADT2_ExpectedPatient.xml";
+        assertTrue(compare(result, expected));
     }
 
     @Test
     @Order(3)
     public void compareBatch () throws IOException {
-        String result = System.getenv("FILE_PATH")+"tmp/FHIR_Patients/FHIR_batch_ADT2_Testpatient.xml";
-        String expected = this.getClass().getClassLoader().getResource("FHIR_batch_ADT2_ExpectedPatient.xml").getPath();
+        String result = "tmp/FHIR_Patients/FHIR_batch_ADT2_Testpatient.xml";
+        String expected = "FHIR_batch_ADT2_ExpectedPatient.xml";
+        assertTrue(compare(result, expected));
+    }
+    private Boolean compare(String resultvar, String expectedvar) throws IOException {
+        String result = System.getenv("FILE_PATH")+resultvar;
+        String expected = this.getClass().getClassLoader().getResource(expectedvar).getPath();
         String resultString = Files.readString(Paths.get(String.valueOf(new File(result))));
         String expectedString = Files.readString(Paths.get(String.valueOf(new File(expected))));
         resultString=replaceAllIds(resultString);
         expectedString=replaceAllIds(expectedString);
-        assertTrue(resultString.equals(expectedString));
+        return (resultString.equals(expectedString));
     }
 
     private String replaceAllIds(String bundle){
