@@ -4,7 +4,7 @@ volumes:
 
 services:
   adt2fhir:
-    image: docker.verbis.dkfz.de/ccp/adt2fhir:main
+    image: docker.verbis.dkfz.de/ccp/adt2fhir:missing-tnm-date
     environment:
       #FILE_PATH: "/adt2fhir/clinical_data"
       STORE_PATH: "http://host.docker.internal:8090/fhir"

@@ -296,9 +296,17 @@
                         </xsl:for-each>
                         <code>
                             <coding>
-                                <xsl:if test="./ICD-Katalog_Version">
-                                    <system value="{mds2fhir:getICDType(./ICD-Katalog_Version)}" />
-                                    <version value="{mds2fhir:getVersionYear(./ICD-Katalog_Version)}" />
+                                <xsl:if test="./ICD-Katalog_Version !=''">
+                                    <xsl:choose>
+                                        <xsl:when test="./ICD-Katalog_Version = 'Sonstige'">
+                                            <system value="Sonstige"/>
+                                            <version value="Sonstige"/>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <system value="{mds2fhir:getICDType(./ICD-Katalog_Version)}" />
+                                            <version value="{mds2fhir:getVersionYear(./ICD-Katalog_Version)}" />
+                                        </xsl:otherwise>
+                                    </xsl:choose>
                                 </xsl:if>
                                 <code value="{./Diagnose}" />
                             </coding>
@@ -1345,7 +1353,7 @@
                             <reference value="Condition/{$Diagnosis_ID}"/>
                         </focus>
                         <xsl:choose>
-                            <xsl:when test="./FM_Diagnosedatum"><effectiveDateTime value="{mds2fhir:transformDate(./FM_Diagnosedatum)}" /></xsl:when>
+                            <xsl:when test="./Datum_diagnostische_Sicherung"><effectiveDateTime value="{mds2fhir:transformDate(./Datum_diagnostische_Sicherung)}" /></xsl:when>
                             <xsl:when test="$Datum_Verlauf"><effectiveDateTime value="{mds2fhir:transformDate($Datum_Verlauf)}" /></xsl:when>
                         </xsl:choose>
                         <xsl:if test="./Fernmetastasen_vorhanden">

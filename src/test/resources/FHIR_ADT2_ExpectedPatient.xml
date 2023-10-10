@@ -295,6 +295,7 @@
             <focus>
                <reference value="Condition/digf41ddcacd3052a7a"/>
             </focus>
+            <effectiveDateTime value="2021-03-15"/>
             <valueCodeableConcept>
                <coding>
                   <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/JNUCS"/>
@@ -335,6 +336,7 @@
             <focus>
                <reference value="Condition/digf41ddcacd3052a7a"/>
             </focus>
+            <effectiveDateTime value="2021-04-15"/>
             <valueCodeableConcept>
                <coding>
                   <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/JNUCS"/>
@@ -375,6 +377,7 @@
             <focus>
                <reference value="Condition/digf41ddcacd3052a7a"/>
             </focus>
+            <effectiveDateTime value="2021-04-15"/>
             <valueCodeableConcept>
                <coding>
                   <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/JNUCS"/>

@@ -37,6 +37,8 @@
             </meta>
             <code>
                <coding>
+                  <system value="Sonstige"/>
+                  <version value="Sonstige"/>
                   <code value="C62"/>
                </coding>
             </code>
