@@ -47,7 +47,6 @@
 					<Menge_OP>
 						<OP OP_ID="1b">
 							<OP_Intention>K</OP_Intention>
-							<OP_Datum/>
 							<Histologie Histologie_ID="3b">
 								<Tumor_Histologiedatum/>
 							</Histologie>
@@ -61,8 +60,7 @@
 						<ST ST_ID="1b">
 							<Menge_Bestrahlung>
 								<Bestrahlung>
-									<ST_Beginn_Datum/>
-									<ST_Ende_Datum/>
+									<ST_Beginn_Datum>21.04.2021</ST_Beginn_Datum>
 								</Bestrahlung>
 							</Menge_Bestrahlung>
 							<ST_Ende_Grund>A</ST_Ende_Grund>
@@ -75,8 +73,6 @@
 							</Menge_Therapieart>
 							<SYST_Therapieart_Anmerkung/>
 							<SYST_Protokoll/>
-							<SYST_Beginn_Datum/>
-							<SYST_Ende_Datum/>
 						</SYST>
 					</Menge_SYST>
 					<Menge_Verlauf>
@@ -87,7 +83,6 @@
 							<TNM TNM_ID="6b">
 								<TNM_Datum/>
 							</TNM>
-							<Untersuchungsdatum_Verlauf/>
 						</Verlauf>
 					</Menge_Verlauf>
 				</Meldung>

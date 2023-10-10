@@ -69,9 +69,16 @@ public class Adt2fhirTests {
         String expected = "FHIR_ADT2_ExpectedPatient.xml";
         assertTrue(compare(result, expected));
     }
-
     @Test
     @Order(3)
+    public void compareErrorPatient () throws IOException {
+        String result = "tmp/FHIR_Patients/FHIR_ADT2_TestpatientMissingDate.xml";
+        String expected = "FHIR_ADT2_ExpectedPatientMissingDate.xml";
+        assertTrue(compare(result, expected));
+    }
+
+    @Test
+    @Order(4)
     public void compareBatch () throws IOException {
         String result = "tmp/FHIR_Patients/FHIR_batch_ADT2_Testpatient.xml";
         String expected = "FHIR_batch_ADT2_ExpectedPatient.xml";
