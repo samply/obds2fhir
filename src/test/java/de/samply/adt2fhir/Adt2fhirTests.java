@@ -52,6 +52,7 @@ public class Adt2fhirTests {
 //            ADT2singleADTtransformer.setParameter("filepath", System.getenv("FILE_PATH"));
             ADT2MDStransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("ADT2MDS_FHIR.xsl")));
             ADT2MDStransformer.setParameter("add_department", false);//TODO test departments
+            ADT2MDStransformer.setParameter("salt", System.getenv().getOrDefault("SALT",""));
             MDS2FHIRtransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("MDS2FHIR.xsl")));
             MDS2FHIRtransformer.setParameter("filepath", System.getenv("FILE_PATH"));
             MDS2FHIRtransformer.setParameter("identifier_system", "http://dktk.dkfz.de/fhir/onco/core/CodeSystem/PseudonymArtCS");

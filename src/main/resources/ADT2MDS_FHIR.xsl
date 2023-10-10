@@ -11,6 +11,7 @@
     <xsl:output omit-xml-declaration="no" indent="yes"/>
     <xsl:strip-space elements="*"/>
     <xsl:param name="add_department" />
+    <xsl:param name="salt" />
 
 <!--    This xsl file transforms ADT xml files (ADT_GEKID_v2.1.1-dktk_v0.1.2 and ADT_GEKID_v2.1.1) to the DKTK searchmodel structure (MDS_Suchmodell_v4) combine with aditional ADT elements
         MDS + additional Structure (entities) generated from ADT:
@@ -45,7 +46,7 @@
             <xsl:variable name="Patient_Pseudonym" select="xsi:Pseudonymize(Patienten_Stammdaten/Patienten_Geschlecht, Patienten_Stammdaten/Patienten_Vornamen, Patienten_Stammdaten/Patienten_Nachname, Patienten_Stammdaten/Patienten_Geburtsname, Patienten_Stammdaten/Patienten_Geburtsdatum, Patienten_Stammdaten/@Patient_ID)"/>
             <xsl:attribute name="Patient_ID">
                 <!--<xsl:value-of select="Patienten_Stammdaten/@Patient_ID"/>-->
-                <xsl:value-of select="hash:hash($Patient_Id,'','')"/>
+                <xsl:value-of select="hash:hash($Patient_Id,$salt,'')"/>
             </xsl:attribute>
             <Geschlecht>
                 <xsl:choose><xsl:when test="Patienten_Stammdaten/Patienten_Geschlecht = 'D'">S</xsl:when>
