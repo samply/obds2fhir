@@ -8,6 +8,7 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
+import java.util.concurrent.TimeUnit;
 import javax.xml.transform.*;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
@@ -43,11 +44,11 @@ public class Adt2fhir {
     public static void main(String[] args) {
         boolean pseudonymize = false;
         if (!System.getenv().getOrDefault("MAINZELLISTE_APIKEY","").isEmpty()){
-            pseudonymize = checkConnections("Mainzelliste", System.getenv().getOrDefault("MAINZELLISTE_URL",""));
+            pseudonymize = checkConnections("Mainzelliste", System.getenv().getOrDefault("MAINZELLISTE_URL",""), Boolean.parseBoolean(System.getenv().getOrDefault("WAIT_FOR_CONNECTION","false")));
         } else {
             System.out.println("missing Mainzelliste Apikey - Skipping relevant processes");
         }
-        boolean FHIRimport = checkConnections("Blaze FHIR Server", System.getenv().getOrDefault("STORE_PATH","") + "?_count=0");
+        boolean FHIRimport = checkConnections("Blaze FHIR Server", System.getenv().getOrDefault("STORE_PATH","") + "?_count=0", Boolean.parseBoolean(System.getenv().getOrDefault("WAIT_FOR_CONNECTION","false")));
 
         System.out.print("initialize transformers... ");
         final TransformerFactoryImpl factory = (TransformerFactoryImpl) TransformerFactory.newInstance("net.sf.saxon.TransformerFactoryImpl", null);
@@ -221,7 +222,7 @@ public class Adt2fhir {
         return httpclient;
     }
 
-    private static boolean checkConnections(String servicename, String URL) {
+    private static boolean checkConnections(String servicename, String URL, boolean waitForConnection) {
         boolean serviceAvailable = false;
         CloseableHttpClient httpclient = null;
         try {
@@ -242,13 +243,24 @@ public class Adt2fhir {
                     serviceAvailable = true;
                 }
                 else {
+                    if (waitForConnection){//if true, then recursively execute again
+                        System.out.println("Waiting for service, trying again...");
+                        checkConnections(servicename,URL,waitForConnection);
+                    }
                     System.out.println(servicename + " is NOT accessible: " + URL + httpResponse.getStatusLine());
                 }
                 httpclient.close();
-            } catch (NoHttpResponseException e){
-                System.out.println("Error: NoHttpResponseException while trying to access " + servicename + " at " + URL + " - Skipping relevant processes");
             } catch (IOException e) {
                 System.out.println("Error: RuntimeException while trying to access " + servicename + " at " + URL + " - Skipping relevant processes");
+                if (waitForConnection){//if true, then recursively execute again
+                    System.out.println("Waiting for service, trying again...");
+                    try {
+                        TimeUnit.SECONDS.sleep(5);
+                    } catch (InterruptedException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    checkConnections(servicename,URL,waitForConnection);
+                }
             }
         }
         else {
