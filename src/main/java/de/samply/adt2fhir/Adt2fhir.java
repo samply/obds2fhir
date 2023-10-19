@@ -156,7 +156,7 @@ public class Adt2fhir {
                             if(transformWrittenResults){
                                 transformer2.setParameter("customPrefix", inputFile.getName());
                                 applyXslt(xmlResult, transformer2);
-                                inputFile.deleteOnExit();
+                                inputFile.delete();
                             }
                             else {
                                 inputFile.renameTo(new File(System.getenv().getOrDefault("FILE_PATH","") + PROCESSED + inputFile.getName()));
@@ -195,7 +195,7 @@ public class Adt2fhir {
             inputFile.renameTo(new File(System.getenv().getOrDefault("FILE_PATH","") + ERRONEOUS));
         }
         else {
-            inputFile.deleteOnExit();
+            inputFile.delete();
         }
         httpclient.close();
     }
