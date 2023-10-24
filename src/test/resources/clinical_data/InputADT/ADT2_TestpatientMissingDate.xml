@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ADT_GEKID xmlns="http://www.gekid.de/namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gekid.de/namespace file:/C:/Workspace/adt2fhir/src/main/resources/ADT_GEKID_v2.2.1-dktk_v1.0.0.xsd" Schema_Version="2.0.0">
+	<Absender Absender_ID="Absender_ID1" Software_ID="Software_ID1" Installations_ID="Installations_ID1">
+		<Absender_Bezeichnung>Absender_Bezeichnung0</Absender_Bezeichnung>
+		<Absender_Ansprechpartner>Absender_Ansprechpartner0</Absender_Ansprechpartner>
+		<Absender_Anschrift>Absender_Anschrift0</Absender_Anschrift>
+		<Absender_Telefon>Absender_Telefon0</Absender_Telefon>
+		<Absender_EMail>Absender_EMail0</Absender_EMail>
+	</Absender>
+	<Menge_Patient>
+		<Patient>
+			<Patienten_Stammdaten Patient_ID="132">
+				<Patienten_Nachname>Mustermann</Patienten_Nachname>
+				<Patienten_Vornamen>Max</Patienten_Vornamen>
+				<Patienten_Geschlecht>M</Patienten_Geschlecht>
+				<Patienten_Geburtsdatum>03.07.1980</Patienten_Geburtsdatum>
+			</Patienten_Stammdaten>
+			<Menge_Meldung>
+				<!--check rare cases-->
+				<Meldung Meldung_ID="1b" Melder_ID="1b">
+					<Meldedatum/>
+					<Tumorzuordnung Tumor_ID="1b">
+						<Diagnosedatum/>
+					</Tumorzuordnung>
+					<Diagnose Tumor_ID="1b">
+						<Primaertumor_ICD_Code>C62</Primaertumor_ICD_Code>
+						<Primaertumor_ICD_Version>Sonstige</Primaertumor_ICD_Version>
+						<Primaertumor_Diagnosetext/>
+						<Primaertumor_Topographie_ICD_O_Freitext/>
+						<Diagnosedatum>13.04.2021</Diagnosedatum>
+						<Menge_Histologie>
+							<Histologie Histologie_ID="1b">
+								<Tumor_Histologiedatum/>
+								<Morphologie_Code>8041/1</Morphologie_Code>
+								<Morphologie_Freitext/>
+								<Grading>1</Grading>
+							</Histologie>
+						</Menge_Histologie>
+						<cTNM TNM_ID="1b">
+							<TNM_Datum/>
+							<TNM_T>4e</TNM_T>
+						</cTNM>
+						<pTNM TNM_ID="2b">
+							<TNM_Datum/>
+							<TNM_T>1a</TNM_T>
+						</pTNM>
+					</Diagnose>
+					<Menge_OP>
+						<OP OP_ID="1b">
+							<OP_Intention>K</OP_Intention>
+							<Histologie Histologie_ID="3b">
+								<Tumor_Histologiedatum/>
+							</Histologie>
+							<TNM TNM_ID="3b">
+								<TNM_Datum/>
+								<TNM_T>4e</TNM_T>
+							</TNM>
+						</OP>
+					</Menge_OP>
+					<Menge_ST>
+						<ST ST_ID="1b">
+							<Menge_Bestrahlung>
+								<Bestrahlung>
+									<ST_Beginn_Datum>21.04.2021</ST_Beginn_Datum>
+								</Bestrahlung>
+							</Menge_Bestrahlung>
+							<ST_Ende_Grund>A</ST_Ende_Grund>
+						</ST>
+					</Menge_ST>
+					<Menge_SYST>
+						<SYST SYST_ID="1b">
+							<Menge_Therapieart>
+								<SYST_Therapieart>CH</SYST_Therapieart>
+							</Menge_Therapieart>
+							<SYST_Therapieart_Anmerkung/>
+							<SYST_Protokoll/>
+						</SYST>
+					</Menge_SYST>
+					<Menge_Verlauf>
+						<Verlauf Verlauf_ID="3b">
+							<Histologie Histologie_ID="6b">
+								<Tumor_Histologiedatum/>
+							</Histologie>
+							<TNM TNM_ID="6b">
+								<TNM_Datum/>
+							</TNM>
+						</Verlauf>
+					</Menge_Verlauf>
+				</Meldung>
+			</Menge_Meldung>
+		</Patient>
+	</Menge_Patient>
+	<Menge_Melder>
+		<Melder Melder_ID="1">
+			<Melder_IKNR>Melder_IKNR0</Melder_IKNR>
+			<Melder_LANR>Melder_LANR0</Melder_LANR>
+			<Melder_BSNR>Melder_BSNR0</Melder_BSNR>
+			<Meldende_Stelle>Meldende_Stelle0</Meldende_Stelle>
+			<Melder_KH_Abt_Station_Praxis>Melder_KH_Abt_Station_Praxis0</Melder_KH_Abt_Station_Praxis>
+			<Melder_Arztname>Melder_Arztname0</Melder_Arztname>
+			<Melder_Anschrift>Melder_Anschrift0</Melder_Anschrift>
+			<Melder_PLZ/>
+			<Melder_Ort>Melder_Ort0</Melder_Ort>
+			<Melder_Bankname>Melder_Bankname0</Melder_Bankname>
+			<Melder_Kontoinhaber>Melder_Kontoinhaber0</Melder_Kontoinhaber>
+			<Melder_BIC>Melder_BIC0</Melder_BIC>
+			<Melder_IBAN>Melder_IBAN0</Melder_IBAN>
+		</Melder>
+		<Melder Melder_ID="2">
+			<Melder_IKNR>Melder_IKNR1</Melder_IKNR>
+			<Melder_LANR>Melder_LANR1</Melder_LANR>
+			<Melder_BSNR>Melder_BSNR1</Melder_BSNR>
+			<Meldende_Stelle>Meldende_Stelle1</Meldende_Stelle>
+			<Melder_KH_Abt_Station_Praxis>Melder_KH_Abt_Station_Praxis1</Melder_KH_Abt_Station_Praxis>
+			<Melder_Arztname>Melder_Arztname1</Melder_Arztname>
+			<Melder_Anschrift>Melder_Anschrift1</Melder_Anschrift>
+			<Melder_PLZ/>
+			<Melder_Ort>Melder_Ort1</Melder_Ort>
+			<Melder_Bankname>Melder_Bankname1</Melder_Bankname>
+			<Melder_Kontoinhaber>Melder_Kontoinhaber1</Melder_Kontoinhaber>
+			<Melder_BIC>Melder_BIC1</Melder_BIC>
+			<Melder_IBAN>Melder_IBAN1</Melder_IBAN>
+		</Melder>
+	</Menge_Melder>
+</ADT_GEKID>

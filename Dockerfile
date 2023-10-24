@@ -1,4 +1,4 @@
-FROM maven:eclipse-temurin AS build
+FROM maven:3-eclipse-temurin-17 AS build
 
 WORKDIR /app
 COPY . ./
@@ -23,3 +23,4 @@ ENV IDTYPE ""
 ENV SALT "createLocalCustomSalt"
 ENV SSL_CERTIFICATE_VALIDATION "true"
 ENV ADD_DEPARTMENTS "false"
+ENV WAIT_FOR_CONNECTION="false"

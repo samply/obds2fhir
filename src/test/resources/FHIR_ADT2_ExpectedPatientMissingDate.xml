@@ -1,0 +1,141 @@
+<Bundle xmlns="http://hl7.org/fhir" xmlns:hash="java:de.samply.adt2fhir">
+   <id value="tpatientMissingD"/>
+   <type value="transaction"/>
+   <entry>
+      <fullUrl value="http://example.com/Patient/036534a43e7e3fea"/>
+      <resource>
+         <Patient>
+            <id value="036534a43e7e3fea"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Patient-Patient"/>
+            </meta>
+            <identifier>
+               <type>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/PseudonymArtCS"/>
+                     <code value="Lokal"/>
+                  </coding>
+               </type>
+               <value value="6f54a92ce0b62ab817c3a03c1cb4f16f"/>
+            </identifier>
+            <gender value="male"/>
+            <birthDate value="1980-07-03"/>
+         </Patient>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Patient/036534a43e7e3fea"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Condition/dig00e13e97b7728886"/>
+      <resource>
+         <Condition>
+            <id value="dig00e13e97b7728886"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Condition-Primaerdiagnose"/>
+            </meta>
+            <code>
+               <coding>
+                  <system value="Sonstige"/>
+                  <version value="Sonstige"/>
+                  <code value="C62"/>
+               </coding>
+            </code>
+            <bodySite>
+               <coding>
+                  <system value="urn:oid:2.16.840.1.113883.6.43.1"/>
+               </coding>
+            </bodySite>
+            <subject>
+               <reference value="Patient/036534a43e7e3fea"/>
+            </subject>
+            <onsetDateTime value="2021-04-13"/>
+            <recordedDate value="2021-04-13"/>
+            <evidence/>
+         </Condition>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Condition/dig00e13e97b7728886"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Procedure/stcef813b10f63cd76"/>
+      <resource>
+         <Procedure>
+            <id value="stcef813b10f63cd76"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Procedure-Strahlentherapie"/>
+            </meta>
+            <status value="unknown"/>
+            <category>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTTherapieartCS"/>
+                  <code value="ST"/>
+                  <display value="Strahlentherapie"/>
+               </coding>
+            </category>
+            <code>
+               <coding>
+                  <system value="http://fhir.de/CodeSystem/bfarm/ops"/>
+                  <code value="8-52"/>
+                  <display value="Strahlentherapie"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/036534a43e7e3fea"/>
+            </subject>
+            <reasonReference>
+               <reference value="Condition/dig00e13e97b7728886"/>
+            </reasonReference>
+         </Procedure>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Procedure/stcef813b10f63cd76"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Procedure/stsbe91d3d00743a984-0"/>
+      <resource>
+         <Procedure>
+            <id value="stsbe91d3d00743a984-0"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Procedure-Strahlentherapie"/>
+            </meta>
+            <partOf>
+               <reference value="Procedure/stcef813b10f63cd76"/>
+            </partOf>
+            <status value="in-progress"/>
+            <category>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTTherapieartCS"/>
+                  <code value="ST"/>
+                  <display value="Strahlentherapie"/>
+               </coding>
+            </category>
+            <code>
+               <coding>
+                  <system value="http://fhir.de/CodeSystem/dimdi/ops"/>
+                  <code value="8-52"/>
+                  <display value="Strahlentherapie"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/036534a43e7e3fea"/>
+            </subject>
+            <performedPeriod>
+               <start value="2021-04-21"/>
+            </performedPeriod>
+            <reasonReference>
+               <reference value="Condition/dig00e13e97b7728886"/>
+            </reasonReference>
+         </Procedure>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Procedure/stsbe91d3d00743a984-0"/>
+      </request>
+   </entry>
+</Bundle>

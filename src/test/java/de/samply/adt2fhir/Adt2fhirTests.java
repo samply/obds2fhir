@@ -2,10 +2,7 @@ package de.samply.adt2fhir;
 
 import net.sf.saxon.TransformerFactoryImpl;
 import net.sf.saxon.s9api.Processor;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
 import uk.org.webcompere.systemstubs.jupiter.SystemStub;
@@ -25,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SystemStubsExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Adt2fhirTests {
 
 
@@ -52,6 +50,7 @@ public class Adt2fhirTests {
 //            ADT2singleADTtransformer.setParameter("filepath", System.getenv("FILE_PATH"));
             ADT2MDStransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("ADT2MDS_FHIR.xsl")));
             ADT2MDStransformer.setParameter("add_department", false);//TODO test departments
+            ADT2MDStransformer.setParameter("salt", System.getenv().getOrDefault("SALT",""));
             MDS2FHIRtransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("MDS2FHIR.xsl")));
             MDS2FHIRtransformer.setParameter("filepath", System.getenv("FILE_PATH"));
             MDS2FHIRtransformer.setParameter("identifier_system", "http://dktk.dkfz.de/fhir/onco/core/CodeSystem/PseudonymArtCS");
@@ -65,25 +64,33 @@ public class Adt2fhirTests {
     @Test
     @Order(2)
     public void comparePatient () throws IOException {
-        String result = System.getenv("FILE_PATH")+"tmp/FHIR_Patients/FHIR_ADT2_Testpatient.xml";
-        String expected = this.getClass().getClassLoader().getResource("FHIR_ADT2_ExpectedPatient.xml").getPath();
-        String resultString = Files.readString(Paths.get(String.valueOf(new File(result))));
-        String expectedString = Files.readString(Paths.get(String.valueOf(new File(expected))));
-        resultString=replaceAllIds(resultString);
-        expectedString=replaceAllIds(expectedString);
-        assertTrue(resultString.equals(expectedString));
+        String result = "tmp/FHIR_Patients/FHIR_ADT2_Testpatient.xml";
+        String expected = "FHIR_ADT2_ExpectedPatient.xml";
+        assertTrue(compare(result, expected));
+    }
+    @Test
+    @Order(3)
+    public void compareErrorPatient () throws IOException {
+        String result = "tmp/FHIR_Patients/FHIR_ADT2_TestpatientMissingDate.xml";
+        String expected = "FHIR_ADT2_ExpectedPatientMissingDate.xml";
+        assertTrue(compare(result, expected));
     }
 
     @Test
-    @Order(3)
+    @Order(4)
     public void compareBatch () throws IOException {
-        String result = System.getenv("FILE_PATH")+"tmp/FHIR_Patients/FHIR_batch_ADT2_Testpatient.xml";
-        String expected = this.getClass().getClassLoader().getResource("FHIR_batch_ADT2_ExpectedPatient.xml").getPath();
+        String result = "tmp/FHIR_Patients/FHIR_batch_ADT2_Testpatient.xml";
+        String expected = "FHIR_batch_ADT2_ExpectedPatient.xml";
+        assertTrue(compare(result, expected));
+    }
+    private Boolean compare(String resultvar, String expectedvar) throws IOException {
+        String result = System.getenv("FILE_PATH")+resultvar;
+        String expected = this.getClass().getClassLoader().getResource(expectedvar).getPath();
         String resultString = Files.readString(Paths.get(String.valueOf(new File(result))));
         String expectedString = Files.readString(Paths.get(String.valueOf(new File(expected))));
         resultString=replaceAllIds(resultString);
         expectedString=replaceAllIds(expectedString);
-        assertTrue(resultString.equals(expectedString));
+        return (resultString.equals(expectedString));
     }
 
     private String replaceAllIds(String bundle){
