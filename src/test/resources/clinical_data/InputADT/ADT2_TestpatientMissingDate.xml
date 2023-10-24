@@ -10,8 +10,8 @@
 	<Menge_Patient>
 		<Patient>
 			<Patienten_Stammdaten Patient_ID="132">
-				<Patienten_Nachname>Strunz</Patienten_Nachname>
-				<Patienten_Vornamen>Wasmachen</Patienten_Vornamen>
+				<Patienten_Nachname>Mustermann</Patienten_Nachname>
+				<Patienten_Vornamen>Max</Patienten_Vornamen>
 				<Patienten_Geschlecht>M</Patienten_Geschlecht>
 				<Patienten_Geburtsdatum>03.07.1980</Patienten_Geburtsdatum>
 			</Patienten_Stammdaten>
@@ -24,6 +24,7 @@
 					</Tumorzuordnung>
 					<Diagnose Tumor_ID="1b">
 						<Primaertumor_ICD_Code>C62</Primaertumor_ICD_Code>
+						<Primaertumor_ICD_Version>Sonstige</Primaertumor_ICD_Version>
 						<Primaertumor_Diagnosetext/>
 						<Primaertumor_Topographie_ICD_O_Freitext/>
 						<Diagnosedatum>13.04.2021</Diagnosedatum>

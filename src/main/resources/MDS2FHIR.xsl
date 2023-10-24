@@ -190,68 +190,71 @@
                         <code>
                             <xsl:choose>
                                 <xsl:when test="./Probentyp='Gewebeprobe'">
-                                <xsl:choose>
-                                    <xsl:when test="./Fixierungsart='Kryo/Frisch (FF)'">
                                     <xsl:choose>
-                                        <xsl:when test="./Probenart='Tumorgewebe'">
-                                            <xsl:attribute name="value">tumor-tissue-frozen</xsl:attribute>
+                                        <xsl:when test="./Fixierungsart='Kryo/Frisch (FF)'">
+                                            <xsl:choose>
+                                                <xsl:when test="./Probenart='Tumorgewebe'">
+                                                    <xsl:attribute name="value">tumor-tissue-frozen</xsl:attribute>
+                                                </xsl:when>
+                                                <xsl:when test="./Probenart='Normalgewebe'">
+                                                    <xsl:attribute name="value">normal-tissue-frozen</xsl:attribute>
+                                                </xsl:when>
+                                                <xsl:otherwise>
+                                                    <xsl:attribute name="value">other-tissue-frozen</xsl:attribute>
+                                                </xsl:otherwise>
+                                            </xsl:choose>
                                         </xsl:when>
-                                        <xsl:when test="./Probenart='Normalgewebe'">
-                                            <xsl:attribute name="value">normal-tissue-frozen</xsl:attribute>
+                                        <xsl:when test="./Fixierungsart='Paraffin (FFPE)'">
+                                            <xsl:choose>
+                                                <xsl:when test="./Probenart='Tumorgewebe'">
+                                                    <xsl:attribute name="value">tumor-tissue-ffpe</xsl:attribute>
+                                                </xsl:when>
+                                                <xsl:when test="./Probenart='Normalgewebe'">
+                                                    <xsl:attribute name="value">normal-tissue-ffpe</xsl:attribute>
+                                                </xsl:when>
+                                                <xsl:otherwise>
+                                                    <xsl:attribute name="value">other-tissue-ffpe</xsl:attribute>
+                                                </xsl:otherwise>
+                                            </xsl:choose>
                                         </xsl:when>
                                         <xsl:otherwise>
-                                            <xsl:attribute name="value">other-tissue-frozen</xsl:attribute>
+                                            <xsl:attribute name="value">tissue-other</xsl:attribute>
                                         </xsl:otherwise>
                                     </xsl:choose>
-                                    </xsl:when>
-                                    <xsl:when test="./Fixierungsart='Paraffin (FFPE)'">
-                                    <xsl:choose>
-                                        <xsl:when test="./Probenart='Tumorgewebe'">
-                                            <xsl:attribute name="value">tumor-tissue-ffpe</xsl:attribute>
-                                        </xsl:when>
-                                        <xsl:when test="./Probenart='Normalgewebe'">
-                                            <xsl:attribute name="value">normal-tissue-ffpe</xsl:attribute>
-                                        </xsl:when>
-                                        <xsl:otherwise>
-                                            <xsl:attribute name="value">other-tissue-ffpe</xsl:attribute>
-                                        </xsl:otherwise>
-                                    </xsl:choose>
-                                    </xsl:when>
-                                </xsl:choose>
                                 </xsl:when>
                                 <xsl:when test="./Probentyp='Flüssigprobe'">
-                                <xsl:choose>
-                                    <xsl:when test="./Probenart='Vollblut'">
-                                        <xsl:attribute name="value">whole-blood</xsl:attribute>
-                                    </xsl:when>
-                                    <xsl:when test="./Probenart='Serum'">
-                                        <xsl:attribute name="value">blood-serum</xsl:attribute>
-                                    </xsl:when>
-                                    <xsl:when test="./Probenart='Plasma'">
-                                        <xsl:attribute name="value">blood-plasma</xsl:attribute>
-                                    </xsl:when>
-                                    <xsl:when test="./Probenart='Urin'">
-                                        <xsl:attribute name="value">urine</xsl:attribute>
-                                    </xsl:when>
-                                    <xsl:when test="./Probenart='Liquor'">
-                                        <xsl:attribute name="value">csf-liquor</xsl:attribute>
-                                    </xsl:when>
-                                    <xsl:when test="./Probenart='Knochenmark'">
-                                        <xsl:attribute name="value">bone-marrow</xsl:attribute>
-                                    </xsl:when>
-                                    <xsl:when test="./Probenart='DNA'">
-                                    <xsl:attribute name="value">dna</xsl:attribute>
-                                    </xsl:when>
-                                    <xsl:when test="./Probenart='RNA'">
-                                        <xsl:attribute name="value">rna</xsl:attribute>
-                                    </xsl:when>
-                                    <xsl:when test="./Probenart='Protein'">
-                                        <xsl:attribute name="value">derivative-other</xsl:attribute>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:attribute name="value">liquid-other</xsl:attribute>
-                                    </xsl:otherwise>
-                                </xsl:choose>
+                                    <xsl:choose>
+                                        <xsl:when test="./Probenart='Vollblut'">
+                                            <xsl:attribute name="value">whole-blood</xsl:attribute>
+                                        </xsl:when>
+                                        <xsl:when test="./Probenart='Serum'">
+                                            <xsl:attribute name="value">blood-serum</xsl:attribute>
+                                        </xsl:when>
+                                        <xsl:when test="./Probenart='Plasma'">
+                                            <xsl:attribute name="value">blood-plasma</xsl:attribute>
+                                        </xsl:when>
+                                        <xsl:when test="./Probenart='Urin'">
+                                            <xsl:attribute name="value">urine</xsl:attribute>
+                                        </xsl:when>
+                                        <xsl:when test="./Probenart='Liquor'">
+                                            <xsl:attribute name="value">csf-liquor</xsl:attribute>
+                                        </xsl:when>
+                                        <xsl:when test="./Probenart='Knochenmark'">
+                                            <xsl:attribute name="value">bone-marrow</xsl:attribute>
+                                        </xsl:when>
+                                        <xsl:when test="./Probenart='DNA'">
+                                            <xsl:attribute name="value">dna</xsl:attribute>
+                                        </xsl:when>
+                                        <xsl:when test="./Probenart='RNA'">
+                                            <xsl:attribute name="value">rna</xsl:attribute>
+                                        </xsl:when>
+                                        <xsl:when test="./Probenart='Protein'">
+                                            <xsl:attribute name="value">derivative-other</xsl:attribute>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:attribute name="value">liquid-other</xsl:attribute>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
                                 </xsl:when>
                             </xsl:choose>
                         </code>
@@ -296,9 +299,17 @@
                         </xsl:for-each>
                         <code>
                             <coding>
-                                <xsl:if test="./ICD-Katalog_Version">
-                                    <system value="{mds2fhir:getICDType(./ICD-Katalog_Version)}" />
-                                    <version value="{mds2fhir:getVersionYear(./ICD-Katalog_Version)}" />
+                                <xsl:if test="./ICD-Katalog_Version !=''">
+                                    <xsl:choose>
+                                        <xsl:when test="./ICD-Katalog_Version = 'Sonstige'">
+                                            <system value="Sonstige"/>
+                                            <version value="Sonstige"/>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <system value="{mds2fhir:getICDType(./ICD-Katalog_Version)}" />
+                                            <version value="{mds2fhir:getVersionYear(./ICD-Katalog_Version)}" />
+                                        </xsl:otherwise>
+                                    </xsl:choose>
                                 </xsl:if>
                                 <code value="{./Diagnose}" />
                             </coding>
@@ -1345,7 +1356,7 @@
                             <reference value="Condition/{$Diagnosis_ID}"/>
                         </focus>
                         <xsl:choose>
-                            <xsl:when test="./FM_Diagnosedatum"><effectiveDateTime value="{mds2fhir:transformDate(./FM_Diagnosedatum)}" /></xsl:when>
+                            <xsl:when test="./Datum_diagnostische_Sicherung"><effectiveDateTime value="{mds2fhir:transformDate(./Datum_diagnostische_Sicherung)}" /></xsl:when>
                             <xsl:when test="$Datum_Verlauf"><effectiveDateTime value="{mds2fhir:transformDate($Datum_Verlauf)}" /></xsl:when>
                         </xsl:choose>
                         <xsl:if test="./Fernmetastasen_vorhanden">
