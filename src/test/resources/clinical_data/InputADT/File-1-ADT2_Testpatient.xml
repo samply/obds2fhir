@@ -9,7 +9,7 @@
 	</Absender>
 	<Menge_Patient>
 		<Patient>
-			<Patienten_Stammdaten Patient_ID="132">
+			<Patienten_Stammdaten Patient_ID="testpatient1">
 				<Patienten_Nachname>Mustermann</Patienten_Nachname>
 				<Patienten_Vornamen>Max</Patienten_Vornamen>
 				<Patienten_Geschlecht>M</Patienten_Geschlecht>
@@ -584,6 +584,27 @@
 						</Biomaterial>
 					</Menge_Biomaterial>
 				</Meldung>
+			</Menge_Meldung>
+		</Patient>
+		<Patient><!--External Diagnosis-->
+			<Patienten_Stammdaten Patient_ID="2345">
+				</Patienten_Stammdaten>
+				<Menge_Meldung>
+					<Meldung Meldung_ID="1" Melder_ID="1">
+						<Meldedatum>01.06.2021</Meldedatum>
+						<Meldebegruendung>I</Meldebegruendung>
+						<Meldeanlass>diagnose</Meldeanlass>
+						<Tumorzuordnung Tumor_ID="2">
+							<Primaertumor_ICD_Code>C61</Primaertumor_ICD_Code>
+							<Primaertumor_ICD_Version>Sonstige</Primaertumor_ICD_Version>
+							<Diagnosedatum>00.00.1800</Diagnosedatum>
+						</Tumorzuordnung>
+						<Diagnose Tumor_ID="2">
+							<Primaertumor_ICD_Code>C61</Primaertumor_ICD_Code>
+							<Primaertumor_ICD_Version>Sonstige</Primaertumor_ICD_Version>
+							<Diagnosedatum>00.00.1800</Diagnosedatum>
+						</Diagnose>
+					</Meldung>
 			</Menge_Meldung>
 		</Patient>
 	</Menge_Patient>

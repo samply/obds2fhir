@@ -11,7 +11,6 @@
     <xsl:output omit-xml-declaration="no" indent="yes"/>
     <xsl:strip-space elements="*"/>
     <xsl:param name="add_department" />
-    <xsl:param name="salt" />
 
 <!--    This xsl file transforms ADT xml files (ADT_GEKID_v2.1.1-dktk_v0.1.2 and ADT_GEKID_v2.1.1) to the DKTK searchmodel structure (MDS_Suchmodell_v4) combine with aditional ADT elements
         MDS + additional Structure (entities) generated from ADT:
@@ -46,7 +45,7 @@
             <xsl:variable name="Patient_Pseudonym" select="xsi:Pseudonymize(Patienten_Stammdaten/Patienten_Geschlecht, Patienten_Stammdaten/Patienten_Vornamen, Patienten_Stammdaten/Patienten_Nachname, Patienten_Stammdaten/Patienten_Geburtsname, Patienten_Stammdaten/Patienten_Geburtsdatum, Patienten_Stammdaten/@Patient_ID)"/>
             <xsl:attribute name="Patient_ID">
                 <!--<xsl:value-of select="Patienten_Stammdaten/@Patient_ID"/>-->
-                <xsl:value-of select="hash:hash($Patient_Id,$salt,'')"/>
+                <xsl:value-of select="hash:hash($Patient_Id,'','')"/>
             </xsl:attribute>
             <Geschlecht>
                 <xsl:choose><xsl:when test="Patienten_Stammdaten/Patienten_Geschlecht = 'D'">S</xsl:when>
@@ -251,8 +250,8 @@
         <xsl:for-each select="cTNM|pTNM">
             <xsl:choose>
                 <xsl:when test="@TNM_ID"><xsl:apply-templates select=".[
-                    not(@TNM_ID=following::TNM[../../../../../Patienten_Stammdaten/@Patient_ID=$Patient_Id and ../../../Tumorzuordnung/@Tumor_ID=$Tumor_Id]/@TNM_ID) and 
-                    not(@TNM_ID=following::cTNM[../../../../Patienten_Stammdaten/@Patient_ID=$Patient_Id and ../@Tumor_ID=$Tumor_Id]/@TNM_ID) and 
+                    not(@TNM_ID=following::TNM[../../../../../Patienten_Stammdaten/@Patient_ID=$Patient_Id and ../../../Tumorzuordnung/@Tumor_ID=$Tumor_Id]/@TNM_ID) and
+                    not(@TNM_ID=following::cTNM[../../../../Patienten_Stammdaten/@Patient_ID=$Patient_Id and ../@Tumor_ID=$Tumor_Id]/@TNM_ID) and
                     not(@TNM_ID=following::pTNM[../../../../Patienten_Stammdaten/@Patient_ID=$Patient_Id and ../@Tumor_ID=$Tumor_Id]/@TNM_ID)]">
                     <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                     <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
@@ -447,7 +446,7 @@
         </xsl:if>
     </xsl:template>
 
-    <!--Generate fourth Level VERLAUF entity (Elements:  Intention_OP | OP |  Intention_ST | Strahlentherapie | Strahlentherapie_Stellung_zu_operativer_Therapie | Intention_SYST | Chemotherapie | Immuntherapie | Hormontherapie | Knochenmarktransplantation | Weitere_Therapien | Sonstige_Therapieart | 
+    <!--Generate fourth Level VERLAUF entity (Elements:  Intention_OP | OP |  Intention_ST | Strahlentherapie | Strahlentherapie_Stellung_zu_operativer_Therapie | Intention_SYST | Chemotherapie | Immuntherapie | Hormontherapie | Knochenmarktransplantation | Weitere_Therapien | Sonstige_Therapieart |
                                                           Systemische_Therapie_Stellung_zu_operativer_Therapie | Lokales-regionäres_Rezidiv | Datum_lokales-regionäres_Rezidiv | Lymphknoten-Rezidiv | Datum_Lymphknoten-Rezidiv | Fernmetastasen | Datum_Fernmetastasen | Ansprechen_im_Verlauf | Untersuchungs-Befunddatum_im_Verlauf ) -->
     <xsl:template match="Verlauf">
         <xsl:param name="Patient_Id"/>
@@ -546,8 +545,8 @@
 
             <xsl:choose>
                 <xsl:when test="TNM/@TNM_ID"><xsl:apply-templates select="TNM[
-                    not(@TNM_ID=following::TNM[../../../Tumorzuordnung/@Tumor_ID=$Tumor_Id]/@TNM_ID) and 
-                    not(@TNM_ID=following::Diagnose[@Tumor_ID=$Tumor_Id]/cTNM/@TNM_ID) and 
+                    not(@TNM_ID=following::TNM[../../../Tumorzuordnung/@Tumor_ID=$Tumor_Id]/@TNM_ID) and
+                    not(@TNM_ID=following::Diagnose[@Tumor_ID=$Tumor_Id]/cTNM/@TNM_ID) and
                     not(@TNM_ID=following::Diagnose[@Tumor_ID=$Tumor_Id]/pTNM/@TNM_ID)]">
                     <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                     <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
@@ -1000,7 +999,7 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:function>
-    
+
     <xsl:function name="xsi:DatumID">
         <xsl:param name="datum"/>
         <xsl:variable name="day" select="string(replace($datum,'(\d\d\.)\d\d\.\d\d\d\d$','$1'))"/>
@@ -1015,7 +1014,7 @@
         </xsl:choose>
         <xsl:value-of select="number(string(replace($datum,'\d\d\.\d\d\.(\d\d\d\d)$','$1')))*8"/>
     </xsl:function>
-    
+
     <xsl:function name="xsi:Pseudonymize">
         <xsl:param name="gender"/>
         <xsl:param name="prename"/>
@@ -1025,7 +1024,7 @@
         <xsl:param name="identifier"/>
         <xsl:value-of select="hash:pseudonymize(xsi:ReplaceEmpty($gender), xsi:ReplaceEmpty($prename), xsi:ReplaceEmpty($surname), xsi:ReplaceEmpty($birthname), xsi:ReplaceEmpty($brithdate), xsi:ReplaceEmpty($identifier))"/>
     </xsl:function>
-    
+
     <xsl:function name="xsi:ReplaceEmpty">
         <xsl:param name="toReplace"/>
         <xsl:choose>
@@ -1037,5 +1036,5 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:function>
-    
+
 </xsl:stylesheet>
