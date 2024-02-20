@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.concurrent.TimeUnit;
 import javax.xml.transform.*;
@@ -125,6 +126,7 @@ public class Adt2fhir {
         }
         else {
             int counter=0;
+            Arrays.sort(listOfFiles);
             for (File inputFile : listOfFiles) {
                 //System.out.println(inputFile);
                 if (inputFile.isFile() & inputFile.getName().toLowerCase().endsWith(".xml")) {
