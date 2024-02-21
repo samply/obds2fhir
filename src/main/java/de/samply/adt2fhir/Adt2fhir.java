@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.concurrent.TimeUnit;
 import javax.xml.transform.*;
@@ -67,7 +68,6 @@ public class Adt2fhir {
             ADT2singleADTtransformer.setParameter("filepath", System.getenv().getOrDefault("FILE_PATH",""));
             ADT2MDStransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("ADT2MDS_FHIR.xsl")));
             ADT2MDStransformer.setParameter("add_department", System.getenv().getOrDefault("ADD_DEPARTMENTS",""));
-            ADT2MDStransformer.setParameter("salt", System.getenv().getOrDefault("SALT",""));
             MDS2FHIRtransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("MDS2FHIR.xsl")));
             MDS2FHIRtransformer.setParameter("filepath", System.getenv().getOrDefault("FILE_PATH",""));
             MDS2FHIRtransformer.setParameter("identifier_system", System.getenv().getOrDefault("IDENTIFIER_SYSTEM",""));
@@ -126,6 +126,7 @@ public class Adt2fhir {
         }
         else {
             int counter=0;
+            Arrays.sort(listOfFiles);
             for (File inputFile : listOfFiles) {
                 //System.out.println(inputFile);
                 if (inputFile.isFile() & inputFile.getName().toLowerCase().endsWith(".xml")) {

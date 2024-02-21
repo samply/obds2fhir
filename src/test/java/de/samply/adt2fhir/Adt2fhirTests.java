@@ -2,6 +2,7 @@ package de.samply.adt2fhir;
 
 import net.sf.saxon.TransformerFactoryImpl;
 import net.sf.saxon.s9api.Processor;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
@@ -26,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class Adt2fhirTests {
 
 
-    String pathWithFile=this.getClass().getClassLoader().getResource("clinical_data/InputADT/ADT2_Testpatient.xml").getPath();
+    String pathWithFile=this.getClass().getClassLoader().getResource("clinical_data/InputADT/File-1-ADT2_Testpatient.xml").getPath();
     @SystemStub
     private EnvironmentVariables environmentVariables =
             new EnvironmentVariables("FILE_PATH", pathWithFile.substring(0, pathWithFile.indexOf("InputADT")));
@@ -42,36 +43,38 @@ public class Adt2fhirTests {
         UniqueIdGenerator uniqueIdGenerator = new UniqueIdGenerator();
         ((Processor) saxonConfig.getProcessor()).registerExtensionFunction(uniqueIdGenerator);
 
-//        Transformer ADT2singleADTtransformer = null;
+        Transformer ADT2singleADTtransformer = null;
         Transformer ADT2MDStransformer = null;
         Transformer MDS2FHIRtransformer = null;
         try {
-//            ADT2singleADTtransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("toSinglePatients.xsl")));
-//            ADT2singleADTtransformer.setParameter("filepath", System.getenv("FILE_PATH"));
+            ADT2singleADTtransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("toSinglePatients.xsl")));
+            ADT2singleADTtransformer.setParameter("filepath", System.getenv("FILE_PATH"));
             ADT2MDStransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("ADT2MDS_FHIR.xsl")));
             ADT2MDStransformer.setParameter("add_department", false);//TODO test departments
-            ADT2MDStransformer.setParameter("salt", System.getenv().getOrDefault("SALT",""));
             MDS2FHIRtransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("MDS2FHIR.xsl")));
             MDS2FHIRtransformer.setParameter("filepath", System.getenv("FILE_PATH"));
             MDS2FHIRtransformer.setParameter("identifier_system", "http://dktk.dkfz.de/fhir/onco/core/CodeSystem/PseudonymArtCS");
         } catch (TransformerConfigurationException e) {
             System.out.print("Transformer configuration error");
         }
-        processXmlFiles("InputADT", ADT2MDStransformer, MDS2FHIRtransformer, true);
+        processXmlFiles("InputADT", ADT2singleADTtransformer);
+        processXmlFiles("tmp/ADT_Patients", ADT2MDStransformer, MDS2FHIRtransformer, true);
         assertTrue(new File(System.getenv("FILE_PATH")).exists());
     }
 
     @Test
     @Order(2)
     public void comparePatient () throws IOException {
-        String result = "tmp/FHIR_Patients/FHIR_ADT2_Testpatient.xml";
+        String filename = DigestUtils.sha256Hex("testpatient1"+System.getenv().getOrDefault("SALT","")).substring(48);
+        String result = "tmp/FHIR_Patients/FHIR_Patient_"+filename+"_1.xml";
         String expected = "FHIR_ADT2_ExpectedPatient.xml";
         assertTrue(compare(result, expected));
     }
     @Test
     @Order(3)
     public void compareErrorPatient () throws IOException {
-        String result = "tmp/FHIR_Patients/FHIR_ADT2_TestpatientMissingDate.xml";
+        String filename = DigestUtils.sha256Hex("testpatient2"+System.getenv().getOrDefault("SALT","")).substring(48);
+        String result = "tmp/FHIR_Patients/FHIR_Patient_"+filename+"_2.xml";
         String expected = "FHIR_ADT2_ExpectedPatientMissingDate.xml";
         assertTrue(compare(result, expected));
     }
@@ -79,7 +82,8 @@ public class Adt2fhirTests {
     @Test
     @Order(4)
     public void compareBatch () throws IOException {
-        String result = "tmp/FHIR_Patients/FHIR_batch_ADT2_Testpatient.xml";
+        String filename = DigestUtils.sha256Hex("testpatient1"+System.getenv().getOrDefault("SALT","")).substring(48);
+        String result = "tmp/FHIR_Patients/FHIR_batch_Patient_"+filename+"_1.xml";
         String expected = "FHIR_batch_ADT2_ExpectedPatient.xml";
         assertTrue(compare(result, expected));
     }

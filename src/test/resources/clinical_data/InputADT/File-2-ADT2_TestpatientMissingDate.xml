@@ -9,7 +9,7 @@
 	</Absender>
 	<Menge_Patient>
 		<Patient>
-			<Patienten_Stammdaten Patient_ID="132">
+			<Patienten_Stammdaten Patient_ID="testpatient2">
 				<Patienten_Nachname>Mustermann</Patienten_Nachname>
 				<Patienten_Vornamen>Max</Patienten_Vornamen>
 				<Patienten_Geschlecht>M</Patienten_Geschlecht>
