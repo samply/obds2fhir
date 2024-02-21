@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns="http://www.gekid.de/namespace" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.gekid.de/namespace" targetNamespace="http://www.gekid.de/namespace" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.2.2 vom 30.11.2022">
+<xs:schema xmlns="http://www.gekid.de/namespace" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.gekid.de/namespace" targetNamespace="http://www.gekid.de/namespace" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.2.3 vom 18.10.2023">
 	<xs:element name="ADT_GEKID">
 		<xs:annotation>
 			<xs:documentation>Root element</xs:documentation>
@@ -59,12 +59,12 @@
 													<xs:element name="Patienten_Geschlecht" minOccurs="0">
 														<xs:annotation>
 															<xs:documentation>
-															Differenzierung einer Person nach ihrem Geschlechtsmerkmal. 
-															M = Männlich
-															W = Weiblich
-															S = Sonstiges/intersexuell
-															U = Unbekannt
-															Die Angabe "X = unbestimmtes Geschlecht" wie z. B. auf der elektronischen Gesundheitskarte (siehe: https://www.kvno.de/60neues/2016/16_02_unbestimmtes_geschlecht/index.html) ist auf "S = Sonstiges/Intersexuell" abzubilden.
+																Differenzierung einer Person nach ihrem Geschlechtsmerkmal.
+																M = Männlich
+																W = Weiblich
+																S = Sonstiges/intersexuell
+																U = Unbekannt
+																Die Angabe "X = unbestimmtes Geschlecht" wie z. B. auf der elektronischen Gesundheitskarte (siehe: https://www.kvno.de/60neues/2016/16_02_unbestimmtes_geschlecht/index.html) ist auf "S = Sonstiges/Intersexuell" abzubilden.
 															</xs:documentation>
 														</xs:annotation>
 														<xs:simpleType>
@@ -188,13 +188,13 @@
 																			<xs:element name="Seitenlokalisation" type="Seitenlokalisation_Typ" minOccurs="0">
 																				<xs:annotation>
 																					<xs:documentation>
-																					Organspezifische Angabe der betroffenen Seite
-																					L = Links
-																					R = Rechts
-																					B = Beidseitig (sollte bei bestimmten Tumoren 2 Meldungen ergeben)
-																					M = Mittellinie/Mittig
-																					U = Unbekannt
-																					T = Trifft nicht zu (Seitenangabe nicht sinnvoll, einschließlich Systemerkrankungen)
+																						Organspezifische Angabe der betroffenen Seite
+																						L = Links
+																						R = Rechts
+																						B = Beidseitig (sollte bei bestimmten Tumoren 2 Meldungen ergeben)
+																						M = Mittellinie/Mittig
+																						U = Unbekannt
+																						T = Trifft nicht zu (Seitenangabe nicht sinnvoll, einschließlich Systemerkrankungen)
 																					</xs:documentation>
 																				</xs:annotation>
 																			</xs:element>
@@ -245,14 +245,14 @@
 																			<xs:element name="Diagnosesicherung" minOccurs="0">
 																				<xs:annotation>
 																					<xs:documentation>
-																					Höchste erreichte Diagnosesicherheit zum Diagnosedatum (siehe BfArM, ICD-O-3.2: Ergänzende Informationen, Abschnitt 4.5. "Sicherheit der Diagnose").
-																					1 = Klinisch ohne tumorspezifische Diagnostik (nur körperliche Untersuchung)
-																					2 = Klinisch: Klinische Diagnose vor dem Sterbedatum durchgeführt; schließt diagnostische Techniken, inklusive Röntgen, Endoskopie, weitere bildgebende Verfahren, Ultraschall, exploratorische Chirurgie (Laparatomie, etc.) und Autopsie, ohne mikroskopische Gewebediagnose, ein.
-																					4 = Spezifische Tumormarker
-																					5 = Zytologisch: Untersuchung von Zellen aus primären Lokalisationen inklusive Flüssigkeitsaspirationen mittels Endoskopien oder Nadeln. Schließt mikroskopische Untersuchungen von peripheren Blutausstrichen und Ausstrichen von Beckenkammaspirationen ein.
-																					6 = Histologie einer Metastase.
-																					7 = Histologisch: Histologie des Primärtumors: Histologische Untersuchung von Gewebe des Primärtumors einschließlich aller Schnitttechniken und Knochenmarksbiopsien. Dies schließt Proben des Primärtumors aus Autopsien ein. Histologische Untersuchung des Gewebes aus einer Metastase, einschließlich bei Autopsie.
-																					9 = Unbekannt
+																						Höchste erreichte Diagnosesicherheit zum Diagnosedatum (siehe BfArM, ICD-O-3.2: Ergänzende Informationen, Abschnitt 4.5. "Sicherheit der Diagnose").
+																						1 = Klinisch ohne tumorspezifische Diagnostik (nur körperliche Untersuchung)
+																						2 = Klinisch: Klinische Diagnose vor dem Sterbedatum durchgeführt; schließt diagnostische Techniken, inklusive Röntgen, Endoskopie, weitere bildgebende Verfahren, Ultraschall, exploratorische Chirurgie (Laparatomie, etc.) und Autopsie, ohne mikroskopische Gewebediagnose, ein.
+																						4 = Spezifische Tumormarker
+																						5 = Zytologisch: Untersuchung von Zellen aus primären Lokalisationen inklusive Flüssigkeitsaspirationen mittels Endoskopien oder Nadeln. Schließt mikroskopische Untersuchungen von peripheren Blutausstrichen und Ausstrichen von Beckenkammaspirationen ein.
+																						6 = Histologie einer Metastase.
+																						7 = Histologisch: Histologie des Primärtumors: Histologische Untersuchung von Gewebe des Primärtumors einschließlich aller Schnitttechniken und Knochenmarksbiopsien. Dies schließt Proben des Primärtumors aus Autopsien ein. Histologische Untersuchung des Gewebes aus einer Metastase, einschließlich bei Autopsie.
+																						9 = Unbekannt
 																					</xs:documentation>
 																				</xs:annotation>
 																				<xs:simpleType>
@@ -317,9 +317,9 @@
 																									<xs:element name="Diagnosedatum" type="Datum_Typ" minOccurs="0">
 																										<xs:annotation>
 																											<xs:documentation>
-																											Diagnosedatum, falls vorhanden
-																											Ist Tag und/oder Monat unbekannt, bitte "00" einsetzen.
-																											Beispiel: Nur Diagnosejahr bekannt: "00.00.JJJJ"
+																												Diagnosedatum, falls vorhanden
+																												Ist Tag und/oder Monat unbekannt, bitte "00" einsetzen.
+																												Beispiel: Nur Diagnosejahr bekannt: "00.00.JJJJ"
 																											</xs:documentation>
 																										</xs:annotation>
 																									</xs:element>
@@ -356,8 +356,8 @@
 																			<xs:element name="Allgemeiner_Leistungszustand" type="Allgemeiner_Leistungszustand_Typ" minOccurs="0"/>
 																			<xs:element name="Anmerkung" type="xs:string" minOccurs="0"/>
 																		</xs:sequence>
-												                        <!-- dktk Änderung optional zu required -->
-												                        <xs:attribute name="Tumor_ID" type="xs:string" use="required"/>
+																		<!-- dktk Änderung optional zu required -->
+																		<xs:attribute name="Tumor_ID" type="xs:string" use="required"/>
 																	</xs:complexType>
 																</xs:element>
 																<xs:element name="Menge_OP" minOccurs="0">
@@ -425,106 +425,7 @@
 																						<xs:element name="OP_OPS_Version" minOccurs="0">
 																							<xs:simpleType>
 																								<xs:restriction base="xs:string">
-																									<xs:enumeration value="2004">
-																										<xs:annotation>
-																											<xs:documentation>Version 2004</xs:documentation>
-																										</xs:annotation>
-																									</xs:enumeration>
-																									<xs:enumeration value="2005">
-																										<xs:annotation>
-																											<xs:documentation>Version 2005</xs:documentation>
-																										</xs:annotation>
-																									</xs:enumeration>
-																									<xs:enumeration value="2006">
-																										<xs:annotation>
-																											<xs:documentation>Version 2006</xs:documentation>
-																										</xs:annotation>
-																									</xs:enumeration>
-																									<xs:enumeration value="2007">
-																										<xs:annotation>
-																											<xs:documentation>Version 2007</xs:documentation>
-																										</xs:annotation>
-																									</xs:enumeration>
-																									<xs:enumeration value="2008">
-																										<xs:annotation>
-																											<xs:documentation>Version 2008</xs:documentation>
-																										</xs:annotation>
-																									</xs:enumeration>
-																									<xs:enumeration value="2009">
-																										<xs:annotation>
-																											<xs:documentation>Version 2009</xs:documentation>
-																										</xs:annotation>
-																									</xs:enumeration>
-																									<xs:enumeration value="2010">
-																										<xs:annotation>
-																											<xs:documentation>Version 2010</xs:documentation>
-																										</xs:annotation>
-																									</xs:enumeration>
-																									<xs:enumeration value="2011">
-																										<xs:annotation>
-																											<xs:documentation>Version 2011</xs:documentation>
-																										</xs:annotation>
-																									</xs:enumeration>
-																									<xs:enumeration value="2012">
-																										<xs:annotation>
-																											<xs:documentation>Version 2012</xs:documentation>
-																										</xs:annotation>
-																									</xs:enumeration>
-																									<xs:enumeration value="2013">
-																										<xs:annotation>
-																											<xs:documentation>Version 2013</xs:documentation>
-																										</xs:annotation>
-																									</xs:enumeration>
-																									<xs:enumeration value="2014">
-																										<xs:annotation>
-																											<xs:documentation>Version 2014</xs:documentation>
-																										</xs:annotation>
-																									</xs:enumeration>
-																									<xs:enumeration value="2015">
-																										<xs:annotation>
-																											<xs:documentation>Version 2015</xs:documentation>
-																										</xs:annotation>
-																									</xs:enumeration>
-																									<xs:enumeration value="2016">
-																										<xs:annotation>
-																											<xs:documentation>Version 2016</xs:documentation>
-																										</xs:annotation>
-																									</xs:enumeration>
-																									<xs:enumeration value="2017">
-																										<xs:annotation>
-																											<xs:documentation>Version 2017</xs:documentation>
-																										</xs:annotation>
-																									</xs:enumeration>
-																									<xs:enumeration value="2018">
-																										<xs:annotation>
-																											<xs:documentation>Version 2018</xs:documentation>
-																										</xs:annotation>
-																									</xs:enumeration>
-																									<xs:enumeration value="2019">
-																										<xs:annotation>
-																											<xs:documentation>Version 2019</xs:documentation>
-																										</xs:annotation>
-																									</xs:enumeration>
-																									<xs:enumeration value="2020">
-																										<xs:annotation>
-																											<xs:documentation>Version 2020</xs:documentation>
-																										</xs:annotation>
-																									</xs:enumeration>
-																									<xs:enumeration value="2021">
-																										<xs:annotation>
-																											<xs:documentation>Version 2021</xs:documentation>
-																										</xs:annotation>
-																									</xs:enumeration>
-																									<xs:enumeration value="2022">
-																										<xs:annotation>
-																											<xs:documentation>Version 2022</xs:documentation>
-																										</xs:annotation>
-																									</xs:enumeration>
-																									<xs:enumeration value="2023">
-																										<xs:annotation>
-																											<xs:documentation>Version 2023</xs:documentation>
-																										</xs:annotation>
-																									</xs:enumeration>
+																									<xs:pattern value="200[4-9]|20[12]\d"/>
 																								</xs:restriction>
 																							</xs:simpleType>
 																						</xs:element>
@@ -541,91 +442,91 @@
 																									<xs:element name="OP_Komplikation" maxOccurs="unbounded">
 																										<xs:annotation>
 																											<xs:documentation>
-																											Gibt an, ob eine oder keine Komplikation aufgetreten ist, bzw. wenn eine aufgetreten ist, welche.
+																												Gibt an, ob eine oder keine Komplikation aufgetreten ist, bzw. wenn eine aufgetreten ist, welche.
 
-																											N = Nein
-																											U = Unbekannt
+																												N = Nein
+																												U = Unbekannt
 
-																											Wenn ja, dann Liste der aufgetretenen Komplikationen nach
-																											Komplikationsschlüssel
-																											ABD  Abszeß in einem Drainagekanal
-																											ABS  Abszeß, intraabdominaler oder intrathorakaler
-																											ASF  Abszeß, subfaszialer
-																											ANI  Akute Niereninsuffizienz
-																											AEP  Alkoholentzugspsychose
-																											ALR  Allergische Reaktion ohne Schocksymptomatik
-																											ANS  Anaphylaktischer Schock
-																											AEE  Anastomoseninsuffizienz einer Enterostomie
-																											API  Apoplektischer Insult
-																											BIF  Biliäre Fistel
-																											BOG  Blutung, obere gastrointestinale (z.B "Stressulkus")
-																											BOE  Bolusverlegung eines Endotubus
-																											BSI  Bronchusstumpfinsuffizienz
-																											CHI  Cholangitis
-																											DAI  Darmanastomoseinsuffizienz
-																											DPS  Darmpassagestörungen (z.B. protrahierte Atonie, Subileus, Ileus)
-																											DIC  Disseminierte intravasale Koagulopathie
-																											DEP  Drogenentzugspsychose
-																											DLU  Druck- und Lagerungsschäden, z.B. Dekubitalulzera
-																											DSI  Duodenalstumpfinsuffizienz
-																											ENF  Enterale Fistel
-																											GER  Gerinnungsstörung
-																											HEM  Hämatemesis
-																											HUR  Hämaturie
-																											HAE  Hämorrhagischer Schock
-																											HFI  Harnfistel
-																											HNK  Hautnekrose im Operationsbereich
-																											HZI  Herzinsuffizienz
-																											HRS  Herzrhythmusstörungen
-																											HNA  Hirnnervenausfälle
-																											HOP  Hirnorganisches Psychosyndrom (z.B."Durchgangssyndrom")
-																											HYB  Hyperbilirubinämie
-																											HYF  Hypopharynxfistel
-																											IFV  Ileofemorale Venenthrombose
-																											KAS  Kardiogener Schock
-																											KES  Komplikationen einer Stomaanlage
-																											KIM  Komplikation eines Implantates (Gefäßprothese, Totalendoprothese, Katheter), z.B. Dislokation
-																											KRA  Krampfanfall
-																											KDS  Kurzdarmsyndrom
-																											LEV  Leberversagen
-																											LOE  Lungenödem
-																											LYF  Lymphfistel
-																											LYE  Lymphozele
-																											MES  Magenentleerungsstörung
-																											MIL  Mechanischer Ileus
-																											MED  Mediastinitis
-																											MAT  Mesenterialarterien- oder -venenthrombose
-																											MYI  Myokardinfarkt
-																											RNB  Nachblutung, revisionsbedürftig, anderweitig nicht erwähnt
-																											NAB  Nachblutung, nicht revisionsbedürftig, anderweitig nicht erwähnt
-																											NIN  Nahtinsuffizienz, anderweitig nicht erwähnt
-																											OES  Ösophagitis
-																											OSM  Osteitis, Osteomyelitis
-																											PAF  Pankreasfistel
-																											PIT  Pankreatitis
-																											PAB  Peranale Blutung
-																											PPA  Periphere Parese
-																											PAV  Peripherer arterieller Verschluß (Embolie, Thrombose)
-																											PER  Peritonitis
-																											PLB  Platzbauch
-																											PEY  Pleuraempyem
-																											PLE  Pleuraerguß
-																											PMN  Pneumonie
-																											PNT  Pneumothorax
-																											PDA  Protrahierte Darmatonie (paralytischer Ileus)
-																											PAE  Pulmonalarterienembolie
-																											RPA  Rekurrensparese
-																											RIN  Respiratorische Insuffizienz
-																											SKI  Septische Komplikation eines Implantates
-																											SES  Septischer Schock
-																											SFH  Störungen des Flüssigkeits-, Elektrolyt- und Säurebasenhaushaltes
-																											SON  Sonstige Komplikation
-																											STK  Stomakomplikation (z.B. Blutung, Nekrose, Stenose)
-																											TZP  Thrombozytopenie
-																											TIA  (transitorische ischämische Attacke) oder RIND (reversibles ischämisches neurologisches Defizit)
-																											TRZ  Transfusionszwischenfall
-																											WUH  Wundhämatom (konservativ therapiert)
-																											WSS  Wundheilungsstörung, subkutane
+																												Wenn ja, dann Liste der aufgetretenen Komplikationen nach
+																												Komplikationsschlüssel
+																												ABD  Abszeß in einem Drainagekanal
+																												ABS  Abszeß, intraabdominaler oder intrathorakaler
+																												ASF  Abszeß, subfaszialer
+																												ANI  Akute Niereninsuffizienz
+																												AEP  Alkoholentzugspsychose
+																												ALR  Allergische Reaktion ohne Schocksymptomatik
+																												ANS  Anaphylaktischer Schock
+																												AEE  Anastomoseninsuffizienz einer Enterostomie
+																												API  Apoplektischer Insult
+																												BIF  Biliäre Fistel
+																												BOG  Blutung, obere gastrointestinale (z.B "Stressulkus")
+																												BOE  Bolusverlegung eines Endotubus
+																												BSI  Bronchusstumpfinsuffizienz
+																												CHI  Cholangitis
+																												DAI  Darmanastomoseinsuffizienz
+																												DPS  Darmpassagestörungen (z.B. protrahierte Atonie, Subileus, Ileus)
+																												DIC  Disseminierte intravasale Koagulopathie
+																												DEP  Drogenentzugspsychose
+																												DLU  Druck- und Lagerungsschäden, z.B. Dekubitalulzera
+																												DSI  Duodenalstumpfinsuffizienz
+																												ENF  Enterale Fistel
+																												GER  Gerinnungsstörung
+																												HEM  Hämatemesis
+																												HUR  Hämaturie
+																												HAE  Hämorrhagischer Schock
+																												HFI  Harnfistel
+																												HNK  Hautnekrose im Operationsbereich
+																												HZI  Herzinsuffizienz
+																												HRS  Herzrhythmusstörungen
+																												HNA  Hirnnervenausfälle
+																												HOP  Hirnorganisches Psychosyndrom (z.B."Durchgangssyndrom")
+																												HYB  Hyperbilirubinämie
+																												HYF  Hypopharynxfistel
+																												IFV  Ileofemorale Venenthrombose
+																												KAS  Kardiogener Schock
+																												KES  Komplikationen einer Stomaanlage
+																												KIM  Komplikation eines Implantates (Gefäßprothese, Totalendoprothese, Katheter), z.B. Dislokation
+																												KRA  Krampfanfall
+																												KDS  Kurzdarmsyndrom
+																												LEV  Leberversagen
+																												LOE  Lungenödem
+																												LYF  Lymphfistel
+																												LYE  Lymphozele
+																												MES  Magenentleerungsstörung
+																												MIL  Mechanischer Ileus
+																												MED  Mediastinitis
+																												MAT  Mesenterialarterien- oder -venenthrombose
+																												MYI  Myokardinfarkt
+																												RNB  Nachblutung, revisionsbedürftig, anderweitig nicht erwähnt
+																												NAB  Nachblutung, nicht revisionsbedürftig, anderweitig nicht erwähnt
+																												NIN  Nahtinsuffizienz, anderweitig nicht erwähnt
+																												OES  Ösophagitis
+																												OSM  Osteitis, Osteomyelitis
+																												PAF  Pankreasfistel
+																												PIT  Pankreatitis
+																												PAB  Peranale Blutung
+																												PPA  Periphere Parese
+																												PAV  Peripherer arterieller Verschluß (Embolie, Thrombose)
+																												PER  Peritonitis
+																												PLB  Platzbauch
+																												PEY  Pleuraempyem
+																												PLE  Pleuraerguß
+																												PMN  Pneumonie
+																												PNT  Pneumothorax
+																												PDA  Protrahierte Darmatonie (paralytischer Ileus)
+																												PAE  Pulmonalarterienembolie
+																												RPA  Rekurrensparese
+																												RIN  Respiratorische Insuffizienz
+																												SKI  Septische Komplikation eines Implantates
+																												SES  Septischer Schock
+																												SFH  Störungen des Flüssigkeits-, Elektrolyt- und Säurebasenhaushaltes
+																												SON  Sonstige Komplikation
+																												STK  Stomakomplikation (z.B. Blutung, Nekrose, Stenose)
+																												TZP  Thrombozytopenie
+																												TIA  (transitorische ischämische Attacke) oder RIND (reversibles ischämisches neurologisches Defizit)
+																												TRZ  Transfusionszwischenfall
+																												WUH  Wundhämatom (konservativ therapiert)
+																												WSS  Wundheilungsstörung, subkutane
 																											</xs:documentation>
 																										</xs:annotation>
 																										<xs:simpleType>
@@ -1058,11 +959,11 @@
 																						<xs:element name="ST_Intention" minOccurs="0">
 																							<xs:annotation>
 																								<xs:documentation>
-																								Gibt an, mit welcher Intention die Strahlentherapie durchgeführt wird.
-																								K = Kurativ
-																								P = Palliativ
-																								S = Sonstiges
-																								X = Keine Angabe
+																									Gibt an, mit welcher Intention die Strahlentherapie durchgeführt wird.
+																									K = Kurativ
+																									P = Palliativ
+																									S = Sonstiges
+																									X = Keine Angabe
 																								</xs:documentation>
 																							</xs:annotation>
 																							<xs:simpleType>
@@ -2847,11 +2748,11 @@
 																	</xs:complexType>
 																</xs:element>
 																<!-- Ende dktk-Änderung -->
-    								                        </xs:sequence>
-    												        <xs:attribute name="Meldung_ID" type="xs:string" use="optional"/>
-    												        <xs:attribute name="Melder_ID" type="xs:string" use="optional"/>
-    												    </xs:complexType>
-    												</xs:element>
+															</xs:sequence>
+															<xs:attribute name="Meldung_ID" type="xs:string" use="optional"/>
+															<xs:attribute name="Melder_ID" type="xs:string" use="optional"/>
+														</xs:complexType>
+													</xs:element>
 												</xs:sequence>
 											</xs:complexType>
 										</xs:element>
@@ -2918,6 +2819,11 @@
 								<xs:documentation>Hotfix 2.2.2 vom 30.11.2022 (ermöglicht ICD/OPS 2023)</xs:documentation>
 							</xs:annotation>
 						</xs:enumeration>
+						<xs:enumeration value="2.2.3">
+							<xs:annotation>
+								<xs:documentation>Hotfix 2.2.3 vom 18.10.2023 Erweiterung der zulässigen ICD-10-Versionen und OPS-Versionen über das Jahr 2023 hinaus</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
@@ -2975,117 +2881,18 @@
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="ICD_Version_Typ">
+		<xs:annotation>
+			<xs:documentation>
+				ICD 10 Version 2006 WHO (gültig bis 2010),
+				ICD 10 Version 2011 WHO (gültig bis 2012),
+				ICD 10 Version 2013 WHO (gültig bis 2015),
+				ICD 10 Version 2016 WHO (gültig bis 2018),
+				ICD 10 Version 2019 WHO (letzte Version, wird nur noch in Ausnahmefällen aktualisiert)
+				Sonstige, falls andere bzw. ältere Versionen verwendet werden
+			</xs:documentation>
+		</xs:annotation>
 		<xs:restriction base="xs:string">
-			<xs:enumeration value="10 2004 GM">
-				<xs:annotation>
-					<xs:documentation>ICD 10 Version 2004 GM</xs:documentation>
-				</xs:annotation>
-			</xs:enumeration>
-			<xs:enumeration value="10 2005 GM">
-				<xs:annotation>
-					<xs:documentation>ICD 10 Version 2005 GM</xs:documentation>
-				</xs:annotation>
-			</xs:enumeration>
-			<xs:enumeration value="10 2006 GM">
-				<xs:annotation>
-					<xs:documentation>ICD 10 Version 2006 GM</xs:documentation>
-				</xs:annotation>
-			</xs:enumeration>
-			<xs:enumeration value="10 2007 GM">
-				<xs:annotation>
-					<xs:documentation>ICD 10 Version 2007 GM</xs:documentation>
-				</xs:annotation>
-			</xs:enumeration>
-			<xs:enumeration value="10 2008 GM">
-				<xs:annotation>
-					<xs:documentation>ICD 10 Version 2008 GM</xs:documentation>
-				</xs:annotation>
-			</xs:enumeration>
-			<xs:enumeration value="10 2009 GM">
-				<xs:annotation>
-					<xs:documentation>ICD 10 Version 2009 GM</xs:documentation>
-				</xs:annotation>
-			</xs:enumeration>
-			<xs:enumeration value="10 2010 GM">
-				<xs:annotation>
-					<xs:documentation>ICD 10 Version 2010 GM</xs:documentation>
-				</xs:annotation>
-			</xs:enumeration>
-			<xs:enumeration value="10 2011 GM">
-				<xs:annotation>
-					<xs:documentation>ICD 10 Version 2011 GM</xs:documentation>
-				</xs:annotation>
-			</xs:enumeration>
-			<xs:enumeration value="10 2012 GM">
-				<xs:annotation>
-					<xs:documentation>ICD 10 Version 2012 GM</xs:documentation>
-				</xs:annotation>
-			</xs:enumeration>
-			<xs:enumeration value="10 2013 GM">
-				<xs:annotation>
-					<xs:documentation>ICD 10 Version 2013 GM</xs:documentation>
-				</xs:annotation>
-			</xs:enumeration>
-			<xs:enumeration value="10 2014 GM">
-				<xs:annotation>
-					<xs:documentation>ICD 10 Version 2014 GM</xs:documentation>
-				</xs:annotation>
-			</xs:enumeration>
-			<xs:enumeration value="10 2015 GM">
-				<xs:annotation>
-					<xs:documentation>ICD 10 Version 2015 GM</xs:documentation>
-				</xs:annotation>
-			</xs:enumeration>
-			<xs:enumeration value="10 2016 GM">
-				<xs:annotation>
-					<xs:documentation>ICD 10 Version 2016 GM</xs:documentation>
-				</xs:annotation>
-			</xs:enumeration>
-			<xs:enumeration value="10 2016 WHO">
-				<xs:annotation>
-					<xs:documentation>ICD 10 Version 2016 WHO</xs:documentation>
-				</xs:annotation>
-			</xs:enumeration>
-			<xs:enumeration value="10 2017 GM">
-				<xs:annotation>
-					<xs:documentation>ICD 10 Version 2017 GM</xs:documentation>
-				</xs:annotation>
-			</xs:enumeration>
-			<xs:enumeration value="10 2018 GM">
-				<xs:annotation>
-					<xs:documentation>ICD 10 Version 2018 GM</xs:documentation>
-				</xs:annotation>
-			</xs:enumeration>
-			<xs:enumeration value="10 2019 GM">
-				<xs:annotation>
-					<xs:documentation>ICD 10 Version 2019 GM</xs:documentation>
-				</xs:annotation>
-			</xs:enumeration>
-			<xs:enumeration value="10 2020 GM">
-				<xs:annotation>
-					<xs:documentation>ICD 10 Version 2020 GM</xs:documentation>
-				</xs:annotation>
-			</xs:enumeration>
-			<xs:enumeration value="10 2021 GM">
-				<xs:annotation>
-					<xs:documentation>ICD 10 Version 2021 GM</xs:documentation>
-				</xs:annotation>
-			</xs:enumeration>
-			<xs:enumeration value="10 2022 GM">
-				<xs:annotation>
-					<xs:documentation>ICD 10 Version 2022 GM</xs:documentation>
-				</xs:annotation>
-			</xs:enumeration>
-			<xs:enumeration value="10 2023 GM">
-				<xs:annotation>
-					<xs:documentation>ICD 10 Version 2023 GM</xs:documentation>
-				</xs:annotation>
-			</xs:enumeration>
-			<xs:enumeration value="Sonstige">
-				<xs:annotation>
-					<xs:documentation>Falls andere bzw. ältere Versionen verwendet werden</xs:documentation>
-				</xs:annotation>
-			</xs:enumeration>
+			<xs:pattern value="(10 20\d{2} ((GM)|(WHO))|Sonstige)"/>
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:complexType name="Melder_Typ">
@@ -3568,7 +3375,7 @@
 			<xs:element name="HormonrezeptorStatus_Oestrogen" type="Hormonrezeptor_Typ" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					<![CDATA[
+						<![CDATA[
 						Rezeptorstatus Positiv/Negativ (gemäß: Immun reaktiver Score (IRS) Remmele W et al. 1987)
 						P = Positiv (IRS >= 1)
 						N = Negativ
@@ -3580,7 +3387,7 @@
 			<xs:element name="HormonrezeptorStatus_Progesteron" type="Hormonrezeptor_Typ" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					<![CDATA[
+						<![CDATA[
 						Rezeptorstatus Positiv/Negativ (gemäß: Immunreaktiver Score (IRS) Remmele W et al. 1987).
 						P = Positiv (IRS >= 1)
 						N = Negativ
@@ -3592,25 +3399,25 @@
 			<xs:element name="Her2neuStatus" type="Hormonrezeptor_Typ" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					Rezeptorstatus Positiv/Negativ (gemäß immunreaktiven Scores nach Leitlinie)
-					P = Positiv, d. h.
+						Rezeptorstatus Positiv/Negativ (gemäß immunreaktiven Scores nach Leitlinie)
+						P = Positiv, d. h.
 						IHC +++ oder
 						IHC ++ und ISH (FISH, CISH o. Ä.) positiv
-					N = Negativ
-					U = Unbekannt
-					Bei FISH "borderline" muss die Festlegung auf negativ oder positiv durch den Kliniker in Absprache mit dem Pathologen erfolgen.
+						N = Negativ
+						U = Unbekannt
+						Bei FISH "borderline" muss die Festlegung auf negativ oder positiv durch den Kliniker in Absprache mit dem Pathologen erfolgen.
 					</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="PraeopDrahtmarkierung" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					Es wurde eine präoperative Drahtmarkierung gesteuert durch das angegebene bildgebende Verfahren durchgeführt.
-					M = Mammografie
-					S = Sonografie
-					T = MRT
-					N = Keine Drahtmarkierung durch Bildgebung
-					U = Unbekannt
+						Es wurde eine präoperative Drahtmarkierung gesteuert durch das angegebene bildgebende Verfahren durchgeführt.
+						M = Mammografie
+						S = Sonografie
+						T = MRT
+						N = Keine Drahtmarkierung durch Bildgebung
+						U = Unbekannt
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
@@ -3647,11 +3454,11 @@
 			<xs:element name="IntraopPraeparatkontrolle" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					Das Präparat wird intraoperativ mammografiert/sonografiert nach präoperativer Drahtmarkierung durch Mammografie oder Sonografie.
-					M = Mammografie
-					S = Sonografie
-					N = Nein
-					U = Unbekannt
+						Das Präparat wird intraoperativ mammografiert/sonografiert nach präoperativer Drahtmarkierung durch Mammografie oder Sonografie.
+						M = Mammografie
+						S = Sonografie
+						N = Nein
+						U = Unbekannt
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
@@ -3695,14 +3502,14 @@
 			<xs:element name="RektumQualitaetTME" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					Qualität des TME-Präparats
-					1 = Grad 1 (gut)
-					2 = Grad 2 (moderat)
-					3 = Grad 3 (schlecht)
-					P = PME durchgeführt
-					L = Lokale Exzision durchgeführt
-					A = Andere Operation durchgeführt
-					U = Unbekannt
+						Qualität des TME-Präparats
+						1 = Grad 1 (gut)
+						2 = Grad 2 (moderat)
+						3 = Grad 3 (schlecht)
+						P = PME durchgeführt
+						L = Lokale Exzision durchgeführt
+						A = Andere Operation durchgeführt
+						U = Unbekannt
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
@@ -3755,10 +3562,10 @@
 			<xs:element name="ArtEingriff" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					Modalität der Eingriffsdurchführung
-					E = Elektiveingriff
-					N = Notfalleingriff
-					U = Unbekannt
+						Modalität der Eingriffsdurchführung
+						E = Elektiveingriff
+						N = Notfalleingriff
+						U = Unbekannt
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
@@ -3784,12 +3591,12 @@
 			<xs:element name="RektumAnzeichnungStomaposition" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					Präoperative Anzeichnung der Stomaposition
-					D = Anzeichnung durchgeführt
-					N = Anzeichnung nicht durchgeführt
-					K = Kein Stoma
-					S = Stoma angelegt, Anzeichnung nicht bekannt
-					U = Unbekannt
+						Präoperative Anzeichnung der Stomaposition
+						D = Anzeichnung durchgeführt
+						N = Anzeichnung nicht durchgeführt
+						K = Kein Stoma
+						S = Stoma angelegt, Anzeichnung nicht bekannt
+						U = Unbekannt
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
@@ -3825,18 +3632,18 @@
 			<xs:element name="GradRektumAnastomoseninsuffizienz" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					Rektum:
-					Grad A (keine therapeutische Konsequenz)
-					Grad B (Antibiotikagabe oder interventionelle Drainage oder transanale Lavage/Drainage)
-					Grad C ((Re)-Laparotomie)
-					Anastomoseninsuffizienz nach elektivem Eingriff mit Anastomosenanlage
+						Rektum:
+						Grad A (keine therapeutische Konsequenz)
+						Grad B (Antibiotikagabe oder interventionelle Drainage oder transanale Lavage/Drainage)
+						Grad C ((Re)-Laparotomie)
+						Anastomoseninsuffizienz nach elektivem Eingriff mit Anastomosenanlage
 
-					B = Anastomoseninsuffizienz Grad B
-					C = Anastomoseninsuffizienz Grad C
-					K = Keine Insuffizienz oder höchstens Grad A
-					U = Unbekannt
+						B = Anastomoseninsuffizienz Grad B
+						C = Anastomoseninsuffizienz Grad C
+						K = Keine Insuffizienz oder höchstens Grad A
+						U = Unbekannt
 
-					Ausprägung gem. Rahbari, N.N., et al., Definition and grading of anastomotic leakage following anterior resection of the rectum: a proposal by the International Study Group of Rectal Cancer.Surgery, 2010. 147(3): p. 339-51.
+						Ausprägung gem. Rahbari, N.N., et al., Definition and grading of anastomotic leakage following anterior resection of the rectum: a proposal by the International Study Group of Rectal Cancer.Surgery, 2010. 147(3): p. 339-51.
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
@@ -3867,12 +3674,12 @@
 			<xs:element name="ASA" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					Einstufung des Patienten nach der ASA-Klassifikation bei präoperativer Untersuchung durch den Anästhesisten.
-					1 = Normaler, ansonsten gesunder Patient
-					2 = Patient mit leichter Allgemeinerkrankung
-					3 = Patient mit schwerer Allgemeinerkrankung und Leistungseinschränkung
-					4 = Patient mit inaktivierender Allgemeinerkrankung, ständige Lebensbedrohung
-					5 = Moribunder Patient
+						Einstufung des Patienten nach der ASA-Klassifikation bei präoperativer Untersuchung durch den Anästhesisten.
+						1 = Normaler, ansonsten gesunder Patient
+						2 = Patient mit leichter Allgemeinerkrankung
+						3 = Patient mit schwerer Allgemeinerkrankung und Leistungseinschränkung
+						4 = Patient mit inaktivierender Allgemeinerkrankung, ständige Lebensbedrohung
+						5 = Moribunder Patient
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
@@ -3908,11 +3715,11 @@
 			<xs:element name="RASMutation" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					Vorliegen einer Mutation im K-ras-Onkogen
-					W = Wildtyp
-					M = Mutation
-					U = Unbekannt
-					N = Nicht untersucht
+						Vorliegen einer Mutation im K-ras-Onkogen
+						W = Wildtyp
+						M = Mutation
+						U = Unbekannt
+						N = Nicht untersucht
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
@@ -3947,9 +3754,9 @@
 			<xs:element name="GleasonScore" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					Wert des Gleason-Score:
-					GleasonGradPrimaer + GleasonGradSekundaer = GleasonScoreErgebnis
-					mod. nach ISUP 2005 bei primärem Ca-Nachweis und im OP-Präparat
+						Wert des Gleason-Score:
+						GleasonGradPrimaer + GleasonGradSekundaer = GleasonScoreErgebnis
+						mod. nach ISUP 2005 bei primärem Ca-Nachweis und im OP-Präparat
 					</xs:documentation>
 				</xs:annotation>
 				<xs:complexType>
@@ -4008,11 +3815,11 @@
 			<xs:element name="AnlassGleasonScore" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					Anlass der Bestimmung des Scores OP oder Stanze
-					Ausprägungen:
-					O = Op
-					S = Stanze
-					U = Unbekannt
+						Anlass der Bestimmung des Scores OP oder Stanze
+						Ausprägungen:
+						O = Op
+						S = Stanze
+						U = Unbekannt
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
@@ -4038,16 +3845,16 @@
 			<xs:element name="DatumStanzen" type="xs:date" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					Datum der Entnahme der Stanzen
-					Ausprägung: yyyy-mm-dd
+						Datum der Entnahme der Stanzen
+						Ausprägung: yyyy-mm-dd
 					</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="AnzahlStanzen" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					Anzahl der entnommenen Stanzen
-					Ausprägungen: natürliche Zahl von 0 - 99
+						Anzahl der entnommenen Stanzen
+						Ausprägungen: natürliche Zahl von 0 - 99
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
@@ -4059,8 +3866,8 @@
 			<xs:element name="AnzahlPosStanzen" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					Anzahl der positiven Stanzen
-					Ausprägungen: natürliche Zahl von 0 - 99
+						Anzahl der positiven Stanzen
+						Ausprägungen: natürliche Zahl von 0 - 99
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
@@ -4072,10 +3879,10 @@
 			<xs:element name="CaBefallStanze" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					Semiquantitative Abschätzung des Prozentsatzes der Gesamtkarzinomfläche/Gesamtstanzzylinderfläche der am schwersten befallenen Stanze
-					Ausprägungen:
-					natürliche Zahl in % (1 - 100)
-					U = Unbekannt
+						Semiquantitative Abschätzung des Prozentsatzes der Gesamtkarzinomfläche/Gesamtstanzzylinderfläche der am schwersten befallenen Stanze
+						Ausprägungen:
+						natürliche Zahl in % (1 - 100)
+						U = Unbekannt
 					</xs:documentation>
 				</xs:annotation>
 				<xs:complexType>
@@ -4110,8 +3917,8 @@
 			<xs:element name="PSA" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					Aktuell relevanter PSA-Wert
-					Ausprägungen: Fließkommazahl in ng/ml (max. 3 Dezimalstellen nach dem Dezimalpunkt)
+						Aktuell relevanter PSA-Wert
+						Ausprägungen: Fließkommazahl in ng/ml (max. 3 Dezimalstellen nach dem Dezimalpunkt)
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
@@ -4125,19 +3932,19 @@
 			<xs:element name="DatumPSA" type="xs:date" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					Datum der Blutentnahme zur PSA-Bestimmung
-					Ausprägung: yyyy-mm-dd
+						Datum der Blutentnahme zur PSA-Bestimmung
+						Ausprägung: yyyy-mm-dd
 					</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="KomplPostOP_ClavienDindo" type="JNU_Typ" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					Komplikation der Clavien-Dindo Grade III oder IV innerhalb der ersten 6 Monate nach Radikaler Prostatektomie
-					Ausprägungen:
-					J = Ja
-					N = keine oder höchsten Grad II
-					U = Unbekannt
+						Komplikation der Clavien-Dindo Grade III oder IV innerhalb der ersten 6 Monate nach Radikaler Prostatektomie
+						Ausprägungen:
+						J = Ja
+						N = keine oder höchsten Grad II
+						U = Unbekannt
 					</xs:documentation>
 				</xs:annotation>
 			</xs:element>
@@ -4148,17 +3955,17 @@
 			<xs:element name="Sicherheitsabstand_Primaertumor" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					<![CDATA[
+						<![CDATA[
 					Minimaler Sicherheitsabstand zum Primärtumor in Millimeter.
 					Ausprägungen:
 					-1 = nicht zu beurteilen
 					0 = kein Abstand
-					n = Abstand in mm (natürliche Zahl) 
-                    Hinweis:
-                    Es ist der endgültige kumulative Sicherheitsabstand, d. h. nach definitiver operativer Versorgung zu verwenden. 
-                    Es soll die sichere Untergrenze angegeben werden. 
-                    Ein Abstand von 0 entspricht lokal R1 oder R2, bzw. randständig. 
-                    ]]>
+					n = Abstand in mm (natürliche Zahl)
+					Hinweis:
+					Es ist der endgültige kumulative Sicherheitsabstand, d. h. nach definitiver operativer Versorgung zu verwenden.
+					Es soll die sichere Untergrenze angegeben werden.
+					Ein Abstand von 0 entspricht lokal R1 oder R2, bzw. randständig.
+					]]>
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
@@ -4171,11 +3978,11 @@
 			<xs:element name="Tumordicke" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					<![CDATA[
+						<![CDATA[
 					Tumordicke in mm.
 					Ausprägungen:
 					Zahl von 0,1 bis 99,0.
-                    ]]>
+					]]>
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
@@ -4189,13 +3996,13 @@
 			<xs:element name="LDH" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					<![CDATA[
+						<![CDATA[
 					LDH-Wert in Unit/Liter (U/l).
 					Hinweis:
 					Für die Umrechung von Katal/l nach Unit/l gilt:
 					1µkat/l = 60 U/l
 					100 U/l = 1.67 µkat/l.
-                    ]]>
+					]]>
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
@@ -4208,17 +4015,17 @@
 			<xs:element name="Ulzeration" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					<![CDATA[
+						<![CDATA[
 					Pathologisches Kriterium der Ulzeration erfüllt.
 					Ausprägungen:
-					J  = Ja 
-					N = Nein 
+					J  = Ja
+					N = Nein
 					U = Unbekannt
 					Hinweis:
-					Dieses Feld soll nur im TNM-Stadium pT1b angegeben werden, 
+					Dieses Feld soll nur im TNM-Stadium pT1b angegeben werden,
 					da dieses Stadium mit und ohne Ulzerationen definiert ist.
 					(Quelle: TNM-Klassifikation, 8. Auflage 2020, S. 188).
-                    ]]>
+					]]>
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
@@ -4250,13 +4057,13 @@
 	<xs:simpleType name="Seitenlokalisation_Typ">
 		<xs:annotation>
 			<xs:documentation>
-			Organspezifische Angabe der betroffenen Seite
-			L = Links
-			R = Rechts
-			B = Beidseitig (sollte bei bestimmten Tumoren 2 Meldungen ergeben)
-			M = Mittellinie/Mittig
-			U = Unbekannt
-			T = Trifft nicht zu (Seitenangabe nicht sinnvoll, einschließlich Systemerkrankungen)
+				Organspezifische Angabe der betroffenen Seite
+				L = Links
+				R = Rechts
+				B = Beidseitig (sollte bei bestimmten Tumoren 2 Meldungen ergeben)
+				M = Mittellinie/Mittig
+				U = Unbekannt
+				T = Trifft nicht zu (Seitenangabe nicht sinnvoll, einschließlich Systemerkrankungen)
 			</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:string">
@@ -4295,15 +4102,15 @@
 	<xs:simpleType name="Allgemeiner_Leistungszustand_Typ">
 		<xs:annotation>
 			<xs:documentation>
-			ECOG oder Karnofsky
-			Begründung: Eindeutige zeitliche Einordnung, insbesondere hinsichtlich Beurteilung der eingeschlagenen Therapiestrategien
-			0 = (90% - 100% nach Karnofsky): Normale, uneingeschränkte Aktivität wie vor der Erkrankung
-			1 = (70% - 80%  nach Karnofsky): Einschränkung bei körperlicher Anstrengung, aber gehfähig; leichte körperliche Arbeit bzw. Arbeit im Sitzen (z.B. leichte Hausarbeit oder Büroarbeit) möglich
-			2 = (50% - 60%  nach Karnofsky): Gehfähig, Selbstversorgung möglich, aber nicht arbeitsfähig; kann mehr als 50% der Wachzeit aufstehen
-			3 = (30% - 40%  nach Karnofsky): Nur begrenzte Selbstversorgung möglich; ist 50% oder mehr der Wachzeit an Bett oder Stuhl gebunden
-			4 = (10% - 20%  nach Karnofsky): Völlig pflegebedürftig, keinerlei Selbstversorgung möglich; völlig an Bett oder Stuhl gebunden
-			Alternativ bei Karnofsky Angabe in %
-			U = Unbekannt
+				ECOG oder Karnofsky
+				Begründung: Eindeutige zeitliche Einordnung, insbesondere hinsichtlich Beurteilung der eingeschlagenen Therapiestrategien
+				0 = (90% - 100% nach Karnofsky): Normale, uneingeschränkte Aktivität wie vor der Erkrankung
+				1 = (70% - 80%  nach Karnofsky): Einschränkung bei körperlicher Anstrengung, aber gehfähig; leichte körperliche Arbeit bzw. Arbeit im Sitzen (z.B. leichte Hausarbeit oder Büroarbeit) möglich
+				2 = (50% - 60%  nach Karnofsky): Gehfähig, Selbstversorgung möglich, aber nicht arbeitsfähig; kann mehr als 50% der Wachzeit aufstehen
+				3 = (30% - 40%  nach Karnofsky): Nur begrenzte Selbstversorgung möglich; ist 50% oder mehr der Wachzeit an Bett oder Stuhl gebunden
+				4 = (10% - 20%  nach Karnofsky): Völlig pflegebedürftig, keinerlei Selbstversorgung möglich; völlig an Bett oder Stuhl gebunden
+				Alternativ bei Karnofsky Angabe in %
+				U = Unbekannt
 			</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:string">
@@ -4500,13 +4307,13 @@
 						<xs:enumeration value="c">
 							<xs:annotation>
 								<xs:documentation>c oder (leer) = Kategorie wurde durch klinische Angaben festgestellt, bzw. erfüllt die Kriterien für p nicht
-											</xs:documentation>
+								</xs:documentation>
 							</xs:annotation>
 						</xs:enumeration>
 						<xs:enumeration value="p">
 							<xs:annotation>
 								<xs:documentation> Feststellung der Kategorie erfolgte durch eine pathohistologische Untersuchung, mit der auch der höchste Grad der jeweiligen Kategorie hätte festgestellt werden können
-											</xs:documentation>
+								</xs:documentation>
 							</xs:annotation>
 						</xs:enumeration>
 						<xs:enumeration value="u">
@@ -4656,16 +4463,16 @@
 			<xs:element name="TNM_S" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					<![CDATA[
-						Serumtumormarker 
-						SX = Werte der Serumtumormarker nicht verfügbar oder entsprechende Untersuchungen nicht vorgenommen 
-						S0 = Serumtumormarker innerhalb der normalen Grenzen 
-						S1–S3 = Wenigstens einer der Serumtumormarker erhöht 
-									LDH					HCG					AFP 
-						S1			< 1,5N		und		< 5000		und		< 1000 
-						S2			1,5-10N		oder	5000-50000  oder	1000-10000 
+						<![CDATA[
+						Serumtumormarker
+						SX = Werte der Serumtumormarker nicht verfügbar oder entsprechende Untersuchungen nicht vorgenommen
+						S0 = Serumtumormarker innerhalb der normalen Grenzen
+						S1–S3 = Wenigstens einer der Serumtumormarker erhöht
+									LDH					HCG					AFP
+						S1			< 1,5N		und		< 5000		und		< 1000
+						S2			1,5-10N		oder	5000-50000  oder	1000-10000
 						S3			> 10 N		oder	> 50000		oder	> 10000
-						N = obere Grenze des Normalwertes 
+						N = obere Grenze des Normalwertes
 						(Quelle: TNM-Klassifikation, 8. Auflage 2020, S.252)
 					]]>
 					</xs:documentation>
