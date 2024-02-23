@@ -1,4 +1,4 @@
-package de.samply.adt2fhir;
+package de.samply.obds2fhir;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -16,7 +16,6 @@ import javax.xml.transform.stream.StreamSource;
 import net.sf.saxon.TransformerFactoryImpl;
 import net.sf.saxon.s9api.Processor;
 import org.apache.http.HttpResponse;
-import org.apache.http.NoHttpResponseException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -29,10 +28,10 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 
-public class Adt2fhir {
+public class Obds2fhir {
 
-    private static final String INPUT_ADT="/InputADT/";
-    private static final String ADT_PATIENTS="/tmp/ADT_Patients/";
+    private static final String INPUT_oBDS ="/InputOBDS/";
+    private static final String oBDS_PATIENTS ="/tmp/oBDS_Patients/";
     private static final String FHIR_PATIENTS="/tmp/FHIR_Patients/";
     private static final String ERRONEOUS="/tmp/erroneous";
     private static final String PROCESSED="/Processed/";
@@ -60,15 +59,15 @@ public class Adt2fhir {
         UniqueIdGenerator uniqueIdGenerator = new UniqueIdGenerator();
         ((Processor) saxonConfig.getProcessor()).registerExtensionFunction(uniqueIdGenerator);
 
-        Transformer ADT2singleADTtransformer = null;
+        Transformer ADT2SinglePatientTransformer = null;
         Transformer ADT2MDStransformer = null;
         Transformer MDS2FHIRtransformer = null;
         try {
-            ADT2singleADTtransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("toSinglePatients.xsl")));
-            ADT2singleADTtransformer.setParameter("filepath", System.getenv().getOrDefault("FILE_PATH",""));
-            ADT2MDStransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("ADT2MDS_FHIR.xsl")));
+            ADT2SinglePatientTransformer = factory.newTransformer(new StreamSource(Obds2fhir.class.getClassLoader().getResourceAsStream("ADT2SinglePatient.xsl")));
+            ADT2SinglePatientTransformer.setParameter("filepath", System.getenv().getOrDefault("FILE_PATH",""));
+            ADT2MDStransformer = factory.newTransformer(new StreamSource(Obds2fhir.class.getClassLoader().getResourceAsStream("ADT2MDS_FHIR.xsl")));
             ADT2MDStransformer.setParameter("add_department", System.getenv().getOrDefault("ADD_DEPARTMENTS",""));
-            MDS2FHIRtransformer = factory.newTransformer(new StreamSource(Adt2fhir.class.getClassLoader().getResourceAsStream("MDS2FHIR.xsl")));
+            MDS2FHIRtransformer = factory.newTransformer(new StreamSource(Obds2fhir.class.getClassLoader().getResourceAsStream("MDS2FHIR.xsl")));
             MDS2FHIRtransformer.setParameter("filepath", System.getenv().getOrDefault("FILE_PATH",""));
             MDS2FHIRtransformer.setParameter("identifier_system", System.getenv().getOrDefault("IDENTIFIER_SYSTEM",""));
         } catch (TransformerConfigurationException e) {
@@ -78,14 +77,14 @@ public class Adt2fhir {
 
         long startTime = System.nanoTime();
         System.out.println("Transforming to single Patients... \n");
-        processXmlFiles(INPUT_ADT, ADT2singleADTtransformer);
+        processXmlFiles(INPUT_oBDS, ADT2SinglePatientTransformer);
         long stopTime = System.nanoTime();
         System.out.println(DONE+(stopTime - startTime)/1000000000+ " seconds");
 
 
         startTime = System.nanoTime();
         System.out.println("Transforming to FHIR... \n");
-        processXmlFiles(ADT_PATIENTS, ADT2MDStransformer, MDS2FHIRtransformer, true);
+        processXmlFiles(oBDS_PATIENTS, ADT2MDStransformer, MDS2FHIRtransformer, true);
         stopTime = System.nanoTime();
         System.out.println(DONE+(stopTime - startTime)/1000000000+ " seconds");
 

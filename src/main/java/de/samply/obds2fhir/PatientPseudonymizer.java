@@ -1,4 +1,4 @@
-package de.samply.adt2fhir;
+package de.samply.obds2fhir;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;

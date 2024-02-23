@@ -1,4 +1,4 @@
-package de.samply.adt2fhir;
+package de.samply.obds2fhir;
 
 import net.sf.saxon.expr.XPathContext;
 import net.sf.saxon.lib.ExtensionFunctionCall;
