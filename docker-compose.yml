@@ -1,12 +1,12 @@
 version: "3.7"
 volumes:
-  adt2fhir_data:
+  obds2fhir_data:
 
 services:
-  adt2fhir:
-    image: docker.verbis.dkfz.de/ccp/adt2fhir:main
+  obds2fhir:
+    image: docker.verbis.dkfz.de/ccp/obds2fhir:main
     environment:
-      #FILE_PATH: "/adt2fhir/clinical_data"
+      #FILE_PATH: "/obds2fhir/clinical_data"
       STORE_PATH: "http://host.docker.internal:8090/fhir"
       #STORE_AUTH: "user:password"
       IDENTIFIER_SYSTEM: "http://dktk.dkfz.de/fhir/onco/core/CodeSystem/PseudonymArtCS"
@@ -17,7 +17,7 @@ services:
       #SSL_CERTIFICATE_VALIDATION: "true"
       #ADD_DEPARTMENTS: "false"
     volumes:
-      - ./clinical_data:/adt2fhir/clinical_data
+      - ./clinical_data:/obds2fhir/clinical_data
       #- /etc/bridgehead/traefik-tls:/.../:ro
     extra_hosts:
       - "host.docker.internal:host-gateway"

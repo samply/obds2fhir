@@ -60,10 +60,11 @@ public class Obds2fhir {
         ((Processor) saxonConfig.getProcessor()).registerExtensionFunction(uniqueIdGenerator);
 
         Transformer ADT2SinglePatientTransformer = null;
+        Transformer oBDS2SinglePatientTransformer = null;
         Transformer ADT2MDStransformer = null;
         Transformer MDS2FHIRtransformer = null;
         try {
-            ADT2SinglePatientTransformer = factory.newTransformer(new StreamSource(Obds2fhir.class.getClassLoader().getResourceAsStream("ADT2SinglePatient.xsl")));
+            ADT2SinglePatientTransformer = factory.newTransformer(new StreamSource(Obds2fhir.class.getClassLoader().getResourceAsStream("oBDS2SinglePatient.xsl")));
             ADT2SinglePatientTransformer.setParameter("filepath", System.getenv().getOrDefault("FILE_PATH",""));
             ADT2MDStransformer = factory.newTransformer(new StreamSource(Obds2fhir.class.getClassLoader().getResourceAsStream("ADT2MDS_FHIR.xsl")));
             ADT2MDStransformer.setParameter("add_department", System.getenv().getOrDefault("ADD_DEPARTMENTS",""));

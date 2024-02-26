@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <xsl:stylesheet
         xmlns="http://hl7.org/fhir"
-        xmlns:mds2fhir="https://github.com/samply/adt2fhir/blob/main/MDS_FHIR2FHIR"
+        xmlns:mds2fhir="https://github.com/samply/obds2fhir/blob/main/MDS_FHIR2FHIR"
         xmlns:dktk="http://dktk.dkfz.de"
         xmlns:saxon="http://saxon.sf.net"
         xmlns:xalan="http://xml.apache.org/xalan"

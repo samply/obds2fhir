@@ -23,7 +23,7 @@ public class UniqueIdGenerator extends ExtensionFunctionDefinition {
 
     @Override
     public StructuredQName getFunctionQName() {
-        return new StructuredQName("hash", "java:de.samply.adt2fhir", "hash");
+        return new StructuredQName("hash", "java:de.samply.obds2fhir", "hash");
     }
 
     @Override

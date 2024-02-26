@@ -51,7 +51,7 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
 
     @Override
     public StructuredQName getFunctionQName() {
-        return new StructuredQName("hash", "java:de.samply.adt2fhir", "pseudonymize");
+        return new StructuredQName("hash", "java:de.samply.obds2fhir", "pseudonymize");
     }
 
     @Override
@@ -128,7 +128,7 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
                 this.mainzellisteConnection = new MainzellisteConnection(mainzelliste_url, mainzelliste_apikey);
                 this.token = new AddPatientToken();
                 AuditTrailLog auditTrailLog = new AuditTrailLog();
-                auditTrailLog.setUsername("adt2fhir");
+                auditTrailLog.setUsername("obds2fhir");
                 auditTrailLog.setRemoteSystem(String.valueOf(InetAddress.getLocalHost()));
                 auditTrailLog.setReasonForChange("Add Patient");
                 this.token.setAuditTrailLog(auditTrailLog);

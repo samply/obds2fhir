@@ -15,7 +15,7 @@
 
     <xsl:template match="/oBDS">
         <xsl:for-each select="Menge_Patient/Patient">
-            <xsl:result-document method="xml" href="file:{$filepath}/tmp/ADT_Patients/Patient_{hash:hash(Patienten_Stammdaten/@Patient_ID,'','')}_{$customPrefix}.xml">
+            <xsl:result-document method="xml" href="file:{$filepath}/tmp/oBDS_Patients/Patient_{hash:hash(Patienten_Stammdaten/@Patient_ID,'','')}_{$customPrefix}.xml">
             <oBDS Schema_Version="3.0.2">
                 <xsl:copy-of select="/oBDS/@*" />
                     <Menge_Patient>
