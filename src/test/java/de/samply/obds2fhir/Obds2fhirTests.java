@@ -35,30 +35,10 @@ public class Obds2fhirTests {
     @Test
     @Order(1)
     public void applyTransformation(){
-        final TransformerFactoryImpl factory = (TransformerFactoryImpl) TransformerFactory.newInstance("net.sf.saxon.TransformerFactoryImpl", null);
-        net.sf.saxon.Configuration saxonConfig = factory.getConfiguration();
-        PatientPseudonymizer patientPseudonymizer = new PatientPseudonymizer();
-        patientPseudonymizer.initialize(false);
-        ((Processor) saxonConfig.getProcessor()).registerExtensionFunction(patientPseudonymizer);
-        UniqueIdGenerator uniqueIdGenerator = new UniqueIdGenerator();
-        ((Processor) saxonConfig.getProcessor()).registerExtensionFunction(uniqueIdGenerator);
-
-        Transformer ADT2SinglePatientTransformer = null;
-        Transformer ADT2MDStransformer = null;
-        Transformer MDS2FHIRtransformer = null;
-        try {
-            ADT2SinglePatientTransformer = factory.newTransformer(new StreamSource(Obds2fhir.class.getClassLoader().getResourceAsStream("ADT2SinglePatient.xsl")));
-            ADT2SinglePatientTransformer.setParameter("filepath", System.getenv("FILE_PATH"));
-            ADT2MDStransformer = factory.newTransformer(new StreamSource(Obds2fhir.class.getClassLoader().getResourceAsStream("ADT2MDS_FHIR.xsl")));
-            ADT2MDStransformer.setParameter("add_department", false);//TODO test departments
-            MDS2FHIRtransformer = factory.newTransformer(new StreamSource(Obds2fhir.class.getClassLoader().getResourceAsStream("MDS2FHIR.xsl")));
-            MDS2FHIRtransformer.setParameter("filepath", System.getenv("FILE_PATH"));
-            MDS2FHIRtransformer.setParameter("identifier_system", "http://dktk.dkfz.de/fhir/onco/core/CodeSystem/PseudonymArtCS");
-        } catch (TransformerConfigurationException e) {
-            System.out.print("Transformer configuration error");
-        }
-        processXmlFiles("InputADT", ADT2SinglePatientTransformer);
-        processXmlFiles("tmp/ADT_Patients", ADT2MDStransformer, MDS2FHIRtransformer, true);
+        Obds2fhir obds2fhir = new Obds2fhir();
+        obds2fhir.initialize(false);
+        processXmlFiles("InputADT", obds2fhir.toSinglePatientTransformer);
+        processXmlFiles("tmp/ADT_Patients", obds2fhir.ADT2MDStransformer, obds2fhir.MDS2FHIRtransformer, true);
         assertTrue(new File(System.getenv("FILE_PATH")).exists());
     }
 

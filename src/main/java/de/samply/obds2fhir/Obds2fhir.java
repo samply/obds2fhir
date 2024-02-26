@@ -29,7 +29,6 @@ import org.apache.http.util.EntityUtils;
 
 
 public class Obds2fhir {
-
     private static final String INPUT_oBDS ="/InputOBDS/";
     private static final String oBDS_PATIENTS ="/tmp/oBDS_Patients/";
     private static final String FHIR_PATIENTS="/tmp/FHIR_Patients/";
@@ -40,48 +39,26 @@ public class Obds2fhir {
     private static final String ANSI_RED = "\u001B[31m";
     private static final String ANSI_GREEN = "\u001B[32m";
     private static final String DONE = ANSI_GREEN+"...done "+ANSI_RESET;
+    public Transformer toSinglePatientTransformer=null;
+    public Transformer ADT2MDStransformer = null;
+    public Transformer MDS2FHIRtransformer = null;
 
-    public static void main(String[] args) {
-        boolean pseudonymize = false;
+    public void main(String[] args) {
+        boolean pseudonymizeFlag = false;
         if (!System.getenv().getOrDefault("MAINZELLISTE_APIKEY","").isEmpty()){
-            pseudonymize = checkConnections("Mainzelliste", System.getenv().getOrDefault("MAINZELLISTE_URL",""), Boolean.parseBoolean(System.getenv().getOrDefault("WAIT_FOR_CONNECTION","false")));
+            pseudonymizeFlag = checkConnections("Mainzelliste", System.getenv().getOrDefault("MAINZELLISTE_URL",""), Boolean.parseBoolean(System.getenv().getOrDefault("WAIT_FOR_CONNECTION","false")));
         } else {
             System.out.println("missing Mainzelliste Apikey - Skipping relevant processes");
         }
-        boolean FHIRimport = checkConnections("Blaze FHIR Server", System.getenv().getOrDefault("STORE_PATH","") + "?_count=0", Boolean.parseBoolean(System.getenv().getOrDefault("WAIT_FOR_CONNECTION","false")));
+        boolean FHIRimportFlag = checkConnections("Blaze FHIR Server", System.getenv().getOrDefault("STORE_PATH","") + "?_count=0", Boolean.parseBoolean(System.getenv().getOrDefault("WAIT_FOR_CONNECTION","false")));
 
-        System.out.print("initialize transformers... ");
-        final TransformerFactoryImpl factory = (TransformerFactoryImpl) TransformerFactory.newInstance("net.sf.saxon.TransformerFactoryImpl", null);
-        net.sf.saxon.Configuration saxonConfig = factory.getConfiguration();
-        PatientPseudonymizer patientPseudonymizer = new PatientPseudonymizer();
-        patientPseudonymizer.initialize(pseudonymize);
-        ((Processor) saxonConfig.getProcessor()).registerExtensionFunction(patientPseudonymizer);
-        UniqueIdGenerator uniqueIdGenerator = new UniqueIdGenerator();
-        ((Processor) saxonConfig.getProcessor()).registerExtensionFunction(uniqueIdGenerator);
-
-        Transformer ADT2SinglePatientTransformer = null;
-        Transformer oBDS2SinglePatientTransformer = null;
-        Transformer ADT2MDStransformer = null;
-        Transformer MDS2FHIRtransformer = null;
-        try {
-            ADT2SinglePatientTransformer = factory.newTransformer(new StreamSource(Obds2fhir.class.getClassLoader().getResourceAsStream("oBDS2SinglePatient.xsl")));
-            ADT2SinglePatientTransformer.setParameter("filepath", System.getenv().getOrDefault("FILE_PATH",""));
-            ADT2MDStransformer = factory.newTransformer(new StreamSource(Obds2fhir.class.getClassLoader().getResourceAsStream("ADT2MDS_FHIR.xsl")));
-            ADT2MDStransformer.setParameter("add_department", System.getenv().getOrDefault("ADD_DEPARTMENTS",""));
-            MDS2FHIRtransformer = factory.newTransformer(new StreamSource(Obds2fhir.class.getClassLoader().getResourceAsStream("MDS2FHIR.xsl")));
-            MDS2FHIRtransformer.setParameter("filepath", System.getenv().getOrDefault("FILE_PATH",""));
-            MDS2FHIRtransformer.setParameter("identifier_system", System.getenv().getOrDefault("IDENTIFIER_SYSTEM",""));
-        } catch (TransformerConfigurationException e) {
-            System.out.print("Transformer configuration error");
-        }
-        System.out.println(DONE);
+        initialize(pseudonymizeFlag);
 
         long startTime = System.nanoTime();
         System.out.println("Transforming to single Patients... \n");
-        processXmlFiles(INPUT_oBDS, ADT2SinglePatientTransformer);
+        processXmlFiles(INPUT_oBDS, toSinglePatientTransformer);
         long stopTime = System.nanoTime();
         System.out.println(DONE+(stopTime - startTime)/1000000000+ " seconds");
-
 
         startTime = System.nanoTime();
         System.out.println("Transforming to FHIR... \n");
@@ -89,7 +66,7 @@ public class Obds2fhir {
         stopTime = System.nanoTime();
         System.out.println(DONE+(stopTime - startTime)/1000000000+ " seconds");
 
-        if (FHIRimport){
+        if (FHIRimportFlag){
             HttpPost httppost = new HttpPost(System.getenv().getOrDefault("STORE_PATH",""));
             RequestConfig requestConfig = RequestConfig.copy(RequestConfig.DEFAULT).build();
             httppost.setConfig(requestConfig);
@@ -208,6 +185,30 @@ public class Obds2fhir {
         StreamResult transformed = new StreamResult(outputWriter);
         transformer.transform(xmlSource, transformed);
         return outputWriter.toString();
+    }
+
+    public void initialize(boolean pseudonymizeFlag) {
+        System.out.print("initialize transformers... ");
+        final TransformerFactoryImpl factory = (TransformerFactoryImpl) TransformerFactory.newInstance("net.sf.saxon.TransformerFactoryImpl", null);
+        net.sf.saxon.Configuration saxonConfig = factory.getConfiguration();
+        PatientPseudonymizer patientPseudonymizer = new PatientPseudonymizer();
+        patientPseudonymizer.initialize(pseudonymizeFlag);
+        ((Processor) saxonConfig.getProcessor()).registerExtensionFunction(patientPseudonymizer);
+        UniqueIdGenerator uniqueIdGenerator = new UniqueIdGenerator();
+        ((Processor) saxonConfig.getProcessor()).registerExtensionFunction(uniqueIdGenerator);
+
+        try {
+            toSinglePatientTransformer = factory.newTransformer(new StreamSource(Obds2fhir.class.getClassLoader().getResourceAsStream("oBDS2SinglePatient.xsl")));
+            toSinglePatientTransformer.setParameter("filepath", System.getenv().getOrDefault("FILE_PATH",""));
+            ADT2MDStransformer = factory.newTransformer(new StreamSource(Obds2fhir.class.getClassLoader().getResourceAsStream("ADT2MDS_FHIR.xsl")));
+            ADT2MDStransformer.setParameter("add_department", System.getenv().getOrDefault("ADD_DEPARTMENTS",""));
+            MDS2FHIRtransformer = factory.newTransformer(new StreamSource(Obds2fhir.class.getClassLoader().getResourceAsStream("MDS2FHIR.xsl")));
+            MDS2FHIRtransformer.setParameter("filepath", System.getenv().getOrDefault("FILE_PATH",""));
+            MDS2FHIRtransformer.setParameter("identifier_system", System.getenv().getOrDefault("IDENTIFIER_SYSTEM",""));
+        } catch (TransformerConfigurationException e) {
+            System.out.print("Transformer configuration error");
+        }
+        System.out.println(DONE);
     }
 
     private static CloseableHttpClient getHttpClient(Boolean sslVerification) throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
