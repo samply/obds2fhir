@@ -1,4 +1,4 @@
-<Bundle xmlns="http://hl7.org/fhir" xmlns:hash="java:de.samply.adt2fhir">
+<Bundle xmlns="http://hl7.org/fhir" xmlns:hash="java:de.samply.obds2fhir">
    <id value="159e9710bd1eeef9"/>
    <type value="transaction"/>
    <entry>

@@ -2,7 +2,7 @@
 <xsl:stylesheet xmlns="http://www.mds.de/namespace"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xsi="http://www.mds.de/namespace MDS_Suchmodell_v4.xsd"
-    xmlns:hash="java:de.samply.adt2fhir"
+    xmlns:hash="java:de.samply.obds2fhir"
     exclude-result-prefixes="#default"
     version="2.0"
     xpath-default-namespace="http://www.gekid.de/namespace">

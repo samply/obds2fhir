@@ -8,7 +8,7 @@
         xmlns:xs="http://www.w3.org/2001/XMLSchema"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-        xmlns:hash="java:de.samply.adt2fhir"
+        xmlns:hash="java:de.samply.obds2fhir"
         exclude-result-prefixes="xs xsi dktk saxon xalan mds2fhir #default"
         version="2.0"
         xpath-default-namespace="http://www.mds.de/namespace">

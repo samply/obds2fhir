@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ADT_GEKID xmlns="http://www.gekid.de/namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gekid.de/namespace file:/C:/Workspace/adt2fhir/src/main/resources/ADT_GEKID_v2.2.1-dktk_v1.0.0.xsd" Schema_Version="2.0.0">
+<ADT_GEKID xmlns="http://www.gekid.de/namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gekid.de/namespace" Schema_Version="2.0.0">
 	<Absender Absender_ID="Absender_ID1" Software_ID="Software_ID1" Installations_ID="Installations_ID1">
 		<Absender_Bezeichnung>Absender_Bezeichnung0</Absender_Bezeichnung>
 		<Absender_Ansprechpartner>Absender_Ansprechpartner0</Absender_Ansprechpartner>
