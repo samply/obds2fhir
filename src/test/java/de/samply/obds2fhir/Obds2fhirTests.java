@@ -1,7 +1,5 @@
 package de.samply.obds2fhir;
 
-import net.sf.saxon.TransformerFactoryImpl;
-import net.sf.saxon.s9api.Processor;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,39 +7,30 @@ import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
 import uk.org.webcompere.systemstubs.jupiter.SystemStub;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.stream.StreamSource;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import static de.samply.obds2fhir.Obds2fhir.processXmlFiles;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SystemStubsExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Obds2fhirTests {
-
-
-    String pathWithFile=this.getClass().getClassLoader().getResource("clinical_data/InputADT/File-1-ADT2_Testpatient.xml").getPath();
+    String pathWithFile=this.getClass().getClassLoader().getResource("clinical_data/InputOBDS/File-1-ADT2_Testpatient.xml").getPath();
     @SystemStub
     private EnvironmentVariables environmentVariables =
-            new EnvironmentVariables("FILE_PATH", pathWithFile.substring(0, pathWithFile.indexOf("InputADT")));
-
+            new EnvironmentVariables("FILE_PATH", pathWithFile.substring(0, pathWithFile.indexOf("InpuOBDS")));
     @Test
     @Order(1)
     public void applyTransformation(){
         Obds2fhir obds2fhir = new Obds2fhir();
-        obds2fhir.initialize(false);
-        processXmlFiles("InputADT", obds2fhir.toSinglePatientTransformer);
-        processXmlFiles("tmp/ADT_Patients", obds2fhir.ADT2MDStransformer, obds2fhir.MDS2FHIRtransformer, true);
+        obds2fhir.initializeTransformers(false);
+        obds2fhir.processXmlFiles("InputOBDS",1);
+        obds2fhir.processXmlFiles("tmp/oBDS_Patients", 2);
         assertTrue(new File(System.getenv("FILE_PATH")).exists());
     }
-
     @Test
     @Order(2)
     public void comparePatient () throws IOException {
@@ -58,7 +47,6 @@ public class Obds2fhirTests {
         String expected = "FHIR_ADT2_ExpectedPatientMissingDate.xml";
         assertTrue(compare(result, expected));
     }
-
     @Test
     @Order(4)
     public void compareBatch () throws IOException {
@@ -76,7 +64,6 @@ public class Obds2fhirTests {
         expectedString=replaceAllIds(expectedString);
         return (resultString.equals(expectedString));
     }
-
     private String replaceAllIds(String bundle){
         //repalce ids
         String result = bundle.replaceAll("([/\"])([a-z0-9]{16,21}[-0-9]{0,2})(\")","$1repalced-id$3");

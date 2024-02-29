@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
-<xsl:stylesheet xmlns="http://www.mds.de/namespace"
+<xsl:stylesheet xmlns="http://www.basisdatensatz.de/oBDS/XML"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xsi="http://www.mds.de/namespace MDS_Suchmodell_v4.xsd"
     xmlns:hash="java:de.samply.obds2fhir"
     exclude-result-prefixes="#default"
     version="2.0"
-    xpath-default-namespace="http://www.gekid.de/namespace">
+    xpath-default-namespace="http://www.basisdatensatz.de/oBDS/XML">
 
     <xsl:output encoding="UTF-8" indent="yes" method="xml"/>
     <xsl:output omit-xml-declaration="no" indent="yes"/>
     <xsl:strip-space elements="*"/>
     <xsl:param name="add_department" />
 
-<!--    This xsl file transforms ADT xml files (ADT_GEKID_v2.1.1-dktk_v0.1.2 and ADT_GEKID_v2.1.1) to the DKTK searchmodel structure (MDS_Suchmodell_v4) combine with aditional ADT elements
-        MDS + additional Structure (entities) generated from ADT:
+<!--    This xsl file transforms oBDS xml files to the DKTK searchmodel structure (MDS_Suchmodell_v4) combine with aditional oBDS elements
+        MDS + additional Structure (entities) generated from oBDS:
             Patient
                 Sample
                 Diagnosis
@@ -31,7 +31,7 @@
                         SYST-->
 
     <!--Deep copy of the whole document-->
-    <xsl:template match="/ADT_GEKID/Menge_Patient">
+    <xsl:template match="/oBDS/Menge_Patient">
         <Patienten>
             <xsl:apply-templates select="node()| @*"/>
         </Patienten>
@@ -41,17 +41,18 @@
     <!--Generate first Level PATIENT entity (Elements: Geschlecht | Geburtsdatum | Datum_des_letztbekannten_Vitalstatus | Vitalstatus | DKTK_ID | DKTK_LOCAL_ID | DKTK_Einwilligung_erfolgt | Upload_Zeitpunkt_ZS_Antwort | Upload_Zeitpunkt_ZS_Erfolgt )-->
     <xsl:template match="Patient">
         <Patient>
-            <xsl:variable name="Patient_Id" select="Patienten_Stammdaten/@Patient_ID"/>
-            <xsl:variable name="Patient_Pseudonym" select="xsi:Pseudonymize(Patienten_Stammdaten/Patienten_Geschlecht, Patienten_Stammdaten/Patienten_Vornamen, Patienten_Stammdaten/Patienten_Nachname, Patienten_Stammdaten/Patienten_Geburtsname, Patienten_Stammdaten/Patienten_Geburtsdatum, Patienten_Stammdaten/@Patient_ID)"/>
+            <xsl:variable name="Patient_Id" select="@Patient_ID"/>
+            <xsl:variable name="Patient_Pseudonym" select="xsi:Pseudonymize(Patienten_Stammdaten/Geschlecht, Patienten_Stammdaten/Vornamen, Patienten_Stammdaten/Nachname, Patienten_Stammdaten/Geburtsname, Patienten_Stammdaten/Geburtsdatum, @Patient_ID)"/>
             <xsl:attribute name="Patient_ID">
                 <!--<xsl:value-of select="Patienten_Stammdaten/@Patient_ID"/>-->
                 <xsl:value-of select="hash:hash($Patient_Id,'','')"/>
             </xsl:attribute>
             <Geschlecht>
-                <xsl:choose><xsl:when test="Patienten_Stammdaten/Patienten_Geschlecht = 'D'">S</xsl:when>
-                <xsl:otherwise><xsl:value-of select="Patienten_Stammdaten/Patienten_Geschlecht"/></xsl:otherwise></xsl:choose>
+                <xsl:apply-templates select="Patienten_Stammdaten/Geschlech"/>
+                <xsl:choose><xsl:when test="Patienten_Stammdaten/Geschlecht = 'D'">S</xsl:when><!--TODO todelete-->
+                <xsl:otherwise><xsl:value-of select="Patienten_Stammdaten/Geschlecht"/></xsl:otherwise></xsl:choose>
             </Geschlecht>
-            <xsl:if test="Patienten_Stammdaten/Patienten_Geburtsdatum"><Geburtsdatum><xsl:value-of select="Patienten_Stammdaten/Patienten_Geburtsdatum"/></Geburtsdatum></xsl:if>
+            <xsl:apply-templates select="Patienten_Stammdaten/Geburtsdatum"/>
             <xsl:choose>
                 <xsl:when test="./Patienten_Stammdaten/Vitalstatus_Datum"><Datum_des_letztbekannten_Vitalstatus><xsl:value-of select="./Patienten_Stammdaten/Vitalstatus_Datum"/></Datum_des_letztbekannten_Vitalstatus></xsl:when>
                 <xsl:when test="Menge_Meldung/Meldung/Menge_Verlauf/Verlauf/Untersuchungsdatum_Verlauf | Menge_Meldung/Meldung/Tumorzuordnung/Diagnosedatum"><xsl:copy-of select="xsi:Datum_des_letztbekannten_Vitalstatus(Menge_Meldung)"/></xsl:when>

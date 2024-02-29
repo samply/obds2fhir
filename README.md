@@ -31,6 +31,9 @@ Set the environment variables either directly in Java oder via docker compose (s
 ```FILE_PATH``` defines the directory of the clinical oBDS data in the docker container.
 There souldn't be a reason to change this for docker.
 
+```FILE_TYPE``` defines the data type of the clinical data (oBDS|ADT_GEKID).
+This is an optional parameter to increase performance. if not set, each file will be checked individually.
+
 ```STORE_PATH``` defines the URL of the FHIR server API.
 You can use the default value, when using the default BLAZE server (https://github.com/samply/blaze).
 

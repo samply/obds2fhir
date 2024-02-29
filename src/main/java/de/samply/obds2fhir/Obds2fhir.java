@@ -39,34 +39,38 @@ public class Obds2fhir {
     private static final String ANSI_RED = "\u001B[31m";
     private static final String ANSI_GREEN = "\u001B[32m";
     private static final String DONE = ANSI_GREEN+"...done "+ANSI_RESET;
-    public Transformer toSinglePatientTransformer=null;
-    public Transformer ADT2MDStransformer = null;
-    public Transformer MDS2FHIRtransformer = null;
+    private static final String FILE_TYPE = System.getenv().getOrDefault("FILE_TYPE","");
+    private static TransformerFactoryImpl factory = null;
+    public static Transformer oBDS2SinglePatientTransformer = null;
+    public static Transformer ADT2SinglePatientTransformer = null;
+    public static Transformer oBDS2MDSTransformer = null;
+    public static Transformer ADT2MDSTransformer = null;
+    public static Transformer MDS2FHIRTransformer = null;
 
-    public void main(String[] args) {
+    public static void main(String[] args) {
         boolean pseudonymizeFlag = false;
         if (!System.getenv().getOrDefault("MAINZELLISTE_APIKEY","").isEmpty()){
             pseudonymizeFlag = checkConnections("Mainzelliste", System.getenv().getOrDefault("MAINZELLISTE_URL",""), Boolean.parseBoolean(System.getenv().getOrDefault("WAIT_FOR_CONNECTION","false")));
         } else {
             System.out.println("missing Mainzelliste Apikey - Skipping relevant processes");
         }
-        boolean FHIRimportFlag = checkConnections("Blaze FHIR Server", System.getenv().getOrDefault("STORE_PATH","") + "?_count=0", Boolean.parseBoolean(System.getenv().getOrDefault("WAIT_FOR_CONNECTION","false")));
+        boolean importFhirFlag = checkConnections("Blaze FHIR Server", System.getenv().getOrDefault("STORE_PATH","") + "?_count=0", Boolean.parseBoolean(System.getenv().getOrDefault("WAIT_FOR_CONNECTION","false")));
 
-        initialize(pseudonymizeFlag);
+        initializeTransformers(pseudonymizeFlag);
 
         long startTime = System.nanoTime();
         System.out.println("Transforming to single Patients... \n");
-        processXmlFiles(INPUT_oBDS, toSinglePatientTransformer);
+        processXmlFiles(INPUT_oBDS,1);
         long stopTime = System.nanoTime();
         System.out.println(DONE+(stopTime - startTime)/1000000000+ " seconds");
 
         startTime = System.nanoTime();
         System.out.println("Transforming to FHIR... \n");
-        processXmlFiles(oBDS_PATIENTS, ADT2MDStransformer, MDS2FHIRtransformer, true);
+        processXmlFiles(oBDS_PATIENTS, 2);
         stopTime = System.nanoTime();
         System.out.println(DONE+(stopTime - startTime)/1000000000+ " seconds");
 
-        if (FHIRimportFlag){
+        if (importFhirFlag){
             HttpPost httppost = new HttpPost(System.getenv().getOrDefault("STORE_PATH",""));
             RequestConfig requestConfig = RequestConfig.copy(RequestConfig.DEFAULT).build();
             httppost.setConfig(requestConfig);
@@ -76,25 +80,25 @@ public class Obds2fhir {
 
             startTime = System.nanoTime();
             System.out.println("posting fhir resources to blaze store...\n");
-            processXmlFiles(FHIR_PATIENTS, null, httppost);
+            processXmlFiles(FHIR_PATIENTS, null, httppost,3);
             stopTime = System.nanoTime();
             System.out.println(DONE+(stopTime - startTime)/1000000000+ " seconds");
         }
     }
 
 
-    public static void processXmlFiles (String inputData, Transformer transformer){
-        processXmlFiles (inputData, transformer, null, false, null);
+    public static void processXmlFiles(String inputData, int step){
+        processXmlFiles (inputData, false, null,step);
     }
 
-    public static void processXmlFiles (String inputData, Transformer transformer, Transformer transformer2, Boolean transformWrittenResults){
-        processXmlFiles (inputData, transformer, transformer2, transformWrittenResults, null);
+    public static void processXmlFiles (String inputData, Boolean transformWrittenResults, int step){
+        processXmlFiles (inputData, transformWrittenResults, null,step);
     }
 
-    public static void processXmlFiles (String inputData, Transformer transformer, HttpPost httppost){
-        processXmlFiles (inputData, transformer, null, false, httppost);
+    public static void processXmlFiles (String inputData, HttpPost httppost, int step){
+        processXmlFiles (inputData,false, httppost,step);
     }
-    public static void processXmlFiles (String inputData, Transformer transformer, Transformer transformer2, Boolean transformWrittenResults, HttpPost httppost ){
+    public static void processXmlFiles(String inputData, Boolean transformWrittenResults, HttpPost httppost, int step){
         //System.out.print("load "+ filetype + " files...");
         File fileDir = new File(System.getenv().getOrDefault("FILE_PATH","") + inputData);
         File[] listOfFiles = fileDir.listFiles();
@@ -109,7 +113,7 @@ public class Obds2fhir {
                 if (inputFile.isFile() & inputFile.getName().toLowerCase().endsWith(".xml")) {
                     counter+=1;
                     System.out.println("\u001B[AFile " + counter + " of " + (listOfFiles.length) + " / Filename: " + inputFile);
-                    if (transformer ==null){
+                    if (step==3){
                         try {
                             postToFhirStore(inputFile, httppost);
                         } catch (IOException e) {
@@ -129,11 +133,16 @@ public class Obds2fhir {
                             e.printStackTrace();
                         }
                         try {
-                            transformer.setParameter("customPrefix", counter);
-                            String xmlResult = applyXslt(inputFileString, transformer);
-                            if(transformWrittenResults){
-                                transformer2.setParameter("customPrefix", inputFile.getName());
-                                applyXslt(xmlResult, transformer2);
+                            if (step==1){
+                                Transformer transformer= identifyTransformer(inputFileString, step);
+                                transformer.setParameter("customPrefix", counter);
+                                applyXslt(inputFileString, transformer);
+                            } else if (step==2){
+                                Transformer transformer= identifyTransformer(inputFileString, step);
+                                transformer.setParameter("customPrefix", counter);
+                                String xmlResult = applyXslt(inputFileString, transformer);
+                                MDS2FHIRTransformer.setParameter("customPrefix", inputFile.getName());
+                                applyXslt(xmlResult, MDS2FHIRTransformer);
                                 inputFile.delete();
                             }
                             else {
@@ -154,6 +163,34 @@ public class Obds2fhir {
                 }
             }
         }
+    }
+
+    private static Transformer identifyTransformer(String file, int step) {
+        int fileVersion = getFileVersion(file);
+        if (fileVersion == 2){
+            if (step == 1){
+                return ADT2SinglePatientTransformer;
+            } else {
+                return ADT2MDSTransformer;
+            }
+        } else if (fileVersion == 3){
+            if (step == 1){
+                return oBDS2SinglePatientTransformer;
+            } else {
+                return oBDS2MDSTransformer;
+            }
+        }
+        return null;
+    }
+
+    private static int getFileVersion(String xmlContent) {
+        int transformation = 0;
+        if (xmlContent.contains("<ADT_GEKID")) {
+            transformation = 2;
+        } else if (xmlContent.contains("<oBDS")) {
+            transformation = 3;
+        }
+        return transformation;
     }
 
     private static void postToFhirStore(File inputFile, HttpPost httppost) throws IOException {
@@ -187,24 +224,27 @@ public class Obds2fhir {
         return outputWriter.toString();
     }
 
-    public void initialize(boolean pseudonymizeFlag) {
+    public static void initializeTransformers(boolean pseudonymizeFlag) {
         System.out.print("initialize transformers... ");
-        final TransformerFactoryImpl factory = (TransformerFactoryImpl) TransformerFactory.newInstance("net.sf.saxon.TransformerFactoryImpl", null);
+        factory = (TransformerFactoryImpl) TransformerFactory.newInstance("net.sf.saxon.TransformerFactoryImpl", null);
         net.sf.saxon.Configuration saxonConfig = factory.getConfiguration();
         PatientPseudonymizer patientPseudonymizer = new PatientPseudonymizer();
         patientPseudonymizer.initialize(pseudonymizeFlag);
         ((Processor) saxonConfig.getProcessor()).registerExtensionFunction(patientPseudonymizer);
         UniqueIdGenerator uniqueIdGenerator = new UniqueIdGenerator();
         ((Processor) saxonConfig.getProcessor()).registerExtensionFunction(uniqueIdGenerator);
-
         try {
-            toSinglePatientTransformer = factory.newTransformer(new StreamSource(Obds2fhir.class.getClassLoader().getResourceAsStream("oBDS2SinglePatient.xsl")));
-            toSinglePatientTransformer.setParameter("filepath", System.getenv().getOrDefault("FILE_PATH",""));
-            ADT2MDStransformer = factory.newTransformer(new StreamSource(Obds2fhir.class.getClassLoader().getResourceAsStream("ADT2MDS_FHIR.xsl")));
-            ADT2MDStransformer.setParameter("add_department", System.getenv().getOrDefault("ADD_DEPARTMENTS",""));
-            MDS2FHIRtransformer = factory.newTransformer(new StreamSource(Obds2fhir.class.getClassLoader().getResourceAsStream("MDS2FHIR.xsl")));
-            MDS2FHIRtransformer.setParameter("filepath", System.getenv().getOrDefault("FILE_PATH",""));
-            MDS2FHIRtransformer.setParameter("identifier_system", System.getenv().getOrDefault("IDENTIFIER_SYSTEM",""));
+            oBDS2SinglePatientTransformer = factory.newTransformer(new StreamSource(Obds2fhir.class.getClassLoader().getResourceAsStream("oBDS2SinglePatient.xsl")));
+            oBDS2SinglePatientTransformer.setParameter("filepath", System.getenv().getOrDefault("FILE_PATH",""));
+            ADT2SinglePatientTransformer = factory.newTransformer(new StreamSource(Obds2fhir.class.getClassLoader().getResourceAsStream("ADT2SinglePatient.xsl")));
+            ADT2SinglePatientTransformer.setParameter("filepath", System.getenv().getOrDefault("FILE_PATH",""));
+            oBDS2MDSTransformer = factory.newTransformer(new StreamSource(Obds2fhir.class.getClassLoader().getResourceAsStream("oBDS2MDS_FHIR.xsl")));
+            oBDS2MDSTransformer.setParameter("add_department", System.getenv().getOrDefault("ADD_DEPARTMENTS",""));
+            ADT2MDSTransformer = factory.newTransformer(new StreamSource(Obds2fhir.class.getClassLoader().getResourceAsStream("ADT2MDS_FHIR.xsl")));
+            ADT2MDSTransformer.setParameter("add_department", System.getenv().getOrDefault("ADD_DEPARTMENTS",""));
+            MDS2FHIRTransformer = factory.newTransformer(new StreamSource(Obds2fhir.class.getClassLoader().getResourceAsStream("MDS2FHIR.xsl")));
+            MDS2FHIRTransformer.setParameter("filepath", System.getenv().getOrDefault("FILE_PATH",""));
+            MDS2FHIRTransformer.setParameter("identifier_system", System.getenv().getOrDefault("IDENTIFIER_SYSTEM",""));
         } catch (TransformerConfigurationException e) {
             System.out.print("Transformer configuration error");
         }
