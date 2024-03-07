@@ -70,23 +70,15 @@
 
     <!--Generate second Level DIAGNOSIS entity (Elements: Alter_bei_Erstdiagnose | Tumor_Diagnosedatum | Diagnose | ICD-Katalog_Version )-->
     <xsl:template match="Menge_Meldung">
-        <xsl:param name="Patient"/>
+        <xsl:param name="Patient_Id"/>
         <xsl:param name="Tumor_Id"/>
-        <xsl:variable name="Tumor_Meldung" select="Meldung[Tumorzuordnung/@Tumor_ID=$Tumor_Id]"/>
-        <xsl:variable name="diagnoseDatum" select="$Tumor_Meldung/Tumorzuordnung/Diagnosedatum"/>
+        <xsl:variable name="Tumor_Meldungen" select="Meldung[Tumorzuordnung/@Tumor_ID=$Tumor_Id]"/>
+        <xsl:variable name="diagnoseDatum" select="$Tumor_Meldungen/Tumorzuordnung/Diagnosedatum"/>
 
         <Diagnosis>
             <xsl:attribute name="Diagnosis_ID" select="concat('dig', hash:hash($Patient_Id, $Tumor_Id, ''))"/>
-            <xsl:if test="$Diagnosis_Meldung"><!-- don't create those elements if no Diagnose is delivered -->
-                <xsl:element name="Alter_bei_Erstdiagnose">
-                    <xsl:variable name="geb" select="number(replace(../Patienten_Stammdaten/Patienten_Geburtsdatum,'\d\d\.\d\d\.(\d\d\d\d)$','$1'))"/>
-                    <xsl:variable name="diag" select="number(replace($diagnoseDatum,'\d\d\.\d\d\.(\d\d\d\d)$','$1'))"/>
-                    <xsl:variable name="dif" select="$diag - $geb"/>
-                    <xsl:variable name="gebMonths" select="number(replace(../Patienten_Stammdaten/Patienten_Geburtsdatum,'(\d\d)\.(\d\d)\.\d\d\d\d','$2$1'))"/><!--Falls ein Jahr mehr aber ein früherer Zeitpunkt des Jahres besteht (also noch kein ganzes Jahr rum ist) z.B. 14.08.xxxx = 814-->
-                    <xsl:variable name="diagMonths" select="number(replace($diagnoseDatum,'(\d\d)\.(\d\d)\.\d\d\d\d','$2$1'))"/>
-                    <xsl:if test="$diagMonths &lt; $gebMonths"><xsl:value-of select="$dif -1"/></xsl:if>
-                    <xsl:if test="not ($diagMonths &lt; $gebMonths)"><xsl:value-of select="$dif"/></xsl:if>
-                </xsl:element>
+            <xsl:if test="$Tumor_Meldungen/Diagnose"><!-- don't create those elements if no Diagnose is delivered -->
+                <Alter_bei_Erstdiagnose><xsl:value-of select="xsi:date_diff(/oBDS/Menge_Patient/Patient/Patienten_Stammdaten/Geburtsdatum, $Tumor_Meldungen[1]/Tumorzuordnung/Diagnosedatum)"/></Alter_bei_Erstdiagnose>
                 <Tumor_Diagnosedatum><xsl:apply-templates select="$diagnoseDatum"/></Tumor_Diagnosedatum>
                 <xsl:apply-templates select="$Diagnosis_Meldung/Primaertumor_ICD_Code | $Diagnosis_Meldung/Primaertumor_ICD_Version | $Diagnosis_Meldung/Primaertumor_Diagnosetext"/>
             </xsl:if>
@@ -276,7 +268,7 @@
                             <xsl:otherwise><xsl:value-of select="'gen',concat(string-join(xsi:DatumID(TNM_Datum)),TNM_T,TNM_N,TNM_M,TNM_c_p_u_Praefix_T,TNM_c_p_u_Praefix_N,TNM_c_p_u_Praefix_M)"/></xsl:otherwise>
                         </xsl:choose>
                     </xsl:variable>
-                    <xsl:value-of select="concat('ptnm', hash:hash($Patient_Id, $Tumor_Id, $attribute))" />
+                    <xsl:value-of select="concat('ptnm', concat($Patient_Id, $Tumor_Id, $attribute))" />
                 </xsl:attribute>
                 <gesamtpraefix>p</gesamtpraefix>
                 <xsl:if test="TNM_m_Symbol"><TNM-m-Symbol><xsl:value-of select="TNM_m_Symbol"/></TNM-m-Symbol></xsl:if>
@@ -344,7 +336,7 @@
                            <xsl:otherwise><xsl:value-of select="'gen',concat(string-join(xsi:DatumID(TNM_Datum)),TNM_T,TNM_N,TNM_M,TNM_c_p_u_Praefix_T,TNM_c_p_u_Praefix_N,TNM_c_p_u_Praefix_M)"/></xsl:otherwise>
                        </xsl:choose>
                     </xsl:variable>
-                    <xsl:value-of select="concat('tnm', hash:hash($Patient_Id, $Tumor_Id, $attribute))" />
+                    <xsl:value-of select="concat('tnm', concat($Patient_Id, $Tumor_Id, $attribute))" />
                 </xsl:attribute>
                 <gesamtpraefix></gesamtpraefix>
                 <xsl:if test="TNM_m_Symbol"><TNM-m-Symbol><xsl:value-of select="TNM_m_Symbol"/></TNM-m-Symbol></xsl:if>
@@ -664,20 +656,20 @@
 
 
     <!--Rename elements according to MDS-->
-    <xsl:template match="Patienten_Geburtsdatum">
+    <xsl:template match="Geschlecht" >
+        <Geschlecht>
+            <xsl:apply-templates select="node()"/>
+        </Geschlecht>
+    </xsl:template>
+    <xsl:template match="Geburtsdatum">
         <Geburtsdatum>
-            <xsl:apply-templates select="node() | @*"/>
+            <xsl:apply-templates select="node()"/>
         </Geburtsdatum>
     </xsl:template>
     <xsl:template match="Grading">
         <Grading>
-            <xsl:apply-templates select="node() | @*"/>
+            <xsl:apply-templates select="node()"/>
         </Grading>
-    </xsl:template>
-    <xsl:template match="Patienten_Geschlecht" >
-        <Geschlecht>
-            <xsl:apply-templates select="node() | @*"/>
-        </Geschlecht>
     </xsl:template>
     <xsl:template match="Primaertumor_ICD_Code" >
         <Diagnose>
@@ -958,6 +950,20 @@
             <xsl:otherwise>
                 <xsl:value-of select="'empty'"/>
             </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+
+    <xsl:function name="xsi:date_diff">
+        <xsl:param name="date1"/>
+        <xsl:param name="date2"/>
+        <xsl:variable name="year1" select="number(substring($date1,1,4))"/>
+        <xsl:variable name="year2" select="number(substring($date2,1,4))"/>
+        <xsl:variable name="diff" select="$year2 - $year1"/>
+        <xsl:variable name="month1" select="number(substring($date1,6,2))"/>
+        <xsl:variable name="month2" select="number(substring($date2,6,2))"/>
+        <xsl:choose>
+            <xsl:when test="$month2 &lt; $month1"><xsl:value-of select="$diff -1"/></xsl:when>
+            <xsl:otherwise><xsl:value-of select="$diff"/></xsl:otherwise>
         </xsl:choose>
     </xsl:function>
 
