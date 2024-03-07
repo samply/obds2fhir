@@ -59,25 +59,21 @@
                     <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                 </xsl:apply-templates>
             </xsl:if>-->
-            <xsl:for-each select="./Menge_Meldung/Meldung[not(Tumorzuordnung/@Tumor_ID=../preceding-sibling::*/Tumorzuordnung/@Tumor_ID)]">
-                <xsl:apply-templates select="../Menge_Meldung[/Meldung/Tumorzuordnung/@Tumor_ID=]"/>
-                <xsl:with-param name="Tumor_Id" select="./Tumorzuordnung/@Tumor_ID"/>
+            <xsl:for-each select="./Menge_Meldung/Meldung[not(Tumorzuordnung/@Tumor_ID=preceding-sibling::*/Tumorzuordnung/@Tumor_ID)]">
+                <xsl:apply-templates select="../../Menge_Meldung"><!--apply sequential tumor related reports -->
+                    <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
+                    <xsl:with-param name="Tumor_Id" select="./Tumorzuordnung/@Tumor_ID"/>
+                </xsl:apply-templates>
             </xsl:for-each>
         </Patient>
     </xsl:template>
 
     <!--Generate second Level DIAGNOSIS entity (Elements: Alter_bei_Erstdiagnose | Tumor_Diagnosedatum | Diagnose | ICD-Katalog_Version )-->
     <xsl:template match="Menge_Meldung">
+        <xsl:param name="Patient"/>
         <xsl:param name="Tumor_Id"/>
         <xsl:variable name="Tumor_Meldung" select="Meldung[Tumorzuordnung/@Tumor_ID=$Tumor_Id]"/>
-        <xsl:variable name="Diagnosis_Meldung" select="$Tumor_Meldung/Diagnose[not(../Tomorzuordnung/@Tumor_ID=following::Diagnose[../../../Patienten_Stammdaten/@Patient_ID=$Patient_Id]/@Tumor_ID)]"/>
-        <!--Some cases allow ambiguous "Diagnosedatum": therefore set unambiguous Variable "diagnoseDatum"-->
-        <xsl:variable name="diagnoseDatum">
-            <xsl:choose>
-                <xsl:when test="$Diagnosis_Meldung/Diagnosedatum"><xsl:value-of select="$Diagnosis_Meldung/Diagnosedatum"/></xsl:when>
-                <xsl:otherwise><xsl:value-of select="$Tumor_Meldung[1]/Tumorzuordnung/Diagnosedatum"/></xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
+        <xsl:variable name="diagnoseDatum" select="$Tumor_Meldung/Tumorzuordnung/Diagnosedatum"/>
 
         <Diagnosis>
             <xsl:attribute name="Diagnosis_ID" select="concat('dig', hash:hash($Patient_Id, $Tumor_Id, ''))"/>
