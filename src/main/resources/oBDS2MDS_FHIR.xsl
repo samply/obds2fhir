@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <xsl:stylesheet xmlns="http://www.basisdatensatz.de/oBDS/XML"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:xsi="http://www.mds.de/namespace MDS_Suchmodell_v4.xsd"
     xmlns:hash="java:de.samply.obds2fhir"
     exclude-result-prefixes="#default"
@@ -73,14 +74,14 @@
         <xsl:param name="Patient_Id"/>
         <xsl:param name="Tumor_Id"/>
         <xsl:variable name="Tumor_Meldungen" select="Meldung[Tumorzuordnung/@Tumor_ID=$Tumor_Id]"/>
-        <xsl:variable name="diagnoseDatum" select="$Tumor_Meldungen/Tumorzuordnung/Diagnosedatum"/>
+        <xsl:variable name="diagnoseDatum" select="$Tumor_Meldungen[1]/Tumorzuordnung/Diagnosedatum"/>
 
         <Diagnosis>
             <xsl:attribute name="Diagnosis_ID" select="concat('dig', hash:hash($Patient_Id, $Tumor_Id, ''))"/>
             <xsl:if test="$Tumor_Meldungen/Diagnose"><!-- don't create those elements if no Diagnose is delivered -->
-                <Alter_bei_Erstdiagnose><xsl:value-of select="xsi:date_diff(/oBDS/Menge_Patient/Patient/Patienten_Stammdaten/Geburtsdatum, $Tumor_Meldungen[1]/Tumorzuordnung/Diagnosedatum)"/></Alter_bei_Erstdiagnose>
+                <Alter_bei_Erstdiagnose><xsl:value-of select="xsi:date_diff(/oBDS/Menge_Patient/Patient/Patienten_Stammdaten/Geburtsdatum, $diagnoseDatum)"/></Alter_bei_Erstdiagnose>
                 <Tumor_Diagnosedatum><xsl:apply-templates select="$diagnoseDatum"/></Tumor_Diagnosedatum>
-                <xsl:apply-templates select="$Diagnosis_Meldung/Primaertumor_ICD_Code | $Diagnosis_Meldung/Primaertumor_ICD_Version | $Diagnosis_Meldung/Primaertumor_Diagnosetext"/>
+                <xsl:apply-templates select="$Tumor_Meldungen[1]/Tumorzuordnung/Diagnose/Primaertumor_ICD/Code | $Tumor_Meldungen[1]/Tumorzuordnung/Diagnose/Primaertumor_ICD/Version"/>
             </xsl:if>
             <!--Generate third Level TUMOR entity (Elements:  Lokalisation | ICD-O_Katalog_Topographie_Version |  Seitenlokalisation ) -->
             <Tumor>
@@ -900,7 +901,9 @@
                     <xsl:value-of select="$meldungen/Meldung/Tod/Sterbedatum"/>
                 </xsl:when>
                 <xsl:when test="$meldungen/Meldung/Verlauf/Untersuchungsdatum_Verlauf">
-                    <xsl:value-of select="max($meldungen/Meldung/Verlauf/Untersuchungsdatum_Verlauf)"/>
+                    <xsl:variable name="nodes" select="$meldungen/Meldung/Verlauf/Untersuchungsdatum_Verlauf"/>
+                    <xsl:variable name="mostRecentNode" select="$nodes[xs:date(.) = max($nodes/xs:date(.))]"/>
+                    <xsl:value-of select="$mostRecentNode"/>
                 </xsl:when>
                 <!--TODO check
                 <xsl:when test="$meldungen/Meldung/OP/Datum">
