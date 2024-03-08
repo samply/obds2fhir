@@ -77,22 +77,20 @@
         <xsl:variable name="diagnoseDatum" select="$Tumor_Meldungen[1]/Tumorzuordnung/Diagnosedatum"/>
 
         <Diagnosis>
-            <xsl:attribute name="Diagnosis_ID" select="concat('dig', hash:hash($Patient_Id, $Tumor_Id, ''))"/>
+            <xsl:variable name="Diagnosis_Id" select="concat('dig', hash:hash($Patient_Id, $Tumor_Id, ''))"/>
+            <xsl:attribute name="Diagnosis_ID" select="$Diagnosis_Id"/>
             <xsl:if test="$Tumor_Meldungen/Diagnose"><!-- don't create those elements if no Diagnose is delivered -->
                 <Alter_bei_Erstdiagnose><xsl:value-of select="xsi:date_diff(/oBDS/Menge_Patient/Patient/Patienten_Stammdaten/Geburtsdatum, $diagnoseDatum)"/></Alter_bei_Erstdiagnose>
-                <Tumor_Diagnosedatum><xsl:apply-templates select="$diagnoseDatum"/></Tumor_Diagnosedatum>
-                <xsl:apply-templates select="$Tumor_Meldungen[1]/Tumorzuordnung/Diagnose/Primaertumor_ICD/Code | $Tumor_Meldungen[1]/Tumorzuordnung/Diagnose/Primaertumor_ICD/Version"/>
+                <xsl:apply-templates select="$diagnoseDatum | $Tumor_Meldungen[1]/Tumorzuordnung/Primaertumor_ICD | $Tumor_Meldungen/Diagnose/Primaertumor_Diagnosetext | $Tumor_Meldungen/Diagnose/Primaertumor_Topographie_Freitext | $Tumor_Meldungen/Diagnose/Diagnosesicherung"/>
             </xsl:if>
             <!--Generate third Level TUMOR entity (Elements:  Lokalisation | ICD-O_Katalog_Topographie_Version |  Seitenlokalisation ) -->
             <Tumor>
-                <xsl:attribute name="Tumor_ID" select="concat('tmr', hash:hash($Patient_Id, $Tumor_Id, ''))"/>
-                <xsl:if test="$Diagnosis_Meldung"><!-- don't create those elements if no Diagnose is delivered -->
-                    <xsl:if test="$Diagnosis_Meldung/Primaertumor_Topographie_ICD_O"><Lokalisation><xsl:value-of select="$Diagnosis_Meldung/Primaertumor_Topographie_ICD_O"/></Lokalisation></xsl:if>
-                    <xsl:if test="$Diagnosis_Meldung/Primaertumor_Topographie_ICD_O_Version"><ICD-O_Katalog_Topographie_Version><xsl:value-of select="$Diagnosis_Meldung/Primaertumor_Topographie_ICD_O_Version"/></ICD-O_Katalog_Topographie_Version></xsl:if>
-                    <xsl:if test="$Diagnosis_Meldung/Seitenlokalisation"><Seitenlokalisation><xsl:value-of select="$Diagnosis_Meldung/Seitenlokalisation"/></Seitenlokalisation></xsl:if>
+                <xsl:attribute name="Tumor_ID" select="$Diagnosis_Id"/>
+                <xsl:if test="$Tumor_Meldungen/Diagnose"><!-- don't create those elements if no Diagnose is delivered -->
+                    <xsl:apply-templates select="$Tumor_Meldungen/Diagnose/Primaertumor_Topographie_ICD_O | $Tumor_Meldungen[1]/Tumorzuordnung/Seitenlokalisation"/>
                 </xsl:if>
                 <!--Initiate all TUMOR child nodes-->
-                <xsl:apply-templates select="$Diagnosis_Meldung">
+                <xsl:apply-templates select="$Tumor_Meldungen/Diagnose">
                     <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                     <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
                 </xsl:apply-templates>
@@ -672,30 +670,49 @@
             <xsl:apply-templates select="node()"/>
         </Grading>
     </xsl:template>
-    <xsl:template match="Primaertumor_ICD_Code" >
-        <Diagnose>
-            <xsl:apply-templates select="node() | @*"/>
-        </Diagnose>
-    </xsl:template>
-    <xsl:template match="Primaertumor_ICD_Version" >
-        <ICD-Katalog_Version>
-            <xsl:apply-templates select="node() | @*"/>
-        </ICD-Katalog_Version>
+    <xsl:template match="Primaertumor_ICD" >
+        <xsl:if test="Code">
+            <Diagnose>
+                <xsl:apply-templates select="Code"/>
+            </Diagnose>
+        </xsl:if>
+        <xsl:if test="Version">
+            <ICD-Katalog_Version>
+                <xsl:apply-templates select="Version"/>
+            </ICD-Katalog_Version>
+        </xsl:if>
     </xsl:template>
     <xsl:template match="Primaertumor_Diagnosetext" >
         <Diagnose_Text>
             <xsl:apply-templates select="node() | @*"/>
         </Diagnose_Text>
     </xsl:template>
-    <xsl:template match="Primaertumor_Topographie_ICD_O" >
-        <Lokalisation>
+    <xsl:template match="Primaertumor_Topographie_Freitext" >
+        <Primaertumor_Topographie_Freitext>
             <xsl:apply-templates select="node() | @*"/>
-        </Lokalisation>
+        </Primaertumor_Topographie_Freitext>
     </xsl:template>
-    <xsl:template match="Primaertumor_Topographie_ICD_O_Version" >
-        <ICD-O_Katalog_Topographie_Version>
+    <xsl:template match="Diagnosesicherung" >
+        <Diagnosesicherung>
             <xsl:apply-templates select="node() | @*"/>
-        </ICD-O_Katalog_Topographie_Version>
+        </Diagnosesicherung>
+    </xsl:template>
+    <xsl:template match="Primaertumor_Topographie_ICD_O" >
+        <xsl:if test="Code">
+            <Lokalisation>
+                <xsl:apply-templates select="Code"/>
+            </Lokalisation>
+        </xsl:if>
+        <xsl:if test="Version">
+            <ICD-O_Katalog_Topographie_Version>
+                <xsl:apply-templates select="Version"/>
+            </ICD-O_Katalog_Topographie_Version>
+        </xsl:if>
+    </xsl:template>
+    <xsl:template match="Seitenlokalisation" >
+        <Seitenlokalisation>
+            <xsl:apply-templates select="node() | @*"/>
+        </Seitenlokalisation>
     </xsl:template>
     <xsl:template match="Morphologie_Code" >
         <Morphologie>
@@ -729,7 +746,7 @@
     </xsl:template>
     <xsl:template match="Diagnosedatum">
         <Tumor_Diagnosedatum>
-            <xsl:apply-templates select="node() | @*"/>
+            <xsl:apply-templates select="node()"/>
         </Tumor_Diagnosedatum>
     </xsl:template>
     <xsl:template match="TNM_m_Symbol">

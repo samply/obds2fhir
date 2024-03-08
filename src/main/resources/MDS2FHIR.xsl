@@ -320,6 +320,7 @@
                                 <system value="urn:oid:2.16.840.1.113883.6.43.1" />
                                 <xsl:if test="./Tumor/ICD-O_Katalog_Topographie_Version"><version value="{./Tumor/ICD-O_Katalog_Topographie_Version}" /></xsl:if>
                                 <xsl:if test="./Tumor/Lokalisation"><code value="{./Tumor/Lokalisation}" /></xsl:if>
+                                <xsl:if test="./Primaertumor_Topographie_Freitext != ''"><display value="{./Primaertumor_Topographie_Freitext}" /></xsl:if>
                             </coding>
                             <xsl:if test="./Tumor/Seitenlokalisation">
                                 <coding>
@@ -343,6 +344,10 @@
                             </xsl:if>
                         </xsl:for-each>
                         <evidence>
+                            <coding>
+                                <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/DiagnosesicherungCS" />
+                                <code value="{./Diagnosesicherung}" />
+                            </coding>
                             <xsl:for-each select="./Tumor/Histology">
                                 <xsl:if test="./Tumor_Histologiedatum !=''">
                                     <detail>
