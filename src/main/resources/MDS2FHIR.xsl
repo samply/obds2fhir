@@ -1426,14 +1426,27 @@
                         <focus>
                             <reference value="Condition/{$Diagnosis_ID}"/>
                         </focus>
-                        <xsl:if test="./Tumor_Histologiedatum !=''"><effectiveDateTime value="{mds2fhir:transformDate(./Tumor_Histologiedatum)}" /></xsl:if>
+                        <xsl:if test="Tumor_Histologiedatum !=''"><effectiveDateTime value="{mds2fhir:transformDate(Tumor_Histologiedatum)}" /></xsl:if>
                         <valueCodeableConcept>
-                            <coding>
-                                <system value="urn:oid:2.16.840.1.113883.6.43.1" />
-                                <xsl:if test="./ICD-O_Katalog_Morphologie_Version"><version value="{./ICD-O_Katalog_Morphologie_Version}" /></xsl:if>
-                                <xsl:if test="./Morphologie"><code value="{./Morphologie}" /></xsl:if>
-                            </coding>
-                            <xsl:if test="./Morphologie_Freitext"><text value="{./Morphologie_Freitext}" /></xsl:if>
+                            <xsl:choose>
+                                <xsl:when test="Morphologie_ICD_O"><!--oBDS source-->
+                                    <xsl:for-each select="Morphologie_ICD_O">
+                                        <coding>
+                                            <system value="urn:oid:2.16.840.1.113883.6.43.1" />
+                                            <xsl:if test="ICD-O_Katalog_Morphologie_Version"><version value="{ICD-O_Katalog_Morphologie_Version}" /></xsl:if>
+                                            <xsl:if test="Morphologie_Code"><code value="{Morphologie_Code}" /></xsl:if>
+                                        </coding>
+                                    </xsl:for-each>
+                                </xsl:when>
+                                <xsl:otherwise><!--ADT2 source-->
+                                    <coding>
+                                        <system value="urn:oid:2.16.840.1.113883.6.43.1" />
+                                        <xsl:if test="./ICD-O_Katalog_Morphologie_Version"><version value="{./ICD-O_Katalog_Morphologie_Version}" /></xsl:if>
+                                        <xsl:if test="./Morphologie"><code value="{./Morphologie}" /></xsl:if>
+                                    </coding>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:if test="Morphologie_Freitext"><text value="{./Morphologie_Freitext}" /></xsl:if>
                         </valueCodeableConcept>
                         <hasMember>
                             <reference value="Observation/{$Grading_ID}" />
