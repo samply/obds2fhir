@@ -201,6 +201,12 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:for-each>
+        <xsl:for-each select="Menge_Genetik/Genetische_Variante">
+            <xsl:apply-templates select=".[not(concat(Datum,Bezeichnung,Sonstige_Auspraegung)=following::*/Genetische_Variante/concat(Datum,Bezeichnung,Sonstige_Auspraegung))]">
+                <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
+                <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
+            </xsl:apply-templates>
+        </xsl:for-each>
     </xsl:template>
 
     <xsl:template match="Histologie">
@@ -280,14 +286,12 @@
     <xsl:template match="Genetische_Variante">
         <xsl:param name="Patient_Id"/>
         <xsl:param name="Tumor_Id"/>
-        <xsl:if test="Datum !=''">
-            <xsl:variable name="attribute" select="'gen',concat(Datum)"/>
+        <xsl:if test="Bezeichnung !=''">
             <Genetische_Variante>
-                <xsl:attribute name="ID">
-                    <xsl:value-of select="concat('gen', hash:hash($Patient_Id, $Tumor_Id, $attribute))" />
-                </xsl:attribute>
-                <gesamtpraefix><xsl:value-of select="name(.)"/></gesamtpraefix>
-                <xsl:apply-templates select="node()"/>
+                <xsl:attribute name="Gen_ID" select="concat('gen', hash:hash($Patient_Id, $Tumor_Id, Bezeichnung))" />
+                <xsl:if test="Datum"><Datum><xsl:value-of select="Datum"/></Datum></xsl:if>
+                <xsl:if test="Bezeichnung"><Bezeichnung><xsl:value-of select="Bezeichnung"/></Bezeichnung></xsl:if>
+                <xsl:if test="Auspraegung"><Auspraegung><xsl:value-of select="Auspraegung"/></Auspraegung></xsl:if>
             </Genetische_Variante>
         </xsl:if>
     </xsl:template>
