@@ -154,7 +154,6 @@
         </Diagnosis>
     </xsl:template>
 
-
     <xsl:template match="Diagnose">
         <xsl:param name="Patient_Id"/>
         <xsl:param name="Tumor_Id"/>
@@ -181,16 +180,13 @@
         </xsl:for-each>
         <xsl:for-each select="Histologie">
             <xsl:choose>
-                <xsl:when test="@Histologie_ID"><xsl:apply-templates select=".[
-                    not(@Histologie_ID=following::*/Histologie/@Histologie_ID)]">
+                <xsl:when test="@Histologie_ID"><xsl:apply-templates select=".[not(@Histologie_ID=following::*/Histologie/@Histologie_ID)]">
                     <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                     <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
                 </xsl:apply-templates>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:apply-templates select=".[
-                        not(Tumor_Histologiedatum=following::*/Histologie/Tumor_Histologiedatum)]">
-                        <!--not(concat(Tumor_Histologiedatum,Morphologie_Code,Grading)=following::Histologie[../../../../../Patienten_Stammdaten/@Patient_ID=$Patient_Id and ../../../Tumorzuordnung/@Tumor_ID=$Tumor_Id]/concat(Tumor_Histologiedatum,Morphologie_Code,Grading))]">-->
+                    <xsl:apply-templates select=".[not(Tumor_Histologiedatum=following::*/Histologie/Tumor_Histologiedatum)]">
                         <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                         <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
                     </xsl:apply-templates>
@@ -198,8 +194,7 @@
             </xsl:choose>
         </xsl:for-each>
         <xsl:for-each select="Menge_FM/Fernmetastase">
-            <xsl:apply-templates select=".[
-                not(concat(Diagnosedatum,Lokalisation)=following::*/Fernmetastase/concat(Diagnosedatum,Lokalisation))]">
+            <xsl:apply-templates select=".[not(concat(Diagnosedatum,Lokalisation)=following::*/Fernmetastase/concat(Diagnosedatum,Lokalisation))]">
                 <xsl:with-param name="counter"><xsl:value-of select="count(preceding-sibling::Fernmetastase[concat(Diagnosedatum,Lokalisation)=current()/concat(Diagnosedatum,Lokalisation)])" /></xsl:with-param>
                 <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                 <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
@@ -207,8 +202,6 @@
         </xsl:for-each>
     </xsl:template>
 
-
-    <!--Generate fourth Level HISTOLOGY entity (Elements:  Morphologie | ICD-O_Katalog_Morphologie_Version |  Grading ) -->
     <xsl:template match="Histologie">
         <xsl:param name="Patient_Id"/>
         <xsl:param name="Tumor_Id"/>
@@ -219,24 +212,33 @@
                          <xsl:choose>
                              <xsl:when test="@Histologie_ID"><xsl:value-of select="@Histologie_ID"/></xsl:when>
                              <xsl:otherwise>
-                                 <xsl:value-of select="'gen',concat(Tumor_Histologiedatum,Morphologie_Code,Grading)"/>
+                                 <xsl:value-of select="'gen',Tumor_Histologiedatum"/>
                              </xsl:otherwise>
                          </xsl:choose>
                      </xsl:variable>
-                     <xsl:value-of select="concat('hist', hash:hash($Patient_Id, $Tumor_Id, string-join($attribute, '')))" />
+                     <xsl:value-of select="concat('hist', hash:hash($Patient_Id, $Tumor_Id, $attribute))" />
                  </xsl:attribute>
-                 <xsl:apply-templates select="Morphologie_Code | Morphologie_ICD_O_Version | Morphologie_Freitext | Grading "/>
-                 <xsl:if test="Tumor_Histologiedatum"><Tumor_Histologiedatum><xsl:value-of select="Tumor_Histologiedatum"/></Tumor_Histologiedatum></xsl:if>
-                 <xsl:if test="LK_untersucht"><LK_untersucht><xsl:value-of select="LK_untersucht"/></LK_untersucht></xsl:if>
-                 <xsl:if test="LK_befallen"><LK_befallen><xsl:value-of select="LK_befallen"/></LK_befallen></xsl:if>
-                 <xsl:if test="Sentinel_LK_untersucht"><Sentinel_LK_untersucht><xsl:value-of select="Sentinel_LK_untersucht"/></Sentinel_LK_untersucht></xsl:if>
-                 <xsl:if test="Sentinel_LK_befallen"><Sentinel_LK_befallen><xsl:value-of select="Sentinel_LK_befallen"/></Sentinel_LK_befallen></xsl:if>
+                 <xsl:if test="Morphologie_ICD_O">
+                     <xsl:for-each select="Morphologie_ICD_O">
+                         <Morphologie_ICD_O>
+                             <xsl:if test="Code">
+                                 <Morphologie_Code>
+                                     <xsl:value-of select="Code"/>
+                                 </Morphologie_Code>
+                             </xsl:if>
+                             <xsl:if test="Version">
+                                 <ICD-O_Katalog_Morphologie_Version>
+                                     <xsl:value-of select="Version"/>
+                                 </ICD-O_Katalog_Morphologie_Version>
+                             </xsl:if>
+                         </Morphologie_ICD_O>
+                     </xsl:for-each>
+                 </xsl:if>
+                 <xsl:apply-templates select="Tumor_Histologiedatum | Morphologie_Freitext | Grading | LK_untersucht | LK_befallen | Sentinel_LK_untersucht | Sentinel_LK_befallen"/>
              </Histology>
         </xsl:if>
     </xsl:template>
 
-
-    <!--Generate fourth Level METASTASIS entity (Elements:  Datum_diagnostische_Sicherung | Lokalisation_Fernmetastasen |  Fernmetastasen_vorhanden ) -->
     <xsl:template match="Fernmetastase">
         <xsl:param name="counter"/>
         <xsl:param name="Patient_Id"/>
@@ -715,20 +717,35 @@
             <xsl:apply-templates select="node() | @*"/>
         </Seitenlokalisation>
     </xsl:template>
-    <xsl:template match="Morphologie_Code" >
-        <Morphologie>
-            <xsl:apply-templates select="node() | @*"/>
-        </Morphologie>
-    </xsl:template>
-    <xsl:template match="Morphologie_ICD_O_Version" >
-        <ICD-O_Katalog_Morphologie_Version>
-            <xsl:apply-templates select="node() | @*"/>
-        </ICD-O_Katalog_Morphologie_Version>
-    </xsl:template>
     <xsl:template match="Morphologie_Freitext" >
         <Morphologie_Freitext>
             <xsl:apply-templates select="node() | @*"/>
         </Morphologie_Freitext>
+    </xsl:template>
+    <xsl:template match="Tumor_Histologiedatum" >
+        <Tumor_Histologiedatum>
+            <xsl:apply-templates select="node()"/>
+        </Tumor_Histologiedatum>
+    </xsl:template>
+    <xsl:template match="LK_untersucht" >
+        <LK_untersucht>
+            <xsl:apply-templates select="node()"/>
+        </LK_untersucht>
+    </xsl:template>
+    <xsl:template match="LK_befallen" >
+        <LK_befallen>
+            <xsl:apply-templates select="node()"/>
+        </LK_befallen>
+    </xsl:template>
+    <xsl:template match="Sentinel_LK_untersucht" >
+        <Sentinel_LK_untersucht>
+            <xsl:apply-templates select="node()"/>
+        </Sentinel_LK_untersucht>
+    </xsl:template>
+    <xsl:template match="Sentinel_LK_befallen" >
+        <Sentinel_LK_befallen>
+            <xsl:apply-templates select="node()"/>
+        </Sentinel_LK_befallen>
     </xsl:template>
     <xsl:template match="TNM_Datum" >
         <Datum_der_TNM-Dokumentation-Datum_Befund>
