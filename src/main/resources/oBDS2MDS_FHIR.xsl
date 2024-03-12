@@ -81,7 +81,14 @@
             <xsl:attribute name="Diagnosis_ID" select="$Diagnosis_Id"/>
             <xsl:if test="$Tumor_Meldungen/Diagnose"><!-- don't create those elements if no Diagnose is delivered -->
                 <Alter_bei_Erstdiagnose><xsl:value-of select="xsi:date_diff(/oBDS/Menge_Patient/Patient/Patienten_Stammdaten/Geburtsdatum, $diagnoseDatum)"/></Alter_bei_Erstdiagnose>
-                <xsl:apply-templates select="$diagnoseDatum | $Tumor_Meldungen[1]/Tumorzuordnung/Primaertumor_ICD | $Tumor_Meldungen/Diagnose/Primaertumor_Diagnosetext | $Tumor_Meldungen/Diagnose/Primaertumor_Topographie_Freitext | $Tumor_Meldungen/Diagnose/Diagnosesicherung | $Tumor_Meldungen/Diagnose/Allgemeiner_Leistungszustand"/>
+                <xsl:apply-templates select="
+                    $diagnoseDatum |
+                    $Tumor_Meldungen[1]/Tumorzuordnung/Primaertumor_ICD |
+                    $Tumor_Meldungen/Diagnose/Primaertumor_Diagnosetext |
+                    $Tumor_Meldungen/Diagnose/Primaertumor_Topographie_Freitext |
+                    $Tumor_Meldungen/Diagnose/Diagnosesicherung |
+                    $Tumor_Meldungen/Diagnose/Allgemeiner_Leistungszustand |
+                    $Tumor_Meldungen/Diagnose/Menge_Weitere_Klassifikation"/>
             </xsl:if>
             <!--Generate third Level TUMOR entity (Elements:  Lokalisation | ICD-O_Katalog_Topographie_Version |  Seitenlokalisation ) -->
             <Tumor>
@@ -595,6 +602,18 @@
 
     <xsl:template match="Menge_Substanz">
         <xsl:apply-templates select="SYST_Substanz"/>
+    </xsl:template>
+
+    <xsl:template match="Menge_Weitere_Klassifikation">
+        <Menge_Weitere_Klassifikation>
+            <xsl:for-each select="Weitere_Klassifikation">
+                <Weitere_Klassifikation>
+                    <xsl:if test="Datum"><Datum><xsl:value-of select="Datum"/></Datum></xsl:if>
+                    <xsl:if test="Name"><Name><xsl:value-of select="Name"/></Name></xsl:if>
+                    <xsl:if test="Stadium"><Stadium><xsl:value-of select="Stadium"/></Stadium></xsl:if>
+                </Weitere_Klassifikation>
+            </xsl:for-each>
+        </Menge_Weitere_Klassifikation>
     </xsl:template>
 
     <!--!!!!!!!!!!STRUCTURE TRANSFORMATION COMPLETED!!!!!!!!!!-->
