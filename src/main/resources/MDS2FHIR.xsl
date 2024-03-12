@@ -788,13 +788,20 @@
                             </coding>
                         </category>
                         <code>
-                            <xsl:for-each select="./OP_OPS">
+                            <xsl:for-each select="./OP_OPS"><!--legacy-->
                                 <coding>
                                     <system value="http://fhir.de/CodeSystem/bfarm/ops" />
                                     <xsl:if test="../../OP_OPS_Version">
-                                    <version value="{../../OP_OPS_Version}"/>
-                                </xsl:if>
+                                        <version value="{../../OP_OPS_Version}"/>
+                                    </xsl:if>
                                     <code value="{.}" />
+                                </coding>
+                            </xsl:for-each>
+                            <xsl:for-each select="./OPS"><!--oBDS-->
+                                <coding>
+                                    <system value="http://fhir.de/CodeSystem/bfarm/ops" />
+                                    <xsl:if test="Version"><version value="{Version}"/></xsl:if>
+                                    <code value="{Code}" />
                                 </coding>
                             </xsl:for-each>
                         </code>
