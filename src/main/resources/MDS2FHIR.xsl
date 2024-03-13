@@ -394,16 +394,28 @@
                                 </valueCodeableConcept>
                             </extension>
                         </xsl:if>
-                        <xsl:if test="./Intention_Chemotherapie">
-                            <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-SYSTIntention">
-                                <valueCodeableConcept>
-                                    <coding>
-                                        <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTIntentionCS" />
-                                        <code value="{./Intention_Chemotherapie}" />
-                                    </coding>
-                                </valueCodeableConcept>
-                            </extension>
-                        </xsl:if>
+                        <xsl:choose>
+                            <xsl:when test="./Intention_Chemotherapie"><!--legacy mapping-->
+                                <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-SYSTIntention">
+                                    <valueCodeableConcept>
+                                        <coding>
+                                            <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTIntentionCS" />
+                                            <code value="{./Intention_Chemotherapie}" />
+                                        </coding>
+                                    </valueCodeableConcept>
+                                </extension>
+                            </xsl:when>
+                            <xsl:when test="./Intention"><!--oBDS-->
+                                <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-SYSTIntention">
+                                    <valueCodeableConcept>
+                                        <coding>
+                                            <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTIntentionCS" />
+                                            <code value="{./Intention}" />
+                                        </coding>
+                                    </valueCodeableConcept>
+                                </extension>
+                            </xsl:when>
+                        </xsl:choose>
                         <xsl:if test="./Lokale_Beurteilung_Resttumor">
                             <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-LokaleResidualstatus">
                                 <valueReference>
@@ -458,16 +470,21 @@
                                 </coding>
                             </xsl:for-each>
                         </category>
-                        <!-- There may be more substances, but we can only save one here -->
                         <medicationCodeableConcept>
-                        <xsl:choose>
-                            <xsl:when test="./SYST_Substanz">
-                                <text value="{./SYST_Substanz}" />
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <text value="Keine Angabe zur Substanz" />
-                            </xsl:otherwise>
-                        </xsl:choose>
+                            <xsl:for-each select="SYST_Substanz">
+                                <coding>
+                                    <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTIntentionCS" />
+                                    <code value="{./Intention}" />
+                                </coding>
+                            </xsl:for-each>
+                            <xsl:choose>
+                                <xsl:when test="./SYST_Substanz">
+                                    <text><xsl:attribute name="value"><xsl:value-of select="string-join(SYST_Substanz, ';')"/></xsl:attribute></text>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <text value="Keine Angabe zur Substanz" />
+                                </xsl:otherwise>
+                            </xsl:choose>
                         </medicationCodeableConcept>
                         <subject>
                             <reference value="Patient/{$Patient_ID}" />
@@ -618,16 +635,28 @@
                             </valueCodeableConcept>
                         </extension>
                     </xsl:if>
-                    <xsl:if test="./Intention_Strahlentherapie">
-                        <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-SYSTIntention">
-                            <valueCodeableConcept>
-                                <coding>
-                                    <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTIntentionCS" />
-                                    <code value="{./Intention_Strahlentherapie}" />
-                                </coding>
-                            </valueCodeableConcept>
-                        </extension>
-                    </xsl:if>
+                    <xsl:choose>
+                        <xsl:when test="./Intention_Strahlentherapie"><!--legacy mapping-->
+                            <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-SYSTIntention">
+                                <valueCodeableConcept>
+                                    <coding>
+                                        <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTIntentionCS" />
+                                        <code value="{./Intention_Strahlentherapie}" />
+                                    </coding>
+                                </valueCodeableConcept>
+                            </extension>
+                        </xsl:when>
+                        <xsl:when test="./Intention"><!--oBDS-->
+                            <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-SYSTIntention">
+                                <valueCodeableConcept>
+                                    <coding>
+                                        <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTIntentionCS" />
+                                        <code value="{./Intention}" />
+                                    </coding>
+                                </valueCodeableConcept>
+                            </extension>
+                        </xsl:when>
+                    </xsl:choose>
                     <status value="unknown" />
                     <category>
                         <coding>
