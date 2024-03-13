@@ -117,21 +117,21 @@
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:for-each>
-                <xsl:for-each select="$Tumor_Meldung/Menge_ST/ST">
+                <xsl:for-each select="$Tumor_Meldungen/ST">
                     <xsl:choose>
-                        <xsl:when test="@ST_ID"><xsl:apply-templates select=".[not(@ST_ID=following::ST[../../../../Patienten_Stammdaten/@Patient_ID=$Patient_Id and ../../Tumorzuordnung/@Tumor_ID=$Tumor_Id]/@ST_ID)]">
+                        <xsl:when test="@ST_ID"><xsl:apply-templates select=".[not(@ST_ID=following::*/ST/@ST_ID)]">
                             <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                             <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
                         </xsl:apply-templates>
                         </xsl:when>
-                        <xsl:otherwise><xsl:apply-templates select=".[not(Menge_Bestrahlung/Bestrahlung/ST_Beginn_Datum=following::ST[../../../../Patienten_Stammdaten/@Patient_ID=$Patient_Id and ../../Tumorzuordnung/@Tumor_ID=$Tumor_Id]/Menge_Bestrahlung/Bestrahlung/ST_Beginn_Datum)]">
+                        <xsl:otherwise><xsl:apply-templates select=".[not(Menge_Bestrahlung/Bestrahlung/Beginn_=following::*/ST/Menge_Bestrahlung/Bestrahlung/Beginn)]">
                             <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                             <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
                         </xsl:apply-templates>
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:for-each>
-                <xsl:for-each select="$Tumor_Meldung/Menge_SYST/SYST">
+                <xsl:for-each select="$Tumor_Meldungen/SYST">
                     <xsl:choose>
                         <xsl:when test="@SYST_ID"><xsl:apply-templates select=".[not(@SYST_ID=following::SYST[../../../../Patienten_Stammdaten/@Patient_ID=$Patient_Id and ../../Tumorzuordnung/@Tumor_ID=$Tumor_Id]/@SYST_ID)]">
                             <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
@@ -145,7 +145,7 @@
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:for-each>
-                <xsl:for-each select="$Tumor_Meldung/Menge_Verlauf/Verlauf">
+                <xsl:for-each select="$Tumor_Meldungen/Verlauf">
                     <xsl:choose>
                         <xsl:when test="@Verlauf_ID"><xsl:apply-templates select=".[not(@Verlauf_ID=following::Verlauf[../../../../Patienten_Stammdaten/@Patient_ID=$Patient_Id and ../../Tumorzuordnung/@Tumor_ID=$Tumor_Id]/@Verlauf_ID)]">
                             <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
@@ -451,30 +451,23 @@
             <xsl:variable name="attribute">
                 <xsl:choose>
                     <xsl:when test="@ST_ID"><xsl:value-of select="@ST_ID"/></xsl:when>
-                    <xsl:when test="Menge_Bestrahlung[1]/Bestrahlung[1]/ST_Beginn_Datum[1]"><xsl:value-of select="'gen',Menge_Bestrahlung[1]/Bestrahlung[1]/ST_Beginn_Datum[1]"/></xsl:when>
-                    <xsl:otherwise>gen:missing_ID_and_Date</xsl:otherwise>
+                    <xsl:when test="Menge_Bestrahlung[1]/Bestrahlung[1]/Beginn"><xsl:value-of select="'gen',Menge_Bestrahlung[1]/Bestrahlung[1]/Beginn"/></xsl:when>
                 </xsl:choose>
             </xsl:variable>
             <xsl:attribute name="ST_ID" select="concat('st', hash:hash($Patient_Id, $Tumor_Id, string-join($attribute, '')))"/>
-            <xsl:apply-templates select="ST_Intention"></xsl:apply-templates>
-            <xsl:apply-templates select="ST_Stellung_OP"></xsl:apply-templates>
-
-            <xsl:apply-templates select="ST_Ende_Grund"/>
-            <xsl:apply-templates select="Residualstatus"/>
-            <xsl:apply-templates select="Menge_Nebenwirkung">
+            <xsl:if test="Meldeanlass"><Meldeanlass><xsl:value-of select="Meldeanlass"/></Meldeanlass></xsl:if>
+            <xsl:if test="Intention"><Intention_Strahlentherapie><xsl:value-of select="Intention"/></Intention_Strahlentherapie></xsl:if>
+            <xsl:if test="Stellung_OP"><Strahlentherapie_Stellung_zu_operativer_Therapie><xsl:value-of select="Stellung_OP"/></Strahlentherapie_Stellung_zu_operativer_Therapie></xsl:if>
+            <xsl:if test="Ende_Grund"><ST_Ende_Grund><xsl:value-of select="Ende_Grund"/></ST_Ende_Grund></xsl:if>
+            <xsl:apply-templates select="Nebenwirkungen">
                 <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                 <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
                 <xsl:with-param name="Therapy_Id" select="string-join($attribute, '')"/>
             </xsl:apply-templates>
-
-            <xsl:for-each select="Menge_Bestrahlung/Bestrahlung">
-                <xsl:apply-templates select=".[
-                    not(concat(ST_Beginn_Datum, ST_Ende_Datum, ST_Applikationsart, ST_Zielgebiet, ST_Seite_Zielgebiet, ST_Gesamtdosis/Dosis, ST_Einzeldosis/Dosis)=following::*/Bestrahlung/concat(ST_Beginn_Datum, ST_Ende_Datum, ST_Applikationsart, ST_Zielgebiet, ST_Seite_Zielgebiet, ST_Gesamtdosis/Dosis, ST_Einzeldosis/Dosis))]">
-                    <xsl:with-param name="counter"><xsl:value-of select="count(preceding-sibling::Bestrahlung[concat(ST_Beginn_Datum, ST_Ende_Datum, ST_Applikationsart, ST_Zielgebiet, ST_Seite_Zielgebiet, ST_Gesamtdosis/Dosis, ST_Einzeldosis/Dosis)=current()/concat(ST_Beginn_Datum, ST_Ende_Datum, ST_Applikationsart, ST_Zielgebiet, ST_Seite_Zielgebiet, ST_Gesamtdosis/Dosis, ST_Einzeldosis/Dosis)])" /></xsl:with-param>
-                    <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
-                    <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
-                </xsl:apply-templates>
-            </xsl:for-each>
+            <xsl:apply-templates select="Menge_Bestrahlung">
+                <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
+                <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
+            </xsl:apply-templates>
         </ST>
     </xsl:template>
 
@@ -508,45 +501,29 @@
     </xsl:template>
 
     <!-- Sub functions -->
-
-    <xsl:template match="Menge_Nebenwirkung">
+    <xsl:template match="Nebenwirkungen">
         <xsl:param name="Patient_Id"/>
         <xsl:param name="Tumor_Id"/>
         <xsl:param name="Therapy_Id"/>
-        <xsl:apply-templates select="ST_Nebenwirkung[not(concat(Nebenwirkung_Grad,Nebenwirkung_Art,Nebenwirkung_Version)=following-sibling::*/concat(Nebenwirkung_Grad,Nebenwirkung_Art,Nebenwirkung_Version))]">
-                <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
-            <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
-            <xsl:with-param name="Therapy_Id" select="$Therapy_Id"/>
-            </xsl:apply-templates>
-        <xsl:apply-templates select="SYST_Nebenwirkung[not(concat(Nebenwirkung_Grad,Nebenwirkung_Art,Nebenwirkung_Version)=following-sibling::*/concat(Nebenwirkung_Grad,Nebenwirkung_Art,Nebenwirkung_Version))]">
-                <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
-                <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
-                <xsl:with-param name="Therapy_Id" select="$Therapy_Id"/>
-            </xsl:apply-templates>
-    </xsl:template>
-
-    <xsl:template match="ST_Nebenwirkung">
-        <xsl:param name="Patient_Id"/>
-        <xsl:param name="Tumor_Id"/>
-        <xsl:param name="Therapy_Id"/>
-        <ST_Nebenwirkung>
-            <xsl:attribute name="Nebenwirkung_ID" select="concat('stn', hash:hash($Patient_Id, $Tumor_Id, concat($Therapy_Id, Nebenwirkung_Art, Nebenwirkung_Grad, Nebenwirkung_Version)))"/>
-            <xsl:if test="Nebenwirkung_Grad"><Nebenwirkung_Grad><xsl:value-of select="Nebenwirkung_Grad"/></Nebenwirkung_Grad></xsl:if>
-            <xsl:if test="Nebenwirkung_Art"><Nebenwirkung_Art><xsl:value-of select="Nebenwirkung_Art"/></Nebenwirkung_Art></xsl:if>
-            <xsl:if test="Nebenwirkung_Version"><Nebenwirkung_Version><xsl:value-of select="Nebenwirkung_Version"/></Nebenwirkung_Version></xsl:if>
-        </ST_Nebenwirkung>
-    </xsl:template>
-
-    <xsl:template match="SYST_Nebenwirkung">
-        <xsl:param name="Patient_Id"/>
-        <xsl:param name="Tumor_Id"/>
-        <xsl:param name="Therapy_Id"/>
-        <SYST_Nebenwirkung>
-            <xsl:attribute name="Nebenwirkung_ID" select="concat('syn', hash:hash($Patient_Id, $Tumor_Id, concat($Therapy_Id, Nebenwirkung_Art, Nebenwirkung_Grad, Nebenwirkung_Version)))"/>
-            <xsl:if test="Nebenwirkung_Grad"><Nebenwirkung_Grad><xsl:value-of select="Nebenwirkung_Grad"/></Nebenwirkung_Grad></xsl:if>
-            <xsl:if test="Nebenwirkung_Art"><Nebenwirkung_Art><xsl:value-of select="Nebenwirkung_Art"/></Nebenwirkung_Art></xsl:if>
-            <xsl:if test="Nebenwirkung_Version"><Nebenwirkung_Version><xsl:value-of select="Nebenwirkung_Version"/></Nebenwirkung_Version></xsl:if>
-        </SYST_Nebenwirkung>
+        <xsl:for-each select="Menge_Nebenwirkung/Nebenwirkung">
+            <Nebenwirkung>
+                <xsl:attribute name="Nebenwirkung_ID" select="hash:hash($Patient_Id, $Tumor_Id, concat($Therapy_Id, Art/MedDRA_Code, Art/Bezeichnung, Grad, Version))"/>
+                <xsl:if test="Art">
+                    <Art>
+                        <xsl:if test="Art/MedDRA_Code"><MedDRA_Code><xsl:value-of select="Art/MedDRA_Code"/></MedDRA_Code></xsl:if>
+                        <xsl:if test="Art/Bezeichnung"><Bezeichnung><xsl:value-of select="Art/Bezeichnung"/></Bezeichnung></xsl:if>
+                    </Art>
+                </xsl:if>
+                <xsl:if test="Grad"><Grad><xsl:value-of select="Grad"/></Grad></xsl:if>
+                <xsl:if test="Version"><Version><xsl:value-of select="Version"/></Version></xsl:if>
+            </Nebenwirkung>
+        </xsl:for-each>
+        <xsl:for-each select="Grad_maximal2_oder_unbekannt">
+            <Nebenwirkung>
+                <xsl:attribute name="Nebenwirkung_ID" select="hash:hash($Patient_Id, $Tumor_Id, concat($Therapy_Id, .))"/>
+                <Grad_maximal2_oder_unbekannt><xsl:value-of select="."/></Grad_maximal2_oder_unbekannt>
+            </Nebenwirkung>
+        </xsl:for-each>
     </xsl:template>
 
     <xsl:template match="Menge_Therapieart">
@@ -570,20 +547,48 @@
         </xsl:if>
     </xsl:template>
 
-    <xsl:template match="Bestrahlung">
-        <xsl:param name="counter"/>
+    <xsl:template match="Menge_Bestrahlung">
         <xsl:param name="Patient_Id"/>
         <xsl:param name="Tumor_Id"/>
-        <Bestrahlung>
-            <xsl:attribute name="Betrahlung_ID" select="concat('sts', hash:hash($Patient_Id, $Tumor_Id, concat(ST_Beginn_Datum, ST_Ende_Datum, ST_Applikationsart, ST_Zielgebiet, ST_Seite_Zielgebiet, ST_Gesamtdosis/Dosis, ST_Einzeldosis/Dosis)),'-',$counter)"/>
-            <xsl:if test="ST_Zielgebiet"><ST_Zielgebiet><xsl:value-of select="ST_Zielgebiet"/></ST_Zielgebiet></xsl:if>
-            <xsl:if test="ST_Seite_Zielgebiet"><ST_Seite_Zielgebiet><xsl:value-of select="ST_Seite_Zielgebiet"/></ST_Seite_Zielgebiet></xsl:if>
-            <xsl:if test="ST_Beginn_Datum"><ST_Beginn_Datum><xsl:value-of select="ST_Beginn_Datum"/></ST_Beginn_Datum></xsl:if>
-            <xsl:if test="ST_Ende_Datum"><ST_Ende_Datum><xsl:value-of select="ST_Ende_Datum"/></ST_Ende_Datum></xsl:if>
-            <xsl:if test="ST_Applikationsart"><ST_Applikationsart><xsl:value-of select="ST_Applikationsart"/></ST_Applikationsart></xsl:if>
-            <xsl:apply-templates select="ST_Gesamtdosis"/>
-            <xsl:apply-templates select="ST_Einzeldosis"/>
-        </Bestrahlung>
+        <xsl:for-each select="Bestrahlung[not(concat(Beginn,Ende,Applikationsart)=following::*/Bestrahlung/concat(Beginn,Ende,Applikationsart))]">
+                <Bestrahlung>
+                    <xsl:attribute name="Betrahlung_ID" select="concat('sts', hash:hash($Patient_Id, $Tumor_Id, concat(Beginn,Ende,Applikationsart)))"/>
+                    <xsl:if test="Beginn"><ST_Beginn_Datum><xsl:value-of select="Beginn"/></ST_Beginn_Datum></xsl:if>
+                    <xsl:if test="Ende"><ST_Ende_Datum><xsl:value-of select="Ende"/></ST_Ende_Datum></xsl:if>
+                    <xsl:apply-templates select="Applikationsart"/>
+                </Bestrahlung>
+        </xsl:for-each>
+    </xsl:template>
+
+    <xsl:template match="Applikationsart">
+        <Applikationsart>
+            <!-- common elements -->
+            <xsl:if test="node()/Zielgebiet">
+                <Zielgebiet><xsl:value-of select="node()/Zielgebiet"/></Zielgebiet>
+                <xsl:if test="node()/Zielgebiet/CodeVersion2021">
+                    <Zielgebiet_Version>CodeVersion2021</Zielgebiet_Version>
+                </xsl:if>
+                <xsl:if test="node()/Zielgebiet/CodeVersion2014">
+                    <Zielgebiet_Version>CodeVersion2014</Zielgebiet_Version>
+                </xsl:if>
+            </xsl:if>
+            <xsl:if test="node()/Seite_Zielgebiet"><Seite_Zielgebiet><xsl:value-of select="node()/Seite_Zielgebiet"/></Seite_Zielgebiet></xsl:if>
+            <xsl:if test="node()/Gesamtdosis"><Gesamtdosis><xsl:value-of select="node()/Gesamtdosis"/></Gesamtdosis></xsl:if>
+            <xsl:if test="node()/Einzeldosis"><Einzeldosis><xsl:value-of select="node()/Einzeldosis"/></Einzeldosis></xsl:if>
+            <!-- Perkutan & Kontakt & Metabolisch -->
+            <xsl:if test="node()/Strahlenart"><Strahlenart><xsl:value-of select="node()/Strahlenart"/></Strahlenart></xsl:if>
+            <!-- Perkutan & Kontakt -->
+            <xsl:if test="node()/Boost"><Boost><xsl:value-of select="node()/Boost"/></Boost></xsl:if>
+            <!-- Perkutan -->
+            <xsl:if test="node()/Radiochemo"><Radiochemo><xsl:value-of select="node()/Radiochemo"/></Radiochemo></xsl:if>
+            <xsl:if test="node()/Stereotaktisch"><Stereotaktisch><xsl:value-of select="node()/Stereotaktisch"/></Stereotaktisch></xsl:if>
+            <xsl:if test="node()/Atemgetriggert"><Atemgetriggert><xsl:value-of select="node()/Atemgetriggert"/></Atemgetriggert></xsl:if>
+            <!-- Kontakt -->
+            <xsl:if test="node()/Interstitiell_endokavitaer"><Interstitiell_endokavitaer><xsl:value-of select="node()/Interstitiell_endokavitaer"/></Interstitiell_endokavitaer></xsl:if>
+            <xsl:if test="node()/Rate_Type"><Rate_Type><xsl:value-of select="node()/Rate_Type"/></Rate_Type></xsl:if>
+            <!-- Metabolisch -->
+            <xsl:if test="Metabolisch/Metabolisch_Typ"><Metabolisch_Typ><xsl:value-of select="node()/Metabolisch_Typ"/></Metabolisch_Typ></xsl:if>
+        </Applikationsart>
     </xsl:template>
 
     <xsl:template match="ST_Gesamtdosis">
@@ -804,20 +809,10 @@
             <xsl:apply-templates select="node() | @*"/>
         </UICC_Stadium>
     </xsl:template>
-    <xsl:template match="ST_Intention">
-        <Intention_Strahlentherapie>
-        <xsl:apply-templates select="node() | @*"/>
-        </Intention_Strahlentherapie>
-    </xsl:template>
     <xsl:template match="SYST_Intention">
         <Intention_Chemotherapie>
         <xsl:apply-templates select="node() | @*"/>
         </Intention_Chemotherapie>
-    </xsl:template>
-    <xsl:template match="ST_Stellung_OP">
-        <Strahlentherapie_Stellung_zu_operativer_Therapie>
-            <xsl:apply-templates select="node() | @*"/>
-        </Strahlentherapie_Stellung_zu_operativer_Therapie>
     </xsl:template>
     <xsl:template match="SYST_Stellung_OP">
         <Systemische_Therapie_Stellung_zu_operativer_Therapie>
@@ -841,11 +836,6 @@
     </xsl:template>
 
     <!-- remove ADT Namespace -->
-    <xsl:template match="ST_Ende_Grund">
-        <ST_Ende_Grund>
-            <xsl:apply-templates select="node() | @*"/>
-        </ST_Ende_Grund>
-    </xsl:template>
     <xsl:template match="SYST_Therapieart">
         <SYST_Therapieart>
             <xsl:apply-templates select="node() | @*"/>
