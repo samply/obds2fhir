@@ -657,7 +657,17 @@
                             </extension>
                         </xsl:when>
                     </xsl:choose>
-                    <status value="unknown" />
+                    <xsl:choose>
+                        <xsl:when test="Meldeanlass='behandlungsbeginn'">
+                            <status value="in-progress" />
+                        </xsl:when>
+                        <xsl:when test="Meldeanlass='behandlungsende'">
+                            <status value="completed" />
+                        </xsl:when>
+                        <xsl:otherwise><!--TODO mapping with ende grund-->
+                            <status value="unknown" />
+                        </xsl:otherwise>
+                    </xsl:choose>
                     <category>
                         <coding>
                             <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTTherapieartCS" />
@@ -678,27 +688,41 @@
                     <reasonReference>
                         <reference value="Condition/{$Diagnosis_ID}" />
                     </reasonReference> 
-                    <xsl:if test="./Lokale_Beurteilung_Resttumor or ./Gesamtbeurteilung_Resttumor">
-                    <outcome>
-                        <xsl:if test="./Lokale_Beurteilung_Resttumor">
-                        <coding>
-                            <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/LokaleBeurteilungResidualstatusCS" />
-                            <code value="{./Lokale_Beurteilung_Resttumor}" />
-                        </coding>
+                    <xsl:if test="./Lokale_Beurteilung_Resttumor or ./Gesamtbeurteilung_Resttumor"><!--legacy ADT, not present in oBDS-->
+                        <outcome>
+                            <xsl:if test="./Lokale_Beurteilung_Resttumor">
+                                <coding>
+                                    <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/LokaleBeurteilungResidualstatusCS" />
+                                    <code value="{./Lokale_Beurteilung_Resttumor}" />
+                                </coding>
+                            </xsl:if>
+                            <xsl:if test="./Gesamtbeurteilung_Resttumor">
+                                <coding>
+                                    <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/GesamtbeurteilungResidualstatusCS" />
+                                    <code value="{./Gesamtbeurteilung_Resttumor}" />
+                                </coding>
+                            </xsl:if>
+                        </outcome>
                     </xsl:if>
-                    <xsl:if test="./Gesamtbeurteilung_Resttumor">
-                        <coding>
-                            <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/GesamtbeurteilungResidualstatusCS" />
-                            <code value="{./Gesamtbeurteilung_Resttumor}" />
-                        </coding>
-                    </xsl:if>
-                    </outcome>
-                </xsl:if>
-                <!--<xsl:for-each select="./ST_Nebenwirkung">
-                    <complication>
-                        <text value="./Nebenwirkung_Art"/>
-                    </complication>
-                </xsl:for-each>-->
+                    <xsl:for-each select="./Nebenwirkung">
+                        <complication>
+                            <xsl:choose>
+                                <xsl:when test="Grad_maximal2_oder_unbekannt">
+                                    <text value="Schweregrad von Nebenwirkungen (K|1|2|U): {Grad_maximal2_oder_unbekannt}"/>
+                                </xsl:when>
+                                <xsl:when test="Art">
+                                    <xsl:choose>
+                                        <xsl:when test="Art/MedDRA_Code">
+                                            <text value="Nebenwirkung: Art - '{Art/MedDRA_Code}'; Grad - '{Grad}'; Version - '{Version}'"/>
+                                        </xsl:when>
+                                        <xsl:when test="Art/Bezeichnung">
+                                            <text value="Nebenwirkung: Bezeichnung - '{Art/Bezeichnung}'; Grad - '{Grad}'; Version - '{Version}'"/>
+                                        </xsl:when>
+                                    </xsl:choose>
+                                </xsl:when>
+                            </xsl:choose>
+                        </complication>
+                    </xsl:for-each>
                 </Procedure>
             </resource>
             <request>
@@ -1141,7 +1165,7 @@
                         <id value="{$TNM_ID}" />
                         <meta>
                             <xsl:choose>
-                                <xsl:when test="./gesamtpraefix='p' or ./c-p-u-Präfix_T='p' or ./c-p-u-Präfix_N='p' or ./c-p-u-Präfix_M='p'">
+                                <xsl:when test="./gesamtpraefix='pTNM' or ./gesamtpraefix='p' or ./c-p-u-Präfix_T='p' or ./c-p-u-Präfix_N='p' or ./c-p-u-Präfix_M='p'">
                                     <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-TNMp" />
                                 </xsl:when>
                                 <xsl:otherwise>
@@ -1152,7 +1176,7 @@
                         <status value="final" />
                         <code>
                             <xsl:choose>
-                                <xsl:when test="./gesamtpraefix='p' or ./c-p-u-Präfix_T='p' or ./c-p-u-Präfix_N='p' or ./c-p-u-Präfix_M='p'">
+                                <xsl:when test="./gesamtpraefix='pTNM' or ./gesamtpraefix='p' or ./c-p-u-Präfix_T='p' or ./c-p-u-Präfix_N='p' or ./c-p-u-Präfix_M='p'">
                                     <coding>
                                         <system value="http://loinc.org" />
                                         <code>
@@ -1160,7 +1184,7 @@
                                         </code>
                                     </coding>
                                 </xsl:when>
-                                <xsl:when test="./gesamtpraefix='c' or ./c-p-u-Präfix_T='c' or ./c-p-u-Präfix_N='c' or ./c-p-u-Präfix_M='c'">
+                                <xsl:when test="./gesamtpraefix='cTNM' or ./gesamtpraefix='c' or ./c-p-u-Präfix_T='c' or ./c-p-u-Präfix_N='c' or ./c-p-u-Präfix_M='c'">
                                     <coding>
                                         <system value="http://loinc.org" />
                                         <code>

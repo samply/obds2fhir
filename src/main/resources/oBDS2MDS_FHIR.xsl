@@ -455,8 +455,7 @@
                 </xsl:choose>
             </xsl:variable>
             <xsl:attribute name="ST_ID" select="concat('st', hash:hash($Patient_Id, $Tumor_Id, string-join($attribute, '')))"/>
-            <xsl:if test="Meldeanlass"><Meldeanlass><xsl:value-of select="Meldeanlass"/></Meldeanlass></xsl:if>
-            <xsl:if test="Intention"><Intention_Strahlentherapie><xsl:value-of select="Intention"/></Intention_Strahlentherapie></xsl:if>
+            <xsl:apply-templates select="Meldeanlass | Intention"/>
             <xsl:if test="Stellung_OP"><Strahlentherapie_Stellung_zu_operativer_Therapie><xsl:value-of select="Stellung_OP"/></Strahlentherapie_Stellung_zu_operativer_Therapie></xsl:if>
             <xsl:if test="Ende_Grund"><ST_Ende_Grund><xsl:value-of select="Ende_Grund"/></ST_Ende_Grund></xsl:if>
             <xsl:apply-templates select="Nebenwirkungen">
@@ -524,10 +523,6 @@
                 <Grad_maximal2_oder_unbekannt><xsl:value-of select="."/></Grad_maximal2_oder_unbekannt>
             </Nebenwirkung>
         </xsl:for-each>
-    </xsl:template>
-
-    <xsl:template match="Menge_Therapieart">
-            <xsl:apply-templates select="SYST_Therapieart"/>
     </xsl:template>
 
     <xsl:template match="Tod">
@@ -605,10 +600,6 @@
         </ST_Einzeldosis>
     </xsl:template>
 
-    <xsl:template match="Menge_Substanz">
-        <xsl:apply-templates select="SYST_Substanz"/>
-    </xsl:template>
-
     <xsl:template match="Menge_Weitere_Klassifikation">
         <Menge_Weitere_Klassifikation>
             <xsl:for-each select="Weitere_Klassifikation">
@@ -619,6 +610,18 @@
                 </Weitere_Klassifikation>
             </xsl:for-each>
         </Menge_Weitere_Klassifikation>
+    </xsl:template>
+
+    <xsl:template match="Menge_Substanz">
+        <xsl:for-each select="Substanz">
+            <xsl:if test="Bezeichnung"><SYST_Substanz><xsl:value-of select="Bezeichnung"/></SYST_Substanz></xsl:if>
+            <xsl:if test="ATC">
+                <SYST_Substanz-ATC>
+                    <xsl:if test="ATC/Code"><Code><xsl:value-of select="ATC/Code"/></Code></xsl:if>
+                    <xsl:if test="ATC/Version"><Version><xsl:value-of select="ATC/Version"/></Version></xsl:if>
+                </SYST_Substanz-ATC>
+            </xsl:if>
+        </xsl:for-each>
     </xsl:template>
 
     <!--!!!!!!!!!!STRUCTURE TRANSFORMATION COMPLETED!!!!!!!!!!-->
@@ -809,38 +812,18 @@
             <xsl:apply-templates select="node() | @*"/>
         </UICC_Stadium>
     </xsl:template>
-    <xsl:template match="SYST_Intention">
-        <Intention_Chemotherapie>
+    <xsl:template match="Intention">
+        <Intention>
         <xsl:apply-templates select="node() | @*"/>
-        </Intention_Chemotherapie>
-    </xsl:template>
-    <xsl:template match="SYST_Stellung_OP">
-        <Systemische_Therapie_Stellung_zu_operativer_Therapie>
-            <xsl:apply-templates select="node() | @*"/>
-        </Systemische_Therapie_Stellung_zu_operativer_Therapie>
+        </Intention>
     </xsl:template>
     <xsl:template match="Untersuchungsdatum_Verlauf">
         <Untersuchungs-Befunddatum_im_Verlauf>
             <xsl:apply-templates select="node() | @*"/>
         </Untersuchungs-Befunddatum_im_Verlauf>
     </xsl:template>
-    <xsl:template match="SYST_Ende_Grund">
-        <SYST_Ende_Grund>
-            <xsl:apply-templates select="node() | @*"/>
-        </SYST_Ende_Grund>
-    </xsl:template>
-    <xsl:template match="SYST_Substanz">
-        <SYST_Substanz>
-            <xsl:apply-templates select="node() | @*"/>
-        </SYST_Substanz>
-    </xsl:template>
 
     <!-- remove ADT Namespace -->
-    <xsl:template match="SYST_Therapieart">
-        <SYST_Therapieart>
-            <xsl:apply-templates select="node() | @*"/>
-        </SYST_Therapieart>
-    </xsl:template>
     <xsl:template match="Sterbedatum">
         <Sterbedatum>
             <xsl:apply-templates select="node() | @*"/>
@@ -861,6 +844,11 @@
             <xsl:apply-templates select="node() | @*"/>
         </Todesursache_ICD_Version>
     </xsl:template>
+    <xsl:template match="Meldeanlass">
+        <Meldeanlass>
+            <xsl:apply-templates select="node() | @*"/>
+        </Meldeanlass>
+    </xsl:template>
 
 
 
@@ -874,7 +862,6 @@
     <xsl:template match="Menge_Adresse"/>
     <xsl:template match="Meldedatum"/>
     <xsl:template match="Meldebegruendung"/>
-    <xsl:template match="Meldeanlass"/>
     <xsl:template match="Tumorzuordnung"/>
     <xsl:template match="Menge_Tumorkonferenz"/>
     <xsl:template match="Menge_Zusatzitem"/>
