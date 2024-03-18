@@ -384,16 +384,28 @@
                         <meta>
                             <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-MedicationStatement-Systemtherapie" />
                         </meta>
-                        <xsl:if test="./Systemische_Therapie_Stellung_zu_operativer_Therapie">
-                            <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-StellungZurOp">
-                                <valueCodeableConcept>
-                                    <coding>
-                                        <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTStellungOPCS" />
-                                        <code value="{./Systemische_Therapie_Stellung_zu_operativer_Therapie}" />
-                                    </coding>
-                                </valueCodeableConcept>
-                            </extension>
-                        </xsl:if>
+                        <xsl:choose>
+                            <xsl:when test="./Systemische_Therapie_Stellung_zu_operativer_Therapie"><!--legacy mapping-->
+                                <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-StellungZurOp">
+                                    <valueCodeableConcept>
+                                        <coding>
+                                            <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTStellungOPCS" />
+                                            <code value="{./Systemische_Therapie_Stellung_zu_operativer_Therapie}" />
+                                        </coding>
+                                    </valueCodeableConcept>
+                                </extension>
+                            </xsl:when>
+                            <xsl:when test="./Stellung_OP"><!--oBDS-->
+                                <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-StellungZurOp">
+                                    <valueCodeableConcept>
+                                        <coding>
+                                            <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTStellungOPCS" />
+                                            <code value="{./Stellung_OP}" />
+                                        </coding>
+                                    </valueCodeableConcept>
+                                </extension>
+                            </xsl:when>
+                        </xsl:choose>
                         <xsl:choose>
                             <xsl:when test="./Intention_Chemotherapie"><!--legacy mapping-->
                                 <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-SYSTIntention">
@@ -625,16 +637,28 @@
                         <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Procedure-Strahlentherapie" />
                     </meta>
 <!--                    TODO: Betrahlungen abdecken; Datum ergänzen-->
-                    <xsl:if test="./Strahlentherapie_Stellung_zu_operativer_Therapie">
-                        <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-StellungZurOp">
-                            <valueCodeableConcept>
-                                <coding>
-                                    <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTStellungOPCS" />
-                                    <code value="{./Strahlentherapie_Stellung_zu_operativer_Therapie}" />
-                                </coding>
-                            </valueCodeableConcept>
-                        </extension>
-                    </xsl:if>
+                    <xsl:choose>
+                        <xsl:when test="./Strahlentherapie_Stellung_zu_operativer_Therapie"><!--legacy mapping-->
+                            <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-StellungZurOp">
+                                <valueCodeableConcept>
+                                    <coding>
+                                        <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTStellungOPCS" />
+                                        <code value="{./Strahlentherapie_Stellung_zu_operativer_Therapie}" />
+                                    </coding>
+                                </valueCodeableConcept>
+                            </extension>
+                        </xsl:when>
+                        <xsl:when test="./Stellung_OP"><!--oBDS-->
+                            <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-StellungZurOp">
+                                <valueCodeableConcept>
+                                    <coding>
+                                        <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTStellungOPCS" />
+                                        <code value="{./Stellung_OP}" />
+                                    </coding>
+                                </valueCodeableConcept>
+                            </extension>
+                        </xsl:when>
+                    </xsl:choose>
                     <xsl:choose>
                         <xsl:when test="./Intention_Strahlentherapie"><!--legacy mapping-->
                             <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-SYSTIntention">

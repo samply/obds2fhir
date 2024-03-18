@@ -454,9 +454,8 @@
                     <xsl:when test="Menge_Bestrahlung[1]/Bestrahlung[1]/Beginn"><xsl:value-of select="'gen',Menge_Bestrahlung[1]/Bestrahlung[1]/Beginn"/></xsl:when>
                 </xsl:choose>
             </xsl:variable>
-            <xsl:attribute name="ST_ID" select="concat('st', hash:hash($Patient_Id, $Tumor_Id, string-join($attribute, '')))"/>
-            <xsl:apply-templates select="Meldeanlass | Intention"/>
-            <xsl:if test="Stellung_OP"><Strahlentherapie_Stellung_zu_operativer_Therapie><xsl:value-of select="Stellung_OP"/></Strahlentherapie_Stellung_zu_operativer_Therapie></xsl:if>
+            <xsl:attribute name="ST_ID" select="concat('st', concat($Patient_Id, $Tumor_Id, string-join($attribute, '')))"/>
+            <xsl:apply-templates select="Meldeanlass | Intention | Stellung_OP"/>
             <xsl:if test="Ende_Grund"><ST_Ende_Grund><xsl:value-of select="Ende_Grund"/></ST_Ende_Grund></xsl:if>
             <xsl:apply-templates select="Nebenwirkungen">
                 <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
@@ -478,24 +477,22 @@
             <xsl:variable name="attribute">
                 <xsl:choose>
                     <xsl:when test="@SYST_ID"><xsl:value-of select="@SYST_ID"/></xsl:when>
-                    <xsl:when test="SYST_Beginn_Datum"><xsl:value-of select="'gen',SYST_Beginn_Datum"/></xsl:when>
-                    <xsl:otherwise>gen:missing_ID_and_Date</xsl:otherwise>
-                </xsl:choose></xsl:variable>
+                    <xsl:when test="Beginn"><xsl:value-of select="'gen',Beginn"/></xsl:when>
+                </xsl:choose>
+            </xsl:variable>
             <xsl:attribute name="SYST_ID" select="concat('syst', hash:hash($Patient_Id, $Tumor_Id, string-join($attribute, '')))"/>
-            <xsl:apply-templates select="SYST_Intention"></xsl:apply-templates>
-            <xsl:apply-templates select="SYST_Stellung_OP"></xsl:apply-templates>
-            <xsl:apply-templates select="Menge_Therapieart"/>
-            <xsl:apply-templates select="SYST_Ende_Grund"/>
-            <xsl:apply-templates select="Residualstatus"/>
-            <xsl:apply-templates select="Menge_Nebenwirkung">
+            <xsl:apply-templates select="Meldeanlass | Intention | Stellung_OP"/>
+            <xsl:if test="Therapieart"><SYST_Therapieart><xsl:value-of select="Therapieart"/></SYST_Therapieart></xsl:if>
+            <xsl:if test="Protokoll"><Systemische_Therapie_Protokoll><xsl:value-of select="Protokoll"/></Systemische_Therapie_Protokoll></xsl:if>
+            <xsl:if test="Beginn"><Systemische_Therapie_Beginn><xsl:value-of select="Beginn"/></Systemische_Therapie_Beginn></xsl:if>
+            <xsl:apply-templates select="Menge_Substanz"/>
+            <xsl:if test="Ende_Grund"><SYST_Ende_Grund><xsl:value-of select="Ende_Grund"/></SYST_Ende_Grund></xsl:if>
+            <xsl:if test="Ende"><Systemische_Therapie_Ende><xsl:value-of select="Ende"/></Systemische_Therapie_Ende></xsl:if>
+            <xsl:apply-templates select="Nebenwirkungen">
                 <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                 <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
                 <xsl:with-param name="Therapy_Id" select="string-join($attribute, '')"/>
             </xsl:apply-templates>
-            <xsl:if test="SYST_Beginn_Datum"><Systemische_Therapie_Beginn><xsl:value-of select="SYST_Beginn_Datum"/></Systemische_Therapie_Beginn></xsl:if>
-            <xsl:if test="SYST_Ende_Datum"><Systemische_Therapie_Ende><xsl:value-of select="SYST_Ende_Datum"/></Systemische_Therapie_Ende></xsl:if>
-            <xsl:if test="SYST_Protokoll"><Systemische_Therapie_Protokoll><xsl:value-of select="SYST_Protokoll"/></Systemische_Therapie_Protokoll></xsl:if>
-            <xsl:apply-templates select="Menge_Substanz"/>
         </SYST>
     </xsl:template>
 
@@ -814,8 +811,13 @@
     </xsl:template>
     <xsl:template match="Intention">
         <Intention>
-        <xsl:apply-templates select="node() | @*"/>
+            <xsl:apply-templates select="node() | @*"/>
         </Intention>
+    </xsl:template>
+    <xsl:template match="Stellung_OP">
+        <Stellung_OP>
+            <xsl:apply-templates select="node() | @*"/>
+        </Stellung_OP>
     </xsl:template>
     <xsl:template match="Untersuchungsdatum_Verlauf">
         <Untersuchungs-Befunddatum_im_Verlauf>
