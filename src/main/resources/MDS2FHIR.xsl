@@ -465,8 +465,15 @@
                         <medicationCodeableConcept>
                             <xsl:for-each select="SYST_Substanz">
                                 <coding>
-                                    <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTIntentionCS" />
-                                    <code value="{./Intention}" />
+                                    <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTSubstanzCS" />
+                                    <code value="{.}" />
+                                </coding>
+                            </xsl:for-each>
+                            <xsl:for-each select="SYST_Substanz-ATC">
+                                <coding>
+                                    <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTSubstanzATCCS" />
+                                    <version value="{Version}"/>
+                                    <code value="{Code}" />
                                 </coding>
                             </xsl:for-each>
                             <xsl:choose>
@@ -498,13 +505,12 @@
                 </request>
             </entry>
 
-            <!--<xsl:for-each select="./SYST_Nebenwirkung">
-                <xsl:variable name="Nebenwirkung_ID" select="mds2fhir:getID(./@Nebenwirkung_ID, '', generate-id())" as="xs:string" />
+            <xsl:for-each select="Nebenwirkung">
                 <entry>
-                    <fullUrl value="http://example.com/AdverseEvent/{$Nebenwirkung_ID}" />
+                    <fullUrl value="http://example.com/AdverseEvent/{@Nebenwirkung_ID}" />
                     <resource>
                         <AdverseEvent xmlns="http://hl7.org/fhir">
-                            <id value="{$Nebenwirkung_ID}" />
+                            <id value="{@Nebenwirkung_ID}" />
                             <actuality value="actual" />
                             <event>
                                 <text value="{./Nebenwirkung_Art}" />
@@ -521,10 +527,10 @@
                     </resource>
                     <request>
                         <method value="PUT" />
-                        <url value="AdverseEvent/{$Nebenwirkung_ID}" />
+                        <url value="AdverseEvent/{@Nebenwirkung_ID}"/>
                     </request>
                 </entry>
-            </xsl:for-each>-->
+            </xsl:for-each>
 
             <xsl:if test="./Gesamtbeurteilung_Resttumor">
                 <entry>
@@ -1646,7 +1652,10 @@
         <xsl:variable name="month" select="substring($fixedDate, 4, 2)" as="xs:string" />
         <xsl:variable name="year" select="substring($fixedDate, 7, 4)" as="xs:string" />
         <xsl:choose>
-            <xsl:when test="$day='00'">
+            <xsl:when test="matches($date, '\d{4}-\d{2}-\d{2}')"><!-- oBDS date -->
+                <xsl:value-of select="$date"/>
+            </xsl:when>
+            <xsl:when test="$day='00'"><!-- legacy ADT date mapping -->
                 <xsl:choose>
                     <xsl:when test="$month='00'">
                         <xsl:value-of select="$year" />
