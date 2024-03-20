@@ -62,15 +62,12 @@
                 <xsl:when test="Menge_Meldung/Meldung/Menge_Verlauf/Verlauf/Tod"><Vitalstatus>verstorben</Vitalstatus></xsl:when>
                 <xsl:when test="not(Menge_Meldung/Meldung/Menge_Verlauf/Verlauf/Tod)"><Vitalstatus >lebend</Vitalstatus></xsl:when>
             </xsl:choose>
-            <DKTK_ID>TODO</DKTK_ID>
             <DKTK_LOCAL_ID><xsl:value-of select="$Patient_Pseudonym"/></DKTK_LOCAL_ID>
             <xsl:choose>
                 <xsl:when test="Patienten_Stammdaten/DKTK_Einwilligung_erfolgt='ja'"><DKTK_Einwilligung_erfolgt>true</DKTK_Einwilligung_erfolgt></xsl:when>
                 <xsl:when test="Patienten_Stammdaten/DKTK_Einwilligung_erfolgt='true'"><DKTK_Einwilligung_erfolgt>true</DKTK_Einwilligung_erfolgt></xsl:when>
                 <xsl:otherwise><DKTK_Einwilligung_erfolgt>false</DKTK_Einwilligung_erfolgt></xsl:otherwise>
             </xsl:choose>
-            <Upload_Zeitpunkt_ZS_Antwort>PLACEHOLDER</Upload_Zeitpunkt_ZS_Antwort>
-            <Upload_Zeitpunkt_ZS_Erfolg>PLACEHOLDER</Upload_Zeitpunkt_ZS_Erfolg>
             <xsl:if test="$add_department=true()">
                 <Organisationen>
                     <Organisation><xsl:value-of select="/ADT_GEKID/Menge_Melder/Melder[1]/Meldende_Stelle"/></Organisation>
@@ -168,7 +165,7 @@
                     <xsl:if test="not ($diagMonths &lt; $gebMonths)"><xsl:value-of select="$dif"/></xsl:if>
                 </xsl:element>
                 <Tumor_Diagnosedatum><xsl:apply-templates select="$diagnoseDatum"/></Tumor_Diagnosedatum>
-                <xsl:apply-templates select="$Diagnosis_Meldung/Primaertumor_ICD_Code | $Diagnosis_Meldung/Primaertumor_ICD_Version | $Diagnosis_Meldung/Primaertumor_Diagnosetext"/>
+                <xsl:apply-templates select="$Diagnosis_Meldung/Primaertumor_ICD_Code | $Diagnosis_Meldung/Primaertumor_ICD_Version | $Diagnosis_Meldung/Primaertumor_Diagnosetext | $Diagnosis_Meldung/Primaertumor_Topographie_ICD_O_Freitext | $Diagnosis_Meldung/Diagnosesicherung | $Diagnosis_Meldung/Menge_Weitere_Klassifikation | $Diagnosis_Meldung/Allgemeiner_Leistungszustand"/>
             </xsl:if>
             <!--Generate third Level TUMOR entity (Elements:  Lokalisation | ICD-O_Katalog_Topographie_Version |  Seitenlokalisation ) -->
             <Tumor>
@@ -374,6 +371,7 @@
                 <xsl:if test="TNM_L"><TNM-L><xsl:value-of select="TNM_L"/></TNM-L></xsl:if>
                 <xsl:if test="TNM_V"><TNM-V><xsl:value-of select="TNM_V"/></TNM-V></xsl:if>
                 <xsl:if test="TNM_Pn"><TNM-Pn><xsl:value-of select="TNM_Pn"/></TNM-Pn></xsl:if>
+                <xsl:if test="TNM_S"><S><xsl:value-of select="TNM_Pn"/></S></xsl:if>
             </TNM>
         </xsl:if>
     </xsl:template>
@@ -408,6 +406,7 @@
                 <xsl:if test="TNM_L"><TNM-L><xsl:value-of select="TNM_L"/></TNM-L></xsl:if>
                 <xsl:if test="TNM_V"><TNM-V><xsl:value-of select="TNM_V"/></TNM-V></xsl:if>
                 <xsl:if test="TNM_Pn"><TNM-Pn><xsl:value-of select="TNM_Pn"/></TNM-Pn></xsl:if>
+                <xsl:if test="TNM_S"><S><xsl:value-of select="TNM_Pn"/></S></xsl:if>
             </TNM>
         </xsl:if>
     </xsl:template>
@@ -442,6 +441,7 @@
                 <xsl:if test="TNM_L"><TNM-L><xsl:value-of select="TNM_L"/></TNM-L></xsl:if>
                 <xsl:if test="TNM_V"><TNM-V><xsl:value-of select="TNM_V"/></TNM-V></xsl:if>
                 <xsl:if test="TNM_Pn"><TNM-Pn><xsl:value-of select="TNM_Pn"/></TNM-Pn></xsl:if>
+                <xsl:if test="TNM_S"><S><xsl:value-of select="TNM_Pn"/></S></xsl:if>
             </TNM>
         </xsl:if>
     </xsl:template>
@@ -460,8 +460,7 @@
         </xsl:variable>
         <Verlauf>
             <xsl:attribute name="Verlauf_ID" select="concat('vrl', hash:hash($Patient_Id, $Tumor_Id, string-join($attribute, '')))" />
-            <xsl:if test="Allgemeiner_Leistungszustand"><Allgemeiner_Leistungszustand><xsl:value-of select="Allgemeiner_Leistungszustand"/></Allgemeiner_Leistungszustand></xsl:if>
-            <xsl:apply-templates select="Tod"/>
+            <xsl:apply-templates select="Allgemeiner_Leistungszustand | Tod"/>
             <xsl:if test="Verlauf_Lokaler_Tumorstatus"><!--Lokales-regionäres_Rezidiv + zugehöriges Datum-->
                 <Lokales-regionäres_Rezidiv><xsl:value-of select="Verlauf_Lokaler_Tumorstatus"/></Lokales-regionäres_Rezidiv>
             </xsl:if>
@@ -736,6 +735,18 @@
         </ST_Einzeldosis>
     </xsl:template>
 
+    <xsl:template match="Menge_Weitere_Klassifikation">
+        <Menge_Weitere_Klassifikation>
+            <xsl:for-each select="Weitere_Klassifikation">
+                <Weitere_Klassifikation>
+                    <xsl:if test="Datum"><Datum><xsl:value-of select="Datum"/></Datum></xsl:if>
+                    <xsl:if test="Name"><Name><xsl:value-of select="Name"/></Name></xsl:if>
+                    <xsl:if test="Stadium"><Stadium><xsl:value-of select="Stadium"/></Stadium></xsl:if>
+                </Weitere_Klassifikation>
+            </xsl:for-each>
+        </Menge_Weitere_Klassifikation>
+    </xsl:template>
+
     <xsl:template match="Menge_Substanz">
         <xsl:apply-templates select="SYST_Substanz"/>
     </xsl:template>
@@ -783,6 +794,21 @@
         <ICD-O_Katalog_Topographie_Version>
             <xsl:apply-templates select="node() | @*"/>
         </ICD-O_Katalog_Topographie_Version>
+    </xsl:template>
+    <xsl:template match="Primaertumor_Topographie_ICD_O_Freitext" >
+        <Primaertumor_Topographie_Freitext>
+            <xsl:apply-templates select="node() | @*"/>
+            </Primaertumor_Topographie_Freitext>
+    </xsl:template>
+    <xsl:template match="Diagnosesicherung" >
+        <Diagnosesicherung>
+            <xsl:apply-templates select="node() | @*"/>
+        </Diagnosesicherung>
+    </xsl:template>
+    <xsl:template match="Allgemeiner_Leistungszustand" >
+        <Allgemeiner_Leistungszustand>
+            <xsl:apply-templates select="node() | @*"/>
+        </Allgemeiner_Leistungszustand>
     </xsl:template>
     <xsl:template match="Morphologie_Code" >
         <Morphologie>
