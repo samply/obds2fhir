@@ -1,30 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<xsl:stylesheet
-        xmlns="http://hl7.org/fhir"
-        xmlns:mds2fhir="https://github.com/samply/obds2fhir/blob/main/MDS_FHIR2FHIR"
-        xmlns:dktk="http://dktk.dkfz.de"
-        xmlns:saxon="http://saxon.sf.net"
-        xmlns:xalan="http://xml.apache.org/xalan"
-        xmlns:xs="http://www.w3.org/2001/XMLSchema"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-        xmlns:hash="java:de.samply.obds2fhir"
-        exclude-result-prefixes="xs xsi dktk saxon xalan mds2fhir #default"
-        version="2.0"
-        xpath-default-namespace="http://www.mds.de/namespace">
+<xsl:stylesheet xmlns="http://hl7.org/fhir"
+                xmlns:mds2fhir="https://github.com/samply/obds2fhir/blob/main/MDS_FHIR2FHIR"
+                xmlns:dktk="http://dktk.dkfz.de"
+                xmlns:saxon="http://saxon.sf.net"
+                xmlns:xalan="http://xml.apache.org/xalan"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:hash="java:de.samply.obds2fhir"
+                exclude-result-prefixes="xs xsi dktk saxon xalan mds2fhir #default"
+                version="2.0"
+                xpath-default-namespace="http://www.mds.de/namespace">
 
-    <!-- Settings-->
-    <!-- System für lokale Identifier-->
     <xsl:param name="identifier_system"/>
-    <xsl:variable name="Lokal_DKTK_ID_Pat_System"><xsl:value-of select="$identifier_system"/></xsl:variable>
-
+    <xsl:variable name="Lokal_DKTK_ID_Pat_System">
+        <xsl:value-of select="$identifier_system"/>
+    </xsl:variable>
     <xsl:output encoding="UTF-8" indent="yes" method="xml"/>
     <xsl:output omit-xml-declaration="yes" indent="yes"/>
     <xsl:strip-space elements="*"/>
     <xsl:param name="filepath"/>
     <xsl:param name="customPrefix"/>
-
-    <!-- Ende Settings -->
 
     <xsl:template match="/">
         <xsl:param name="Patient_ID" select="Patienten/@Patient_ID"/>
@@ -73,7 +69,9 @@
                                     </xsl:otherwise>
                                 </xsl:choose>
                             </gender>
-                            <xsl:if test="./Geburtsdatum"><birthDate value="{mds2fhir:transformDate(./Geburtsdatum)}"/></xsl:if>
+                            <xsl:if test="./Geburtsdatum">
+                                <birthDate value="{mds2fhir:transformDate(./Geburtsdatum)}"/>
+                            </xsl:if>
                         </Patient>
                     </resource>
                     <request>
@@ -118,7 +116,9 @@
                                 <subject>
                                     <reference value="Patient/{$Patient_ID}"/>
                                 </subject>
-                                <xsl:if test="./Datum_des_letztbekannten_Vitalstatus"><effectiveDateTime value="{mds2fhir:transformDate(./Datum_des_letztbekannten_Vitalstatus)}"/></xsl:if>
+                                <xsl:if test="./Datum_des_letztbekannten_Vitalstatus">
+                                    <effectiveDateTime value="{mds2fhir:transformDate(./Datum_des_letztbekannten_Vitalstatus)}"/>
+                                </xsl:if>
                                 <valueCodeableConcept>
                                     <coding>
                                         <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VitalstatusCS"/>
@@ -313,14 +313,22 @@
                                 </xsl:if>
                                 <code value="{./Diagnose}"/>
                             </coding>
-                            <xsl:if test="./Diagnose_Text != ''"><text value="{./Diagnose_Text}"/></xsl:if>
+                            <xsl:if test="./Diagnose_Text != ''">
+                                <text value="{./Diagnose_Text}"/>
+                            </xsl:if>
                         </code>
                         <bodySite>
                             <coding>
                                 <system value="urn:oid:2.16.840.1.113883.6.43.1"/>
-                                <xsl:if test="./Tumor/ICD-O_Katalog_Topographie_Version"><version value="{./Tumor/ICD-O_Katalog_Topographie_Version}"/></xsl:if>
-                                <xsl:if test="./Tumor/Lokalisation"><code value="{./Tumor/Lokalisation}"/></xsl:if>
-                                <xsl:if test="./Primaertumor_Topographie_Freitext != ''"><display value="{./Primaertumor_Topographie_Freitext}"/></xsl:if>
+                                <xsl:if test="./Tumor/ICD-O_Katalog_Topographie_Version">
+                                    <version value="{./Tumor/ICD-O_Katalog_Topographie_Version}"/>
+                                </xsl:if>
+                                <xsl:if test="./Tumor/Lokalisation">
+                                    <code value="{./Tumor/Lokalisation}"/>
+                                </xsl:if>
+                                <xsl:if test="./Primaertumor_Topographie_Freitext != ''">
+                                    <display value="{./Primaertumor_Topographie_Freitext}"/>
+                                </xsl:if>
                             </coding>
                             <xsl:if test="./Tumor/Seitenlokalisation">
                                 <coding>
@@ -478,7 +486,11 @@
                             </xsl:for-each>
                             <xsl:choose>
                                 <xsl:when test="./SYST_Substanz">
-                                    <text><xsl:attribute name="value"><xsl:value-of select="string-join(SYST_Substanz, ';')"/></xsl:attribute></text>
+                                    <text>
+                                        <xsl:attribute name="value">
+                                            <xsl:value-of select="string-join(SYST_Substanz, ';')"/>
+                                        </xsl:attribute>
+                                    </text>
                                 </xsl:when>
                                 <xsl:otherwise>
                                     <text value="Keine Angabe zur Substanz"/>
@@ -490,8 +502,12 @@
                         </subject>
                         <xsl:if test="./Systemische_Therapie_Beginn or ./Systemische_Therapie_Ende">
                             <effectivePeriod>
-                                <xsl:if test="./Systemische_Therapie_Beginn"><start value="{mds2fhir:transformDate(./Systemische_Therapie_Beginn)}"/></xsl:if>
-                                <xsl:if test="./Systemische_Therapie_Ende"><end value="{mds2fhir:transformDate(./Systemische_Therapie_Ende)}"/></xsl:if>
+                                <xsl:if test="./Systemische_Therapie_Beginn">
+                                    <start value="{mds2fhir:transformDate(./Systemische_Therapie_Beginn)}"/>
+                                </xsl:if>
+                                <xsl:if test="./Systemische_Therapie_Ende">
+                                    <end value="{mds2fhir:transformDate(./Systemische_Therapie_Ende)}"/>
+                                </xsl:if>
                             </effectivePeriod>
                         </xsl:if>
                         <reasonReference>
@@ -794,12 +810,16 @@
                             </subject>
                             <xsl:if test="./ST_Beginn_Datum or ./ST_Ende_Datum">
                                 <performedPeriod>
-                                    <xsl:if test="./ST_Beginn_Datum"><start value="{mds2fhir:transformDate(./ST_Beginn_Datum)}"/></xsl:if>
-                                    <xsl:if test="./ST_Ende_Datum"><end value="{mds2fhir:transformDate(./ST_Ende_Datum)}"/></xsl:if>
+                                    <xsl:if test="./ST_Beginn_Datum">
+                                        <start value="{mds2fhir:transformDate(./ST_Beginn_Datum)}"/>
+                                    </xsl:if>
+                                    <xsl:if test="./ST_Ende_Datum">
+                                        <end value="{mds2fhir:transformDate(./ST_Ende_Datum)}"/>
+                                    </xsl:if>
                                 </performedPeriod>
                             </xsl:if>
                             <reasonReference>
-                                <reference  value="Condition/{$Diagnosis_ID}"/>
+                                <reference value="Condition/{$Diagnosis_ID}"/>
                             </reasonReference>
                         </Procedure>
                     </resource>
@@ -857,7 +877,9 @@
                             <xsl:for-each select="./OPS"><!--oBDS-->
                                 <coding>
                                     <system value="http://fhir.de/CodeSystem/bfarm/ops"/>
-                                    <xsl:if test="Version"><version value="{Version}"/></xsl:if>
+                                    <xsl:if test="Version">
+                                        <version value="{Version}"/>
+                                    </xsl:if>
                                     <code value="{Code}"/>
                                 </coding>
                             </xsl:for-each>
@@ -897,7 +919,6 @@
             <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
             <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
         </xsl:apply-templates>
-
         <xsl:apply-templates select="./TNM">
             <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
             <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
@@ -927,7 +948,9 @@
                         <subject>
                             <reference value="Patient/{$Patient_ID}"/>
                         </subject>
-                        <xsl:if test="./Datum_Verlauf"><effectiveDateTime value="{mds2fhir:transformDate(Datum_Verlauf)}"/></xsl:if>
+                        <xsl:if test="./Datum_Verlauf">
+                            <effectiveDateTime value="{mds2fhir:transformDate(Datum_Verlauf)}"/>
+                        </xsl:if>
                         <!--                    TODO Todesursache + Tumorbedingt-->
                         <problem>
                             <reference value="Condition/{$Diagnosis_ID}"/>
@@ -1012,7 +1035,9 @@
                             <focus>
                                 <reference value="Condition/{$Diagnosis_ID}"/>
                             </focus>
-                            <xsl:if test="./Datum_Verlauf"><effectiveDateTime value="{mds2fhir:transformDate(./Datum_Verlauf)}"/></xsl:if>
+                            <xsl:if test="./Datum_Verlauf">
+                                <effectiveDateTime value="{mds2fhir:transformDate(./Datum_Verlauf)}"/>
+                            </xsl:if>
                             <valueCodeableConcept>
                                 <coding>
                                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VerlaufLokalerTumorstatusCS"/>
@@ -1049,7 +1074,9 @@
                             <focus>
                                 <reference value="Condition/{$Diagnosis_ID}"/>
                             </focus>
-                            <xsl:if test="./Datum_Verlauf"><effectiveDateTime value="{mds2fhir:transformDate(./Datum_Verlauf)}"/></xsl:if>
+                            <xsl:if test="./Datum_Verlauf">
+                                <effectiveDateTime value="{mds2fhir:transformDate(./Datum_Verlauf)}"/>
+                            </xsl:if>
                             <valueCodeableConcept>
                                 <coding>
                                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VerlaufTumorstatusLymphknotenCS"/>
@@ -1086,7 +1113,9 @@
                             <focus>
                                 <reference value="Condition/{$Diagnosis_ID}"/>
                             </focus>
-                            <xsl:if test="./Datum_Verlauf"><effectiveDateTime value="{mds2fhir:transformDate(./Datum_Verlauf)}"/></xsl:if>
+                            <xsl:if test="./Datum_Verlauf">
+                                <effectiveDateTime value="{mds2fhir:transformDate(./Datum_Verlauf)}"/>
+                            </xsl:if>
                             <valueCodeableConcept>
                                 <coding>
                                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VerlaufTumorstatusFernmetastasenCS"/>
@@ -1123,7 +1152,9 @@
                             <focus>
                                 <reference value="Condition/{$Diagnosis_ID}"/>
                             </focus>
-                            <xsl:if test="./Datum_Verlauf"><effectiveDateTime value="{mds2fhir:transformDate(./Datum_Verlauf)}"/></xsl:if>
+                            <xsl:if test="./Datum_Verlauf">
+                                <effectiveDateTime value="{mds2fhir:transformDate(./Datum_Verlauf)}"/>
+                            </xsl:if>
                             <valueCodeableConcept>
                                 <coding>
                                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/GesamtbeurteilungTumorstatusCS"/>
@@ -1143,12 +1174,10 @@
             <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
             <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
         </xsl:apply-templates>
-
         <xsl:apply-templates select="./TNM">
             <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
             <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
         </xsl:apply-templates>
-
         <xsl:apply-templates select="./Metastasis">
             <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
             <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
@@ -1161,7 +1190,6 @@
         <xsl:param name="Diagnosis_ID"/>
         <xsl:if test="./Datum_der_TNM-Dokumentation-Datum_Befund !=''">
             <xsl:variable name="TNM_ID" select="mds2fhir:getID(./@TNM_ID, mds2fhir:transformDate(./Datum_der_TNM-Dokumentation-Datum_Befund), generate-id())" as="xs:string"/>
-
             <entry>
                 <fullUrl value="http://example.com/Observation/{$TNM_ID}"/>
                 <resource>
@@ -1197,7 +1225,7 @@
                                     </coding>
                                 </xsl:when>
                                 <xsl:otherwise>
-                                    <text value= "TNM ohne Angabe ob klinisch oder pthologisch"/>
+                                    <text value="TNM ohne Angabe ob klinisch oder pthologisch"/>
                                 </xsl:otherwise>
                             </xsl:choose>
                         </code>
@@ -1207,7 +1235,9 @@
                         <focus>
                             <reference value="Condition/{$Diagnosis_ID}"/>
                         </focus>
-                        <xsl:if test="./Datum_der_TNM-Dokumentation-Datum_Befund !=''"><effectiveDateTime value="{mds2fhir:transformDate(./Datum_der_TNM-Dokumentation-Datum_Befund)}"/></xsl:if>
+                        <xsl:if test="./Datum_der_TNM-Dokumentation-Datum_Befund !=''">
+                            <effectiveDateTime value="{mds2fhir:transformDate(./Datum_der_TNM-Dokumentation-Datum_Befund)}"/>
+                        </xsl:if>
                         <xsl:if test="./UICC_Stadium">
                             <valueCodeableConcept>
                                 <coding>
@@ -1229,7 +1259,7 @@
                                             </coding>
                                         </valueCodeableConcept>
                                     </extension>
-                                    <extension></extension>
+                                    <extension/>
                                 </xsl:if>
                                 <code>
                                     <coding>
@@ -1264,7 +1294,7 @@
                                             </coding>
                                         </valueCodeableConcept>
                                     </extension>
-                                    <extension></extension>
+                                    <extension/>
                                 </xsl:if>
                                 <code>
                                     <coding>
@@ -1299,7 +1329,7 @@
                                             </coding>
                                         </valueCodeableConcept>
                                     </extension>
-                                    <extension></extension>
+                                    <extension/>
                                 </xsl:if>
                                 <code>
                                     <coding>
@@ -1400,7 +1430,6 @@
         <xsl:param name="Patient_ID"/>
         <xsl:param name="Diagnosis_ID"/>
         <xsl:param name="Datum_Verlauf"/>
-
         <xsl:if test="./Datum_diagnostische_Sicherung !=''">
             <xsl:variable name="Metastasis_ID" select="mds2fhir:getID(./@Metastasis_ID, mds2fhir:transformDate(./Datum_diagnostische_Sicherung), generate-id())" as="xs:string"/>
             <entry>
@@ -1425,8 +1454,12 @@
                             <reference value="Condition/{$Diagnosis_ID}"/>
                         </focus>
                         <xsl:choose>
-                            <xsl:when test="./Datum_diagnostische_Sicherung"><effectiveDateTime value="{mds2fhir:transformDate(./Datum_diagnostische_Sicherung)}"/></xsl:when>
-                            <xsl:when test="$Datum_Verlauf"><effectiveDateTime value="{mds2fhir:transformDate($Datum_Verlauf)}"/></xsl:when>
+                            <xsl:when test="./Datum_diagnostische_Sicherung">
+                                <effectiveDateTime value="{mds2fhir:transformDate(./Datum_diagnostische_Sicherung)}"/>
+                            </xsl:when>
+                            <xsl:when test="$Datum_Verlauf">
+                                <effectiveDateTime value="{mds2fhir:transformDate($Datum_Verlauf)}"/>
+                            </xsl:when>
                         </xsl:choose>
                         <xsl:if test="./Fernmetastasen_vorhanden">
                             <valueCodeableConcept>
@@ -1464,11 +1497,9 @@
     <xsl:template match="Histology">
         <xsl:param name="Patient_ID"/>
         <xsl:param name="Diagnosis_ID"/>
-
         <xsl:if test="./Tumor_Histologiedatum !=''">
             <xsl:variable name="Histology_ID" select="mds2fhir:getID(./@Histology_ID, mds2fhir:transformDate(./Tumor_Histologiedatum), generate-id())" as="xs:string"/>
             <xsl:variable name="Grading_ID" select="mds2fhir:getID(hash:hash($Patient_ID, ./@Histology_ID,'grading'), '', generate-id())" as="xs:string"/>
-
             <entry>
                 <fullUrl value="http://example.com/Observation/{$Histology_ID}"/>
                 <resource>
@@ -1490,27 +1521,40 @@
                         <focus>
                             <reference value="Condition/{$Diagnosis_ID}"/>
                         </focus>
-                        <xsl:if test="Tumor_Histologiedatum !=''"><effectiveDateTime value="{mds2fhir:transformDate(Tumor_Histologiedatum)}"/></xsl:if>
+                        <xsl:if test="Tumor_Histologiedatum !=''">
+                            <effectiveDateTime value="{mds2fhir:transformDate(Tumor_Histologiedatum)}"/>
+                        </xsl:if>
                         <valueCodeableConcept>
                             <xsl:choose>
                                 <xsl:when test="Morphologie_ICD_O"><!--oBDS source-->
                                     <xsl:for-each select="Morphologie_ICD_O">
                                         <coding>
                                             <system value="urn:oid:2.16.840.1.113883.6.43.1"/>
-                                            <xsl:if test="ICD-O_Katalog_Morphologie_Version"><version value="{ICD-O_Katalog_Morphologie_Version}"/></xsl:if>
-                                            <xsl:if test="Morphologie_Code"><code value="{Morphologie_Code}"/></xsl:if>
+                                            <xsl:if test="ICD-O_Katalog_Morphologie_Version">
+                                                <version value="{ICD-O_Katalog_Morphologie_Version}"/>
+                                            </xsl:if>
+                                            <xsl:if test="Morphologie_Code">
+                                                <code value="{Morphologie_Code}"/>
+                                            </xsl:if>
                                         </coding>
                                     </xsl:for-each>
                                 </xsl:when>
-                                <xsl:otherwise><!--ADT2 source-->
+                                <xsl:otherwise>
+                                    <!--ADT2 source-->
                                     <coding>
                                         <system value="urn:oid:2.16.840.1.113883.6.43.1"/>
-                                        <xsl:if test="./ICD-O_Katalog_Morphologie_Version"><version value="{./ICD-O_Katalog_Morphologie_Version}"/></xsl:if>
-                                        <xsl:if test="./Morphologie"><code value="{./Morphologie}"/></xsl:if>
+                                        <xsl:if test="./ICD-O_Katalog_Morphologie_Version">
+                                            <version value="{./ICD-O_Katalog_Morphologie_Version}"/>
+                                        </xsl:if>
+                                        <xsl:if test="./Morphologie">
+                                            <code value="{./Morphologie}"/>
+                                        </xsl:if>
                                     </coding>
                                 </xsl:otherwise>
                             </xsl:choose>
-                            <xsl:if test="Morphologie_Freitext"><text value="{./Morphologie_Freitext}"/></xsl:if>
+                            <xsl:if test="Morphologie_Freitext">
+                                <text value="{./Morphologie_Freitext}"/>
+                            </xsl:if>
                         </valueCodeableConcept>
                         <hasMember>
                             <reference value="Observation/{$Grading_ID}"/>
@@ -1546,7 +1590,9 @@
                         <valueCodeableConcept>
                             <coding>
                                 <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/GradingCS"/>
-                                <xsl:if test="./Grading"><code value="{./Grading}"/></xsl:if>
+                                <xsl:if test="./Grading">
+                                    <code value="{./Grading}"/>
+                                </xsl:if>
                             </coding>
                         </valueCodeableConcept>
                     </Observation>
@@ -1623,45 +1669,34 @@
         </entry>
     </xsl:template>
 
-
-
     <xsl:template match="Tumor" mode="tumor">
         <xsl:param name="Diagnosis_ID"/>
         <xsl:param name="Patient_ID"/>
         <xsl:variable name="Tumor_ID" select="mds2fhir:getID(./@Tumor_ID, '', generate-id())" as="xs:string"/>
-
         <xsl:apply-templates select="./Histology">
             <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
             <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
         </xsl:apply-templates>
-
         <xsl:apply-templates select="./Metastasis">
             <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
             <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
         </xsl:apply-templates>
-
-
         <xsl:apply-templates select="./TNM">
             <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
             <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
         </xsl:apply-templates>
-
         <xsl:apply-templates select="./OP">
             <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
             <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
         </xsl:apply-templates>
-
         <xsl:apply-templates select="./ST">
             <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
             <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
         </xsl:apply-templates>
-
         <xsl:apply-templates select="./SYST">
             <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
             <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
         </xsl:apply-templates>
-
-
         <xsl:apply-templates select="./Verlauf">
             <xsl:with-param name="Tumor_ID" select="$Tumor_ID"/>
             <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
@@ -1669,14 +1704,12 @@
         </xsl:apply-templates>
     </xsl:template>
 
-
     <!-- Funktionen -->
     <!-- Generate Id if non exists. If possible, include some releated date to avoid collision & improve indexing. -->
     <xsl:function name="mds2fhir:getID">
         <xsl:param name="id"/>
         <xsl:param name="date"/>
         <xsl:param name="prefix"/>
-
         <xsl:sequence select="
             if ($id and $id != '') then
                $id
@@ -1799,5 +1832,4 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:function>
-
 </xsl:stylesheet>
