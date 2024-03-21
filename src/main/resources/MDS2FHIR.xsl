@@ -910,10 +910,10 @@
         <xsl:param name="Diagnosis_ID"/>
         <xsl:if test="./Datum_Verlauf !=''">
             <xsl:variable name="Progress_ID" select="mds2fhir:getID(./@Verlauf_ID, ./Datum_Verlauf, generate-id())" as="xs:string"/>
-            <xsl:variable name="Lym_Rezidiv_ID"><xsl:if test="./Lymphknoten-Rezidiv"><xsl:value-of select="hash:hash($Progress_ID, ./Lymphknoten-Rezidiv, 'yrz')"/></xsl:if></xsl:variable>
-            <xsl:variable name="Fernmetastasen_ID"><xsl:if test="./Fernmetastasen"><xsl:value-of select="hash:hash($Progress_ID, ./Fernmetastasen, 'fmn')"/></xsl:if></xsl:variable>
-            <xsl:variable name="Lokales_Rezidiv_ID"><xsl:if test="./Lokales-regionäres_Rezidiv"><xsl:value-of select="hash:hash($Progress_ID, ./Lokales-regionäres_Rezidiv, 'krz')"/></xsl:if></xsl:variable>
-            <xsl:variable name="Ansprechen_ID"><xsl:if test="./Ansprechen_im_Verlauf"><xsl:value-of select="hash:hash($Progress_ID, ./Ansprechen_im_Verlauf, 'asp')"/></xsl:if></xsl:variable>
+            <xsl:variable name="TumorstatusLymphknoten_ID"><xsl:if test="./Lymphknoten-Rezidiv or Verlauf_Tumorstatus_Lymphknoten"><xsl:value-of select="concat($Progress_ID, Lymphknoten-Rezidiv | Verlauf_Tumorstatus_Lymphknoten, 'tsl')"/></xsl:if></xsl:variable><!-- for both, legacy ADT or oBDS -->
+            <xsl:variable name="TumorstatusFernmetastasen_ID"><xsl:if test="Fernmetastasen or Verlauf_Tumorstatus_Fernmetastasen"><xsl:value-of select="concat($Progress_ID, Fernmetastasen | Verlauf_Tumorstatus_Fernmetastasen, 'fmn')"/></xsl:if></xsl:variable><!-- for both, legacy ADT or oBDS -->
+            <xsl:variable name="LokalerTumorstatus_ID"><xsl:if test="Lokales-regionäres_Rezidiv or Verlauf_Lokaler_Tumorstatus"><xsl:value-of select="concat($Progress_ID, Lokales-regionäres_Rezidiv | Verlauf_Lokaler_Tumorstatus, 'krz')"/></xsl:if></xsl:variable><!-- for both, legacy ADT or oBDS -->
+            <xsl:variable name="GesamtbeurteilungTumorstatus_ID"><xsl:if test="Ansprechen_im_Verlauf or Gesamtbeurteilung_Tumorstatus"><xsl:value-of select="concat($Progress_ID, Ansprechen_im_Verlauf | Gesamtbeurteilung_Tumorstatus, 'asp')"/></xsl:if></xsl:variable><!-- for both, legacy ADT or oBDS -->
 
             <entry>
                 <fullUrl value="http://example.com/ClinicalImpression/{$Progress_ID}"/>
@@ -955,31 +955,31 @@
                                 </itemReference>
                             </finding>
                         </xsl:for-each>
-                        <xsl:if test="$Lokales_Rezidiv_ID != ''">
+                        <xsl:if test="$LokalerTumorstatus_ID != ''">
                             <finding>
                                 <itemReference>
-                                    <reference value="Observation/{$Lokales_Rezidiv_ID}"/>
+                                    <reference value="Observation/{$LokalerTumorstatus_ID}"/>
                                 </itemReference>
                             </finding>
                         </xsl:if>
-                        <xsl:if test="$Lym_Rezidiv_ID != ''">
+                        <xsl:if test="$TumorstatusLymphknoten_ID != ''">
                             <finding>
                                 <itemReference>
-                                    <reference value="Observation/{$Lym_Rezidiv_ID}"/>
+                                    <reference value="Observation/{$TumorstatusLymphknoten_ID}"/>
                                 </itemReference>
                             </finding>
                         </xsl:if>
-                        <xsl:if test="$Fernmetastasen_ID != ''">
+                        <xsl:if test="$TumorstatusFernmetastasen_ID != ''">
                             <finding>
                                 <itemReference>
-                                    <reference value="Observation/{$Fernmetastasen_ID}"/>
+                                    <reference value="Observation/{$TumorstatusFernmetastasen_ID}"/>
                                 </itemReference>
                             </finding>
                         </xsl:if>
-                        <xsl:if test="$Ansprechen_ID != ''">
+                        <xsl:if test="$GesamtbeurteilungTumorstatus_ID != ''">
                             <finding>
                                 <itemReference>
-                                    <reference value="Observation/{$Ansprechen_ID}"/>
+                                    <reference value="Observation/{$GesamtbeurteilungTumorstatus_ID}"/>
                                 </itemReference>
                             </finding>
                         </xsl:if>
@@ -990,12 +990,12 @@
                     <url value="ClinicalImpression/{$Progress_ID}"/>
                 </request>
             </entry>
-            <xsl:if test="./Lokales-regionäres_Rezidiv">
+            <xsl:if test="Lokales-regionäres_Rezidiv or Verlauf_Lokaler_Tumorstatus">
                 <entry>
-                    <fullUrl value="http://example.com/Observation/{$Lokales_Rezidiv_ID}"/>
+                    <fullUrl value="http://example.com/Observation/{$LokalerTumorstatus_ID}"/>
                     <resource>
                         <Observation xmlns="http://hl7.org/fhir">
-                            <id value="{$Lokales_Rezidiv_ID}"/>
+                            <id value="{$LokalerTumorstatus_ID}"/>
                             <meta>
                                 <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-LokalerTumorstatus"/>
                             </meta>
@@ -1016,23 +1016,23 @@
                             <valueCodeableConcept>
                                 <coding>
                                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VerlaufLokalerTumorstatusCS"/>
-                                    <code value="{./Lokales-regionäres_Rezidiv}"/>
+                                    <code value="{Lokales-regionäres_Rezidiv}{Verlauf_Lokaler_Tumorstatus}"/><!-- for both, legacy ADT or oBDS -->
                                 </coding>
                             </valueCodeableConcept>
                         </Observation>
                     </resource>
                     <request>
                         <method value="PUT"/>
-                        <url value="Observation/{$Lokales_Rezidiv_ID}"/>
+                        <url value="Observation/{$LokalerTumorstatus_ID}"/>
                     </request>
                 </entry>
             </xsl:if>
-            <xsl:if test="./Lymphknoten-Rezidiv">
+            <xsl:if test="./Lymphknoten-Rezidiv or Verlauf_Tumorstatus_Lymphknoten">
                 <entry>
-                    <fullUrl value="http://example.com/Observation/{$Lym_Rezidiv_ID}"/>
+                    <fullUrl value="http://example.com/Observation/{$TumorstatusLymphknoten_ID}"/>
                     <resource>
                         <Observation xmlns="http://hl7.org/fhir">
-                            <id value="{$Lym_Rezidiv_ID}"/>
+                            <id value="{$TumorstatusLymphknoten_ID}"/>
                             <meta>
                                 <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-TumorstatusLymphknoten"/>
                             </meta>
@@ -1053,23 +1053,23 @@
                             <valueCodeableConcept>
                                 <coding>
                                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VerlaufTumorstatusLymphknotenCS"/>
-                                    <code value="{./Lymphknoten-Rezidiv}"/>
+                                    <code value="{Lymphknoten-Rezidiv}{Verlauf_Tumorstatus_Lymphknoten}"/><!-- for both, legacy ADT or oBDS -->
                                 </coding>
                             </valueCodeableConcept>
                         </Observation>
                     </resource>
                     <request>
                         <method value="PUT"/>
-                        <url value="Observation/{$Lym_Rezidiv_ID}"/>
+                        <url value="Observation/{$TumorstatusLymphknoten_ID}"/>
                     </request>
                 </entry>
             </xsl:if>
-            <xsl:if test="./Fernmetastasen">
+            <xsl:if test="Fernmetastasen or Verlauf_Tumorstatus_Fernmetastasen">
                 <entry>
-                    <fullUrl value="http://example.com/Observation/{$Fernmetastasen_ID}"/>
+                    <fullUrl value="http://example.com/Observation/{$TumorstatusFernmetastasen_ID}"/>
                     <resource>
                         <Observation xmlns="http://hl7.org/fhir">
-                            <id value="{$Fernmetastasen_ID}"/>
+                            <id value="{$TumorstatusFernmetastasen_ID}"/>
                             <meta>
                                 <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-TumorstatusFernmetastasen"/>
                             </meta>
@@ -1090,23 +1090,23 @@
                             <valueCodeableConcept>
                                 <coding>
                                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VerlaufTumorstatusFernmetastasenCS"/>
-                                    <code value="{./Fernmetastasen}"/>
+                                    <code value="{Fernmetastasen}{Verlauf_Tumorstatus_Fernmetastasen}"/>
                                 </coding>
                             </valueCodeableConcept>
                         </Observation>
                     </resource>
                     <request>
                         <method value="PUT"/>
-                        <url value="Observation/{$Fernmetastasen_ID}"/>
+                        <url value="Observation/{$TumorstatusFernmetastasen_ID}"/>
                     </request>
                 </entry>
             </xsl:if>
-            <xsl:if test="./Ansprechen_im_Verlauf">
+            <xsl:if test="Ansprechen_im_Verlauf or Gesamtbeurteilung_Tumorstatus">
                 <entry>
-                    <fullUrl value="http://example.com/Observation/{$Ansprechen_ID}"/>
+                    <fullUrl value="http://example.com/Observation/{$GesamtbeurteilungTumorstatus_ID}"/>
                     <resource>
                         <Observation xmlns="http://hl7.org/fhir">
-                            <id value="{$Ansprechen_ID}"/>
+                            <id value="{$GesamtbeurteilungTumorstatus_ID}"/>
                             <meta>
                                 <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-GesamtbeurteilungTumorstatus"/>
                             </meta>
@@ -1127,14 +1127,14 @@
                             <valueCodeableConcept>
                                 <coding>
                                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/GesamtbeurteilungTumorstatusCS"/>
-                                    <code value="{./Ansprechen_im_Verlauf}"/>
+                                    <code value="{./Ansprechen_im_Verlauf}{Gesamtbeurteilung_Tumorstatus}"/><!-- for both, legacy ADT or oBDS -->
                                 </coding>
                             </valueCodeableConcept>
                         </Observation>
                     </resource>
                     <request>
                         <method value="PUT"/>
-                        <url value="Observation/{$Ansprechen_ID}"/>
+                        <url value="Observation/{$GesamtbeurteilungTumorstatus_ID}"/>
                     </request>
                 </entry>
             </xsl:if>
@@ -1559,6 +1559,72 @@
         </xsl:if>
     </xsl:template>
 
+    <xsl:template match="Genetische_Variante">
+        <xsl:variable name="Gen_ID" select="./@Gen_ID" as="xs:string"/>
+        <entry>
+            <fullUrl value="http://example.com/Observation/{$Gen_ID}"/>
+            <resource>
+                <Observation xmlns="http://hl7.org/fhir">
+                    <id value="{$Gen_ID}"/>
+                    <meta>
+                        <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-GenetischeVariante"/>
+                    </meta>
+                    <status value="final"/>
+                    <code>
+                        <coding>
+                            <system value="http://loinc.org"/>
+                            <code value="69548-6"/>
+                        </coding>
+                    </code>
+                    <subject>
+                        <reference value="Patient/TODO"/>
+                    </subject>
+                    <focus>
+                        <reference value="Condition/TODO"/>
+                    </focus>
+                    <effectiveDateTime value="{Datum}"/>
+                    <xsl:choose>
+                        <xsl:when test="Auspraegung">
+                            <valueCodeableConcept>
+                                <coding>
+                                    <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/GenetischeVarianteCS"/>
+                                    <code value="{Auspraegung}"/>
+                                </coding>
+                            </valueCodeableConcept>
+                        </xsl:when>
+                        <xsl:when test="Sonstige_Auspraegung">
+                            <valueCodeableConcept>
+                                <text value="{Sonstige_Auspraegung}"/>
+                            </valueCodeableConcept>
+                        </xsl:when>
+                    </xsl:choose>
+                    <xsl:if test="Bezeichnung!=''">
+                        <component>
+                            <code>
+                                <coding>
+                                    <system value="http://loinc.org"/>
+                                    <code value="48018-6"/>
+                                </coding>
+                            </code>
+                            <valueCodeableConcept>
+                                <coding>
+                                    <system value="http://www.genenames.org"/>
+                                    <code value="{Bezeichnung}"/>
+                                </coding>
+                            </valueCodeableConcept>
+                        </component>
+                    </xsl:if>
+                </Observation>
+            </resource>
+            <request>
+                <method value="PUT"/>
+                <url value="Observation/{$Gen_ID}"/>
+            </request>
+        </entry>
+    </xsl:template>
+
+
+
     <xsl:template match="Tumor" mode="tumor">
         <xsl:param name="Diagnosis_ID"/>
         <xsl:param name="Patient_ID"/>
@@ -1674,6 +1740,9 @@
     <xsl:function name="mds2fhir:autocorrectDate">
         <xsl:param name="date"/>
         <xsl:choose>
+            <xsl:when test="matches($date, '\d{4}-\d{2}-\d{2}')"><!-- oBDS date -->
+                <xsl:value-of select="$date"/>
+            </xsl:when>
             <xsl:when test="matches($date, '^\d{4}')">
                 <xsl:value-of select="concat('00.00.', $date)"/>
             </xsl:when>

@@ -166,28 +166,6 @@
     <xsl:template match="Diagnose">
         <xsl:param name="Patient_Id"/>
         <xsl:param name="Tumor_Id"/>
-        <xsl:for-each select="Histologie">
-            <xsl:choose>
-                <xsl:when test="@Histologie_ID"><xsl:apply-templates select=".[not(@Histologie_ID=following::*/Histologie/@Histologie_ID)]">
-                    <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
-                    <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
-                </xsl:apply-templates>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:apply-templates select=".[not(Tumor_Histologiedatum=following::*/Histologie/Tumor_Histologiedatum)]">
-                        <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
-                        <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
-                    </xsl:apply-templates>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:for-each>
-        <xsl:for-each select="Menge_FM/Fernmetastase">
-            <xsl:apply-templates select=".[not(concat(Diagnosedatum,Lokalisation)=following::*/Fernmetastase/concat(Diagnosedatum,Lokalisation))]">
-                <xsl:with-param name="counter"><xsl:value-of select="count(preceding-sibling::Fernmetastase[concat(Diagnosedatum,Lokalisation)=current()/concat(Diagnosedatum,Lokalisation)])" /></xsl:with-param>
-                <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
-                <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
-            </xsl:apply-templates>
-        </xsl:for-each>
         <xsl:for-each select="cTNM|pTNM">
             <xsl:choose>
                 <xsl:when test="@ID">
@@ -209,6 +187,28 @@
                     </xsl:apply-templates>
                 </xsl:otherwise>
             </xsl:choose>
+        </xsl:for-each>
+        <xsl:for-each select="Histologie">
+            <xsl:choose>
+                <xsl:when test="@Histologie_ID"><xsl:apply-templates select=".[not(@Histologie_ID=following::*/Histologie/@Histologie_ID)]">
+                    <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
+                    <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
+                </xsl:apply-templates>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select=".[not(Tumor_Histologiedatum=following::Histologie/Tumor_Histologiedatum)]">
+                        <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
+                        <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
+                    </xsl:apply-templates>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:for-each>
+        <xsl:for-each select="Menge_FM/Fernmetastase">
+            <xsl:apply-templates select=".[not(concat(Diagnosedatum,Lokalisation)=following::*/Fernmetastase/concat(Diagnosedatum,Lokalisation))]">
+                <xsl:with-param name="counter"><xsl:value-of select="count(preceding-sibling::Fernmetastase[concat(Diagnosedatum,Lokalisation)=current()/concat(Diagnosedatum,Lokalisation)])" /></xsl:with-param>
+                <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
+                <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
+            </xsl:apply-templates>
         </xsl:for-each>
         <xsl:for-each select="Menge_Genetik/Genetische_Variante">
             <xsl:apply-templates select=".[not(concat(Datum,Bezeichnung,Sonstige_Auspraegung)=following::*/Genetische_Variante/concat(Datum,Bezeichnung,Sonstige_Auspraegung))]">
@@ -283,7 +283,7 @@
                 </xsl:choose>
             </xsl:variable>
             <TNM>
-                <xsl:attribute name="ID" select="concat('tnm', hash:hash($Patient_Id, $Tumor_Id, $attribute))" />
+                <xsl:attribute name="TNM_ID" select="concat('tnm', hash:hash($Patient_Id, $Tumor_Id, $attribute))" />
                 <gesamtpraefix><xsl:value-of select="name(.)"/></gesamtpraefix>
                 <xsl:apply-templates select="node()"/>
             </TNM>
@@ -315,39 +315,16 @@
         </xsl:variable>
         <Verlauf>
             <xsl:attribute name="Verlauf_ID" select="concat('vrl', hash:hash($Patient_Id, $Tumor_Id, string-join($attribute, '')))" />
-            <xsl:if test="Allgemeiner_Leistungszustand"><Allgemeiner_Leistungszustand><xsl:value-of select="Allgemeiner_Leistungszustand"/></Allgemeiner_Leistungszustand></xsl:if>
-            <xsl:apply-templates select="Tod"/>
-            <xsl:if test="Verlauf_Lokaler_Tumorstatus"><!--Lokales-regionäres_Rezidiv + zugehöriges Datum-->
-                <Lokales-regionäres_Rezidiv><xsl:value-of select="Verlauf_Lokaler_Tumorstatus"/></Lokales-regionäres_Rezidiv>
-            </xsl:if>
-            <xsl:if test="Verlauf_Tumorstatus_Lymphknoten"><!--Lymphknoten-Rezidiv + zugehöriges Datum-->
-                <Lymphknoten-Rezidiv><xsl:value-of select="Verlauf_Tumorstatus_Lymphknoten"/></Lymphknoten-Rezidiv>
-            </xsl:if>
-            <xsl:if test="Verlauf_Tumorstatus_Fernmetastasen"><!--Lymphknoten-Rezidiv+ zugehöriges Datum-->
-                <Fernmetastasen><xsl:value-of select="Verlauf_Tumorstatus_Fernmetastasen"/></Fernmetastasen>
-            </xsl:if>
-
-            <xsl:if test="Gesamtbeurteilung_Tumorstatus"><Ansprechen_im_Verlauf><xsl:value-of select="Gesamtbeurteilung_Tumorstatus"/></Ansprechen_im_Verlauf></xsl:if><!--Ansprechen_im_Verlauf-->
-            <!--<xsl:apply-templates select="./Menge_Verlauf/Verlauf/Gesamtbeurteilung_Tumorstatus"></xsl:apply-templates><!-\-Ansprechen_innerhalb_der_letzten_3_Monate TODO-\->
-            <xsl:apply-templates select="./Menge_Verlauf/Verlauf/Untersuchungsdatum_Verlauf"></xsl:apply-templates><!-\-Datum_des_letztbekannten_Verlaufs TODO-\->-->
-
-            <xsl:if test="Untersuchungsdatum_Verlauf !=''"><Datum_Verlauf><xsl:apply-templates select="Untersuchungsdatum_Verlauf/node()"/></Datum_Verlauf></xsl:if>
-
-
-
+            <xsl:apply-templates select="Meldeanlass | Untersuchungsdatum_Verlauf | Gesamtbeurteilung_Tumorstatus | Verlauf_Lokaler_Tumorstatus | Verlauf_Tumorstatus_Lymphknoten | Verlauf_Tumorstatus_Fernmetastasen | Allgemeiner_Leistungszustand"/>
             <xsl:choose>
-             <xsl:when test="TNM/@ID"><xsl:apply-templates select="TNM[
-                 not(@ID=following::TNM[../../../../../Patienten_Stammdaten/@Patient_ID=$Patient_Id and ../../../Tumorzuordnung/@Tumor_ID=$Tumor_Id]/@ID) and
-                 not(@ID=following::Diagnose[../../../../Patienten_Stammdaten/@Patient_ID=$Patient_Id and @Tumor_ID=$Tumor_Id]/cTNM/@ID) and
-                 not(@ID=following::Diagnose[../../../../Patienten_Stammdaten/@Patient_ID=$Patient_Id and @Tumor_ID=$Tumor_Id]/pTNM/@ID)]">
-                 <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
-                 <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
-             </xsl:apply-templates></xsl:when>
-             <xsl:otherwise>
-                     <xsl:apply-templates select="TNM[
-                         not(concat(Datum,T,N,M,c_p_u_Praefix_T,c_p_u_Praefix_N,c_p_u_Praefix_M)=following::TNM[../../../../../Patienten_Stammdaten/@Patient_ID=$Patient_Id and ../../../Tumorzuordnung/@Tumor_ID=$Tumor_Id]/concat(Datum,T,N,M,c_p_u_Praefix_T,c_p_u_Praefix_N,c_p_u_Praefix_M))and
-                         not(concat(Datum,T,N,M,c_p_u_Praefix_T,c_p_u_Praefix_N,c_p_u_Praefix_M)=following::Diagnose[../../../../Patienten_Stammdaten/@Patient_ID=$Patient_Id and @Tumor_ID=$Tumor_Id]/pTNM/concat(Datum,T,N,M,c_p_u_Praefix_T,c_p_u_Praefix_N,c_p_u_Praefix_M))and
-                         not(concat(Datum,T,N,M,c_p_u_Praefix_T,c_p_u_Praefix_N,c_p_u_Praefix_M)=following::Diagnose[../../../../Patienten_Stammdaten/@Patient_ID=$Patient_Id and @Tumor_ID=$Tumor_Id]/cTNM/concat(Datum,T,N,M,c_p_u_Praefix_T,c_p_u_Praefix_N,c_p_u_Praefix_M))]">
+                <xsl:when test="TNM/@ID">
+                    <xsl:apply-templates select="TNM[not(@ID=following::*/TNM/@ID)]">
+                        <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
+                        <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
+                    </xsl:apply-templates>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="TNM[not(concat(Datum,T,N,M,c_p_u_Praefix_T,c_p_u_Praefix_N,c_p_u_Praefix_M)=following::*/TNM/concat(Datum,T,N,M,c_p_u_Praefix_T,c_p_u_Praefix_N,c_p_u_Praefix_M))]">
                          <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                          <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
                      </xsl:apply-templates>
@@ -355,24 +332,27 @@
             </xsl:choose>
             <xsl:choose>
                 <xsl:when test="Histologie/@Histologie_ID">
-                    <xsl:apply-templates select="Histologie[
-                        not(@Histologie_ID=following::Histologie[../../../Tumorzuordnung/@Tumor_ID=$Tumor_Id]/@Histologie_ID)]">
+                    <xsl:apply-templates select="Histologie[not(@Histologie_ID=following::*/Histologie/@Histologie_ID)]">
                         <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                         <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
                     </xsl:apply-templates>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:apply-templates select="Histologie[
-                        not(concat(Tumor_Histologiedatum,Morphologie_Code,Grading)=following::Histologie[../../../Tumorzuordnung/@Tumor_ID=$Tumor_Id]/concat(Tumor_Histologiedatum,Morphologie_Code,Grading))]">
+                    <xsl:apply-templates select="Histologie[not(Tumor_Histologiedatum=following::*/Histologie/Tumor_Histologiedatum)]">
                         <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                         <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
                     </xsl:apply-templates>
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:for-each select="Menge_FM/Fernmetastase">
-                <xsl:apply-templates select=".[
-                    not(concat(Diagnosedatum,Lokalisation)=following::*/Fernmetastase/concat(Diagnosedatum,Lokalisation))]">
+                <xsl:apply-templates select=".[not(concat(Diagnosedatum,Lokalisation)=following::*/Fernmetastase/concat(Diagnosedatum,Lokalisation))]">
                     <xsl:with-param name="counter"><xsl:value-of select="count(preceding-sibling::Fernmetastase[concat(Diagnosedatum,Lokalisation)=current()/concat(Diagnosedatum,Lokalisation)])" /></xsl:with-param>
+                    <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
+                    <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
+                </xsl:apply-templates>
+            </xsl:for-each>
+            <xsl:for-each select="Menge_Genetik/Genetische_Variante">
+                <xsl:apply-templates select=".[not(concat(Datum,Bezeichnung,Sonstige_Auspraegung)=following::*/Genetische_Variante/concat(Datum,Bezeichnung,Sonstige_Auspraegung))]">
                     <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                     <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
                 </xsl:apply-templates>
@@ -390,7 +370,7 @@
             </xsl:choose>
         </xsl:variable>
         <OP>
-            <xsl:attribute name="OP_ID" select="hash:hash('op', concat($Patient_Id, $Tumor_Id, $attribute))"/>
+            <xsl:attribute name="OP_ID" select="concat('op', hash:hash($Patient_Id, $Tumor_Id, $attribute))"/>
             <xsl:if test="Intention"><OP_Intention><xsl:value-of select="Intention"/></OP_Intention></xsl:if>
             <xsl:if test="Datum"><Datum><xsl:value-of select="Datum"/></Datum></xsl:if>
             <xsl:for-each select="Menge_OPS/OPS">
@@ -473,27 +453,29 @@
     <xsl:template match="SYST">
         <xsl:param name="Patient_Id"/>
         <xsl:param name="Tumor_Id"/>
-        <SYST>
-            <xsl:variable name="attribute">
-                <xsl:choose>
-                    <xsl:when test="@SYST_ID"><xsl:value-of select="@SYST_ID"/></xsl:when>
-                    <xsl:when test="Beginn"><xsl:value-of select="'gen',Beginn"/></xsl:when>
-                </xsl:choose>
-            </xsl:variable>
-            <xsl:attribute name="SYST_ID" select="concat('syst', hash:hash($Patient_Id, $Tumor_Id, string-join($attribute, '')))"/>
-            <xsl:apply-templates select="Meldeanlass | Intention | Stellung_OP"/>
-            <xsl:if test="Therapieart"><SYST_Therapieart><xsl:value-of select="Therapieart"/></SYST_Therapieart></xsl:if>
-            <xsl:if test="Protokoll"><Systemische_Therapie_Protokoll><xsl:value-of select="Protokoll"/></Systemische_Therapie_Protokoll></xsl:if>
-            <xsl:if test="Beginn"><Systemische_Therapie_Beginn><xsl:value-of select="Beginn"/></Systemische_Therapie_Beginn></xsl:if>
-            <xsl:apply-templates select="Menge_Substanz"/>
-            <xsl:if test="Ende_Grund"><SYST_Ende_Grund><xsl:value-of select="Ende_Grund"/></SYST_Ende_Grund></xsl:if>
-            <xsl:if test="Ende"><Systemische_Therapie_Ende><xsl:value-of select="Ende"/></Systemische_Therapie_Ende></xsl:if>
-            <xsl:apply-templates select="Nebenwirkungen">
-                <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
-                <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
-                <xsl:with-param name="Therapy_Id" select="string-join($attribute, '')"/>
-            </xsl:apply-templates>
-        </SYST>
+        <xsl:if test="Beginn">
+           <SYST>
+               <xsl:variable name="attribute">
+                   <xsl:choose>
+                       <xsl:when test="@SYST_ID"><xsl:value-of select="@SYST_ID"/></xsl:when>
+                       <xsl:otherwise><xsl:value-of select="'gen',Beginn"/></xsl:otherwise>
+                   </xsl:choose>
+               </xsl:variable>
+               <xsl:attribute name="SYST_ID" select="concat('syst', hash:hash($Patient_Id, $Tumor_Id, string-join($attribute, '')))"/>
+               <xsl:apply-templates select="Meldeanlass | Intention | Stellung_OP"/>
+               <xsl:if test="Therapieart"><SYST_Therapieart><xsl:value-of select="Therapieart"/></SYST_Therapieart></xsl:if>
+               <xsl:if test="Protokoll"><Systemische_Therapie_Protokoll><xsl:value-of select="Protokoll"/></Systemische_Therapie_Protokoll></xsl:if>
+               <xsl:if test="Beginn"><Systemische_Therapie_Beginn><xsl:value-of select="Beginn"/></Systemische_Therapie_Beginn></xsl:if>
+               <xsl:apply-templates select="Menge_Substanz"/>
+               <xsl:if test="Ende_Grund"><SYST_Ende_Grund><xsl:value-of select="Ende_Grund"/></SYST_Ende_Grund></xsl:if>
+               <xsl:if test="Ende"><Systemische_Therapie_Ende><xsl:value-of select="Ende"/></Systemische_Therapie_Ende></xsl:if>
+               <xsl:apply-templates select="Nebenwirkungen">
+                   <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
+                   <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
+                   <xsl:with-param name="Therapy_Id" select="string-join($attribute, '')"/>
+               </xsl:apply-templates>
+           </SYST>
+        </xsl:if>
     </xsl:template>
 
     <!-- Sub functions -->
@@ -820,9 +802,29 @@
         </Stellung_OP>
     </xsl:template>
     <xsl:template match="Untersuchungsdatum_Verlauf">
-        <Untersuchungs-Befunddatum_im_Verlauf>
+        <Datum_Verlauf>
             <xsl:apply-templates select="node() | @*"/>
-        </Untersuchungs-Befunddatum_im_Verlauf>
+        </Datum_Verlauf>
+    </xsl:template>
+    <xsl:template match="Gesamtbeurteilung_Tumorstatus">
+        <Gesamtbeurteilung_Tumorstatus>
+            <xsl:apply-templates select="node() | @*"/>
+        </Gesamtbeurteilung_Tumorstatus>
+    </xsl:template>
+    <xsl:template match="Verlauf_Lokaler_Tumorstatus">
+        <Verlauf_Lokaler_Tumorstatus>
+            <xsl:apply-templates select="node() | @*"/>
+        </Verlauf_Lokaler_Tumorstatus>
+    </xsl:template>
+    <xsl:template match="Verlauf_Tumorstatus_Lymphknoten">
+        <Verlauf_Tumorstatus_Lymphknoten>
+            <xsl:apply-templates select="node() | @*"/>
+        </Verlauf_Tumorstatus_Lymphknoten>
+    </xsl:template>
+    <xsl:template match="Verlauf_Tumorstatus_Fernmetastasen">
+        <Verlauf_Tumorstatus_Fernmetastasen>
+            <xsl:apply-templates select="node() | @*"/>
+        </Verlauf_Tumorstatus_Fernmetastasen>
     </xsl:template>
 
     <!-- remove ADT Namespace -->
