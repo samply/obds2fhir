@@ -1728,6 +1728,20 @@
         <xsl:variable name="month" select="substring($fixedDate, 4, 2)" as="xs:string"/>
         <xsl:variable name="year" select="substring($fixedDate, 7, 4)" as="xs:string"/>
         <xsl:choose>
+            <xsl:when test="matches($fixedDate, '\d{4}-\d{2}-\d{2}')"><!-- oBDS date -->
+                <xsl:value-of select="mds2fhir:transformDateBlazebugHelper(substring($fixedDate, 9, 2),substring($fixedDate, 6, 2),substring($fixedDate, 1, 4))"/>
+            </xsl:when>
+            <xsl:otherwise><!-- ADT date -->
+                <xsl:value-of select="mds2fhir:transformDateBlazebugHelper(substring($fixedDate, 1,2),substring($fixedDate, 4, 2),substring($fixedDate, 7, 4))"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+
+    <xsl:function name="mds2fhir:transformDateBlazebugHelper">
+        <xsl:param name="day"/>
+        <xsl:param name="month"/>
+        <xsl:param name="year"/>
+        <xsl:choose>
             <xsl:when test="$day='00'">
                 <xsl:choose>
                     <xsl:when test="$month='00'">
