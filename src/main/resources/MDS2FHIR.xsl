@@ -697,7 +697,7 @@
                     </category>
                     <code>
                         <coding>
-                            <system value="http://fhir.de/CodeSystem/bfarm/ops"/>
+                            <system value="http://fhir.de/CodeSystem/bfarm/ops"/><!--TODO check-->
                             <code value="8-52"/>
                             <display value="Strahlentherapie"/>
                         </coding>
@@ -835,7 +835,7 @@
     <xsl:template match="OP">
         <xsl:param name="Patient_ID"/>
         <xsl:param name="Diagnosis_ID"/>
-        <xsl:if test="./OP_Datum">
+        <xsl:if test="OP_Datum!='' or Datum!=''">
             <xsl:variable name="OP_ID" select="mds2fhir:getID(./@OP_ID, '', generate-id())" as="xs:string"/>
 
             <entry>
@@ -868,8 +868,8 @@
                             <xsl:for-each select="./OP_OPS"><!--legacy-->
                                 <coding>
                                     <system value="http://fhir.de/CodeSystem/bfarm/ops"/>
-                                    <xsl:if test="../../OP_OPS_Version">
-                                        <version value="{../../OP_OPS_Version}"/>
+                                    <xsl:if test="../OP_OPS_Version">
+                                        <version value="{../OP_OPS_Version}"/>
                                     </xsl:if>
                                     <code value="{.}"/>
                                 </coding>
@@ -887,7 +887,7 @@
                         <subject>
                             <reference value="Patient/{$Patient_ID}"/>
                         </subject>
-                        <performedDateTime value="{mds2fhir:transformDate(./OP_Datum)}"/>
+                        <performedDateTime value="{mds2fhir:transformDate(OP_Datum | Datum)}"/>
                         <reasonReference>
                             <reference value="Condition/{$Diagnosis_ID}"/>
                         </reasonReference>

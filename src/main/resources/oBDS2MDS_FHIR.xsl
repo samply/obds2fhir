@@ -371,7 +371,7 @@
         </xsl:variable>
         <OP>
             <xsl:attribute name="OP_ID" select="concat('op', hash:hash($Patient_Id, $Tumor_Id, $attribute))"/>
-            <xsl:if test="Intention"><OP_Intention><xsl:value-of select="Intention"/></OP_Intention></xsl:if>
+            <xsl:if test="Intention"><Intention_OP><xsl:value-of select="Intention"/></Intention_OP></xsl:if>
             <xsl:if test="Datum"><Datum><xsl:value-of select="Datum"/></Datum></xsl:if>
             <xsl:for-each select="Menge_OPS/OPS">
                 <OPS>
