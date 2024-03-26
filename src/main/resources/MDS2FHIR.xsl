@@ -521,7 +521,7 @@
                 </request>
             </entry>
 
-            <xsl:for-each select="Nebenwirkung">
+            <xsl:for-each select="Nebenwirkung | SYST_Nebenwirkung"><!-- todo -->
                 <entry>
                     <fullUrl value="http://example.com/AdverseEvent/{@Nebenwirkung_ID}"/>
                     <resource>
@@ -529,7 +529,13 @@
                             <id value="{@Nebenwirkung_ID}"/>
                             <actuality value="actual"/>
                             <event>
-                                <text value="{./Nebenwirkung_Art}"/>
+                                <coding>
+                                    <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/NebenwirkungCS"/>
+                                    <code value="{Grad}"/>
+                                    <xsl:if test="Version!=''"><version value="{Version}"/></xsl:if>
+                                    <xsl:if test="Art!=''"><display value="{Art}"/></xsl:if>
+                                </coding>
+                                <xsl:if test="Art_Typ!=''"><text value="Type of Adverse Event code: {Art_Typ}"/></xsl:if>
                             </event>
                             <subject>
                                 <reference value="Patient/{$Patient_ID}"/>
@@ -724,23 +730,18 @@
                             </xsl:if>
                         </outcome>
                     </xsl:if>
-                    <xsl:for-each select="./Nebenwirkung">
+                    <xsl:for-each select="Nebenwirkung[Grad!='']">
                         <complication>
-                            <xsl:choose>
-                                <xsl:when test="Grad_maximal2_oder_unbekannt">
-                                    <text value="Schweregrad von Nebenwirkungen (K|1|2|U): {Grad_maximal2_oder_unbekannt}"/>
-                                </xsl:when>
-                                <xsl:when test="Art">
-                                    <xsl:choose>
-                                        <xsl:when test="Art/MedDRA_Code">
-                                            <text value="Nebenwirkung: Art - '{Art/MedDRA_Code}'; Grad - '{Grad}'; Version - '{Version}'"/>
-                                        </xsl:when>
-                                        <xsl:when test="Art/Bezeichnung">
-                                            <text value="Nebenwirkung: Bezeichnung - '{Art/Bezeichnung}'; Grad - '{Grad}'; Version - '{Version}'"/>
-                                        </xsl:when>
-                                    </xsl:choose>
-                                </xsl:when>
-                            </xsl:choose>
+                            <coding>
+                                <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/NebenwirkungCS"/>
+                                <code value="{Grad}"/>
+                                <xsl:if test="Version!=''"><version value="{Version}"/></xsl:if>
+                                <xsl:if test="Art!=''"><display value="{Art}"/></xsl:if>
+                            </coding>
+                            <xsl:if test="Art_Typ!=''"><text value="Type of Adverse Event code: {Art_Typ}"/></xsl:if>
+                        </complication>
+                        <complication>
+                            <reference value="AdverseEvent/{@Nebenwirkung_ID}"/>
                         </complication>
                     </xsl:for-each>
                 </Procedure>
@@ -750,6 +751,12 @@
                 <url value="Procedure/{$Radiation_Therapy_ID}"/>
             </request>
         </entry>
+
+        <xsl:apply-templates select="Nebenwirkung[Grad!='']">
+            <xsl:with-param name="Patient_ID"/>
+            <xsl:with-param name="Diagnosis_ID"/>
+        </xsl:apply-templates>
+
 
         <xsl:variable name="Radiation_Therapy_ID" select="mds2fhir:getID(./@ST_ID,'', generate-id())" as="xs:string"/>
         <xsl:for-each select="./Bestrahlung">
