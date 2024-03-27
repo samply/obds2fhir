@@ -286,13 +286,14 @@ public class Obds2fhir {
                 }
                 else {
                     if (waitForConnection){//if true, then recursively execute again
-                        System.out.println("Waiting for service, trying again...");
+                        System.out.println("Waiting for service " + servicename + ", trying again...");
+                        TimeUnit.SECONDS.sleep(2);
                         checkConnections(servicename,URL,waitForConnection);
                     }
                     System.out.println(servicename + " is NOT accessible: " + URL + httpResponse.getStatusLine());
                 }
                 httpclient.close();
-            } catch (IOException e) {
+            } catch (IOException | InterruptedException e) {
                 System.out.println("Error: RuntimeException while trying to access " + servicename + " at " + URL + " - Skipping relevant processes");
                 if (waitForConnection){//if true, then recursively execute again
                     System.out.println("Waiting for service, trying again...");
