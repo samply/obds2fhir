@@ -483,23 +483,34 @@
         <xsl:param name="Patient_Id"/>
         <xsl:param name="Tumor_Id"/>
         <xsl:param name="Therapy_Id"/>
-        <xsl:for-each select="Menge_Nebenwirkung/Nebenwirkung">
+        <xsl:for-each select="Menge_Nebenwirkung/Nebenwirkung[Grad!='']">
             <Nebenwirkung>
-                <xsl:attribute name="Nebenwirkung_ID" select="hash:hash($Patient_Id, $Tumor_Id, concat($Therapy_Id, Art/MedDRA_Code, Art/Bezeichnung, Grad, Version))"/>
-                <xsl:if test="Art">
-                    <Art>
-                        <xsl:if test="Art/MedDRA_Code"><MedDRA_Code><xsl:value-of select="Art/MedDRA_Code"/></MedDRA_Code></xsl:if>
-                        <xsl:if test="Art/Bezeichnung"><Bezeichnung><xsl:value-of select="Art/Bezeichnung"/></Bezeichnung></xsl:if>
-                    </Art>
-                </xsl:if>
-                <xsl:if test="Grad"><Grad><xsl:value-of select="Grad"/></Grad></xsl:if>
+                <xsl:attribute name="Nebenwirkung_ID" select="concat($Patient_Id, $Tumor_Id, hash:hash($Therapy_Id, Art/node(), Grad, Version))"/>
+                <Grad><xsl:value-of select="Grad"/></Grad>
                 <xsl:if test="Version"><Version><xsl:value-of select="Version"/></Version></xsl:if>
+                <xsl:if test="Art/node()">
+                    <Art><xsl:value-of select="Art/node()"/></Art>
+                    <xsl:choose>
+                        <xsl:when test="Art/MedDRA_Code!=''">
+                            <Art_Typ>MedDRA_Code</Art_Typ>
+                        </xsl:when>
+                        <xsl:when test="Art/Bezeichnung!=''">
+                            <Art_Typ><xsl:value-of select="Art/Bezeichnung"/></Art_Typ>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <Art_Typ>missing_system</Art_Typ>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:if>
             </Nebenwirkung>
         </xsl:for-each>
         <xsl:for-each select="Grad_maximal2_oder_unbekannt">
             <Nebenwirkung>
                 <xsl:attribute name="Nebenwirkung_ID" select="hash:hash($Patient_Id, $Tumor_Id, concat($Therapy_Id, .))"/>
-                <Grad_maximal2_oder_unbekannt><xsl:value-of select="."/></Grad_maximal2_oder_unbekannt>
+                <Grad><xsl:value-of select="."/></Grad>
+                <!--<Version>Art der Nebenwirkung nach CTC + Schweregrad (K|1|2|U)</Version>-->
+                <Art>CTC</Art>
+                <Art_Typ>CTC</Art_Typ>
             </Nebenwirkung>
         </xsl:for-each>
     </xsl:template>

@@ -521,38 +521,10 @@
                 </request>
             </entry>
 
-            <xsl:for-each select="Nebenwirkung | SYST_Nebenwirkung"><!-- todo -->
-                <entry>
-                    <fullUrl value="http://example.com/AdverseEvent/{@Nebenwirkung_ID}"/>
-                    <resource>
-                        <AdverseEvent xmlns="http://hl7.org/fhir">
-                            <id value="{@Nebenwirkung_ID}"/>
-                            <actuality value="actual"/>
-                            <event>
-                                <coding>
-                                    <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/NebenwirkungCS"/>
-                                    <code value="{Grad}"/>
-                                    <xsl:if test="Version!=''"><version value="{Version}"/></xsl:if>
-                                    <xsl:if test="Art!=''"><display value="{Art}"/></xsl:if>
-                                </coding>
-                                <xsl:if test="Art_Typ!=''"><text value="Type of Adverse Event code: {Art_Typ}"/></xsl:if>
-                            </event>
-                            <subject>
-                                <reference value="Patient/{$Patient_ID}"/>
-                            </subject>
-                            <suspectEntity>
-                                <instance>
-                                    <reference value="MedicationStatement/{$System_Therapy_ID}"/>
-                                </instance>
-                            </suspectEntity>
-                        </AdverseEvent>
-                    </resource>
-                    <request>
-                        <method value="PUT"/>
-                        <url value="AdverseEvent/{@Nebenwirkung_ID}"/>
-                    </request>
-                </entry>
-            </xsl:for-each>
+            <xsl:apply-templates select="Nebenwirkung[Grad!='']">
+                <xsl:with-param name="Parent_Ressource" select="concat('MedicationStatement/',$System_Therapy_ID)"/>
+                <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
+            </xsl:apply-templates>
 
             <xsl:if test="./Gesamtbeurteilung_Resttumor">
                 <entry>
@@ -730,20 +702,6 @@
                             </xsl:if>
                         </outcome>
                     </xsl:if>
-                    <xsl:for-each select="Nebenwirkung[Grad!='']">
-                        <complication>
-                            <coding>
-                                <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/NebenwirkungCS"/>
-                                <code value="{Grad}"/>
-                                <xsl:if test="Version!=''"><version value="{Version}"/></xsl:if>
-                                <xsl:if test="Art!=''"><display value="{Art}"/></xsl:if>
-                            </coding>
-                            <xsl:if test="Art_Typ!=''"><text value="Type of Adverse Event code: {Art_Typ}"/></xsl:if>
-                        </complication>
-                        <complication>
-                            <reference value="AdverseEvent/{@Nebenwirkung_ID}"/>
-                        </complication>
-                    </xsl:for-each>
                 </Procedure>
             </resource>
             <request>
@@ -753,10 +711,9 @@
         </entry>
 
         <xsl:apply-templates select="Nebenwirkung[Grad!='']">
-            <xsl:with-param name="Patient_ID"/>
-            <xsl:with-param name="Diagnosis_ID"/>
+            <xsl:with-param name="Parent_Ressource" select="concat('Procedure/',$Radiation_Therapy_ID)"/>
+            <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
         </xsl:apply-templates>
-
 
         <xsl:variable name="Radiation_Therapy_ID" select="mds2fhir:getID(./@ST_ID,'', generate-id())" as="xs:string"/>
         <xsl:for-each select="./Bestrahlung">
@@ -1672,6 +1629,56 @@
             <request>
                 <method value="PUT"/>
                 <url value="Observation/{$Gen_ID}"/>
+            </request>
+        </entry>
+    </xsl:template>
+
+    <xsl:template match="Nebenwirkung">
+        <xsl:param name="Parent_Ressource"/>
+        <xsl:param name="Patient_ID"/>
+        <xsl:variable name="Gen_ID" select="./@Gen_ID" as="xs:string"/>
+        <entry>
+            <fullUrl value="http://example.com/AdverseEvent/{@Nebenwirkung_ID}"/>
+            <resource>
+                <AdverseEvent xmlns="http://hl7.org/fhir">
+                    <id value="{@Nebenwirkung_ID}"/>
+                    <actuality value="actual"/>
+                    <event>
+                        <coding>
+                            <xsl:choose>
+                                <xsl:when test="starts-with(lower-case(Art_Typ), 'meddra')"><!--TODO to lowercase-->
+                                    <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/MedDRA_CodeCS"/>
+                                </xsl:when>
+                                <xsl:when test="starts-with(lower-case(Art_Typ), 'ctc')">
+                                    <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/CTCAECS"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <system value="urn:{Art_Typ}"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:if test="Version!=''"><version value="{Version}"/></xsl:if>
+                            <code value="{Art}"/>
+                        </coding>
+                    </event>
+                    <subject>
+                        <reference value="Patient/{$Patient_ID}"/>
+                    </subject>
+                    <severity>
+                        <coding>
+                            <system value="http://hl7.org/fhir/us/ctcae/CodeSystem/ctcae-grade-code-system"/>
+                            <code value="{Grad}"/>
+                        </coding>
+                    </severity>
+                    <suspectEntity>
+                        <instance>
+                            <reference value="{$Parent_Ressource}"/>
+                        </instance>
+                    </suspectEntity>
+                </AdverseEvent>
+            </resource>
+            <request>
+                <method value="PUT"/>
+                <url value="AdverseEvent/{@Nebenwirkung_ID}"/>
             </request>
         </entry>
     </xsl:template>
