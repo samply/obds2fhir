@@ -1199,9 +1199,7 @@
                         <focus>
                             <reference value="Condition/{$Diagnosis_ID}"/>
                         </focus>
-                        <xsl:if test="./Datum_der_TNM-Dokumentation-Datum_Befund !=''">
-                            <effectiveDateTime value="{mds2fhir:transformDate(./Datum_der_TNM-Dokumentation-Datum_Befund)}"/>
-                        </xsl:if>
+                        <effectiveDateTime value="{mds2fhir:transformDate(./Datum_der_TNM-Dokumentation-Datum_Befund)}"/>
                         <xsl:if test="./UICC_Stadium">
                             <valueCodeableConcept>
                                 <coding>
@@ -1244,6 +1242,9 @@
                                     <coding>
                                         <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMTCS"/>
                                         <code value="{./TNM-T}"/>
+                                        <xsl:if test="./TNM-Version">
+                                            <version value="{./TNM-Version}"/>
+                                        </xsl:if>
                                     </coding>
                                 </valueCodeableConcept>
                             </component>
@@ -1279,6 +1280,9 @@
                                     <coding>
                                         <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMNCS"/>
                                         <code value="{./TNM-N}"/>
+                                        <xsl:if test="./TNM-Version">
+                                            <version value="{./TNM-Version}"/>
+                                        </xsl:if>
                                     </coding>
                                 </valueCodeableConcept>
                             </component>
@@ -1314,6 +1318,9 @@
                                     <coding>
                                         <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMMCS"/>
                                         <code value="{./TNM-M}"/>
+                                        <xsl:if test="./TNM-Version">
+                                            <version value="{./TNM-Version}"/>
+                                        </xsl:if>
                                     </coding>
                                 </valueCodeableConcept>
                             </component>
