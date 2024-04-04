@@ -462,8 +462,7 @@
                    </xsl:choose>
                </xsl:variable>
                <xsl:attribute name="SYST_ID" select="concat('syst', hash:hash($Patient_Id, $Tumor_Id, string-join($attribute, '')))"/>
-               <xsl:apply-templates select="Meldeanlass | Intention | Stellung_OP"/>
-               <xsl:if test="Therapieart"><SYST_Therapieart><xsl:value-of select="Therapieart"/></SYST_Therapieart></xsl:if>
+               <xsl:apply-templates select="Meldeanlass | Intention | Stellung_OP | Therapieart"/>
                <xsl:if test="Protokoll"><Systemische_Therapie_Protokoll><xsl:value-of select="Protokoll"/></Systemische_Therapie_Protokoll></xsl:if>
                <xsl:if test="Beginn"><Systemische_Therapie_Beginn><xsl:value-of select="Beginn"/></Systemische_Therapie_Beginn></xsl:if>
                <xsl:apply-templates select="Menge_Substanz"/>
@@ -811,6 +810,11 @@
         <Stellung_OP>
             <xsl:apply-templates select="node() | @*"/>
         </Stellung_OP>
+    </xsl:template>
+    <xsl:template match="Therapieart">
+        <Therapieart>
+            <xsl:apply-templates select="node() | @*"/>
+        </Therapieart>
     </xsl:template>
     <xsl:template match="Untersuchungsdatum_Verlauf">
         <Datum_Verlauf>

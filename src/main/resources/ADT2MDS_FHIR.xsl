@@ -691,7 +691,8 @@
     </xsl:template>
 
     <xsl:template match="Menge_Therapieart">
-            <xsl:apply-templates select="SYST_Therapieart"/>
+        <Therapieart><xsl:value-of select="xsi:oBDS-mapping-therapy(SYST_Therapieart)"/></Therapieart>
+        <Therapieart_original><xsl:value-of select="SYST_Therapieart"/></Therapieart_original>
     </xsl:template>
 
     <xsl:template match="Tod">
@@ -963,11 +964,6 @@
             <xsl:apply-templates select="node() | @*"/>
         </ST_Ende_Grund>
     </xsl:template>
-    <xsl:template match="SYST_Therapieart">
-        <SYST_Therapieart>
-            <xsl:apply-templates select="node() | @*"/>
-        </SYST_Therapieart>
-    </xsl:template>
     <xsl:template match="Sterbedatum">
         <Sterbedatum>
             <xsl:apply-templates select="node() | @*"/>
@@ -1066,6 +1062,60 @@
             <xsl:otherwise>
                 <xsl:value-of select="'empty'"/>
             </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+
+    <xsl:function name="xsi:oBDS-mapping-therapy">
+        <xsl:param name="toReplace"/>
+        <xsl:choose>
+            <xsl:when test="contains(string-join($toReplace, ','), 'CH')">
+                <xsl:choose>
+                    <xsl:when test="contains(string-join($toReplace, ','), 'IM')">
+                        <xsl:choose>
+                            <xsl:when test="contains(string-join($toReplace, ','), 'ZS')">
+                                <xsl:value-of select="'CIZ'"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="'CI'"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:when>
+                    <xsl:when test="contains(string-join($toReplace, ','), 'ZS')">
+                        <xsl:value-of select="'CZ'"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="'CH'"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <xsl:when test="contains(string-join($toReplace, ','), 'IM')">
+                <xsl:choose>
+                    <xsl:when test="contains(string-join($toReplace, ','), 'ZS')">
+                        <xsl:value-of select="'IZ'"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="'IM'"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <xsl:when test="contains(string-join($toReplace, ','), 'HO')">
+                <xsl:value-of select="'HO'"/>
+            </xsl:when>
+            <xsl:when test="contains(string-join($toReplace, ','), 'KM')">
+                <xsl:value-of select="'SZ'"/>
+            </xsl:when>
+            <xsl:when test="contains(string-join($toReplace, ','), 'ZS')">
+                <xsl:value-of select="'ZS'"/>
+            </xsl:when>
+            <xsl:when test="contains(string-join($toReplace, ','), 'AS')">
+                <xsl:value-of select="'AS'"/>
+            </xsl:when>
+            <xsl:when test="contains(string-join($toReplace, ','), 'WS')">
+                <xsl:value-of select="'WS'"/>
+            </xsl:when>
+            <xsl:when test="contains(string-join($toReplace, ','), 'SO')">
+                <xsl:value-of select="'SO'"/>
+            </xsl:when>
         </xsl:choose>
     </xsl:function>
 

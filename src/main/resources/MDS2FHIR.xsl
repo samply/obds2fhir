@@ -462,14 +462,17 @@
                                 <xsl:value-of select="mds2fhir:getTreatmentStatus(Meldeanlass,SYST_Ende_Grund)"/>
                             </xsl:attribute>
                         </status>
-                        <category>
-                            <xsl:for-each select="./SYST_Therapieart">
+                        <xsl:if test="Therapieart">
+                            <category>
                                 <coding>
                                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTTherapieartCS"/>
-                                    <code value="{.}"/>
+                                    <code value="{Therapieart}"/>
+                                    <xsl:if test="Therapieart_original">
+                                        <text value="{Therapieart_original}"/>
+                                    </xsl:if>
                                 </coding>
-                            </xsl:for-each>
-                        </category>
+                            </category>
+                        </xsl:if>
                         <medicationCodeableConcept>
                             <xsl:for-each select="SYST_Substanz">
                                 <coding>
