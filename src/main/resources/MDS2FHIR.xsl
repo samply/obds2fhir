@@ -354,12 +354,17 @@
                         <evidence>
                             <coding>
                                 <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/DiagnosesicherungCS"/>
-                                <code value="{./Diagnosesicherung}"/>
+                                <code value="{Diagnosesicherung}"/>
                             </coding>
-                            <xsl:for-each select="./Tumor/Histology">
-                                <xsl:if test="./Tumor_Histologiedatum !=''">
+                            <xsl:for-each select="Tumor/Histology | Tumor/Genetische_Variante">
+                                <xsl:if test="Tumor_Histologiedatum !=''">
                                     <detail>
-                                        <reference value="Observation/{mds2fhir:getID(./@Histology_ID, mds2fhir:transformDate(./Tumor_Histologiedatum),generate-id())}"/>
+                                        <reference value="Observation/{@Histology_ID}"/>
+                                    </detail>
+                                </xsl:if>
+                                <xsl:if test="Bezeichnung !=''">
+                                    <detail>
+                                        <reference value="Observation/{@Gen_ID}"/>
                                     </detail>
                                 </xsl:if>
                             </xsl:for-each>
@@ -890,6 +895,10 @@
             <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
             <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
         </xsl:apply-templates>
+        <xsl:apply-templates select="Genetische_Variante">
+            <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
+            <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
+        </xsl:apply-templates>
     </xsl:template>
 
     <xsl:template match="Verlauf">
@@ -942,6 +951,13 @@
                             <finding>
                                 <itemReference>
                                     <reference value="Observation/{mds2fhir:getID(./@Metastasis_ID, mds2fhir:transformDate(./Datum_diagnostische_Sicherung), generate-id())}"/>
+                                </itemReference>
+                            </finding>
+                        </xsl:for-each>
+                        <xsl:for-each select="Genetische_Variante">
+                            <finding>
+                                <itemReference>
+                                    <reference value="Observation/{@Gen_ID}"/>
                                 </itemReference>
                             </finding>
                         </xsl:for-each>
@@ -1149,6 +1165,10 @@
             <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
             <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
             <xsl:with-param name="Datum_Verlauf" select="./Datum_Verlauf"/>
+        </xsl:apply-templates>
+        <xsl:apply-templates select="Genetische_Variante">
+            <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
+            <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
         </xsl:apply-templates>
     </xsl:template>
 
@@ -1580,7 +1600,9 @@
     </xsl:template>
 
     <xsl:template match="Genetische_Variante">
-        <xsl:variable name="Gen_ID" select="./@Gen_ID" as="xs:string"/>
+        <xsl:param name="Patient_ID"/>
+        <xsl:param name="Diagnosis_ID"/>
+        <xsl:variable name="Gen_ID" select="@Gen_ID" as="xs:string"/>
         <entry>
             <fullUrl value="http://example.com/Observation/{$Gen_ID}"/>
             <resource>
@@ -1597,10 +1619,10 @@
                         </coding>
                     </code>
                     <subject>
-                        <reference value="Patient/TODO"/>
+                        <reference value="Patient/{$Patient_ID}"/>
                     </subject>
                     <focus>
-                        <reference value="Condition/TODO"/>
+                        <reference value="Condition/{$Diagnosis_ID}"/>
                     </focus>
                     <effectiveDateTime value="{Datum}"/>
                     <xsl:choose>
@@ -1697,31 +1719,35 @@
         <xsl:param name="Diagnosis_ID"/>
         <xsl:param name="Patient_ID"/>
         <xsl:variable name="Tumor_ID" select="mds2fhir:getID(./@Tumor_ID, '', generate-id())" as="xs:string"/>
-        <xsl:apply-templates select="./Histology">
+        <xsl:apply-templates select="Histology">
             <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
             <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
         </xsl:apply-templates>
-        <xsl:apply-templates select="./Metastasis">
+        <xsl:apply-templates select="Metastasis">
             <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
             <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
         </xsl:apply-templates>
-        <xsl:apply-templates select="./TNM">
+        <xsl:apply-templates select="TNM">
             <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
             <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
         </xsl:apply-templates>
-        <xsl:apply-templates select="./OP">
+        <xsl:apply-templates select="Genetische_Variante">
             <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
             <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
         </xsl:apply-templates>
-        <xsl:apply-templates select="./ST">
+        <xsl:apply-templates select="OP">
             <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
             <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
         </xsl:apply-templates>
-        <xsl:apply-templates select="./SYST">
+        <xsl:apply-templates select="ST">
             <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
             <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
         </xsl:apply-templates>
-        <xsl:apply-templates select="./Verlauf">
+        <xsl:apply-templates select="SYST">
+            <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
+            <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
+        </xsl:apply-templates>
+        <xsl:apply-templates select="Verlauf">
             <xsl:with-param name="Tumor_ID" select="$Tumor_ID"/>
             <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
             <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
