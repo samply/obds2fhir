@@ -33,17 +33,22 @@
             </xsl:attribute>
             <xsl:apply-templates select="Patienten_Stammdaten/Geschlecht"/>
             <xsl:apply-templates select="Patienten_Stammdaten/Geburtsdatum"/>
-            <xsl:choose>
-                <xsl:when test="./Patienten_Stammdaten/Vitalstatus_Datum"><Datum_des_letztbekannten_Vitalstatus><xsl:value-of select="./Patienten_Stammdaten/Vitalstatus_Datum"/></Datum_des_letztbekannten_Vitalstatus></xsl:when>
-                <xsl:otherwise><xsl:copy-of select="xsi:Datum_des_letztbekannten_Vitalstatus(Menge_Meldung)"/></xsl:otherwise>
-            </xsl:choose>
-            <xsl:choose>
-                <xsl:when test="Patienten_Stammdaten/Vitalstatus='verstorben'"><Vitalstatus>verstorben</Vitalstatus></xsl:when>
-                <xsl:when test="Patienten_Stammdaten/Vitalstatus='lebend'"><Vitalstatus >lebend</Vitalstatus></xsl:when>
-                <xsl:when test="Menge_Meldung/Meldung/Tod"><Vitalstatus>verstorben</Vitalstatus></xsl:when>
-            </xsl:choose>
-<!--            <DKTK_ID>TODO</DKTK_ID>-->
+            <!--<DKTK_ID>TODO</DKTK_ID>-->
             <DKTK_LOCAL_ID><xsl:value-of select="$Patient_Pseudonym"/></DKTK_LOCAL_ID>
+            <Vitalstatus_Gesamt>
+                <xsl:attribute name="Vitalstatus_ID"><xsl:value-of select="concat($Patient_Id,'vital')"/></xsl:attribute>
+                <xsl:choose>
+                    <xsl:when test="Patienten_Stammdaten/Vitalstatus_Datum"><Datum_des_letztbekannten_Vitalstatus><xsl:value-of select="Patienten_Stammdaten/Vitalstatus_Datum"/></Datum_des_letztbekannten_Vitalstatus></xsl:when>
+                    <xsl:otherwise><xsl:copy-of select="xsi:Datum_des_letztbekannten_Vitalstatus(Menge_Meldung)"/></xsl:otherwise>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="lower-case(Patienten_Stammdaten/Vitalstatus)='verstorben'"><Vitalstatus>verstorben</Vitalstatus></xsl:when>
+                    <xsl:when test="lower-case(Patienten_Stammdaten/Vitalstatus)='lebend'"><Vitalstatus >lebend</Vitalstatus></xsl:when>
+                    <xsl:when test="Menge_Meldung/Meldung/Tod"><Vitalstatus>verstorben</Vitalstatus></xsl:when>
+                    <xsl:when test="not(Menge_Meldung/Meldung/Tod)"><Vitalstatus>lebend</Vitalstatus></xsl:when>
+                </xsl:choose>
+                <xsl:apply-templates select="Menge_Meldung/Meldung/Tod"/>
+            </Vitalstatus_Gesamt>
             <xsl:if test="$add_department=true()">
                 <Organisationen>
                     <Organisation><xsl:value-of select="/oBDS/Menge_Melder/Melder[1]/Kontoinhaber"/></Organisation>
@@ -133,12 +138,12 @@
                 </xsl:for-each>
                 <xsl:for-each select="$Tumor_Meldungen/SYST">
                     <xsl:choose>
-                        <xsl:when test="@SYST_ID"><xsl:apply-templates select=".[not(@SYST_ID=following::SYST[../../../../Patienten_Stammdaten/@Patient_ID=$Patient_Id and ../../Tumorzuordnung/@Tumor_ID=$Tumor_Id]/@SYST_ID)]">
+                        <xsl:when test="@SYST_ID"><xsl:apply-templates select=".[not(@SYST_ID=following::*/SYST/@SYST_ID)]">
                             <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                             <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
                         </xsl:apply-templates>
                         </xsl:when>
-                        <xsl:otherwise><xsl:apply-templates select=".[not(SYST_Beginn_Datum=following::SYST[../../../../Patienten_Stammdaten/@Patient_ID=$Patient_Id and ../../Tumorzuordnung/@Tumor_ID=$Tumor_Id]/SYST_Beginn_Datum)]">
+                        <xsl:otherwise><xsl:apply-templates select=".[not(SYST_Beginn_Datum=following::*/SYST/SYST_Beginn_Datum)]">
                             <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                             <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
                         </xsl:apply-templates>
@@ -147,12 +152,12 @@
                 </xsl:for-each>
                 <xsl:for-each select="$Tumor_Meldungen/Verlauf">
                     <xsl:choose>
-                        <xsl:when test="@Verlauf_ID"><xsl:apply-templates select=".[not(@Verlauf_ID=following::Verlauf[../../../../Patienten_Stammdaten/@Patient_ID=$Patient_Id and ../../Tumorzuordnung/@Tumor_ID=$Tumor_Id]/@Verlauf_ID)]">
+                        <xsl:when test="@Verlauf_ID"><xsl:apply-templates select=".[not(@Verlauf_ID=following::*/Verlauf/@Verlauf_ID)]">
                             <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                             <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
                         </xsl:apply-templates>
                         </xsl:when>
-                        <xsl:otherwise><xsl:apply-templates select=".[not(Untersuchungsdatum_Verlauf=following::Verlauf[../../../../Patienten_Stammdaten/@Patient_ID=$Patient_Id and ../../Tumorzuordnung/@Tumor_ID=$Tumor_Id]/Untersuchungsdatum_Verlauf)]">
+                        <xsl:otherwise><xsl:apply-templates select=".[not(Untersuchungsdatum_Verlauf=following::*/Verlauf/Untersuchungsdatum_Verlauf)]">
                             <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                             <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
                         </xsl:apply-templates>
@@ -515,13 +520,17 @@
     </xsl:template>
 
     <xsl:template match="Tod">
-        <Tod>
-            <xsl:apply-templates select="Sterbedatum | Tod_tumorbedingt | Menge_Todesursache"></xsl:apply-templates>
-        </Tod>
+        <xsl:if test="Sterbedatum !=''">
+            <Tod>
+                <xsl:apply-templates select="Sterbedatum | Tod_tumorbedingt | Menge_Todesursachen"></xsl:apply-templates>
+            </Tod>
+        </xsl:if>
     </xsl:template>
 
-    <xsl:template match="Menge_Todesursache">
-            <xsl:apply-templates select="Todesursache_ICD | Todesursache_ICD_Version"></xsl:apply-templates>
+    <xsl:template match="Menge_Todesursachen">
+        <Menge_Todesursachen>
+            <xsl:apply-templates select="Todesursache_ICD"/>
+        </Menge_Todesursachen>
     </xsl:template>
 
     <xsl:template match="Residualstatus">
@@ -650,9 +659,12 @@
         </Diagnosesicherung>
     </xsl:template>
     <xsl:template match="Allgemeiner_Leistungszustand" >
-        <Allgemeiner_Leistungszustand>
-            <xsl:apply-templates select="node() | @*"/>
-        </Allgemeiner_Leistungszustand>
+        <xsl:variable name="ecog" select="xsi:mapToECOG(node())"/>
+        <xsl:if test="string-length($ecog)>=1">
+            <ECOG>
+                <xsl:value-of select="$ecog"/>
+            </ECOG>
+        </xsl:if>
     </xsl:template>
     <xsl:template match="Grading">
         <Grading>
@@ -855,7 +867,8 @@
     </xsl:template>
     <xsl:template match="Todesursache_ICD">
         <Todesursache_ICD>
-            <xsl:apply-templates select="node() | @*"/>
+            <xsl:if test="Code"><Code><xsl:value-of select="Code"/></Code></xsl:if>
+            <xsl:if test="Version"><Version><xsl:value-of select="Version"/></Version></xsl:if>
         </Todesursache_ICD>
     </xsl:template>
     <xsl:template match="Todesursache_ICD_Version">
@@ -953,4 +966,39 @@
         </xsl:choose>
     </xsl:function>
 
+    <xsl:function name="xsi:mapToECOG">
+        <xsl:param name="value"/>
+        <xsl:if test="$value !=''">
+            <xsl:choose>
+                <xsl:when test="matches($value, '\d\d%')"><!-- Karnofsky; map to ECOG -->
+                    <xsl:choose>
+                        <xsl:when test="number(substring($value, 1, 2)) >= 90">
+                            <xsl:value-of select="number('0')"/>
+                        </xsl:when>
+                        <xsl:when test="number(substring($value, 1, 2)) >= 70">
+                            <xsl:value-of select="number('1')"/>
+                        </xsl:when>
+                        <xsl:when test="number(substring($value, 1, 2)) >= 50">
+                            <xsl:value-of select="number('2')"/>
+                       </xsl:when>
+                        <xsl:when test="number(substring($value, 1, 2)) >= 30">
+                            <xsl:value-of select="number('3')"/>
+                        </xsl:when>
+                        <xsl:when test="number(substring($value, 1, 2)) >= 10">
+                            <xsl:value-of select="number('4')"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="'error'"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:when>
+                <xsl:when test="matches($value, '[0-4U]')"><!-- ECOG; use directly-->
+                    <xsl:value-of select="$value"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="'error -',$value"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:if>
+    </xsl:function>
 </xsl:stylesheet>

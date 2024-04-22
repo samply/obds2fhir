@@ -30,7 +30,6 @@
 
     <xsl:template match="Patient" mode="patient">
         <xsl:variable name="Patient_ID" select="@Patient_ID"/>
-        <xsl:variable name="Vitalstatus_ID" select="hash:hash($Patient_ID, 'vitalstatus', '')"/>
         <xsl:result-document href="file:{$filepath}/tmp/FHIR_Patients/FHIR_{$customPrefix}">
             <Bundle xmlns="http://hl7.org/fhir">
                 <id value="{substring($customPrefix, 9, 16)}"/>
@@ -97,45 +96,10 @@
             <Bundle xmlns="http://hl7.org/fhir">
                 <id value="{substring($customPrefix, 9, 16)}"/>
                 <type value="batch"/>
-                <xsl:if test="Datum_des_letztbekannten_Vitalstatus !=''">
-                    <entry>
-                        <fullUrl value="http://example.com/Observation/{$Vitalstatus_ID}"/>
-                        <resource>
-                            <Observation>
-                                <id value="{$Vitalstatus_ID}"/>
-                                <meta>
-                                    <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Vitalstatus"/>
-                                </meta>
-                                <status value="registered"/>
-                                <code>
-                                    <coding>
-                                        <system value="http://loinc.org"/>
-                                        <code value="75186-7"/>
-                                    </coding>
-                                </code>
-                                <subject>
-                                    <reference value="Patient/{$Patient_ID}"/>
-                                </subject>
-                                <xsl:if test="./Datum_des_letztbekannten_Vitalstatus">
-                                    <effectiveDateTime value="{mds2fhir:transformDate(./Datum_des_letztbekannten_Vitalstatus)}"/>
-                                </xsl:if>
-                                <valueCodeableConcept>
-                                    <coding>
-                                        <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VitalstatusCS"/>
-                                        <code value="{./Vitalstatus}"/>
-                                    </coding>
-                                </valueCodeableConcept>
-                            </Observation>
-                        </resource>
-                        <request>
-                            <method value="PUT"/>
-                            <xsl:if test="not(./Vitalstatus = 'verstorben')">
-                                <ifNoneMatch value="*"/>
-                            </xsl:if>
-                            <url value="Observation/{$Vitalstatus_ID}"/>
-                        </request>
-                    </entry>
-                </xsl:if>
+                <xsl:apply-templates select="Vitalstatus_Gesamt">
+                    <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
+                </xsl:apply-templates>
+
                 <xsl:for-each select="./Organisationen/Abteilung">
                     <xsl:variable name="Encounter_ID" select="hash:hash($Patient_ID, ., '')"/>
                     <entry>
@@ -377,6 +341,11 @@
                 </request>
             </entry>
         </xsl:if>
+        <xsl:apply-templates select="ECOG">
+            <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
+            <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
+            <xsl:with-param name="ECOG_ID" select="concat($Diagnosis_ID, 'ecog')"/>
+        </xsl:apply-templates>
         <xsl:apply-templates select="./Tumor" mode="tumor">
             <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
             <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
@@ -909,6 +878,7 @@
             <xsl:variable name="Progress_ID" select="mds2fhir:getID(./@Verlauf_ID, ./Datum_Verlauf, generate-id())" as="xs:string"/>
             <xsl:variable name="TumorstatusLymphknoten_ID"><xsl:if test="./Lymphknoten-Rezidiv or Verlauf_Tumorstatus_Lymphknoten"><xsl:value-of select="concat($Progress_ID, Lymphknoten-Rezidiv | Verlauf_Tumorstatus_Lymphknoten, 'tsl')"/></xsl:if></xsl:variable><!-- for both, legacy ADT or oBDS -->
             <xsl:variable name="TumorstatusFernmetastasen_ID"><xsl:if test="Fernmetastasen or Verlauf_Tumorstatus_Fernmetastasen"><xsl:value-of select="concat($Progress_ID, Fernmetastasen | Verlauf_Tumorstatus_Fernmetastasen, 'fmn')"/></xsl:if></xsl:variable><!-- for both, legacy ADT or oBDS -->
+            <xsl:variable name="ECOG_ID"><xsl:if test="ECOG !=''"><xsl:value-of select="concat($Progress_ID, 'ecog')"/></xsl:if></xsl:variable>
             <xsl:variable name="LokalerTumorstatus_ID"><xsl:if test="Lokales-regionäres_Rezidiv or Verlauf_Lokaler_Tumorstatus"><xsl:value-of select="concat($Progress_ID, Lokales-regionäres_Rezidiv | Verlauf_Lokaler_Tumorstatus, 'krz')"/></xsl:if></xsl:variable><!-- for both, legacy ADT or oBDS -->
             <xsl:variable name="GesamtbeurteilungTumorstatus_ID"><xsl:if test="Ansprechen_im_Verlauf or Gesamtbeurteilung_Tumorstatus"><xsl:value-of select="concat($Progress_ID, Ansprechen_im_Verlauf | Gesamtbeurteilung_Tumorstatus, 'asp')"/></xsl:if></xsl:variable><!-- for both, legacy ADT or oBDS -->
 
@@ -961,6 +931,13 @@
                                 </itemReference>
                             </finding>
                         </xsl:for-each>
+                        <xsl:if test="ECOG != ''">
+                            <finding>
+                                <itemReference>
+                                    <reference value="Observation/{$ECOG_ID}"/>
+                                </itemReference>
+                            </finding>
+                        </xsl:if>
                         <xsl:if test="$LokalerTumorstatus_ID != ''">
                             <finding>
                                 <itemReference>
@@ -1152,24 +1129,29 @@
                     </request>
                 </entry>
             </xsl:if>
+            <xsl:apply-templates select="./Histology">
+                <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
+                <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
+            </xsl:apply-templates>
+            <xsl:apply-templates select="./TNM">
+                <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
+                <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
+            </xsl:apply-templates>
+            <xsl:apply-templates select="./Metastasis">
+                <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
+                <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
+                <xsl:with-param name="Datum_Verlauf" select="./Datum_Verlauf"/>
+            </xsl:apply-templates>
+            <xsl:apply-templates select="Genetische_Variante">
+                <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
+                <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
+            </xsl:apply-templates>
+            <xsl:apply-templates select="ECOG">
+                <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
+                <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
+                <xsl:with-param name="ECOG_ID" select="$ECOG_ID"/>
+            </xsl:apply-templates>
         </xsl:if>
-        <xsl:apply-templates select="./Histology">
-            <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
-            <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
-        </xsl:apply-templates>
-        <xsl:apply-templates select="./TNM">
-            <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
-            <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
-        </xsl:apply-templates>
-        <xsl:apply-templates select="./Metastasis">
-            <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
-            <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
-            <xsl:with-param name="Datum_Verlauf" select="./Datum_Verlauf"/>
-        </xsl:apply-templates>
-        <xsl:apply-templates select="Genetische_Variante">
-            <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
-            <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
-        </xsl:apply-templates>
     </xsl:template>
 
     <xsl:template match="TNM">
@@ -1665,6 +1647,54 @@
         </entry>
     </xsl:template>
 
+    <xsl:template match="ECOG">
+        <xsl:param name="Patient_ID"/>
+        <xsl:param name="Diagnosis_ID"/>
+        <xsl:param name="ECOG_ID"/>
+        <entry>
+            <fullUrl value="http://example.com/Observation/{$ECOG_ID}"/>
+            <resource>
+                <Observation xmlns="http://hl7.org/fhir">
+                    <id value="{$ECOG_ID}"/>
+                    <meta>
+                        <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Ecog"/>
+                    </meta>
+                    <status value="final"/>
+                    <code>
+                        <coding>
+                            <system value="http://loinc.org"/>
+                            <code value="89247-1"/>
+                        </coding>
+                    </code>
+                    <subject>
+                        <reference value="Patient/{$Patient_ID}"/>
+                    </subject>
+                    <focus>
+                        <reference value="Condition/{$Diagnosis_ID}"/>
+                    </focus>
+                    <xsl:choose>
+                        <xsl:when test="../Tumor_Diagnosedatum !=''">
+                            <effectiveDateTime value="{mds2fhir:transformDate(../Tumor_Diagnosedatum)}"/>
+                        </xsl:when>
+                        <xsl:when test="../Datum_Verlauf !=''">
+                            <effectiveDateTime value="{mds2fhir:transformDate(../Datum_Verlauf)}"/>
+                        </xsl:when>
+                    </xsl:choose>
+                    <valueCodeableConcept>
+                        <coding>
+                            <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/EcogCS"/>
+                            <code value="{.}"/>
+                        </coding>
+                    </valueCodeableConcept>
+                </Observation>
+            </resource>
+            <request>
+                <method value="PUT"/>
+                <url value="Observation/{$ECOG_ID}"/>
+            </request>
+        </entry>
+    </xsl:template>
+
     <xsl:template match="Nebenwirkung">
         <xsl:param name="Parent_Ressource"/>
         <xsl:param name="Patient_ID"/>
@@ -1715,6 +1745,47 @@
         </entry>
     </xsl:template>
 
+    <xsl:template match="Vitalstatus_Gesamt">
+        <xsl:param name="Patient_ID"/>
+        <xsl:if test="Datum_des_letztbekannten_Vitalstatus !=''">
+            <entry>
+                <fullUrl value="http://example.com/Observation/{@Vitalstatus_ID}"/>
+                <resource>
+                    <Observation>
+                        <id value="{@Vitalstatus_ID}"/>
+                        <meta>
+                            <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Vitalstatus"/>
+                        </meta>
+                        <status value="registered"/>
+                        <code>
+                            <coding>
+                                <system value="http://loinc.org"/>
+                                <code value="75186-7"/>
+                            </coding>
+                        </code>
+                        <subject>
+                            <reference value="Patient/{$Patient_ID}"/>
+                        </subject>
+                        <effectiveDateTime value="{mds2fhir:transformDate(Datum_des_letztbekannten_Vitalstatus)}"/>
+                        <valueCodeableConcept>
+                            <coding>
+                                <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VitalstatusCS"/>
+                                <code value="{Vitalstatus}"/>
+                            </coding>
+                        </valueCodeableConcept>
+                    </Observation>
+                </resource>
+                <request>
+                    <method value="PUT"/>
+                    <xsl:if test="not(Vitalstatus = 'verstorben')">
+                        <ifNoneMatch value="*"/>
+                    </xsl:if>
+                    <url value="Observation/{@Vitalstatus_ID}"/>
+                </request>
+            </entry>
+        </xsl:if>
+    </xsl:template>
+
     <xsl:template match="Tumor" mode="tumor">
         <xsl:param name="Diagnosis_ID"/>
         <xsl:param name="Patient_ID"/>
@@ -1749,6 +1820,10 @@
         </xsl:apply-templates>
         <xsl:apply-templates select="Verlauf">
             <xsl:with-param name="Tumor_ID" select="$Tumor_ID"/>
+            <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
+            <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
+        </xsl:apply-templates>
+        <xsl:apply-templates select="Tod">
             <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
             <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
         </xsl:apply-templates>
