@@ -346,6 +346,10 @@
             <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
             <xsl:with-param name="ECOG_ID" select="concat($Diagnosis_ID, 'ecog')"/>
         </xsl:apply-templates>
+        <xsl:apply-templates select="Weitere_Klassifikation">
+            <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
+            <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
+        </xsl:apply-templates>
         <xsl:apply-templates select="./Tumor" mode="tumor">
             <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
             <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
@@ -887,6 +891,10 @@
             <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
             <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
         </xsl:apply-templates>
+        <xsl:apply-templates select="Weitere_Klassifikation">
+            <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
+            <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
+        </xsl:apply-templates>
     </xsl:template>
 
     <xsl:template match="Verlauf">
@@ -957,6 +965,13 @@
                                 </itemReference>
                             </finding>
                         </xsl:if>
+                        <xsl:for-each select="Weitere_Klassifikation">
+                            <finding>
+                                <itemReference>
+                                    <reference value="Observation/{@WeitereKlassifikation_ID}"/>
+                                </itemReference>
+                            </finding>
+                        </xsl:for-each>
                         <xsl:if test="$LokalerTumorstatus_ID != ''">
                             <finding>
                                 <itemReference>
@@ -1169,6 +1184,10 @@
                 <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
                 <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
                 <xsl:with-param name="ECOG_ID" select="$ECOG_ID"/>
+            </xsl:apply-templates>
+            <xsl:apply-templates select="Weitere_Klassifikation">
+                <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
+                <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
             </xsl:apply-templates>
         </xsl:if>
     </xsl:template>
@@ -1800,6 +1819,48 @@
                         <ifNoneMatch value="*"/>
                     </xsl:if>
                     <url value="Observation/{@Vitalstatus_ID}"/>
+                </request>
+            </entry>
+        </xsl:if>
+    </xsl:template>
+
+    <xsl:template match="Weitere_Klassifikation">
+        <xsl:param name="Patient_ID"/>
+        <xsl:param name="Diagnosis_ID"/>
+        <xsl:if test="Datum !='' and Stadium !=''">
+            <entry>
+                <fullUrl value="http://example.com/Observation/{@WeitereKlassifikation_ID}"/>
+                <resource>
+                    <Observation>
+                        <id value="{@WeitereKlassifikation_ID}"/>
+                        <meta>
+                            <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-WeitereKlassifikation"/>
+                        </meta>
+                        <status value="registered"/>
+                        <code>
+                            <coding>
+                                <system value="http://loinc.org"/>
+                                <code value="LP248771-0"/>
+                            </coding>
+                        </code>
+                        <subject>
+                            <reference value="Patient/{$Patient_ID}"/>
+                        </subject>
+                        <focus>
+                            <reference value="Condition/{$Diagnosis_ID}"/>
+                        </focus>
+                        <effectiveDateTime value="{mds2fhir:transformDate(Datum)}"/>
+                        <valueCodeableConcept>
+                            <coding>
+                                <system value="urn:{Name}"/>
+                                <code value="{Stadium}"/>
+                            </coding>
+                        </valueCodeableConcept>
+                    </Observation>
+                </resource>
+                <request>
+                    <method value="PUT"/>
+                    <url value="Observation/{@WeitereKlassifikation_ID}"/>
                 </request>
             </entry>
         </xsl:if>

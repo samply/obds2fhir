@@ -169,7 +169,11 @@
                     <xsl:if test="not ($diagMonths &lt; $gebMonths)"><xsl:value-of select="$dif"/></xsl:if>
                 </xsl:element>
                 <Tumor_Diagnosedatum><xsl:apply-templates select="$diagnoseDatum"/></Tumor_Diagnosedatum>
-                <xsl:apply-templates select="$Diagnosis_Meldung/Primaertumor_ICD_Code | $Diagnosis_Meldung/Primaertumor_ICD_Version | $Diagnosis_Meldung/Primaertumor_Diagnosetext | $Diagnosis_Meldung/Primaertumor_Topographie_ICD_O_Freitext | $Diagnosis_Meldung/Diagnosesicherung | $Diagnosis_Meldung/Menge_Weitere_Klassifikation | $Diagnosis_Meldung/Allgemeiner_Leistungszustand"/>
+                <xsl:apply-templates select="$Diagnosis_Meldung/Primaertumor_ICD_Code | $Diagnosis_Meldung/Primaertumor_ICD_Version | $Diagnosis_Meldung/Primaertumor_Diagnosetext | $Diagnosis_Meldung/Primaertumor_Topographie_ICD_O_Freitext | $Diagnosis_Meldung/Diagnosesicherung | $Diagnosis_Meldung/Allgemeiner_Leistungszustand"/>
+                <xsl:apply-templates select="$Diagnosis_Meldung/Menge_Weitere_Klassifikation">
+                    <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
+                    <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
+                </xsl:apply-templates>
             </xsl:if>
             <!--Generate third Level TUMOR entity (Elements:  Lokalisation | ICD-O_Katalog_Topographie_Version |  Seitenlokalisation ) -->
             <Tumor>
@@ -480,7 +484,10 @@
             <xsl:apply-templates select="./Menge_Verlauf/Verlauf/Untersuchungsdatum_Verlauf"></xsl:apply-templates><!-\-Datum_des_letztbekannten_Verlaufs TODO-\->-->
 
             <xsl:if test="Untersuchungsdatum_Verlauf !=''"><Datum_Verlauf><xsl:apply-templates select="Untersuchungsdatum_Verlauf/node()"/></Datum_Verlauf></xsl:if>
-
+            <xsl:apply-templates select="Menge_Weitere_Klassifikation">
+                <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
+                <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
+            </xsl:apply-templates>
 
 
             <xsl:choose>
@@ -762,15 +769,16 @@
     </xsl:template>
 
     <xsl:template match="Menge_Weitere_Klassifikation">
-        <Menge_Weitere_Klassifikation>
-            <xsl:for-each select="Weitere_Klassifikation">
-                <Weitere_Klassifikation>
-                    <xsl:if test="Datum"><Datum><xsl:value-of select="Datum"/></Datum></xsl:if>
-                    <xsl:if test="Name"><Name><xsl:value-of select="Name"/></Name></xsl:if>
-                    <xsl:if test="Stadium"><Stadium><xsl:value-of select="Stadium"/></Stadium></xsl:if>
-                </Weitere_Klassifikation>
-            </xsl:for-each>
-        </Menge_Weitere_Klassifikation>
+        <xsl:param name="Patient_Id"/>
+        <xsl:param name="Tumor_Id"/>
+        <xsl:for-each select="Weitere_Klassifikation">
+            <Weitere_Klassifikation>
+                <xsl:attribute name="WeitereKlassifikation_ID" select="hash:hash($Patient_Id, $Tumor_Id, Datum, Name, Stadium)"/>
+                <xsl:if test="Datum"><Datum><xsl:value-of select="Datum"/></Datum></xsl:if>
+                <xsl:if test="Name"><Name><xsl:value-of select="Name"/></Name></xsl:if>
+                <xsl:if test="Stadium"><Stadium><xsl:value-of select="Stadium"/></Stadium></xsl:if>
+            </Weitere_Klassifikation>
+        </xsl:for-each>
     </xsl:template>
 
     <xsl:template match="Menge_Substanz">

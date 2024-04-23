@@ -92,8 +92,11 @@
                     $Tumor_Meldungen/Diagnose/Primaertumor_Diagnosetext |
                     $Tumor_Meldungen/Diagnose/Primaertumor_Topographie_Freitext |
                     $Tumor_Meldungen/Diagnose/Diagnosesicherung |
-                    $Tumor_Meldungen/Diagnose/Allgemeiner_Leistungszustand |
-                    $Tumor_Meldungen/Diagnose/Menge_Weitere_Klassifikation"/>
+                    $Tumor_Meldungen/Diagnose/Allgemeiner_Leistungszustand"/>
+                <xsl:apply-templates select="$Tumor_Meldungen/Diagnose/Menge_Weitere_Klassifikation">
+                    <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
+                    <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
+                </xsl:apply-templates>
             </xsl:if>
             <!--Generate third Level TUMOR entity (Elements:  Lokalisation | ICD-O_Katalog_Topographie_Version |  Seitenlokalisation ) -->
             <Tumor>
@@ -321,6 +324,10 @@
         <Verlauf>
             <xsl:attribute name="Verlauf_ID" select="concat('vrl', hash:hash($Patient_Id, $Tumor_Id, string-join($attribute, '')))" />
             <xsl:apply-templates select="Meldeanlass | Untersuchungsdatum_Verlauf | Gesamtbeurteilung_Tumorstatus | Verlauf_Lokaler_Tumorstatus | Verlauf_Tumorstatus_Lymphknoten | Verlauf_Tumorstatus_Fernmetastasen | Allgemeiner_Leistungszustand"/>
+            <xsl:apply-templates select="Menge_Weitere_Klassifikation">
+                <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
+                <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
+            </xsl:apply-templates>
             <xsl:choose>
                 <xsl:when test="TNM/@ID">
                     <xsl:apply-templates select="TNM[not(@ID=following::*/TNM/@ID)]">
@@ -411,6 +418,10 @@
                 </Komplikationen>
             </xsl:if>
             <xsl:apply-templates select="Residualstatus[not(concat(Lokale_Beurteilung_Residualstatus,Gesamtbeurteilung_Residualstatus)=following-sibling::*/concat(Lokale_Beurteilung_Residualstatus,Gesamtbeurteilung_Residualstatus))]"/>
+            <xsl:apply-templates select="Menge_Weitere_Klassifikation">
+                <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
+                <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
+            </xsl:apply-templates>
             <xsl:choose>
                 <xsl:when test="Histologie/@Histologie_ID">
                     <xsl:apply-templates select="Histologie[not(@Histologie_ID=following::*/Histologie/@Histologie_ID)]">
@@ -622,15 +633,16 @@
     </xsl:template>
 
     <xsl:template match="Menge_Weitere_Klassifikation">
-        <Menge_Weitere_Klassifikation>
-            <xsl:for-each select="Weitere_Klassifikation">
-                <Weitere_Klassifikation>
-                    <xsl:if test="Datum"><Datum><xsl:value-of select="Datum"/></Datum></xsl:if>
-                    <xsl:if test="Name"><Name><xsl:value-of select="Name"/></Name></xsl:if>
-                    <xsl:if test="Stadium"><Stadium><xsl:value-of select="Stadium"/></Stadium></xsl:if>
-                </Weitere_Klassifikation>
-            </xsl:for-each>
-        </Menge_Weitere_Klassifikation>
+        <xsl:param name="Patient_Id"/>
+        <xsl:param name="Tumor_Id"/>
+        <xsl:for-each select="Weitere_Klassifikation">
+            <Weitere_Klassifikation>
+                <xsl:attribute name="WeitereKlassifikation_ID" select="hash:hash($Patient_Id, $Tumor_Id, Datum, Name, Stadium)"/>
+                <xsl:if test="Datum"><Datum><xsl:value-of select="Datum"/></Datum></xsl:if>
+                <xsl:if test="Name"><Name><xsl:value-of select="Name"/></Name></xsl:if>
+                <xsl:if test="Stadium"><Stadium><xsl:value-of select="Stadium"/></Stadium></xsl:if>
+            </Weitere_Klassifikation>
+        </xsl:for-each>
     </xsl:template>
 
     <xsl:template match="Menge_Substanz">
