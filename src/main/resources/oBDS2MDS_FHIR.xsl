@@ -91,9 +91,10 @@
                     $Tumor_Meldungen[1]/Tumorzuordnung/Primaertumor_ICD |
                     $Tumor_Meldungen/Diagnose/Primaertumor_Diagnosetext |
                     $Tumor_Meldungen/Diagnose/Primaertumor_Topographie_Freitext |
-                    $Tumor_Meldungen/Diagnose/Diagnosesicherung |
-                    $Tumor_Meldungen/Diagnose/Allgemeiner_Leistungszustand"/>
-                <xsl:apply-templates select="$Tumor_Meldungen/Diagnose/Menge_Weitere_Klassifikation">
+                    $Tumor_Meldungen/Diagnose/Diagnosesicherung"/>
+                <xsl:apply-templates select="
+                    $Tumor_Meldungen/Diagnose/Allgemeiner_Leistungszustand |
+                    $Tumor_Meldungen/Diagnose/Menge_Weitere_Klassifikation">
                     <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                     <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
                 </xsl:apply-templates>
@@ -323,8 +324,8 @@
         </xsl:variable>
         <Verlauf>
             <xsl:attribute name="Verlauf_ID" select="concat('vrl', hash:hash($Patient_Id, $Tumor_Id, string-join($attribute, '')))" />
-            <xsl:apply-templates select="Meldeanlass | Untersuchungsdatum_Verlauf | Gesamtbeurteilung_Tumorstatus | Verlauf_Lokaler_Tumorstatus | Verlauf_Tumorstatus_Lymphknoten | Verlauf_Tumorstatus_Fernmetastasen | Allgemeiner_Leistungszustand"/>
-            <xsl:apply-templates select="Menge_Weitere_Klassifikation">
+            <xsl:apply-templates select="Meldeanlass | Untersuchungsdatum_Verlauf | Gesamtbeurteilung_Tumorstatus | Verlauf_Lokaler_Tumorstatus | Verlauf_Tumorstatus_Lymphknoten | Verlauf_Tumorstatus_Fernmetastasen"/>
+            <xsl:apply-templates select="Allgemeiner_Leistungszustand | Menge_Weitere_Klassifikation">
                 <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                 <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
             </xsl:apply-templates>
@@ -523,7 +524,7 @@
         <xsl:param name="Therapy_Id"/>
         <xsl:for-each select="Menge_Nebenwirkung/Nebenwirkung[Grad!='']">
             <Nebenwirkung>
-                <xsl:attribute name="Nebenwirkung_ID" select="concat($Patient_Id, $Tumor_Id, hash:hash($Therapy_Id, Art/node(), Grad, Version))"/>
+                <xsl:attribute name="Nebenwirkung_ID" select="hash:hash($Patient_Id, $Tumor_Id, concat($Therapy_Id, Art/node(), Grad, Version))"/>
                 <Grad><xsl:value-of select="Grad"/></Grad>
                 <xsl:if test="Version"><Version><xsl:value-of select="Version"/></Version></xsl:if>
                 <xsl:if test="Art/node()">
@@ -637,7 +638,7 @@
         <xsl:param name="Tumor_Id"/>
         <xsl:for-each select="Weitere_Klassifikation">
             <Weitere_Klassifikation>
-                <xsl:attribute name="WeitereKlassifikation_ID" select="hash:hash($Patient_Id, $Tumor_Id, Datum, Name, Stadium)"/>
+                <xsl:attribute name="WeitereKlassifikation_ID" select="hash:hash($Patient_Id, $Tumor_Id, concat(Datum, Name, Stadium))"/>
                 <xsl:if test="Datum"><Datum><xsl:value-of select="Datum"/></Datum></xsl:if>
                 <xsl:if test="Name"><Name><xsl:value-of select="Name"/></Name></xsl:if>
                 <xsl:if test="Stadium"><Stadium><xsl:value-of select="Stadium"/></Stadium></xsl:if>
@@ -694,9 +695,12 @@
         </Diagnosesicherung>
     </xsl:template>
     <xsl:template match="Allgemeiner_Leistungszustand" >
+        <xsl:param name="Patient_Id"/>
+        <xsl:param name="Tumor_Id"/>
         <xsl:variable name="ecog" select="xsi:mapToECOG(node())"/>
         <xsl:if test="string-length($ecog)>=1">
             <ECOG>
+                <xsl:attribute name="ECOG_ID" select="hash:hash($Patient_Id, $Tumor_Id, $ecog)"/>
                 <xsl:value-of select="$ecog"/>
             </ECOG>
         </xsl:if>

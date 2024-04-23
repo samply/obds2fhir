@@ -11,6 +11,7 @@
     <xsl:output omit-xml-declaration="no" indent="yes"/>
     <xsl:strip-space elements="*"/>
     <xsl:param name="add_department" />
+    <xsl:param name="keep_internal_id" />
 
 <!--    This xsl file transforms ADT xml files (ADT_GEKID_v2.1.1-dktk_v0.1.2 and ADT_GEKID_v2.1.1) to the DKTK searchmodel structure (MDS_Suchmodell_v4) combine with aditional ADT elements
         MDS + additional Structure (entities) generated from ADT:
@@ -44,8 +45,10 @@
             <xsl:variable name="Patient_Id" select="Patienten_Stammdaten/@Patient_ID"/>
             <xsl:variable name="Patient_Pseudonym" select="xsi:Pseudonymize(Patienten_Stammdaten/Patienten_Geschlecht, Patienten_Stammdaten/Patienten_Vornamen, Patienten_Stammdaten/Patienten_Nachname, Patienten_Stammdaten/Patienten_Geburtsname, Patienten_Stammdaten/Patienten_Geburtsdatum, Patienten_Stammdaten/@Patient_ID)"/>
             <xsl:attribute name="Patient_ID">
-                <!--<xsl:value-of select="Patienten_Stammdaten/@Patient_ID"/>-->
-                <xsl:value-of select="hash:hash($Patient_Id,'','')"/>
+                <xsl:choose>
+                    <xsl:when test="$keep_internal_id=true()"><xsl:value-of select="$Patient_Id"/></xsl:when>
+                    <xsl:otherwise><xsl:value-of select="hash:hash($Patient_Id,'','')"/></xsl:otherwise>
+                </xsl:choose>
             </xsl:attribute>
             <Geschlecht>
                 <xsl:choose><xsl:when test="Patienten_Stammdaten/Patienten_Geschlecht = 'D'">S</xsl:when>
@@ -169,8 +172,8 @@
                     <xsl:if test="not ($diagMonths &lt; $gebMonths)"><xsl:value-of select="$dif"/></xsl:if>
                 </xsl:element>
                 <Tumor_Diagnosedatum><xsl:apply-templates select="$diagnoseDatum"/></Tumor_Diagnosedatum>
-                <xsl:apply-templates select="$Diagnosis_Meldung/Primaertumor_ICD_Code | $Diagnosis_Meldung/Primaertumor_ICD_Version | $Diagnosis_Meldung/Primaertumor_Diagnosetext | $Diagnosis_Meldung/Primaertumor_Topographie_ICD_O_Freitext | $Diagnosis_Meldung/Diagnosesicherung | $Diagnosis_Meldung/Allgemeiner_Leistungszustand"/>
-                <xsl:apply-templates select="$Diagnosis_Meldung/Menge_Weitere_Klassifikation">
+                <xsl:apply-templates select="$Diagnosis_Meldung/Primaertumor_ICD_Code | $Diagnosis_Meldung/Primaertumor_ICD_Version | $Diagnosis_Meldung/Primaertumor_Diagnosetext | $Diagnosis_Meldung/Primaertumor_Topographie_ICD_O_Freitext | $Diagnosis_Meldung/Diagnosesicherung"/>
+                <xsl:apply-templates select="$Diagnosis_Meldung/Allgemeiner_Leistungszustand | $Diagnosis_Meldung/Menge_Weitere_Klassifikation">
                     <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                     <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
                 </xsl:apply-templates>
@@ -468,7 +471,6 @@
         </xsl:variable>
         <Verlauf>
             <xsl:attribute name="Verlauf_ID" select="concat('vrl', hash:hash($Patient_Id, $Tumor_Id, string-join($attribute, '')))" />
-            <xsl:apply-templates select="Allgemeiner_Leistungszustand"/>
             <xsl:if test="Verlauf_Lokaler_Tumorstatus"><!--Lokales-regionäres_Rezidiv + zugehöriges Datum-->
                 <Lokales-regionäres_Rezidiv><xsl:value-of select="Verlauf_Lokaler_Tumorstatus"/></Lokales-regionäres_Rezidiv>
             </xsl:if>
@@ -484,7 +486,7 @@
             <xsl:apply-templates select="./Menge_Verlauf/Verlauf/Untersuchungsdatum_Verlauf"></xsl:apply-templates><!-\-Datum_des_letztbekannten_Verlaufs TODO-\->-->
 
             <xsl:if test="Untersuchungsdatum_Verlauf !=''"><Datum_Verlauf><xsl:apply-templates select="Untersuchungsdatum_Verlauf/node()"/></Datum_Verlauf></xsl:if>
-            <xsl:apply-templates select="Menge_Weitere_Klassifikation">
+            <xsl:apply-templates select="Allgemeiner_Leistungszustand | Menge_Weitere_Klassifikation">
                 <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                 <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
             </xsl:apply-templates>
@@ -701,7 +703,7 @@
         <xsl:param name="Therapy_Id"/>
         <xsl:if test="Nebenwirkung_Grad!=''">
             <Nebenwirkung>
-                <xsl:attribute name="Nebenwirkung_ID" select="concat('syn', concat($Patient_Id, $Tumor_Id, concat($Therapy_Id, Nebenwirkung_Art, Nebenwirkung_Grad, Nebenwirkung_Version)))"/>
+                <xsl:attribute name="Nebenwirkung_ID" select="concat('syn', hash:hash($Patient_Id, $Tumor_Id, concat($Therapy_Id, Nebenwirkung_Art, Nebenwirkung_Grad, Nebenwirkung_Version)))"/>
                 <Grad><xsl:value-of select="Nebenwirkung_Grad"/></Grad>
                 <xsl:if test="Nebenwirkung_Version!=''"><Version><xsl:value-of select="Nebenwirkung_Version"/></Version></xsl:if>
                 <xsl:if test="Nebenwirkung_Art!=''"><Art><xsl:value-of select="Nebenwirkung_Art"/></Art></xsl:if>
@@ -773,7 +775,7 @@
         <xsl:param name="Tumor_Id"/>
         <xsl:for-each select="Weitere_Klassifikation">
             <Weitere_Klassifikation>
-                <xsl:attribute name="WeitereKlassifikation_ID" select="hash:hash($Patient_Id, $Tumor_Id, Datum, Name, Stadium)"/>
+                <xsl:attribute name="WeitereKlassifikation_ID" select="hash:hash($Patient_Id, $Tumor_Id, concat(Datum, Name, Stadium))"/>
                 <xsl:if test="Datum"><Datum><xsl:value-of select="Datum"/></Datum></xsl:if>
                 <xsl:if test="Name"><Name><xsl:value-of select="Name"/></Name></xsl:if>
                 <xsl:if test="Stadium"><Stadium><xsl:value-of select="Stadium"/></Stadium></xsl:if>
@@ -840,9 +842,12 @@
         </Diagnosesicherung>
     </xsl:template>
     <xsl:template match="Allgemeiner_Leistungszustand" >
+        <xsl:param name="Patient_Id"/>
+        <xsl:param name="Tumor_Id"/>
         <xsl:variable name="ecog" select="xsi:mapToECOG(node())"/>
         <xsl:if test="string-length($ecog)>=1">
             <ECOG>
+                <xsl:attribute name="ECOG_ID" select="hash:hash($Patient_Id, $Tumor_Id, $ecog)"/>
                 <xsl:value-of select="$ecog"/>
             </ECOG>
         </xsl:if>
