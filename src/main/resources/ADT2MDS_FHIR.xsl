@@ -544,6 +544,15 @@
             <xsl:apply-templates select="OP_Datum"/>
             <xsl:apply-templates select="Menge_OPS/OP_OPS"/>
             <xsl:apply-templates select="OP_OPS_Version"/>
+            <xsl:if test="Menge_Komplikation/OP_Komplikation !=''">
+                <Komplikationen>
+                    <xsl:for-each select="Menge_Komplikation/OP_Komplikation[. != '']">
+                        <Komplikation>
+                            <xsl:value-of select="."/>
+                        </Komplikation>
+                    </xsl:for-each>
+                </Komplikationen>
+            </xsl:if>
             <xsl:apply-templates select="Residualstatus[not(concat(Lokale_Beurteilung_Residualstatus,Gesamtbeurteilung_Residualstatus)=following-sibling::*/concat(Lokale_Beurteilung_Residualstatus,Gesamtbeurteilung_Residualstatus))]"/>
 
             <xsl:choose>

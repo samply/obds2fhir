@@ -848,6 +848,25 @@
                                 </xsl:if>
                             </outcome>
                         </xsl:if>
+                        <xsl:if test="Komplikationen">
+                            <complication>
+                                <xsl:for-each select="Komplikationen/Komplikation[. != '']">
+                                    <coding>
+                                        <system value="http://fhir.de/ValueSet/bfarm/icd-10-gm"/>
+                                        <code value="{.}"/>
+                                    </coding>
+                                </xsl:for-each>
+                                <xsl:for-each select="Komplikationen/ICD[./Code != '']">
+                                    <coding>
+                                        <system value="http://fhir.de/CodeSystem/bfarm/icd-10-gm"/>
+                                        <xsl:if test="Version !=''">
+                                            <version value="{Version}"/>
+                                        </xsl:if>
+                                        <code value="{Code}"/>
+                                    </coding>
+                                </xsl:for-each>
+                            </complication>
+                        </xsl:if>
                     </Procedure>
                 </resource>
                 <request>

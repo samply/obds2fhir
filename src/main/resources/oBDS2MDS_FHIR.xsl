@@ -384,9 +384,32 @@
                     <xsl:if test="Version"><Version><xsl:value-of select="Version"/></Version></xsl:if>
                 </OPS>
             </xsl:for-each>
-            <xsl:for-each select="Komplikationen/Komplikation_nein_oder_unbekannt">
-                <Komplikation_nein_oder_unbekannt><xsl:value-of select="."/></Komplikation_nein_oder_unbekannt>
-            </xsl:for-each>
+            <xsl:if test="Komplikationen !=''">
+                <Komplikationen>
+                    <xsl:for-each select="Komplikationen/Komplikation_nein_oder_unbekannt[. != '']">
+                        <Komplikation>
+                            <xsl:value-of select="."/>
+                        </Komplikation>
+                    </xsl:for-each>
+                    <xsl:for-each select="Komplikationen/Menge_Komplikation/Komplikation/Kuerzel[. != '']">
+                        <Komplikation>
+                            <xsl:value-of select="."/>
+                        </Komplikation>
+                    </xsl:for-each>
+                    <xsl:for-each select="Komplikationen/Menge_Komplikation/Komplikation/ICD/Code[. != '']">
+                        <ICD>
+                            <Code>
+                                <xsl:value-of select="."/>
+                            </Code>
+                            <xsl:if test="../Version !=''">
+                                <Version>
+                                    <xsl:value-of select="../Version"/>
+                                </Version>
+                            </xsl:if>
+                        </ICD>
+                    </xsl:for-each>
+                </Komplikationen>
+            </xsl:if>
             <xsl:apply-templates select="Residualstatus[not(concat(Lokale_Beurteilung_Residualstatus,Gesamtbeurteilung_Residualstatus)=following-sibling::*/concat(Lokale_Beurteilung_Residualstatus,Gesamtbeurteilung_Residualstatus))]"/>
             <xsl:choose>
                 <xsl:when test="Histologie/@Histologie_ID">
