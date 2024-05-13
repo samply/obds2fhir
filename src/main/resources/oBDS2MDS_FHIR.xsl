@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
-<xsl:stylesheet xmlns="http://www.basisdatensatz.de/oBDS/XML"
+<xsl:stylesheet xmlns="http://www.mds.de/namespace"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:xsi="http://www.mds.de/namespace MDS_Suchmodell_v4.xsd"
@@ -162,6 +162,20 @@
                         </xsl:apply-templates>
                         </xsl:when>
                         <xsl:otherwise><xsl:apply-templates select=".[not(Untersuchungsdatum_Verlauf=following::*/Verlauf/Untersuchungsdatum_Verlauf)]">
+                            <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
+                            <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
+                        </xsl:apply-templates>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:for-each>
+                <xsl:for-each select="$Tumor_Meldungen/Tumorkonferenz">
+                    <xsl:choose>
+                        <xsl:when test="@Tumorkonferenz_ID"><xsl:apply-templates select=".[not(@Tumorkonferenz_ID=following::*/Tumorkonferenz/@Tumorkonferenz_ID)]">
+                            <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
+                            <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
+                        </xsl:apply-templates>
+                        </xsl:when>
+                        <xsl:otherwise><xsl:apply-templates select=".[not(Datum=following::*/Tumorkonferenz/Datum)]">
                             <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                             <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
                         </xsl:apply-templates>
@@ -373,6 +387,22 @@
         </Verlauf>
     </xsl:template>
 
+    <xsl:template match="Tumorkonferenz">
+        <xsl:param name="Patient_Id"/>
+        <xsl:param name="Tumor_Id"/>
+        <xsl:variable name="attribute">
+            <xsl:choose>
+                <xsl:when test="@Tumorkonferenz_ID"><xsl:value-of select="@Tumorkonferenz_ID"/></xsl:when>
+                <xsl:when test="Datum"><xsl:value-of select="'gen',Datum"/></xsl:when>
+                <xsl:otherwise>gen:missing_ID_and_Date</xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <Therapieempfehlung>
+            <xsl:attribute name="Tumorkonferenz_ID" select="concat('tkz', hash:hash($Patient_Id, $Tumor_Id, $attribute))" />
+            <xsl:apply-templates select="Meldeanlass | Datum | Typ | Therapieempfehlung"/>
+        </Therapieempfehlung>
+    </xsl:template>
+
     <xsl:template match="OP">
         <xsl:param name="Patient_Id"/>
         <xsl:param name="Tumor_Id"/>
@@ -489,7 +519,6 @@
         </ST>
     </xsl:template>
 
-
     <xsl:template match="SYST">
         <xsl:param name="Patient_Id"/>
         <xsl:param name="Tumor_Id"/>
@@ -531,13 +560,13 @@
                     <Art><xsl:value-of select="Art/node()"/></Art>
                     <xsl:choose>
                         <xsl:when test="Art/MedDRA_Code!=''">
-                            <Art_Typ>MedDRA_Code</Art_Typ>
+                            <Typ>MedDRA_Code</Typ>
                         </xsl:when>
                         <xsl:when test="Art/Bezeichnung!=''">
-                            <Art_Typ><xsl:value-of select="Art/Bezeichnung"/></Art_Typ>
+                            <Typ><xsl:value-of select="Art/Bezeichnung"/></Typ>
                         </xsl:when>
                         <xsl:otherwise>
-                            <Art_Typ>missing_system</Art_Typ>
+                            <Typ>missing_system</Typ>
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:if>
@@ -549,7 +578,7 @@
                 <Grad><xsl:value-of select="."/></Grad>
                 <!--<Version>Art der Nebenwirkung nach CTC + Schweregrad (K|1|2|U)</Version>-->
                 <Art>CTC</Art>
-                <Art_Typ>CTC</Art_Typ>
+                <Typ>CTC</Typ>
             </Nebenwirkung>
         </xsl:for-each>
     </xsl:template>
@@ -656,6 +685,19 @@
                 </SYST_Substanz-ATC>
             </xsl:if>
         </xsl:for-each>
+    </xsl:template>
+
+    <xsl:template match="Therapieempfehlung">
+        <xsl:for-each select="Menge_Typ_Therapieempfehlung/Typ_Therapieempfehlung">
+            <Typ_Therapieempfehlung>
+                <xsl:value-of select="."/>
+            </Typ_Therapieempfehlung>
+        </xsl:for-each>
+        <xsl:if test="Abweichung_Patientenwunsch">
+            <Abweichung_Patientenwunsch>
+                <xsl:value-of select="Abweichung_Patientenwunsch"/>
+            </Abweichung_Patientenwunsch>
+        </xsl:if>
     </xsl:template>
 
     <!--!!!!!!!!!!STRUCTURE TRANSFORMATION COMPLETED!!!!!!!!!!-->
@@ -768,9 +810,9 @@
         </Tumor_Diagnosedatum>
     </xsl:template>
     <xsl:template match="Datum">
-        <Datum_der_TNM-Dokumentation-Datum_Befund>
-            <xsl:apply-templates select="node() | @*"/>
-        </Datum_der_TNM-Dokumentation-Datum_Befund>
+        <Datum>
+            <xsl:apply-templates select="node()"/>
+        </Datum>
     </xsl:template>
     <xsl:template match="Version">
         <TNM-Version>
@@ -891,6 +933,11 @@
         <Verlauf_Tumorstatus_Fernmetastasen>
             <xsl:apply-templates select="node() | @*"/>
         </Verlauf_Tumorstatus_Fernmetastasen>
+    </xsl:template>
+    <xsl:template match="Typ">
+        <Typ>
+            <xsl:apply-templates select="node() | @*"/>
+        </Typ>
     </xsl:template>
 
     <!-- remove ADT Namespace -->

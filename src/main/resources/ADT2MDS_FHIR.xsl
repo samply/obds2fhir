@@ -372,7 +372,7 @@
                 <xsl:if test="TNM_N"><TNM-N><xsl:value-of select="TNM_N"/></TNM-N></xsl:if>
                 <xsl:if test="TNM_M"><TNM-M><xsl:value-of select="TNM_M"/></TNM-M></xsl:if>
                 <xsl:if test="TNM_Version"><TNM-Version><xsl:value-of select="TNM_Version"/></TNM-Version></xsl:if>
-                <xsl:if test="TNM_Datum"><Datum_der_TNM-Dokumentation-Datum_Befund><xsl:value-of select="TNM_Datum"/></Datum_der_TNM-Dokumentation-Datum_Befund></xsl:if>
+                <xsl:if test="TNM_Datum"><Datum><xsl:value-of select="TNM_Datum"/></Datum></xsl:if>
                 <xsl:if test="TNM_c_p_u_Praefix_T"><c-p-u-Präfix_T><xsl:value-of select="TNM_c_p_u_Praefix_T"/></c-p-u-Präfix_T></xsl:if>
                 <xsl:if test="TNM_c_p_u_Praefix_N"><c-p-u-Präfix_N><xsl:value-of select="TNM_c_p_u_Praefix_N"/></c-p-u-Präfix_N></xsl:if>
                 <xsl:if test="TNM_c_p_u_Praefix_M"><c-p-u-Präfix_M><xsl:value-of select="TNM_c_p_u_Praefix_M"/></c-p-u-Präfix_M></xsl:if>
@@ -407,7 +407,7 @@
                 <xsl:if test="TNM_N"><TNM-N><xsl:value-of select="TNM_N"/></TNM-N></xsl:if>
                 <xsl:if test="TNM_M"><TNM-M><xsl:value-of select="TNM_M"/></TNM-M></xsl:if>
                 <xsl:if test="TNM_Version"><TNM-Version><xsl:value-of select="TNM_Version"/></TNM-Version></xsl:if>
-                <xsl:if test="TNM_Datum"><Datum_der_TNM-Dokumentation-Datum_Befund><xsl:value-of select="TNM_Datum"/></Datum_der_TNM-Dokumentation-Datum_Befund></xsl:if>
+                <xsl:if test="TNM_Datum"><Datum><xsl:value-of select="TNM_Datum"/></Datum></xsl:if>
                 <xsl:if test="TNM_c_p_u_Praefix_T"><c-p-u-Präfix_T><xsl:value-of select="TNM_c_p_u_Praefix_T"/></c-p-u-Präfix_T></xsl:if>
                 <xsl:if test="TNM_c_p_u_Praefix_N"><c-p-u-Präfix_N><xsl:value-of select="TNM_c_p_u_Praefix_N"/></c-p-u-Präfix_N></xsl:if>
                 <xsl:if test="TNM_c_p_u_Praefix_M"><c-p-u-Präfix_M><xsl:value-of select="TNM_c_p_u_Praefix_M"/></c-p-u-Präfix_M></xsl:if>
@@ -442,7 +442,7 @@
                 <xsl:if test="TNM_N"><TNM-N><xsl:value-of select="TNM_N"/></TNM-N></xsl:if>
                 <xsl:if test="TNM_M"><TNM-M><xsl:value-of select="TNM_M"/></TNM-M></xsl:if>
                 <xsl:if test="TNM_Version"><TNM-Version><xsl:value-of select="TNM_Version"/></TNM-Version></xsl:if>
-                <xsl:if test="TNM_Datum"><Datum_der_TNM-Dokumentation-Datum_Befund><xsl:value-of select="TNM_Datum"/></Datum_der_TNM-Dokumentation-Datum_Befund></xsl:if>
+                <xsl:if test="TNM_Datum"><Datum><xsl:value-of select="TNM_Datum"/></Datum></xsl:if>
                 <xsl:if test="TNM_c_p_u_Praefix_T"><c-p-u-Präfix_T><xsl:value-of select="TNM_c_p_u_Praefix_T"/></c-p-u-Präfix_T></xsl:if>
                 <xsl:if test="TNM_c_p_u_Praefix_N"><c-p-u-Präfix_N><xsl:value-of select="TNM_c_p_u_Praefix_N"/></c-p-u-Präfix_N></xsl:if>
                 <xsl:if test="TNM_c_p_u_Praefix_M"><c-p-u-Präfix_M><xsl:value-of select="TNM_c_p_u_Praefix_M"/></c-p-u-Präfix_M></xsl:if>
@@ -692,7 +692,7 @@
                 <Grad><xsl:value-of select="Nebenwirkung_Grad"/></Grad>
                 <xsl:if test="Nebenwirkung_Version!=''"><Version><xsl:value-of select="Nebenwirkung_Version"/></Version></xsl:if>
                 <xsl:if test="Nebenwirkung_Art!=''"><Art><xsl:value-of select="Nebenwirkung_Art"/></Art></xsl:if>
-                <Art_Typ>ADT2</Art_Typ>
+                <Typ>ADT2</Typ>
             </Nebenwirkung>
         </xsl:if>
     </xsl:template>
@@ -707,7 +707,7 @@
                 <Grad><xsl:value-of select="Nebenwirkung_Grad"/></Grad>
                 <xsl:if test="Nebenwirkung_Version!=''"><Version><xsl:value-of select="Nebenwirkung_Version"/></Version></xsl:if>
                 <xsl:if test="Nebenwirkung_Art!=''"><Art><xsl:value-of select="Nebenwirkung_Art"/></Art></xsl:if>
-                <Art_Typ>ADT2</Art_Typ>
+                <Typ>ADT2</Typ>
             </Nebenwirkung>
         </xsl:if>
     </xsl:template>
@@ -878,9 +878,9 @@
         </Lokalisation_Fernmetastasen>
     </xsl:template>
     <xsl:template match="TNM_Datum" >
-        <Datum_der_TNM-Dokumentation-Datum_Befund>
+        <Datum>
             <xsl:apply-templates select="node() | @*"/>
-        </Datum_der_TNM-Dokumentation-Datum_Befund>
+        </Datum>
     </xsl:template>
     <xsl:template match="Diagnosedatum">
         <Tumor_Diagnosedatum>
