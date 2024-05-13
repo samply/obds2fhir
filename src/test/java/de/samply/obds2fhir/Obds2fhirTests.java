@@ -21,7 +21,7 @@ public class Obds2fhirTests {
     String pathWithFile=this.getClass().getClassLoader().getResource("clinical_data/InputOBDS/File-1-ADT2_Testpatient.xml").getPath();
     @SystemStub
     private EnvironmentVariables environmentVariables =
-            new EnvironmentVariables("FILE_PATH", pathWithFile.substring(0, pathWithFile.indexOf("InpuOBDS")));
+            new EnvironmentVariables("FILE_PATH", pathWithFile.substring(0, pathWithFile.indexOf("InputOBDS")));
     @Test
     @Order(1)
     public void applyTransformation(){
