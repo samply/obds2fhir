@@ -52,7 +52,6 @@
             </subject>
             <onsetDateTime value="2021-04-13"/>
             <recordedDate value="2021-04-13"/>
-            <evidence/>
          </Condition>
       </resource>
       <request>
@@ -68,7 +67,7 @@
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Procedure-Strahlentherapie"/>
             </meta>
-            <status value="unknown"/>
+            <status value="stopped"/>
             <category>
                <coding>
                   <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTTherapieartCS"/>

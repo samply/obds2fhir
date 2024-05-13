@@ -9,7 +9,7 @@
 	</Absender>
 	<Menge_Patient>
 		<Patient>
-			<Patienten_Stammdaten Patient_ID="testpatient1">
+			<Patienten_Stammdaten Patient_ID="testpatient-ADT-1">
 				<Patienten_Nachname>Mustermann</Patienten_Nachname>
 				<Patienten_Vornamen>Max</Patienten_Vornamen>
 				<Patienten_Geschlecht>M</Patienten_Geschlecht>
@@ -588,6 +588,10 @@
 		</Patient>
 		<Patient><!--External Diagnosis-->
 			<Patienten_Stammdaten Patient_ID="2345">
+				<Patienten_Nachname>Unterberg</Patienten_Nachname>
+				<Patienten_Vornamen>Max</Patienten_Vornamen>
+				<Patienten_Geschlecht>M</Patienten_Geschlecht>
+				<Patienten_Geburtsdatum>26.12.1992</Patienten_Geburtsdatum>
 				</Patienten_Stammdaten>
 				<Menge_Meldung>
 					<Meldung Meldung_ID="1" Melder_ID="1">

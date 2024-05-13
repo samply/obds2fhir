@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 echo "Checking required input and output directories..."
-directories="InputOBDS Processed tmp tmp/oBDS_Patients tmp/FHIR_Patients tmp/erroneous"
+directories="InputData Processed tmp tmp/oBDS_Patients tmp/ADT_Patients tmp/FHIR_Patients tmp/erroneous"
 for dir in $directories; do
   if [ -d "/obds2fhir/clinical_data/$dir" ]; then
     echo "$dir exists"

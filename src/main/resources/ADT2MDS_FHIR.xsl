@@ -62,7 +62,7 @@
                 <xsl:otherwise><DKTK_Einwilligung_erfolgt>false</DKTK_Einwilligung_erfolgt></xsl:otherwise>
             </xsl:choose>
             <Vitalstatus_Gesamt>
-                <xsl:attribute name="Vitalstatus_ID"><xsl:value-of select="concat($Patient_Id,'vital')"/></xsl:attribute>
+                <xsl:attribute name="Vitalstatus_ID"><xsl:value-of select="hash:hash($Patient_Id,'vital','')"/></xsl:attribute>
                 <xsl:choose>
                     <xsl:when test="Patienten_Stammdaten/Vitalstatus_Datum"><Datum_des_letztbekannten_Vitalstatus><xsl:value-of select="Patienten_Stammdaten/Vitalstatus_Datum"/></Datum_des_letztbekannten_Vitalstatus></xsl:when>
                     <xsl:otherwise><xsl:copy-of select="xsi:Datum_des_letztbekannten_Vitalstatus(Menge_Meldung)"/></xsl:otherwise>

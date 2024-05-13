@@ -92,48 +92,50 @@
             </Bundle>
         </xsl:result-document>
 
-        <xsl:result-document href="file:{$filepath}/tmp/FHIR_Patients/FHIR_batch_{$customPrefix}">
-            <Bundle xmlns="http://hl7.org/fhir">
-                <id value="{substring($customPrefix, 9, 16)}"/>
-                <type value="batch"/>
-                <xsl:apply-templates select="Vitalstatus_Gesamt">
-                    <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
-                </xsl:apply-templates>
+        <xsl:if test="Vitalstatus_Gesamt/Datum_des_letztbekannten_Vitalstatus!='' or Vitalstatus_Gesamt/Tod!='' or Organisationen/Abteilung!=''">
+            <xsl:result-document href="file:{$filepath}/tmp/FHIR_Patients/FHIR_batch_{$customPrefix}">
+                <Bundle xmlns="http://hl7.org/fhir">
+                    <id value="{substring($customPrefix, 9, 16)}"/>
+                    <type value="batch"/>
+                    <xsl:apply-templates select="Vitalstatus_Gesamt">
+                        <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
+                    </xsl:apply-templates>
 
-                <xsl:for-each select="./Organisationen/Abteilung">
-                    <xsl:variable name="Encounter_ID" select="hash:hash($Patient_ID, ., '')"/>
-                    <entry>
-                        <fullUrl value="http://example.com/Encounter/{$Encounter_ID}"/>
-                        <resource>
-                            <Encounter>
-                                <id value="{$Encounter_ID}"/>
-                                <meta>
-                                    <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Encounter-Fall"/>
-                                </meta>
-                                <identifier>
-                                    <system value="http://dktk.dkfz.de/fhir/sid/hki-department"/>
-                                    <value value="{.}"/>
-                                </identifier>
-                                <status value="finished"/>
-                                <class>
-                                    <system value="http://terminology.hl7.org/CodeSystem/v3-ActCode"/>
-                                    <code value="VR"/>
-                                    <display value="virtual"/>
-                                </class>
-                                <subject>
-                                    <reference value="Patient/{$Patient_ID}"/>
-                                </subject>
-                            </Encounter>
-                        </resource>
-                        <request>
-                            <method value="PUT"/>
-                            <ifNoneMatch value="*"/>
-                            <url value="Encounter/{$Encounter_ID}"/>
-                        </request>
-                    </entry>
-                </xsl:for-each>
-            </Bundle>
-        </xsl:result-document>
+                    <xsl:for-each select="./Organisationen/Abteilung">
+                        <xsl:variable name="Encounter_ID" select="hash:hash($Patient_ID, ., '')"/>
+                        <entry>
+                            <fullUrl value="http://example.com/Encounter/{$Encounter_ID}"/>
+                            <resource>
+                                <Encounter>
+                                    <id value="{$Encounter_ID}"/>
+                                    <meta>
+                                        <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Encounter-Fall"/>
+                                    </meta>
+                                    <identifier>
+                                        <system value="http://dktk.dkfz.de/fhir/sid/hki-department"/>
+                                        <value value="{.}"/>
+                                    </identifier>
+                                    <status value="finished"/>
+                                    <class>
+                                        <system value="http://terminology.hl7.org/CodeSystem/v3-ActCode"/>
+                                        <code value="VR"/>
+                                        <display value="virtual"/>
+                                    </class>
+                                    <subject>
+                                        <reference value="Patient/{$Patient_ID}"/>
+                                    </subject>
+                                </Encounter>
+                            </resource>
+                            <request>
+                                <method value="PUT"/>
+                                <ifNoneMatch value="*"/>
+                                <url value="Encounter/{$Encounter_ID}"/>
+                            </request>
+                        </entry>
+                    </xsl:for-each>
+                </Bundle>
+            </xsl:result-document>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template match="Sample" mode="sample">
@@ -315,24 +317,28 @@
                                 </stage>
                             </xsl:if>
                         </xsl:for-each>
-                        <evidence>
-                            <coding>
-                                <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/DiagnosesicherungCS"/>
-                                <code value="{Diagnosesicherung}"/>
-                            </coding>
-                            <xsl:for-each select="Tumor/Histology | Tumor/Genetische_Variante">
-                                <xsl:if test="Tumor_Histologiedatum !=''">
-                                    <detail>
-                                        <reference value="Observation/{@Histology_ID}"/>
-                                    </detail>
+                        <xsl:if test="Diagnosesicherung!='' or Tumor/Histology!='' or Tumor/Genetische_Variante!=''">
+                            <evidence>
+                                <xsl:if test="Diagnosesicherung!=''">
+                                    <coding>
+                                        <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/DiagnosesicherungCS"/>
+                                        <code value="{Diagnosesicherung}"/>
+                                    </coding>
                                 </xsl:if>
-                                <xsl:if test="Bezeichnung !=''">
-                                    <detail>
-                                        <reference value="Observation/{@Gen_ID}"/>
-                                    </detail>
-                                </xsl:if>
-                            </xsl:for-each>
-                        </evidence>
+                                <xsl:for-each select="Tumor/Histology | Tumor/Genetische_Variante">
+                                    <xsl:if test="Tumor_Histologiedatum !=''">
+                                        <detail>
+                                            <reference value="Observation/{@Histology_ID}"/>
+                                        </detail>
+                                    </xsl:if>
+                                    <xsl:if test="Bezeichnung !=''">
+                                        <detail>
+                                            <reference value="Observation/{@Gen_ID}"/>
+                                        </detail>
+                                    </xsl:if>
+                                </xsl:for-each>
+                            </evidence>
+                        </xsl:if>
                     </Condition>
                 </resource>
                 <request>
@@ -901,10 +907,10 @@
         <xsl:param name="Diagnosis_ID"/>
         <xsl:if test="./Datum_Verlauf !=''">
             <xsl:variable name="Progress_ID" select="@Verlauf_ID"/>
-            <xsl:variable name="TumorstatusLymphknoten_ID"><xsl:if test="./Lymphknoten-Rezidiv or Verlauf_Tumorstatus_Lymphknoten"><xsl:value-of select="concat($Progress_ID, Lymphknoten-Rezidiv | Verlauf_Tumorstatus_Lymphknoten, 'tsl')"/></xsl:if></xsl:variable><!-- for both, legacy ADT or oBDS -->
-            <xsl:variable name="TumorstatusFernmetastasen_ID"><xsl:if test="Fernmetastasen or Verlauf_Tumorstatus_Fernmetastasen"><xsl:value-of select="concat($Progress_ID, Fernmetastasen | Verlauf_Tumorstatus_Fernmetastasen, 'fmn')"/></xsl:if></xsl:variable><!-- for both, legacy ADT or oBDS -->
-            <xsl:variable name="LokalerTumorstatus_ID"><xsl:if test="Lokales-regionäres_Rezidiv or Verlauf_Lokaler_Tumorstatus"><xsl:value-of select="concat($Progress_ID, Lokales-regionäres_Rezidiv | Verlauf_Lokaler_Tumorstatus, 'krz')"/></xsl:if></xsl:variable><!-- for both, legacy ADT or oBDS -->
-            <xsl:variable name="GesamtbeurteilungTumorstatus_ID"><xsl:if test="Ansprechen_im_Verlauf or Gesamtbeurteilung_Tumorstatus"><xsl:value-of select="concat($Progress_ID, Ansprechen_im_Verlauf | Gesamtbeurteilung_Tumorstatus, 'asp')"/></xsl:if></xsl:variable><!-- for both, legacy ADT or oBDS -->
+            <xsl:variable name="TumorstatusLymphknoten_ID"><xsl:if test="./Lymphknoten-Rezidiv or Verlauf_Tumorstatus_Lymphknoten"><xsl:value-of select="concat($Progress_ID, 'tsl')"/></xsl:if></xsl:variable><!-- for both, legacy ADT or oBDS -->
+            <xsl:variable name="TumorstatusFernmetastasen_ID"><xsl:if test="Fernmetastasen or Verlauf_Tumorstatus_Fernmetastasen"><xsl:value-of select="concat($Progress_ID, 'fmn')"/></xsl:if></xsl:variable><!-- for both, legacy ADT or oBDS -->
+            <xsl:variable name="LokalerTumorstatus_ID"><xsl:if test="Lokales-regionäres_Rezidiv or Verlauf_Lokaler_Tumorstatus"><xsl:value-of select="concat($Progress_ID, 'krz')"/></xsl:if></xsl:variable><!-- for both, legacy ADT or oBDS -->
+            <xsl:variable name="GesamtbeurteilungTumorstatus_ID"><xsl:if test="Ansprechen_im_Verlauf or Gesamtbeurteilung_Tumorstatus"><xsl:value-of select="concat($Progress_ID, 'asp')"/></xsl:if></xsl:variable><!-- for both, legacy ADT or oBDS -->
 
             <entry>
                 <fullUrl value="http://example.com/ClinicalImpression/{$Progress_ID}"/>
@@ -955,10 +961,10 @@
                                 </itemReference>
                             </finding>
                         </xsl:for-each>
-                        <xsl:if test="ECOG != ''">
+                        <xsl:if test="ECOG !=''">
                             <finding>
                                 <itemReference>
-                                    <reference value="Observation/{hash:hash(ECOG/@ECOG_ID, Datum_Verlauf, 'ecog')}"/>
+                                    <reference value="Observation/{ECOG/@ECOG_ID}"/>
                                 </itemReference>
                             </finding>
                         </xsl:if>
@@ -1742,7 +1748,7 @@
             <xsl:value-of select="../Tumor_Diagnosedatum|../Datum_Verlauf"/>
         </xsl:variable>
         <xsl:if test="$date !=''">
-            <xsl:variable name="ECOG_ID" select="concat(@ECOG_ID, $date, 'ecog')"/>
+            <xsl:variable name="ECOG_ID" select="@ECOG_ID"/>
             <entry>
                 <fullUrl value="http://example.com/Observation/{$ECOG_ID}"/>
                 <resource>

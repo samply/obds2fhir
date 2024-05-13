@@ -1,0 +1,853 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<oBDS xmlns="http://www.basisdatensatz.de/oBDS/XML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Schema_Version="3.0.2">
+	<Absender Absender_ID="12" Software_ID="Software_ID1" Software_Version="Software_Version1" Installations_ID="Installations_ID1">
+		<Bezeichnung>DKFZ</Bezeichnung>
+		<Ansprechpartner>Pierre Delpy</Ansprechpartner>
+		<Anschrift>Im Neuenheimer Feld 581</Anschrift>
+		<Telefon>+49 6221 42 5129</Telefon>
+		<EMail>p.delpy@dkfz-heidelberg.de</EMail>
+	</Absender>
+	<Meldedatum>2024-02-23</Meldedatum>
+	<Menge_Patient>
+		<Patient Patient_ID="testpatient-oBDS-1">
+			<Patienten_Stammdaten>
+				<!--				<Versichertendaten_GKV>
+                                    <IKNR>thisValueIsIgnored</IKNR>
+                                    <GKV_Versichertennummer>thisValueIsIgnored</GKV_Versichertennummer>
+                                </Versichertendaten_GKV>-->
+				<!--				<Versichertendaten_PKV>
+                                    <IKNR>thisValueIsIgnored</IKNR>
+                                    <PKV_Versichertennummer>thisValueIsIgnored</PKV_Versichertennummer>
+                                    <Beihilfetraeger>thisValueIsIgnored</Beihilfetraeger>
+                                </Versichertendaten_PKV>-->
+				<Versichertendaten_Sonstige>
+					<!--					<Ersatzkode>thisValueIsIgnored</Ersatzkode>-->
+					<IKNR>thisValueIsIgnored</IKNR>
+					<KrankenkassenName>thisValueIsIgnored</KrankenkassenName>
+					<Versichertennummer>thisValueIsIgnored</Versichertennummer>
+				</Versichertendaten_Sonstige>
+				<Nachname>Mustermann</Nachname>
+				<Titel>thisValueIsIgnored</Titel>
+				<Namenszusatz>thisValueIsIgnored</Namenszusatz>
+				<Namensvorsatz>thisValueIsIgnored</Namensvorsatz>
+				<Vornamen>Max</Vornamen>
+				<Geburtsname>Beispielname</Geburtsname>
+				<Menge_Frueherer_Name>
+					<Frueherer_Name>Examplename</Frueherer_Name>
+				</Menge_Frueherer_Name>
+				<Geschlecht>M</Geschlecht>
+				<Geburtsdatum Datumsgenauigkeit="E">1989-04-13</Geburtsdatum>
+				<Adresse>
+					<Strasse>thisValueIsIgnored</Strasse>
+					<Hausnummer>thisValueIsIgnored</Hausnummer>
+					<Land>thisValueIsIgnored</Land>
+					<PLZ>thisValueIsIgnored</PLZ>
+					<Ort>thisValueIsIgnored</Ort>
+				</Adresse>
+			</Patienten_Stammdaten>
+			<Menge_Meldung>
+				<Meldung Meldung_ID="12013" Melder_ID="3101">
+					<Meldebegruendung>thisValueIsIgnored</Meldebegruendung>
+					<Einwilligung_nicht_meldepflichtig>thisValueIsIgnored</Einwilligung_nicht_meldepflichtig>
+					<Zertifizierung>thisValueIsIgnored</Zertifizierung>
+					<Eigene_Leistung>thisValueIsIgnored</Eigene_Leistung>
+					<Tumorzuordnung Tumor_ID="012001">
+						<Primaertumor_ICD>
+							<Code>C43.4</Code>
+							<Version>10 2024 GM</Version>
+						</Primaertumor_ICD>
+						<Diagnosedatum Datumsgenauigkeit="E">2024-03-02</Diagnosedatum>
+						<Seitenlokalisation>M</Seitenlokalisation>
+						<Morphologie_ICD_O>
+							<Code>8721/3</Code>
+							<Version>33</Version>
+						</Morphologie_ICD_O>
+					</Tumorzuordnung>
+					<Diagnose>
+						<Primaertumor_Diagnosetext>Malignes Melanom oberer Rücken mittig</Primaertumor_Diagnosetext>
+						<Primaertumor_Topographie_ICD_O>
+							<Code>C44.5</Code>
+							<Version>33</Version>
+						</Primaertumor_Topographie_ICD_O>
+						<Primaertumor_Topographie_Freitext>oberer quadrant</Primaertumor_Topographie_Freitext>
+						<Diagnosesicherung>2</Diagnosesicherung>
+						<Menge_Fruehere_Tumorerkrankung>
+							<Fruehere_Tumorerkrankung>
+								<Freitext>thisValueIsIgnored</Freitext>
+								<ICD>
+									<Code>thisValueIsIgnored</Code>
+									<Version>thisValueIsIgnored</Version>
+								</ICD>
+								<Diagnosedatum>thisValueIsIgnored</Diagnosedatum>
+							</Fruehere_Tumorerkrankung>
+							<Fruehere_Tumorerkrankung>
+								<Freitext>thisValueIsIgnored</Freitext>
+								<ICD>
+									<Code>thisValueIsIgnored</Code>
+									<Version>thisValueIsIgnored</Version>
+								</ICD>
+								<Diagnosedatum>thisValueIsIgnored</Diagnosedatum>
+							</Fruehere_Tumorerkrankung>
+						</Menge_Fruehere_Tumorerkrankung>
+						<Histologie Histologie_ID="040231">
+							<Tumor_Histologiedatum Datumsgenauigkeit="E">2024-03-02</Tumor_Histologiedatum>
+							<Histologie_EinsendeNr>1923</Histologie_EinsendeNr>
+							<Morphologie_ICD_O>
+								<Code>8721/3</Code>
+								<Version>33</Version>
+							</Morphologie_ICD_O>
+							<Morphologie_ICD_O>
+								<Code>8722/3</Code>
+								<Version>31</Version>
+							</Morphologie_ICD_O>
+							<Morphologie_Freitext>Noduläres malignes Melanom (NM)</Morphologie_Freitext>
+							<Grading>T</Grading>
+							<LK_untersucht>50</LK_untersucht>
+							<LK_befallen>50</LK_befallen>
+							<Sentinel_LK_untersucht>50</Sentinel_LK_untersucht>
+							<Sentinel_LK_befallen>50</Sentinel_LK_befallen>
+						</Histologie>
+						<Menge_FM>
+							<Fernmetastase>
+								<Diagnosedatum Datumsgenauigkeit="E">2024-03-02</Diagnosedatum>
+								<Lokalisation>PUL</Lokalisation>
+							</Fernmetastase>
+							<Fernmetastase>
+								<Diagnosedatum Datumsgenauigkeit="E">2024-03-02</Diagnosedatum>
+								<Lokalisation>OSS</Lokalisation>
+							</Fernmetastase>
+							<Fernmetastase>
+								<Diagnosedatum Datumsgenauigkeit="E">2024-03-02</Diagnosedatum>
+								<Lokalisation>HEP</Lokalisation>
+							</Fernmetastase>
+							<Fernmetastase>
+								<Diagnosedatum Datumsgenauigkeit="E">2024-03-02</Diagnosedatum>
+								<Lokalisation>BRA</Lokalisation>
+							</Fernmetastase>
+							<Fernmetastase>
+								<Diagnosedatum Datumsgenauigkeit="E">2024-03-02</Diagnosedatum>
+								<Lokalisation>LYM</Lokalisation>
+							</Fernmetastase>
+							<Fernmetastase>
+								<Diagnosedatum Datumsgenauigkeit="E">2024-03-02</Diagnosedatum>
+								<Lokalisation>MAR</Lokalisation>
+							</Fernmetastase>
+							<Fernmetastase>
+								<Diagnosedatum Datumsgenauigkeit="E">2024-03-02</Diagnosedatum>
+								<Lokalisation>PLE</Lokalisation>
+							</Fernmetastase>
+							<Fernmetastase>
+								<Diagnosedatum Datumsgenauigkeit="E">2024-03-02</Diagnosedatum>
+								<Lokalisation>PER</Lokalisation>
+							</Fernmetastase>
+							<Fernmetastase>
+								<Diagnosedatum Datumsgenauigkeit="E">2024-03-02</Diagnosedatum>
+								<Lokalisation>ADR</Lokalisation>
+							</Fernmetastase>
+							<Fernmetastase>
+								<Diagnosedatum Datumsgenauigkeit="E">2024-03-02</Diagnosedatum>
+								<Lokalisation>SKI</Lokalisation>
+							</Fernmetastase>
+							<Fernmetastase>
+								<Diagnosedatum Datumsgenauigkeit="E">2024-03-02</Diagnosedatum>
+								<Lokalisation>OTH</Lokalisation>
+							</Fernmetastase>
+							<Fernmetastase>
+								<Diagnosedatum Datumsgenauigkeit="E">2024-03-02</Diagnosedatum>
+								<Lokalisation>GEN</Lokalisation>
+							</Fernmetastase>
+						</Menge_FM>
+						<cTNM>
+							<Datum>2024-05-29</Datum>
+							<Version>8</Version>
+							<y_Symbol>y</y_Symbol>
+							<r_Symbol>r</r_Symbol>
+							<a_Symbol>a</a_Symbol>
+							<c_p_u_Praefix_T>u</c_p_u_Praefix_T>
+							<T>1a</T>
+							<m_Symbol>m1</m_Symbol>
+							<c_p_u_Praefix_N>c</c_p_u_Praefix_N>
+							<N>0</N>
+							<c_p_u_Praefix_M>c</c_p_u_Praefix_M>
+							<M>0</M>
+							<L>L0</L>
+							<V>Vx</V>
+							<Pn>PnX</Pn>
+							<S>SX</S>
+							<UICC_Stadium>IB</UICC_Stadium>
+						</cTNM>
+						<pTNM ID="1733001">
+							<Datum>2024-03-31</Datum>
+							<Version>8</Version>
+							<c_p_u_Praefix_T>p</c_p_u_Praefix_T>
+							<T>1a</T>
+							<c_p_u_Praefix_N>p</c_p_u_Praefix_N>
+							<N>0</N>
+							<c_p_u_Praefix_M>p</c_p_u_Praefix_M>
+							<M>0</M>
+							<L>L1</L>
+							<V>V2</V>
+							<Pn>Pn1</Pn>
+							<S>S3</S>
+							<UICC_Stadium>IB2</UICC_Stadium>
+						</pTNM>
+						<Menge_Weitere_Klassifikation>
+							<Weitere_Klassifikation>
+								<Datum Datumsgenauigkeit="E">2024-03-02</Datum>
+								<Name>Breslow</Name>
+								<Stadium>13,1</Stadium>
+							</Weitere_Klassifikation>
+							<Weitere_Klassifikation>
+								<Datum Datumsgenauigkeit="E">2024-03-02</Datum>
+								<Name>WHO-Grading für Gehirntumoren</Name>
+								<Stadium>II</Stadium>
+							</Weitere_Klassifikation>
+							<Weitere_Klassifikation>
+								<Datum Datumsgenauigkeit="E">2024-03-02</Datum>
+								<Name>Clark-Level</Name>
+								<Stadium>III</Stadium>
+							</Weitere_Klassifikation>
+						</Menge_Weitere_Klassifikation>
+						<Menge_Genetik>
+							<Genetische_Variante>
+								<Datum Datumsgenauigkeit="E">2024-03-02</Datum>
+								<Bezeichnung>EGFR</Bezeichnung>
+								<Auspraegung>Mutation/positiv</Auspraegung>
+							</Genetische_Variante>
+							<Genetische_Variante>
+								<Datum Datumsgenauigkeit="E">2024-03-02</Datum>
+								<Bezeichnung>freitext</Bezeichnung>
+								<Sonstige_Auspraegung>freitext</Sonstige_Auspraegung>
+							</Genetische_Variante>
+						</Menge_Genetik>
+						<Allgemeiner_Leistungszustand>30%</Allgemeiner_Leistungszustand>
+						<Modul_Allgemein>
+							<Sozialdienstkontakt>
+								<Datum>thisValueIsIgnored</Datum>
+							</Sozialdienstkontakt>
+							<Psychoonkologiekontakt>
+								<Datum>thisValueIsIgnored</Datum>
+							</Psychoonkologiekontakt>
+							<Studienteilnahme><!--TODO-->
+								<NU>thisValueIsIgnored</NU>
+							</Studienteilnahme>
+						</Modul_Allgemein>
+					</Diagnose>
+				</Meldung>
+				<Meldung Meldung_ID="12014" Melder_ID="3101"><!--fully ignored: Pathologie-->
+					<Tumorzuordnung Tumor_ID="012001">
+						<Primaertumor_ICD>
+							<Code>C43.4</Code>
+							<Version>10 2024 GM</Version>
+						</Primaertumor_ICD>
+						<Diagnosedatum Datumsgenauigkeit="E">2024-03-02</Diagnosedatum>
+						<Seitenlokalisation>M</Seitenlokalisation>
+						<Morphologie_ICD_O>
+							<Code>8721/3</Code>
+							<Version>33</Version>
+						</Morphologie_ICD_O>
+					</Tumorzuordnung>
+					<Pathologie Befund_ID="Befund_ID1">
+						<Primaertumor_Diagnosetext>thisValueIsIgnored</Primaertumor_Diagnosetext>
+						<Primaertumor_Topographie_ICD_O>
+							<Code>thisValueIsIgnored</Code>
+							<Version>thisValueIsIgnored</Version>
+						</Primaertumor_Topographie_ICD_O>
+						<Primaertumor_Topographie_Freitext>thisValueIsIgnored</Primaertumor_Topographie_Freitext>
+						<Diagnosesicherung>thisValueIsIgnored</Diagnosesicherung>
+						<Histologie Histologie_ID="040232">
+							<Tumor_Histologiedatum Datumsgenauigkeit="E">2024-03-02</Tumor_Histologiedatum>
+							<Histologie_EinsendeNr>thisValueIsIgnored</Histologie_EinsendeNr>
+							<Morphologie_ICD_O>
+								<Code>thisValueIsIgnored</Code>
+								<Version>thisValueIsIgnored</Version>
+							</Morphologie_ICD_O>
+							<Morphologie_ICD_O>
+								<Code>thisValueIsIgnored</Code>
+								<Version>thisValueIsIgnored</Version>
+							</Morphologie_ICD_O>
+							<Morphologie_Freitext>thisValueIsIgnored</Morphologie_Freitext>
+							<Grading>thisValueIsIgnored</Grading>
+							<LK_untersucht>thisValueIsIgnored</LK_untersucht>
+							<LK_befallen>thisValueIsIgnored</LK_befallen>
+							<Sentinel_LK_untersucht>thisValueIsIgnored</Sentinel_LK_untersucht>
+							<Sentinel_LK_befallen>thisValueIsIgnored</Sentinel_LK_befallen>
+						</Histologie>
+						<Menge_FM>
+							<Fernmetastase>
+								<Diagnosedatum Datumsgenauigkeit="E">2024-03-02</Diagnosedatum>
+								<Lokalisation>thisValueIsIgnored</Lokalisation>
+							</Fernmetastase>
+							<Fernmetastase>
+								<Diagnosedatum Datumsgenauigkeit="E">2024-03-02</Diagnosedatum>
+								<Lokalisation>thisValueIsIgnored</Lokalisation>
+							</Fernmetastase>
+						</Menge_FM>
+						<cTNM ID="1619002">
+							<Datum>thisValueIsIgnored</Datum>
+							<Version>thisValueIsIgnored</Version>
+							<y_Symbol>thisValueIsIgnored</y_Symbol>
+							<r_Symbol>thisValueIsIgnored</r_Symbol>
+							<a_Symbol>thisValueIsIgnored</a_Symbol>
+							<c_p_u_Praefix_T>thisValueIsIgnored</c_p_u_Praefix_T>
+							<T>thisValueIsIgnored</T>
+							<m_Symbol>thisValueIsIgnored</m_Symbol>
+							<c_p_u_Praefix_N>thisValueIsIgnored</c_p_u_Praefix_N>
+							<N>thisValueIsIgnored</N>
+							<c_p_u_Praefix_M>thisValueIsIgnored</c_p_u_Praefix_M>
+							<M>thisValueIsIgnored</M>
+							<L>thisValueIsIgnored</L>
+							<V>thisValueIsIgnored</V>
+							<Pn>thisValueIsIgnored</Pn>
+							<S>thisValueIsIgnored</S>
+							<UICC_Stadium>thisValueIsIgnored</UICC_Stadium>
+						</cTNM>
+						<pTNM ID="1733002">
+							<Datum>thisValueIsIgnored</Datum>
+							<Version>thisValueIsIgnored</Version>
+							<y_Symbol>thisValueIsIgnored</y_Symbol>
+							<r_Symbol>thisValueIsIgnored</r_Symbol>
+							<a_Symbol>thisValueIsIgnored</a_Symbol>
+							<c_p_u_Praefix_T>thisValueIsIgnored</c_p_u_Praefix_T>
+							<T>thisValueIsIgnored</T>
+							<m_Symbol>thisValueIsIgnored</m_Symbol>
+							<c_p_u_Praefix_N>thisValueIsIgnored</c_p_u_Praefix_N>
+							<N>thisValueIsIgnored</N>
+							<c_p_u_Praefix_M>thisValueIsIgnored</c_p_u_Praefix_M>
+							<M>thisValueIsIgnored</M>
+							<L>thisValueIsIgnored</L>
+							<V>thisValueIsIgnored</V>
+							<Pn>thisValueIsIgnored</Pn>
+							<S>thisValueIsIgnored</S>
+							<UICC_Stadium>thisValueIsIgnored</UICC_Stadium>
+						</pTNM>
+						<Lokale_Beurteilung_Residualstatus>thisValueIsIgnored</Lokale_Beurteilung_Residualstatus>
+						<Menge_Weitere_Klassifikation>
+							<Weitere_Klassifikation>
+								<Datum Datumsgenauigkeit="E">2024-03-02</Datum>
+								<Name>thisValueIsIgnored</Name>
+								<Stadium>thisValueIsIgnored</Stadium>
+							</Weitere_Klassifikation>
+							<Weitere_Klassifikation>
+								<Datum Datumsgenauigkeit="E">2024-03-02</Datum>
+								<Name>thisValueIsIgnored</Name>
+								<Stadium>thisValueIsIgnored</Stadium>
+							</Weitere_Klassifikation>
+						</Menge_Weitere_Klassifikation>
+						<Menge_Genetik>
+							<Genetische_Variante>
+								<Datum Datumsgenauigkeit="E">2024-03-02</Datum>
+								<Bezeichnung>thisValueIsIgnored</Bezeichnung>
+								<Auspraegung>thisValueIsIgnored</Auspraegung>
+								<!--								<Sonstige_Auspraegung>thisValueIsIgnored</Sonstige_Auspraegung>-->
+							</Genetische_Variante>
+							<Genetische_Variante>
+								<Datum Datumsgenauigkeit="E">2024-03-02</Datum>
+								<Bezeichnung>thisValueIsIgnored</Bezeichnung>
+								<Auspraegung>thisValueIsIgnored</Auspraegung>
+								<!--								<Sonstige_Auspraegung>thisValueIsIgnored</Sonstige_Auspraegung>-->
+							</Genetische_Variante>
+						</Menge_Genetik>
+						<Einsender>
+							<strukturiert>
+								<Titel>thisValueIsIgnored</Titel>
+								<Vornamen>thisValueIsIgnored</Vornamen>
+								<Nachname>thisValueIsIgnored</Nachname>
+								<Einrichtung>thisValueIsIgnored</Einrichtung>
+								<Abteilung>thisValueIsIgnored</Abteilung>
+								<Strasse>thisValueIsIgnored</Strasse>
+								<Hausnummer>thisValueIsIgnored</Hausnummer>
+								<Land>thisValueIsIgnored</Land>
+								<PLZ>thisValueIsIgnored</PLZ>
+								<Ort>thisValueIsIgnored</Ort>
+							</strukturiert>
+							<!--							<unstrukturiert>
+                                                            <Adresse1>thisValueIsIgnored</Adresse1>
+                                                            <Adresse2>thisValueIsIgnored</Adresse2>
+                                                            <Adresse3>thisValueIsIgnored</Adresse3>
+                                                            <Adresse4>thisValueIsIgnored</Adresse4>
+                                                            <Adresse5>thisValueIsIgnored</Adresse5>
+                                                            <Adresse6>thisValueIsIgnored</Adresse6>
+                                                        </unstrukturiert>-->
+							<Ident_Nummern>
+								<IKNR>thisValueIsIgnored</IKNR>
+								<LANR>thisValueIsIgnored</LANR>
+								<BSNR>thisValueIsIgnored</BSNR>
+								<ZANR>thisValueIsIgnored</ZANR>
+							</Ident_Nummern>
+						</Einsender>
+						<Befundtext>thisValueIsIgnored</Befundtext>
+					</Pathologie>
+				</Meldung>
+				<Meldung Meldung_ID="12015" Melder_ID="3101">
+					<Tumorzuordnung Tumor_ID="012001">
+						<Primaertumor_ICD>
+							<Code>C43.4</Code>
+							<Version>10 2024 GM</Version>
+						</Primaertumor_ICD>
+						<Diagnosedatum Datumsgenauigkeit="E">2024-03-02</Diagnosedatum>
+						<Seitenlokalisation>M</Seitenlokalisation>
+						<Morphologie_ICD_O>
+							<Code>8721/3</Code>
+							<Version>33</Version>
+						</Morphologie_ICD_O>
+					</Tumorzuordnung>
+					<OP OP_ID="20310891">
+						<Intention>P</Intention>
+						<Datum>2024-04-02</Datum>
+						<Menge_OPS>
+							<OPS>
+								<Code>5-456.00</Code>
+								<Version>2013</Version>
+							</OPS>
+							<OPS>
+								<Code>5-451.02</Code>
+								<Version>2013</Version>
+							</OPS>
+						</Menge_OPS>
+						<Histologie Histologie_ID="040233">
+							<Tumor_Histologiedatum Datumsgenauigkeit="E">2024-04-02</Tumor_Histologiedatum>
+							<Morphologie_ICD_O>
+								<Code>8721/3</Code>
+								<Version>33</Version>
+							</Morphologie_ICD_O>
+							<Morphologie_Freitext>Noduläres malignes Melanom (NM)</Morphologie_Freitext>
+							<Grading>T</Grading>
+						</Histologie>
+						<TNM ID="1832001">
+							<Datum>2024-04-02</Datum>
+							<Version>8</Version>
+							<y_Symbol>y</y_Symbol>
+							<r_Symbol>r</r_Symbol>
+							<a_Symbol>a</a_Symbol>
+							<c_p_u_Praefix_T>u</c_p_u_Praefix_T>
+							<T>1a</T>
+							<m_Symbol>m1</m_Symbol>
+							<c_p_u_Praefix_N>c</c_p_u_Praefix_N>
+							<N>0</N>
+							<c_p_u_Praefix_M>c</c_p_u_Praefix_M>
+							<M>0</M>
+							<L>L0</L>
+							<V>Vx</V>
+							<Pn>PnX</Pn>
+							<S>SX</S>
+							<UICC_Stadium>IB</UICC_Stadium>
+						</TNM>
+						<Residualstatus>
+							<Lokale_Beurteilung_Residualstatus>R0</Lokale_Beurteilung_Residualstatus>
+							<Gesamtbeurteilung_Residualstatus>R1(cy+)</Gesamtbeurteilung_Residualstatus>
+						</Residualstatus>
+						<Menge_Weitere_Klassifikation>
+							<Weitere_Klassifikation>
+								<Datum Datumsgenauigkeit="E">2024-04-03</Datum>
+								<Name>UICC</Name>
+								<Stadium>3</Stadium>
+							</Weitere_Klassifikation>
+							<Weitere_Klassifikation>
+								<Datum Datumsgenauigkeit="E">2024-04-04</Datum>
+								<Name>WHO-Grading</Name>
+								<Stadium>VI</Stadium>
+							</Weitere_Klassifikation>
+						</Menge_Weitere_Klassifikation>
+						<Menge_Genetik>
+							<Genetische_Variante>
+								<Datum Datumsgenauigkeit="E">2024-04-02</Datum>
+								<Bezeichnung>PLAAT4</Bezeichnung>
+								<Auspraegung>Mutation/positiv</Auspraegung>
+							</Genetische_Variante>
+							<Genetische_Variante>
+								<Datum Datumsgenauigkeit="E">2024-04-02</Datum>
+								<Bezeichnung>EGFR</Bezeichnung>
+								<Sonstige_Auspraegung>freitext</Sonstige_Auspraegung>
+							</Genetische_Variante>
+						</Menge_Genetik>
+						<Komplikationen>
+							<Komplikation_nein_oder_unbekannt>U</Komplikation_nein_oder_unbekannt>
+							<Menge_Komplikation>
+								<Komplikation>
+									<Kuerzel>ABD</Kuerzel>
+								</Komplikation>
+								<Komplikation>
+									-                                    <ICD>
+									<Code>E31</Code>
+									<Version>10 2000 GM</Version>
+								</ICD>
+								</Komplikation>
+							</Menge_Komplikation>
+						</Komplikationen>
+						<Menge_Operateur>
+							<Operateur>
+								<Nachname>thisValueIsIgnored</Nachname>
+								<Vornamen>thisValueIsIgnored</Vornamen>
+								<Hauptoperateur>thisValueIsIgnored</Hauptoperateur>
+							</Operateur>
+							<Operateur>
+								<Nachname>thisValueIsIgnored</Nachname>
+								<Vornamen>thisValueIsIgnored</Vornamen>
+								<Hauptoperateur>thisValueIsIgnored</Hauptoperateur>
+							</Operateur>
+						</Menge_Operateur>
+						<Modul_Allgemein>
+							<Sozialdienstkontakt>
+								<N>thisValueIsIgnored</N>
+							</Sozialdienstkontakt>
+							<Psychoonkologiekontakt>
+								<N>thisValueIsIgnored</N>
+							</Psychoonkologiekontakt>
+							<Studienteilnahme>
+								<Datum>thisValueIsIgnored</Datum>
+							</Studienteilnahme>
+						</Modul_Allgemein>
+					</OP>
+				</Meldung>
+				<Meldung Meldung_ID="12016" Melder_ID="3101">
+					<Tumorzuordnung Tumor_ID="012001">
+						<Primaertumor_ICD>
+							<Code>C43.4</Code>
+							<Version>10 2024 GM</Version>
+						</Primaertumor_ICD>
+						<Diagnosedatum Datumsgenauigkeit="E">2024-03-02</Diagnosedatum>
+						<Seitenlokalisation>M</Seitenlokalisation>
+						<Morphologie_ICD_O>
+							<Code>8721/3</Code>
+							<Version>33</Version>
+						</Morphologie_ICD_O>
+					</Tumorzuordnung>
+					<ST ST_ID="20400001">
+						<Meldeanlass>behandlungsende</Meldeanlass>
+						<Intention>K</Intention>
+						<Stellung_OP>O</Stellung_OP>
+						<Menge_Bestrahlung>
+							<Bestrahlung>
+								<Beginn>2024-05-13</Beginn>
+								<Ende>2024-05-29</Ende>
+								<Applikationsart>
+									<Perkutan>
+										<Radiochemo>RCN</Radiochemo>
+										<Zielgebiet>
+											<CodeVersion2021>9.10</CodeVersion2021><!--caution, different nodes: CodeVersion2014|CodeVersion2021-->
+										</Zielgebiet>
+										<Seite_Zielgebiet>L</Seite_Zielgebiet>
+										<Gesamtdosis>
+											<Dosis>30</Dosis>
+											<Einheit>Gy</Einheit>
+										</Gesamtdosis>
+										<Einzeldosis>
+											<Dosis>2</Dosis>
+											<Einheit>Gy</Einheit>
+										</Einzeldosis>
+										<Boost>N</Boost>
+									</Perkutan>
+								</Applikationsart>
+							</Bestrahlung>
+							<Bestrahlung>
+								<Beginn>2024-05-30</Beginn>
+								<Ende>2024-06-03</Ende>
+								<Applikationsart>
+									<Perkutan>
+										<Radiochemo>RCN</Radiochemo>
+										<Zielgebiet>
+											<CodeVersion2021>9.10</CodeVersion2021>
+										</Zielgebiet>
+										<Seite_Zielgebiet>L</Seite_Zielgebiet>
+										<Gesamtdosis>
+											<Dosis>32</Dosis>
+											<Einheit>Gy</Einheit>
+										</Gesamtdosis>
+										<Einzeldosis>
+											<Dosis>3</Dosis>
+											<Einheit>Gy</Einheit>
+										</Einzeldosis>
+										<Boost>N</Boost>
+									</Perkutan>
+								</Applikationsart>
+							</Bestrahlung>
+						</Menge_Bestrahlung>
+						<Ende_Grund>E</Ende_Grund>
+						<Nebenwirkungen>
+							<Grad_maximal2_oder_unbekannt>1</Grad_maximal2_oder_unbekannt>
+							<Menge_Nebenwirkung>
+								<Nebenwirkung>
+									<Art>
+										<MedDRA_Code>10061103</MedDRA_Code>
+									</Art>
+									<Grad>3</Grad>
+									<Version>4.03</Version>
+								</Nebenwirkung>
+								<Nebenwirkung>
+									<Art>
+										<Bezeichnung>proprietärCode</Bezeichnung>
+									</Art>
+									<Grad>5</Grad>
+									<Version>Sonstige</Version>
+								</Nebenwirkung>
+							</Menge_Nebenwirkung>
+						</Nebenwirkungen>
+						<Modul_Allgemein>
+							<Sozialdienstkontakt>
+								<N>thisValueIsIgnored</N>
+							</Sozialdienstkontakt>
+							<Psychoonkologiekontakt>
+								<Datum>thisValueIsIgnored</Datum>
+							</Psychoonkologiekontakt>
+							<Studienteilnahme>
+								<NU>thisValueIsIgnored</NU>
+							</Studienteilnahme>
+						</Modul_Allgemein>
+					</ST>
+				</Meldung>
+				<Meldung Meldung_ID="12017" Melder_ID="3101">
+					<Tumorzuordnung Tumor_ID="012001">
+						<Primaertumor_ICD>
+							<Code>C43.4</Code>
+							<Version>10 2024 GM</Version>
+						</Primaertumor_ICD>
+						<Diagnosedatum Datumsgenauigkeit="E">2024-03-02</Diagnosedatum>
+						<Seitenlokalisation>M</Seitenlokalisation>
+						<Morphologie_ICD_O>
+							<Code>8721/3</Code>
+							<Version>33</Version>
+						</Morphologie_ICD_O>
+					</Tumorzuordnung>
+					<SYST SYST_ID="20503201">
+						<Meldeanlass>behandlungsbeginn</Meldeanlass>
+						<Intention>P</Intention>
+						<Stellung_OP>O</Stellung_OP>
+						<Therapieart>CIZ</Therapieart>
+						<Protokoll>Atezolizumab/ Bevacizumab</Protokoll>
+						<Beginn Datumsgenauigkeit="E">2023-01-01</Beginn>
+						<Menge_Substanz>
+							<Substanz>
+								<Bezeichnung>Bevacizumab</Bezeichnung>
+							</Substanz>
+							<Substanz>
+								<Bezeichnung>Ipilimumab</Bezeichnung>
+							</Substanz>
+							<Substanz>
+								<ATC>
+									<Code>A00AA00</Code>
+									<Version>2004</Version>
+								</ATC>
+							</Substanz>
+						</Menge_Substanz>
+						<Ende_Grund>E</Ende_Grund>
+						<Ende>2023-09-15</Ende>
+						<Nebenwirkungen>
+							<Menge_Nebenwirkung>
+								<Nebenwirkung>
+									<Art>
+										<MedDRA_Code>00000000</MedDRA_Code>
+									</Art>
+									<Grad>3</Grad>
+									<Version>4</Version>
+								</Nebenwirkung>
+								<Nebenwirkung>
+									<Art>
+										<Bezeichnung>Bezeichnung17</Bezeichnung>
+									</Art>
+									<Grad>3</Grad>
+									<Version>4</Version>
+								</Nebenwirkung>
+							</Menge_Nebenwirkung>
+							<Grad_maximal2_oder_unbekannt>1</Grad_maximal2_oder_unbekannt>
+						</Nebenwirkungen>
+						<Modul_Allgemein>
+							<Sozialdienstkontakt>
+								<N>thisValueIsIgnored</N>
+							</Sozialdienstkontakt>
+							<Psychoonkologiekontakt>
+								<Datum>thisValueIsIgnored</Datum>
+							</Psychoonkologiekontakt>
+							<Studienteilnahme>
+								<Datum>thisValueIsIgnored</Datum>
+							</Studienteilnahme>
+						</Modul_Allgemein>
+					</SYST>
+				</Meldung>
+				<Meldung Meldung_ID="12018" Melder_ID="3101">
+					<Tumorzuordnung Tumor_ID="012001">
+						<Primaertumor_ICD>
+							<Code>C43.4</Code>
+							<Version>10 2024 GM</Version>
+						</Primaertumor_ICD>
+						<Diagnosedatum Datumsgenauigkeit="E">2024-03-02</Diagnosedatum>
+						<Seitenlokalisation>M</Seitenlokalisation>
+						<Morphologie_ICD_O>
+							<Code>8721/3</Code>
+							<Version>33</Version>
+						</Morphologie_ICD_O>
+					</Tumorzuordnung>
+					<Verlauf Verlauf_ID="20780101">
+						<Meldeanlass>statusaenderung</Meldeanlass>
+						<Untersuchungsdatum_Verlauf>2023-07-19</Untersuchungsdatum_Verlauf>
+						<Gesamtbeurteilung_Tumorstatus>P</Gesamtbeurteilung_Tumorstatus>
+						<Verlauf_Lokaler_Tumorstatus>K</Verlauf_Lokaler_Tumorstatus>
+						<Verlauf_Tumorstatus_Lymphknoten>K</Verlauf_Tumorstatus_Lymphknoten>
+						<Verlauf_Tumorstatus_Fernmetastasen>R</Verlauf_Tumorstatus_Fernmetastasen>
+						<Menge_FM>
+							<Fernmetastase>
+								<Diagnosedatum Datumsgenauigkeit="E">2023-07-19</Diagnosedatum>
+								<Lokalisation>OTH</Lokalisation>
+							</Fernmetastase>
+							<Fernmetastase>
+								<Diagnosedatum Datumsgenauigkeit="E">2023-07-19</Diagnosedatum>
+								<Lokalisation>ADR</Lokalisation>
+							</Fernmetastase>
+						</Menge_FM>
+						<Histologie Histologie_ID="040234">
+							<Tumor_Histologiedatum Datumsgenauigkeit="E">2023-07-19</Tumor_Histologiedatum>
+							<Histologie_EinsendeNr>thisValueIsIgnored</Histologie_EinsendeNr>
+							<Morphologie_ICD_O>
+								<Code>8721/3</Code>
+								<Version>33</Version>
+							</Morphologie_ICD_O>
+							<Morphologie_Freitext>unklar</Morphologie_Freitext>
+							<Grading>T</Grading>
+						</Histologie>
+						<TNM ID="1832002">
+							<Datum>2023-07-15</Datum>
+							<Version>8</Version>
+							<y_Symbol>y</y_Symbol>
+							<r_Symbol>r</r_Symbol>
+							<a_Symbol>a</a_Symbol>
+							<c_p_u_Praefix_T>u</c_p_u_Praefix_T>
+							<T>1</T>
+							<m_Symbol>m1</m_Symbol>
+							<c_p_u_Praefix_N>c</c_p_u_Praefix_N>
+							<N>0</N>
+							<c_p_u_Praefix_M>c</c_p_u_Praefix_M>
+							<M>0</M>
+							<L>L0</L>
+							<V>Vx</V>
+							<Pn>PnX</Pn>
+							<S>SX</S>
+							<UICC_Stadium>I</UICC_Stadium>
+						</TNM>
+						<Menge_Weitere_Klassifikation>
+							<Weitere_Klassifikation>
+								<Datum Datumsgenauigkeit="E">2023-07-18</Datum>
+								<Name>UICC</Name>
+								<Stadium>II</Stadium>
+							</Weitere_Klassifikation>
+							<Weitere_Klassifikation>
+								<Datum Datumsgenauigkeit="E">2023-07-12</Datum>
+								<Name>WHO-Grading</Name>
+								<Stadium>I</Stadium>
+							</Weitere_Klassifikation>
+						</Menge_Weitere_Klassifikation>
+						<Menge_Genetik>
+							<Genetische_Variante>
+								<Datum Datumsgenauigkeit="E">2023-07-15</Datum>
+								<Bezeichnung>FCRL4</Bezeichnung>
+								<Auspraegung>M</Auspraegung>
+							</Genetische_Variante>
+						</Menge_Genetik>
+						<Allgemeiner_Leistungszustand>0</Allgemeiner_Leistungszustand>
+					</Verlauf>
+				</Meldung>
+				<Meldung Meldung_ID="12019" Melder_ID="3102">
+					<Tumorzuordnung Tumor_ID="012001">
+						<Primaertumor_ICD>
+							<Code>C43.4</Code>
+							<Version>10 2024 GM</Version>
+						</Primaertumor_ICD>
+						<Diagnosedatum Datumsgenauigkeit="E">2024-03-02</Diagnosedatum>
+						<Seitenlokalisation>M</Seitenlokalisation>
+						<Morphologie_ICD_O>
+							<Code>8721/3</Code>
+							<Version>33</Version>
+						</Morphologie_ICD_O>
+					</Tumorzuordnung>
+					<Tod Abschluss_ID="121">
+						<Sterbedatum>2024-07-20</Sterbedatum>
+						<Tod_tumorbedingt>J</Tod_tumorbedingt>
+						<Menge_Todesursachen>
+							<Todesursache_ICD>
+								<Code>C43.4</Code>
+								<Version>10 2024 GM</Version>
+							</Todesursache_ICD>
+							<Todesursache_ICD>
+								<Code>todo</Code>
+								<Version>10 2024 GM</Version>
+							</Todesursache_ICD>
+						</Menge_Todesursachen>
+					</Tod>
+				</Meldung>
+				<Meldung Meldung_ID="12020" Melder_ID="3101"><!--Tumorkonferenz igrnored in ADT, Therapieempfehlung in oBDS-->
+					<Tumorzuordnung Tumor_ID="012001">
+						<Primaertumor_ICD>
+							<Code>C43.4</Code>
+							<Version>10 2024 GM</Version>
+						</Primaertumor_ICD>
+						<Diagnosedatum Datumsgenauigkeit="E">2024-03-02</Diagnosedatum>
+						<Seitenlokalisation>M</Seitenlokalisation>
+						<Morphologie_ICD_O>
+							<Code>8721/3</Code>
+							<Version>33</Version>
+						</Morphologie_ICD_O>
+					</Tumorzuordnung>
+					<Tumorkonferenz Tumorkonferenz_ID="Tumorkonferenz_ID1">
+						<Meldeanlass>thisValueIsIgnored</Meldeanlass>
+						<Datum Datumsgenauigkeit="E">2024-03-02</Datum>
+						<Typ>postop</Typ><!--TODO would be nice: praeth|postop|postth|ther-->
+						<Therapieempfehlung>
+							<Menge_Typ_Therapieempfehlung>
+								<Typ_Therapieempfehlung>CZ</Typ_Therapieempfehlung><!--TODO-->
+								<Typ_Therapieempfehlung>HO</Typ_Therapieempfehlung>
+							</Menge_Typ_Therapieempfehlung>
+							<Abweichung_Patientenwunsch>N</Abweichung_Patientenwunsch><!--TODO-->
+						</Therapieempfehlung>
+					</Tumorkonferenz>
+				</Meldung>
+				<Meldung Meldung_ID="12021" Melder_ID="3101"><!--fully ignored: Zusatzitem-->
+					<Tumorzuordnung Tumor_ID="012001">
+						<Primaertumor_ICD>
+							<Code>C43.4</Code>
+							<Version>10 2024 GM</Version>
+						</Primaertumor_ICD>
+						<Diagnosedatum Datumsgenauigkeit="E">2024-03-02</Diagnosedatum>
+						<Seitenlokalisation>M</Seitenlokalisation>
+						<Morphologie_ICD_O>
+							<Code>8721/3</Code>
+							<Version>33</Version>
+						</Morphologie_ICD_O>
+					</Tumorzuordnung>
+					<Menge_Zusatzitem>
+						<Zusatzitem>
+							<Datum Datumsgenauigkeit="E">2024-03-02</Datum>
+							<Art>thisValueIsIgnored</Art>
+							<Wert>thisValueIsIgnored</Wert>
+							<Bemerkung>thisValueIsIgnored</Bemerkung>
+						</Zusatzitem>
+						<Zusatzitem>
+							<Datum Datumsgenauigkeit="E">2024-03-02</Datum>
+							<Art>thisValueIsIgnored</Art>
+							<Wert>thisValueIsIgnored</Wert>
+							<Bemerkung>thisValueIsIgnored</Bemerkung>
+						</Zusatzitem>
+					</Menge_Zusatzitem>
+					<Anmerkung>thisValueIsIgnored</Anmerkung>
+				</Meldung>
+			</Menge_Meldung>
+			<Anmerkung>thisValueIsIgnored</Anmerkung>
+		</Patient>
+	</Menge_Patient>
+	<Menge_Melder>
+		<Melder ID="3101">
+			<KH_Abt_Station_Praxis>Urologie</KH_Abt_Station_Praxis>
+			<Arztname>Dr. Urologe</Arztname>
+			<Anschrift>Musterstr 15</Anschrift>
+			<PLZ>36211</PLZ>
+			<Ort>Musterstadt</Ort>
+			<Kontoinhaber>Universitätsklinikum Musterstadt</Kontoinhaber>
+		</Melder>
+		<Melder ID="3102">
+			<KH_Abt_Station_Praxis>Medizinische Klinik II</KH_Abt_Station_Praxis>
+			<Arztname>Dr. Muster</Arztname>
+			<Anschrift>Musterstr 15</Anschrift>
+			<PLZ>36211</PLZ>
+			<Ort>Musterstadt</Ort>
+			<Kontoinhaber>Universitätsklinikum Musterstadt</Kontoinhaber>
+		</Melder>
+	</Menge_Melder>
+</oBDS>
