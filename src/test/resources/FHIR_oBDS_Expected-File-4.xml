@@ -101,7 +101,7 @@
                   <version value="2024"/>
                   <code value="C43.4"/>
                </coding>
-               <text value="Malignes Melanom oberer Rücken mittig"/>
+               <text value="Malignes_Melanom_oberer_Ruecken_mittig"/>
             </code>
             <bodySite>
                <coding>
@@ -131,18 +131,20 @@
                </assessment>
             </stage>
             <evidence>
-               <coding>
-                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/DiagnosesicherungCS"/>
-                  <code value="2"/>
-               </coding>
+               <code>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/DiagnosesicherungCS"/>
+                     <code value="2"/>
+                  </coding>
+               </code>
                <detail>
                   <reference value="Observation/histb7bd2dea7b9d637b"/>
                </detail>
                <detail>
-                  <reference value="Observation/gen1027ab79dc70d073"/>
+                  <reference value="Observation/genaba78cc5c215416a"/>
                </detail>
                <detail>
-                  <reference value="Observation/gendbee8edc718d131b"/>
+                  <reference value="Observation/gen16f2c57a327db5b3"/>
                </detail>
             </evidence>
          </Condition>
@@ -246,7 +248,7 @@
             <effectiveDateTime value="2024-03-02"/>
             <valueCodeableConcept>
                <coding>
-                  <system value="urn:WHO-Grading für Gehirntumoren"/>
+                  <system value="urn:WHO-Grading_fuer_Gehirntumoren"/>
                   <code value="II"/>
                </coding>
             </valueCodeableConcept>
@@ -325,7 +327,7 @@
                   <version value="31"/>
                   <code value="8722/3"/>
                </coding>
-               <text value="Noduläres malignes Melanom (NM)"/>
+               <text value="Nodulaeres_malignes_Melanom_(NM)"/>
             </valueCodeableConcept>
             <hasMember>
                <reference value="Observation/46fe4cf5a885bc53"/>
@@ -1144,10 +1146,10 @@
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/Observation/gen1027ab79dc70d073"/>
+      <fullUrl value="http://example.com/Observation/genaba78cc5c215416a"/>
       <resource>
          <Observation>
-            <id value="gen1027ab79dc70d073"/>
+            <id value="genaba78cc5c215416a"/>
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-GenetischeVariante"/>
             </meta>
@@ -1189,14 +1191,14 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="Observation/gen1027ab79dc70d073"/>
+         <url value="Observation/genaba78cc5c215416a"/>
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/Observation/gendbee8edc718d131b"/>
+      <fullUrl value="http://example.com/Observation/gen16f2c57a327db5b3"/>
       <resource>
          <Observation>
-            <id value="gendbee8edc718d131b"/>
+            <id value="gen16f2c57a327db5b3"/>
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-GenetischeVariante"/>
             </meta>
@@ -1232,7 +1234,7 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="Observation/gendbee8edc718d131b"/>
+         <url value="Observation/gen16f2c57a327db5b3"/>
       </request>
    </entry>
    <entry>
@@ -1338,7 +1340,7 @@
                   <version value="33"/>
                   <code value="8721/3"/>
                </coding>
-               <text value="Noduläres malignes Melanom (NM)"/>
+               <text value="Nodulaeres_malignes_Melanom_(NM)"/>
             </valueCodeableConcept>
             <hasMember>
                <reference value="Observation/7ab6872e634cf4c8"/>
@@ -1532,10 +1534,10 @@
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/Observation/gen322c769eab171910"/>
+      <fullUrl value="http://example.com/Observation/genaa19114e79156bc6"/>
       <resource>
          <Observation>
-            <id value="gen322c769eab171910"/>
+            <id value="genaa19114e79156bc6"/>
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-GenetischeVariante"/>
             </meta>
@@ -1577,14 +1579,14 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="Observation/gen322c769eab171910"/>
+         <url value="Observation/genaa19114e79156bc6"/>
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/Observation/gen1027ab79dc70d073"/>
+      <fullUrl value="http://example.com/Observation/gen7ccf53b43f5357ca"/>
       <resource>
          <Observation>
-            <id value="gen1027ab79dc70d073"/>
+            <id value="gen7ccf53b43f5357ca"/>
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-GenetischeVariante"/>
             </meta>
@@ -1620,7 +1622,7 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="Observation/gen1027ab79dc70d073"/>
+         <url value="Observation/gen7ccf53b43f5357ca"/>
       </request>
    </entry>
    <entry>
@@ -1787,7 +1789,7 @@
             <actuality value="actual"/>
             <event>
                <coding>
-                  <system value="urn:proprietärCode"/>
+                  <system value="urn:proprietaerCode"/>
                   <version value="Sonstige"/>
                   <code value="proprietärCode"/>
                </coding>
@@ -1958,7 +1960,7 @@
             </extension>
             <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-SystemischeTherapieProtokoll">
                <valueCodeableConcept>
-                  <text value="Atezolizumab/ Bevacizumab"/>
+                  <text value="Atezolizumab/_Bevacizumab"/>
                </valueCodeableConcept>
             </extension>
             <status value="completed"/>
@@ -2140,7 +2142,7 @@
             </finding>
             <finding>
                <itemReference>
-                  <reference value="Observation/genf08a8d6073aab555"/>
+                  <reference value="Observation/genb41fc3d37cb665fb"/>
                </itemReference>
             </finding>
             <finding>
@@ -2629,10 +2631,10 @@
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/Observation/genf08a8d6073aab555"/>
+      <fullUrl value="http://example.com/Observation/genb41fc3d37cb665fb"/>
       <resource>
          <Observation>
-            <id value="genf08a8d6073aab555"/>
+            <id value="genb41fc3d37cb665fb"/>
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-GenetischeVariante"/>
             </meta>
@@ -2674,7 +2676,7 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="Observation/genf08a8d6073aab555"/>
+         <url value="Observation/genb41fc3d37cb665fb"/>
       </request>
    </entry>
    <entry>
@@ -2809,12 +2811,10 @@
                   </code>
                   <status value="unknown"/>
                   <statusReason>
-                     <code>
-                        <coding>
-                           <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/JNUCS"/>
-                           <code value="N"/>
-                        </coding>
-                     </code>
+                     <coding>
+                        <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/JNUCS"/>
+                        <code value="N"/>
+                     </coding>
                   </statusReason>
                </detail>
             </activity>
@@ -2828,12 +2828,10 @@
                   </code>
                   <status value="unknown"/>
                   <statusReason>
-                     <code>
-                        <coding>
-                           <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/JNUCS"/>
-                           <code value="N"/>
-                        </coding>
-                     </code>
+                     <coding>
+                        <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/JNUCS"/>
+                        <code value="N"/>
+                     </coding>
                   </statusReason>
                </detail>
             </activity>

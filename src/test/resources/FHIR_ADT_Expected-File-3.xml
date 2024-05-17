@@ -101,7 +101,7 @@
                   <version value="2024"/>
                   <code value="C43.4"/>
                </coding>
-               <text value="Malignes Melanom oberer Rücken mittig"/>
+               <text value="Malignes_Melanom_oberer_Ruecken_mittig"/>
             </code>
             <bodySite>
                <coding>
@@ -131,10 +131,12 @@
                </assessment>
             </stage>
             <evidence>
-               <coding>
-                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/DiagnosesicherungCS"/>
-                  <code value="2"/>
-               </coding>
+               <code>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/DiagnosesicherungCS"/>
+                     <code value="2"/>
+                  </coding>
+               </code>
                <detail>
                   <reference value="Observation/hist3b517bb65fd6cddf"/>
                </detail>
@@ -243,7 +245,7 @@
             <effectiveDateTime value="2024-03-02"/>
             <valueCodeableConcept>
                <coding>
-                  <system value="urn:WHO-Grading für Gehirntumoren"/>
+                  <system value="urn:WHO-Grading_fuer_Gehirntumoren"/>
                   <code value="II"/>
                </coding>
             </valueCodeableConcept>
@@ -317,7 +319,7 @@
                   <version value="33"/>
                   <code value="8721/3"/>
                </coding>
-               <text value="Noduläres malignes Melanom (NM)"/>
+               <text value="Nodulaeres_malignes_Melanom_(NM)"/>
             </valueCodeableConcept>
             <hasMember>
                <reference value="Observation/d663fd4009d8aaae"/>
@@ -1304,7 +1306,7 @@
                   <version value="33"/>
                   <code value="8721/3"/>
                </coding>
-               <text value="Noduläres malignes Melanom (NM)"/>
+               <text value="Nodulaeres_malignes_Melanom_(NM)"/>
             </valueCodeableConcept>
             <hasMember>
                <reference value="Observation/cd1bd907fd2b42ad"/>
@@ -1749,7 +1751,7 @@
             </extension>
             <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-SystemischeTherapieProtokoll">
                <valueCodeableConcept>
-                  <text value="Atezolizumab/ Bevacizumab"/>
+                  <text value="Atezolizumab/_Bevacizumab"/>
                </valueCodeableConcept>
             </extension>
             <status value="completed"/>
@@ -1757,7 +1759,7 @@
                <coding>
                   <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTTherapieartCS"/>
                   <code value="CIZ"/>
-                  <text value="CH IM HO ZS"/>
+                  <display value="CH IM HO ZS"/>
                </coding>
             </category>
             <medicationCodeableConcept>

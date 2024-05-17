@@ -4,12 +4,8 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Base64;
-import java.util.concurrent.TimeUnit;
 import javax.xml.transform.*;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
@@ -17,14 +13,9 @@ import net.sf.saxon.TransformerFactoryImpl;
 import net.sf.saxon.s9api.Processor;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.ssl.NoopHostnameVerifier;
-import org.apache.http.conn.ssl.SSLContextBuilder;
-import org.apache.http.conn.ssl.TrustAllStrategy;
 import org.apache.http.entity.FileEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 
@@ -50,11 +41,11 @@ public class Obds2fhir {
     public static void main(String[] args) {
         boolean pseudonymizeFlag = false;
         if (!System.getenv().getOrDefault("MAINZELLISTE_APIKEY","").isEmpty()){
-            pseudonymizeFlag = checkConnections("Mainzelliste", System.getenv().getOrDefault("MAINZELLISTE_URL",""), Boolean.parseBoolean(System.getenv().getOrDefault("WAIT_FOR_CONNECTION","false")));
+            pseudonymizeFlag = Util.checkConnections("Mainzelliste", System.getenv().getOrDefault("MAINZELLISTE_URL",""), Boolean.parseBoolean(System.getenv().getOrDefault("WAIT_FOR_CONNECTION","false")));
         } else {
             System.out.println("missing Mainzelliste Apikey - Skipping relevant processes");
         }
-        boolean importFhirFlag = checkConnections("Blaze FHIR Server", System.getenv().getOrDefault("STORE_PATH","") + "?_count=0", Boolean.parseBoolean(System.getenv().getOrDefault("WAIT_FOR_CONNECTION","false")));
+        boolean importFhirFlag = Util.checkConnections("Blaze FHIR Server", System.getenv().getOrDefault("STORE_PATH","") + "?_count=0", Boolean.parseBoolean(System.getenv().getOrDefault("WAIT_FOR_CONNECTION","false")));
 
         initializeTransformers(pseudonymizeFlag);
 
@@ -151,28 +142,14 @@ public class Obds2fhir {
     }
 
     private static Transformer identifyTransformer(String file) {
-        int fileVersion = getFileVersion(file);
+        int fileVersion = Util.getFileVersion(file);
         return fileVersion==3 ? oBDS2SinglePatientTransformer : ADT2SinglePatientTransformer;
     }
 
-    private static int getFileVersion(String xmlContent) throws IllegalArgumentException {
-        if (xmlContent.contains("<ADT_GEKID")) {
-            return 2;
-        } else if (xmlContent.contains("<oBDS")) {
-            return 3;
-        } else {
-            int maxLength = xmlContent.length() < 200 ? xmlContent.length() : 200;
-            throw new IllegalArgumentException("Error: File does not contain oBDS or ADT/GEKID  " + xmlContent.substring(0, maxLength));
-        }
-    }
 
     private static void postToFhirStore(File inputFile, HttpPost httppost) throws IOException {
         CloseableHttpClient httpclient = null;
-        try {
-            httpclient = getHttpClient(Boolean.parseBoolean(System.getenv().getOrDefault("SSL_CERTIFICATE_VALIDATION","")));
-        } catch (NoSuchAlgorithmException | KeyStoreException | KeyManagementException e) {
-            throw new RuntimeException(e);
-        }
+        httpclient = Util.getHttpClient(Boolean.parseBoolean(System.getenv().getOrDefault("SSL_CERTIFICATE_VALIDATION","")));
         File file = new File(inputFile.toString());
         FileEntity entity = new FileEntity(file);
         httppost.setEntity(entity);
@@ -224,66 +201,5 @@ public class Obds2fhir {
             System.out.print("Transformer configuration error");
         }
         System.out.println(DONE);
-    }
-
-    private static CloseableHttpClient getHttpClient(Boolean sslVerification) throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
-        CloseableHttpClient httpclient = null;
-        if (!sslVerification){//experimental feature, do not set ssl_certificate_validation=false
-            httpclient = HttpClients.custom()
-                    .setSSLContext(new SSLContextBuilder().loadTrustMaterial(null, TrustAllStrategy.INSTANCE).build())
-                    .setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE).build();
-        }
-        else {
-            httpclient = HttpClients.createDefault();
-        }
-        return httpclient;
-    }
-
-    private static boolean checkConnections(String servicename, String URL, boolean waitForConnection) {
-        boolean serviceAvailable = false;
-        CloseableHttpClient httpclient = null;
-        try {
-            httpclient = getHttpClient(Boolean.parseBoolean(System.getenv().getOrDefault("SSL_CERTIFICATE_VALIDATION","")));
-        } catch (NoSuchAlgorithmException | KeyStoreException | KeyManagementException e) {
-            throw new RuntimeException(e);
-        }
-        HttpResponse httpResponse;
-        HttpGet httpGetRequest;
-        if (URL != null && !URL.isEmpty()) {
-            httpGetRequest = new HttpGet(URL);
-            String encoding = Base64.getEncoder().encodeToString(System.getenv().getOrDefault("STORE_AUTH","").getBytes());
-            httpGetRequest.addHeader("Authorization", "Basic " + encoding);
-            try {
-                httpResponse = httpclient.execute(httpGetRequest);
-                if (httpResponse.getStatusLine().getReasonPhrase().equals("OK") || httpResponse.getStatusLine().getStatusCode()==200) {
-                    System.out.println(servicename + " is accessible: " + URL);
-                    serviceAvailable = true;
-                }
-                else {
-                    if (waitForConnection){//if true, then recursively execute again
-                        System.out.println("Waiting for service " + servicename + ", trying again...");
-                        TimeUnit.SECONDS.sleep(2);
-                        checkConnections(servicename,URL,waitForConnection);
-                    }
-                    System.out.println(servicename + " is NOT accessible: " + URL + httpResponse.getStatusLine());
-                }
-                httpclient.close();
-            } catch (IOException | InterruptedException e) {
-                System.out.println("Error: RuntimeException while trying to access " + servicename + " at " + URL + " - Skipping relevant processes");
-                if (waitForConnection){//if true, then recursively execute again
-                    System.out.println("Waiting for service, trying again...");
-                    try {
-                        TimeUnit.SECONDS.sleep(5);
-                    } catch (InterruptedException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                    checkConnections(servicename,URL,waitForConnection);
-                }
-            }
-        }
-        else {
-            System.out.println(servicename + " url not specified. Skipping relevant processes");
-        }
-        return serviceAvailable;
     }
 }

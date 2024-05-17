@@ -113,10 +113,12 @@
                </assessment>
             </stage>
             <evidence>
-               <coding>
-                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/DiagnosesicherungCS"/>
-                  <code value="1"/>
-               </coding>
+               <code>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/DiagnosesicherungCS"/>
+                     <code value="1"/>
+                  </coding>
+               </code>
                <detail>
                   <reference value="Observation/hist9703e136bf80bded"/>
                </detail>
@@ -1715,7 +1717,7 @@
                <coding>
                   <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTTherapieartCS"/>
                   <code value="CH"/>
-                  <text value="CH CH"/>
+                  <display value="CH CH"/>
                </coding>
             </category>
             <medicationCodeableConcept>
@@ -1926,7 +1928,7 @@
                <coding>
                   <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTTherapieartCS"/>
                   <code value="CH"/>
-                  <text value="CH CH"/>
+                  <display value="CH CH"/>
                </coding>
             </category>
             <medicationCodeableConcept>

@@ -318,7 +318,7 @@
         <xsl:param name="Tumor_Id"/>
         <xsl:if test="Bezeichnung !=''">
             <Genetische_Variante>
-                <xsl:attribute name="Gen_ID" select="concat('gen', hash:hash($Patient_Id, $Tumor_Id, Bezeichnung))" />
+                <xsl:attribute name="Gen_ID" select="concat('gen', hash:hash($Patient_Id, $Tumor_Id, concat(Datum, Bezeichnung, Auspraegung)))" />
                 <xsl:if test="Datum"><Datum><xsl:value-of select="Datum"/></Datum></xsl:if>
                 <xsl:if test="Bezeichnung"><Bezeichnung><xsl:value-of select="Bezeichnung"/></Bezeichnung></xsl:if>
                 <xsl:if test="Auspraegung"><Auspraegung><xsl:value-of select="Auspraegung"/></Auspraegung></xsl:if>

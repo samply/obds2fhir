@@ -280,7 +280,7 @@
                                 <code value="{./Diagnose}"/>
                             </coding>
                             <xsl:if test="./Diagnose_Text != ''">
-                                <text value="{./Diagnose_Text}"/>
+                                <text value="{mds2fhir:fix-free-text(Diagnose_Text)}"/>
                             </xsl:if>
                         </code>
                         <bodySite>
@@ -320,10 +320,12 @@
                         <xsl:if test="Diagnosesicherung!='' or Tumor/Histology!='' or Tumor/Genetische_Variante!=''">
                             <evidence>
                                 <xsl:if test="Diagnosesicherung!=''">
-                                    <coding>
-                                        <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/DiagnosesicherungCS"/>
-                                        <code value="{Diagnosesicherung}"/>
-                                    </coding>
+                                    <code>
+                                        <coding>
+                                            <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/DiagnosesicherungCS"/>
+                                            <code value="{Diagnosesicherung}"/>
+                                        </coding>
+                                    </code>
                                 </xsl:if>
                                 <xsl:for-each select="Tumor/Histology | Tumor/Genetische_Variante">
                                     <xsl:if test="Tumor_Histologiedatum !=''">
@@ -436,7 +438,7 @@
                         <xsl:if test="./Systemische_Therapie_Protokoll">
                             <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-SystemischeTherapieProtokoll">
                                 <valueCodeableConcept>
-                                    <text value="{./Systemische_Therapie_Protokoll}"/>
+                                    <text value="{mds2fhir:fix-free-text(Systemische_Therapie_Protokoll)}"/>
                                 </valueCodeableConcept>
                             </extension>
                         </xsl:if>
@@ -451,7 +453,7 @@
                                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTTherapieartCS"/>
                                     <code value="{Therapieart}"/>
                                     <xsl:if test="Therapieart_original">
-                                        <text value="{Therapieart_original}"/>
+                                        <display value="{Therapieart_original}"/>
                                     </xsl:if>
                                 </coding>
                             </category>
@@ -1227,12 +1229,10 @@
                                     <status value="unknown"/>
                                     <xsl:if test="../Abweichung_Patientenwunsch!=''">
                                         <statusReason>
-                                            <code>
-                                                <coding>
-                                                    <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/JNUCS"/>
-                                                    <code value="{../Abweichung_Patientenwunsch}"/>
-                                                </coding>
-                                            </code>
+                                            <coding>
+                                                <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/JNUCS"/>
+                                                <code value="{../Abweichung_Patientenwunsch}"/>
+                                            </coding>
                                         </statusReason>
                                     </xsl:if>
                                 </detail>
@@ -1288,7 +1288,7 @@
                                     </coding>
                                 </xsl:when>
                                 <xsl:otherwise>
-                                    <text value="TNM ohne Angabe ob klinisch oder pthologisch"/>
+                                    <text value="TNM ohne Angabe ob klinisch oder pathologisch"/>
                                 </xsl:otherwise>
                             </xsl:choose>
                         </code>
@@ -1623,7 +1623,7 @@
                                 </xsl:otherwise>
                             </xsl:choose>
                             <xsl:if test="Morphologie_Freitext">
-                                <text value="{./Morphologie_Freitext}"/>
+                                <text value="{mds2fhir:fix-free-text(Morphologie_Freitext)}"/>
                             </xsl:if>
                         </valueCodeableConcept>
                         <hasMember>
@@ -1712,7 +1712,7 @@
                         </xsl:when>
                         <xsl:when test="Sonstige_Auspraegung">
                             <valueCodeableConcept>
-                                <text value="{Sonstige_Auspraegung}"/>
+                                <text value="{mds2fhir:fix-free-text(Sonstige_Auspraegung)}"/>
                             </valueCodeableConcept>
                         </xsl:when>
                     </xsl:choose>
@@ -1807,7 +1807,7 @@
                                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/CTCAECS"/>
                                 </xsl:when>
                                 <xsl:otherwise>
-                                    <system value="urn:{Typ}"/>
+                                    <system value="urn:{mds2fhir:fix-free-text(Typ)}"/>
                                 </xsl:otherwise>
                             </xsl:choose>
                             <xsl:if test="Version!=''"><version value="{Version}"/></xsl:if>
@@ -1906,7 +1906,7 @@
                         <effectiveDateTime value="{mds2fhir:transformDate(Datum)}"/>
                         <valueCodeableConcept>
                             <coding>
-                                <system value="urn:{Name}"/>
+                                <system value="urn:{mds2fhir:fix-free-text(Name)}"/>
                                 <code value="{Stadium}"/>
                             </coding>
                         </valueCodeableConcept>
@@ -2106,5 +2106,10 @@
                 <xsl:value-of select="'unknown'"/>
             </xsl:otherwise>
         </xsl:choose>
+    </xsl:function>
+
+    <xsl:function name="mds2fhir:fix-free-text">
+        <xsl:param name="text" />
+        <xsl:value-of select="replace(replace(replace(translate($text,' ', '_'), 'ä', 'ae'), 'ö', 'oe'), 'ü', 'ue')"/>
     </xsl:function>
 </xsl:stylesheet>

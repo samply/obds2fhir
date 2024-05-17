@@ -133,7 +133,7 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
                 auditTrailLog.setReasonForChange("Add Patient");
                 this.token.setAuditTrailLog(auditTrailLog);
                 this.token.addIdType(System.getenv("IDTYPE"));
-                this.httpclient = HttpClients.createDefault();
+                this.httpclient = Util.getHttpClient(Boolean.parseBoolean(System.getenv().getOrDefault("SSL_CERTIFICATE_VALIDATION","true")));
                 createMainzellisteSession();
             } catch (URISyntaxException | MainzellisteNetworkException | InvalidSessionException | UnknownHostException e) {
                 throw new RuntimeException(e);
