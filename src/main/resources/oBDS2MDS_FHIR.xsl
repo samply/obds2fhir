@@ -109,7 +109,7 @@
                     $Tumor_Meldungen/Diagnose/Menge_Weitere_Klassifikation">
                     <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                     <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
-                    <xsl:with-param name="Datum" select="$diagnoseDatum"/>
+                    <xsl:with-param name="Origin" select="$diagnoseDatum"/>
                 </xsl:apply-templates>
             </xsl:if>
             <!--Generate third Level TUMOR entity (Elements:  Lokalisation | ICD-O_Katalog_Topographie_Version |  Seitenlokalisation ) -->
@@ -350,12 +350,13 @@
             </xsl:choose>
         </xsl:variable>
         <Verlauf>
-            <xsl:attribute name="Verlauf_ID" select="concat('vrl', hash:hash($Patient_Id, $Tumor_Id, string-join($attribute, '')))" />
+            <xsl:variable name="Verlauf_ID" select="concat('vrl', hash:hash($Patient_Id, $Tumor_Id, string-join($attribute, '')))" />
+            <xsl:attribute name="Verlauf_ID" select="$Verlauf_ID" />
             <xsl:apply-templates select="Meldeanlass | Untersuchungsdatum_Verlauf | Gesamtbeurteilung_Tumorstatus | Verlauf_Lokaler_Tumorstatus | Verlauf_Tumorstatus_Lymphknoten | Verlauf_Tumorstatus_Fernmetastasen"/>
             <xsl:apply-templates select="Allgemeiner_Leistungszustand | Menge_Weitere_Klassifikation">
                 <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                 <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
-                <xsl:with-param name="Datum" select="Untersuchungsdatum_Verlauf"/>
+                <xsl:with-param name="Origin" select="concat(Untersuchungsdatum_Verlauf, $Verlauf_ID)"/>
             </xsl:apply-templates>
             <xsl:choose>
                 <xsl:when test="TNM/@ID">
@@ -755,11 +756,11 @@
     <xsl:template match="Allgemeiner_Leistungszustand" >
         <xsl:param name="Patient_Id"/>
         <xsl:param name="Tumor_Id"/>
-        <xsl:param name="Datum"/>
+        <xsl:param name="Origin"/>
         <xsl:variable name="ECOG" select="xsi:mapToECOG(node())"/>
         <xsl:if test="string-length($ECOG)>=1">
             <ECOG>
-                <xsl:attribute name="ECOG_ID" select="hash:hash($Patient_Id, $Tumor_Id, concat($ECOG, $Datum))"/>
+                <xsl:attribute name="ECOG_ID" select="hash:hash($Patient_Id, $Tumor_Id, concat($ECOG, $Origin))"/>
                 <xsl:value-of select="$ECOG"/>
             </ECOG>
         </xsl:if>
