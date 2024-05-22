@@ -43,7 +43,19 @@
     <xsl:template match="Patient">
         <Patient>
             <xsl:variable name="Patient_Id" select="Patienten_Stammdaten/@Patient_ID"/>
-            <xsl:variable name="Patient_Pseudonym" select="xsi:Pseudonymize(Patienten_Stammdaten/Patienten_Geschlecht, Patienten_Stammdaten/Patienten_Vornamen, Patienten_Stammdaten/Patienten_Nachname, Patienten_Stammdaten/Patienten_Geburtsname, Patienten_Stammdaten/Patienten_Geburtsdatum, Patienten_Stammdaten/@Patient_ID)"/>
+            <xsl:variable name="Geburtsdatum" select="Patienten_Stammdaten/Patienten_Geburtsdatum"/>
+            <xsl:variable name="Geburtstag" select="string(replace($Geburtsdatum,'(\d\d)\.\d\d\.\d\d\d\d$','$1'))"/>
+            <xsl:variable name="Geburtsmonat" select="string(replace($Geburtsdatum,'\d\d\.(\d\d)\.\d\d\d\d$','$1'))"/>
+            <xsl:variable name="Geburtsjahr" select="string(replace($Geburtsdatum,'\d\d\.\d\d\.(\d\d\d\d)$','$1'))"/>
+            <xsl:variable name="Patient_Pseudonym" select="hash:pseudonymize(
+            xsi:ReplaceEmpty(Patienten_Stammdaten/Patienten_Geschlecht),
+            xsi:ReplaceEmpty(Patienten_Stammdaten/Patienten_Vornamen),
+            xsi:ReplaceEmpty(Patienten_Stammdaten/Patienten_Nachname),
+            xsi:ReplaceEmpty(Patienten_Stammdaten/Patienten_Geburtsname),
+            xsi:ReplaceEmpty($Geburtstag),
+            xsi:ReplaceEmpty($Geburtsmonat),
+            xsi:ReplaceEmpty($Geburtsjahr),
+            xsi:ReplaceEmpty(Patienten_Stammdaten/@Patient_ID))"/>
             <xsl:attribute name="Patient_ID">
                 <xsl:choose>
                     <xsl:when test="$keep_internal_id=true()"><xsl:value-of select="$Patient_Id"/></xsl:when>
@@ -176,6 +188,7 @@
                 <xsl:apply-templates select="$Diagnosis_Meldung/Allgemeiner_Leistungszustand | $Diagnosis_Meldung/Menge_Weitere_Klassifikation">
                     <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                     <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
+                    <xsl:with-param name="Datum" select="$Diagnosis_Meldung/Diagnosedatum"/>
                 </xsl:apply-templates>
             </xsl:if>
             <!--Generate third Level TUMOR entity (Elements:  Lokalisation | ICD-O_Katalog_Topographie_Version |  Seitenlokalisation ) -->
@@ -489,6 +502,7 @@
             <xsl:apply-templates select="Allgemeiner_Leistungszustand | Menge_Weitere_Klassifikation">
                 <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                 <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
+                <xsl:with-param name="Datum" select="Untersuchungsdatum_Verlauf"/>
             </xsl:apply-templates>
 
 
@@ -844,11 +858,12 @@
     <xsl:template match="Allgemeiner_Leistungszustand" >
         <xsl:param name="Patient_Id"/>
         <xsl:param name="Tumor_Id"/>
-        <xsl:variable name="ecog" select="xsi:mapToECOG(node())"/>
-        <xsl:if test="string-length($ecog)>=1">
+        <xsl:param name="Datum"/>
+        <xsl:variable name="ECOG" select="xsi:mapToECOG(node())"/>
+        <xsl:if test="string-length($ECOG)>=1">
             <ECOG>
-                <xsl:attribute name="ECOG_ID" select="hash:hash($Patient_Id, $Tumor_Id, $ecog)"/>
-                <xsl:value-of select="$ecog"/>
+                <xsl:attribute name="ECOG_ID" select="hash:hash($Patient_Id, $Tumor_Id, concat($ECOG, $Datum))"/>
+                <xsl:value-of select="$ECOG"/>
             </ECOG>
         </xsl:if>
     </xsl:template>
@@ -1076,16 +1091,6 @@
             <xsl:otherwise><xsl:value-of select="round(number($week) * 1.8)"/></xsl:otherwise>
         </xsl:choose>
         <xsl:value-of select="number(string(replace($datum,'\d\d\.\d\d\.(\d\d\d\d)$','$1')))*8"/>
-    </xsl:function>
-
-    <xsl:function name="xsi:Pseudonymize">
-        <xsl:param name="gender"/>
-        <xsl:param name="prename"/>
-        <xsl:param name="surname"/>
-        <xsl:param name="birthname"/>
-        <xsl:param name="brithdate"/>
-        <xsl:param name="identifier"/>
-        <xsl:value-of select="hash:pseudonymize(xsi:ReplaceEmpty($gender), xsi:ReplaceEmpty($prename), xsi:ReplaceEmpty($surname), xsi:ReplaceEmpty($birthname), xsi:ReplaceEmpty($brithdate), xsi:ReplaceEmpty($identifier))"/>
     </xsl:function>
 
     <xsl:function name="xsi:ReplaceEmpty">

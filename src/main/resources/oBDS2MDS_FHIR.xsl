@@ -24,7 +24,19 @@
     <xsl:template match="Patient">
         <Patient>
             <xsl:variable name="Patient_Id" select="@Patient_ID"/>
-            <xsl:variable name="Patient_Pseudonym" select="xsi:Pseudonymize(Patienten_Stammdaten/Geschlecht, Patienten_Stammdaten/Vornamen, Patienten_Stammdaten/Nachname, Patienten_Stammdaten/Geburtsname, Patienten_Stammdaten/Geburtsdatum, @Patient_ID)"/>
+            <xsl:variable name="Geburtsdatum" select="Patienten_Stammdaten/Geburtsdatum"/>
+            <xsl:variable name="Geburtstag" select="string(replace($Geburtsdatum,'\d\d\d\d\-\d\d\-(\d\d)$','$1'))"/>
+            <xsl:variable name="Geburtsmonat" select="string(replace($Geburtsdatum,'\d\d\d\d\-(\d\d)\-\d\d$','$1'))"/>
+            <xsl:variable name="Geburtsjahr" select="string(replace($Geburtsdatum,'(\d\d\d\d)\-\d\d\-\d\d$','$1'))"/>
+            <xsl:variable name="Patient_Pseudonym" select="hash:pseudonymize(
+            xsi:ReplaceEmpty(Patienten_Stammdaten/Geschlecht),
+            xsi:ReplaceEmpty(Patienten_Stammdaten/Vornamen),
+            xsi:ReplaceEmpty(Patienten_Stammdaten/Nachname),
+            xsi:ReplaceEmpty(Patienten_Stammdaten/Geburtsname),
+            xsi:ReplaceEmpty($Geburtstag),
+            xsi:ReplaceEmpty($Geburtsmonat),
+            xsi:ReplaceEmpty($Geburtsjahr),
+            xsi:ReplaceEmpty(@Patient_ID))"/>
             <xsl:attribute name="Patient_ID">
                 <xsl:choose>
                     <xsl:when test="$keep_internal_id=true()"><xsl:value-of select="$Patient_Id"/></xsl:when>
@@ -97,6 +109,7 @@
                     $Tumor_Meldungen/Diagnose/Menge_Weitere_Klassifikation">
                     <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                     <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
+                    <xsl:with-param name="Datum" select="$diagnoseDatum"/>
                 </xsl:apply-templates>
             </xsl:if>
             <!--Generate third Level TUMOR entity (Elements:  Lokalisation | ICD-O_Katalog_Topographie_Version |  Seitenlokalisation ) -->
@@ -342,6 +355,7 @@
             <xsl:apply-templates select="Allgemeiner_Leistungszustand | Menge_Weitere_Klassifikation">
                 <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                 <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
+                <xsl:with-param name="Datum" select="Untersuchungsdatum_Verlauf"/>
             </xsl:apply-templates>
             <xsl:choose>
                 <xsl:when test="TNM/@ID">
@@ -739,11 +753,12 @@
     <xsl:template match="Allgemeiner_Leistungszustand" >
         <xsl:param name="Patient_Id"/>
         <xsl:param name="Tumor_Id"/>
-        <xsl:variable name="ecog" select="xsi:mapToECOG(node())"/>
-        <xsl:if test="string-length($ecog)>=1">
+        <xsl:param name="Datum"/>
+        <xsl:variable name="ECOG" select="xsi:mapToECOG(node())"/>
+        <xsl:if test="string-length($ECOG)>=1">
             <ECOG>
-                <xsl:attribute name="ECOG_ID" select="hash:hash($Patient_Id, $Tumor_Id, $ecog)"/>
-                <xsl:value-of select="$ecog"/>
+                <xsl:attribute name="ECOG_ID" select="hash:hash($Patient_Id, $Tumor_Id, concat($ECOG, $Datum))"/>
+                <xsl:value-of select="$ECOG"/>
             </ECOG>
         </xsl:if>
     </xsl:template>
@@ -1014,16 +1029,6 @@
                 </xsl:otherwise>
             </xsl:choose>
         </Datum_des_letztbekannten_Vitalstatus>
-    </xsl:function>
-
-    <xsl:function name="xsi:Pseudonymize">
-        <xsl:param name="gender"/>
-        <xsl:param name="prename"/>
-        <xsl:param name="surname"/>
-        <xsl:param name="birthname"/>
-        <xsl:param name="brithdate"/>
-        <xsl:param name="identifier"/>
-        <xsl:value-of select="hash:pseudonymize(xsi:ReplaceEmpty($gender), xsi:ReplaceEmpty($prename), xsi:ReplaceEmpty($surname), xsi:ReplaceEmpty($birthname), xsi:ReplaceEmpty($brithdate), xsi:ReplaceEmpty($identifier))"/>
     </xsl:function>
 
     <xsl:function name="xsi:ReplaceEmpty">

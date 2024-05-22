@@ -46,6 +46,8 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
                 net.sf.saxon.value.SequenceType.SINGLE_STRING,
                 net.sf.saxon.value.SequenceType.SINGLE_STRING,
                 net.sf.saxon.value.SequenceType.SINGLE_STRING,
+                net.sf.saxon.value.SequenceType.SINGLE_STRING,
+                net.sf.saxon.value.SequenceType.SINGLE_STRING,
                 net.sf.saxon.value.SequenceType.SINGLE_STRING };
     }
 
@@ -70,14 +72,16 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
                 String prename = args[1].iterate().next().getStringValue();
                 String surname = args[2].iterate().next().getStringValue();
                 String formername = args[3].iterate().next().getStringValue();
-                String birthdate = args[4].iterate().next().getStringValue();
-                String identifier = args[5].iterate().next().getStringValue();
+                String birthday = args[4].iterate().next().getStringValue();
+                String birthmonth = args[5].iterate().next().getStringValue();
+                String birthyear = args[6].iterate().next().getStringValue();
+                String identifier = args[7].iterate().next().getStringValue();
 
                 if (anonymize) {
-                    output = DigestUtils.sha256Hex(gender + prename + surname + formername + birthdate + identifier + salt).substring(32);
+                    output = DigestUtils.sha256Hex(gender + prename + surname + formername + birthday + birthmonth + birthyear + identifier + salt).substring(32);
                 } else {
                     try {
-                        output=pseudonymizationCall(gender, prename, surname, formername, birthdate, identifier);
+                        output=pseudonymizationCall(gender, prename, surname, formername, birthday, birthmonth, birthyear, identifier);
                     } catch (URISyntaxException | MainzellisteNetworkException | InvalidSessionException | IOException e) {
                         e.printStackTrace();
                     }
@@ -88,11 +92,10 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
         };
     }
 
-    private String pseudonymizationCall(String gender, String prename, String surname, String formername, String birthdate, String identifier) throws URISyntaxException, MainzellisteNetworkException, InvalidSessionException, IOException {
+    private String pseudonymizationCall(String gender, String prename, String surname, String formername, String birthday, String birthmonth, String birthyear, String identifier) throws URISyntaxException, MainzellisteNetworkException, InvalidSessionException, IOException {
         String pseudonym="";
-        String[] birthdateParts = !birthdate.equals("empty") ? birthdate.split("[.]") : new String[]{"empty", "empty", "empty"};
         this.addPatientToken = session.getToken(token);
-        HttpPost httppost = createHttpPost(prename, surname, formername, birthdateParts[0], birthdateParts[1], birthdateParts[2], gender);
+        HttpPost httppost = createHttpPost(prename, surname, formername, birthday, birthmonth, birthyear, gender);
         HttpResponse response = httpclient.execute(httppost);
         if (response.getStatusLine().getStatusCode()==401) {
             createMainzellisteSession();
@@ -102,7 +105,7 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
         }
         if (response.getStatusLine().getStatusCode()==400){
             this.httpclient = HttpClients.createDefault();
-            httppost = createHttpPost(preprocessIDAT(prename), preprocessIDAT(surname), preprocessIDAT(formername), birthdateParts[0], birthdateParts[1], birthdateParts[2], gender);
+            httppost = createHttpPost(preprocessIDAT(prename), preprocessIDAT(surname), preprocessIDAT(formername), birthday, birthmonth, birthyear, gender);
             response = httpclient.execute(httppost);
             System.out.println("\u001B[A"+"\u001B[100C" + "Unallowed character in patient "+ identifier + " ... autocorrected\n");
         }
