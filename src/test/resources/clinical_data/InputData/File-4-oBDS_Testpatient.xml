@@ -207,6 +207,11 @@
 								<Name>Clark-Level</Name>
 								<Stadium>III</Stadium>
 							</Weitere_Klassifikation>
+							<Weitere_Klassifikation><!--problematic duplicate from diagnosis-->
+								<Datum Datumsgenauigkeit="E">2023-07-18</Datum>
+								<Name>problematic duplicate: diagnosis and progress</Name>
+								<Stadium>I</Stadium>
+							</Weitere_Klassifikation>
 						</Menge_Weitere_Klassifikation>
 						<Menge_Genetik>
 							<Genetische_Variante>
@@ -729,9 +734,19 @@
 								<Name>UICC</Name>
 								<Stadium>II</Stadium>
 							</Weitere_Klassifikation>
-							<Weitere_Klassifikation>
-								<Datum Datumsgenauigkeit="E">2023-07-12</Datum>
+							<Weitere_Klassifikation><!--problematic duplicate internal-->
+								<Datum Datumsgenauigkeit="E">2023-07-18</Datum>
 								<Name>WHO-Grading</Name>
+								<Stadium>I</Stadium>
+							</Weitere_Klassifikation>
+							<Weitere_Klassifikation><!--problematic duplicate internal-->
+								<Datum Datumsgenauigkeit="E">2023-07-18</Datum>
+								<Name>WHO-Grading</Name>
+								<Stadium>I</Stadium>
+							</Weitere_Klassifikation>
+							<Weitere_Klassifikation><!--problematic duplicate from diagnosis-->
+								<Datum Datumsgenauigkeit="E">2023-07-18</Datum>
+								<Name>problematic duplicate: diagnosis and progress</Name>
 								<Stadium>I</Stadium>
 							</Weitere_Klassifikation>
 						</Menge_Weitere_Klassifikation>

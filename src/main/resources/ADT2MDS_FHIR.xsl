@@ -106,7 +106,7 @@
             </xsl:if>
             <xsl:choose>
                 <xsl:when test="./Menge_Meldung/Meldung/Diagnose">
-                    <xsl:for-each select="./Menge_Meldung/Meldung/Diagnose[not(@Tumor_ID=following::*/Diagnose[../../../Patienten_Stammdaten/@Patient_ID=$Patient_Id]/@Tumor_ID)]"><!--use foreach loop to allow multiple Diagnoses for one Patient AND ignore multiple identical diagnoses-->
+                    <xsl:for-each select="./Menge_Meldung/Meldung/Diagnose[not(@Tumor_ID=following::Diagnose[../../../Patienten_Stammdaten/@Patient_ID=$Patient_Id]/@Tumor_ID)]"><!--use foreach loop to allow multiple Diagnoses for one Patient AND ignore multiple identical diagnoses-->
                         <xsl:choose>
                             <xsl:when test="@Tumor_ID">
                                <xsl:apply-templates select="../../../Menge_Meldung" mode="withIds">
@@ -308,7 +308,7 @@
         </xsl:for-each>
         <xsl:for-each select="Menge_FM/Fernmetastase">
             <xsl:apply-templates select=".[
-                not(concat(FM_Diagnosedatum,FM_Lokalisation)=following::*/Fernmetastase/concat(FM_Diagnosedatum,FM_Lokalisation))]">
+                not(concat(FM_Diagnosedatum,FM_Lokalisation)=following::Fernmetastase/concat(FM_Diagnosedatum,FM_Lokalisation))]">
                 <xsl:with-param name="counter"><xsl:value-of select="count(preceding-sibling::Fernmetastase[concat(FM_Diagnosedatum,FM_Lokalisation)=current()/concat(FM_Diagnosedatum,FM_Lokalisation)])" /></xsl:with-param>
                 <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                 <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
@@ -542,7 +542,7 @@
             </xsl:choose>
             <xsl:for-each select="Menge_FM/Fernmetastase">
                 <xsl:apply-templates select=".[
-                    not(concat(FM_Diagnosedatum,FM_Lokalisation)=following::*/Fernmetastase/concat(FM_Diagnosedatum,FM_Lokalisation))]">
+                    not(concat(FM_Diagnosedatum,FM_Lokalisation)=following::Fernmetastase/concat(FM_Diagnosedatum,FM_Lokalisation))]">
                     <xsl:with-param name="counter"><xsl:value-of select="count(preceding-sibling::Fernmetastase[concat(FM_Diagnosedatum,FM_Lokalisation)=current()/concat(FM_Diagnosedatum,FM_Lokalisation)])" /></xsl:with-param>
                     <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                     <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
@@ -640,7 +640,7 @@
 
             <xsl:for-each select="Menge_Bestrahlung/Bestrahlung">
                 <xsl:apply-templates select=".[
-                    not(concat(ST_Beginn_Datum, ST_Ende_Datum, ST_Applikationsart, ST_Zielgebiet, ST_Seite_Zielgebiet, ST_Gesamtdosis/Dosis, ST_Einzeldosis/Dosis)=following::*/Bestrahlung/concat(ST_Beginn_Datum, ST_Ende_Datum, ST_Applikationsart, ST_Zielgebiet, ST_Seite_Zielgebiet, ST_Gesamtdosis/Dosis, ST_Einzeldosis/Dosis))]">
+                    not(concat(ST_Beginn_Datum, ST_Ende_Datum, ST_Applikationsart, ST_Zielgebiet, ST_Seite_Zielgebiet, ST_Gesamtdosis/Dosis, ST_Einzeldosis/Dosis)=following::Bestrahlung/concat(ST_Beginn_Datum, ST_Ende_Datum, ST_Applikationsart, ST_Zielgebiet, ST_Seite_Zielgebiet, ST_Gesamtdosis/Dosis, ST_Einzeldosis/Dosis))]">
                     <xsl:with-param name="counter"><xsl:value-of select="count(preceding-sibling::Bestrahlung[concat(ST_Beginn_Datum, ST_Ende_Datum, ST_Applikationsart, ST_Zielgebiet, ST_Seite_Zielgebiet, ST_Gesamtdosis/Dosis, ST_Einzeldosis/Dosis)=current()/concat(ST_Beginn_Datum, ST_Ende_Datum, ST_Applikationsart, ST_Zielgebiet, ST_Seite_Zielgebiet, ST_Gesamtdosis/Dosis, ST_Einzeldosis/Dosis)])" /></xsl:with-param>
                     <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                     <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
@@ -788,12 +788,14 @@
         <xsl:param name="Patient_Id"/>
         <xsl:param name="Tumor_Id"/>
         <xsl:for-each select="Weitere_Klassifikation">
-            <Weitere_Klassifikation>
-                <xsl:attribute name="WeitereKlassifikation_ID" select="hash:hash($Patient_Id, $Tumor_Id, concat(Datum, Name, Stadium))"/>
-                <xsl:if test="Datum"><Datum><xsl:value-of select="Datum"/></Datum></xsl:if>
-                <xsl:if test="Name"><Name><xsl:value-of select="Name"/></Name></xsl:if>
-                <xsl:if test="Stadium"><Stadium><xsl:value-of select="Stadium"/></Stadium></xsl:if>
-            </Weitere_Klassifikation>
+            <xsl:if test=".[not(concat(Datum, Name, Stadium)=following::Weitere_Klassifikation/concat(Datum, Name, Stadium))]">
+              <Weitere_Klassifikation>
+                  <xsl:attribute name="WeitereKlassifikation_ID" select="hash:hash($Patient_Id, $Tumor_Id, concat(Datum, Name, Stadium))"/>
+                  <xsl:if test="Datum"><Datum><xsl:value-of select="Datum"/></Datum></xsl:if>
+                  <xsl:if test="Name"><Name><xsl:value-of select="Name"/></Name></xsl:if>
+                  <xsl:if test="Stadium"><Stadium><xsl:value-of select="Stadium"/></Stadium></xsl:if>
+              </Weitere_Klassifikation>
+            </xsl:if>
         </xsl:for-each>
     </xsl:template>
 

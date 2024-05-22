@@ -16,7 +16,7 @@
                      <code value="Lokal"/>
                   </coding>
                </type>
-               <value value="bd67af67155a21f7fcb1bb827be62e7b"/>
+               <value value="ed2a8052536d3adf0c4893b0550a64e4"/>
             </identifier>
             <gender value="male"/>
             <birthDate value="1989-04-13"/>
@@ -152,10 +152,10 @@
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/Observation/511d32df71cd92b5"/>
+      <fullUrl value="http://example.com/Observation/be271ff7eddf78a9"/>
       <resource>
          <Observation>
-            <id value="511d32df71cd92b5"/>
+            <id value="be271ff7eddf78a9"/>
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Ecog"/>
             </meta>
@@ -183,7 +183,7 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="Observation/511d32df71cd92b5"/>
+         <url value="Observation/be271ff7eddf78a9"/>
       </request>
    </entry>
    <entry>
@@ -2001,7 +2001,7 @@
             </finding>
             <finding>
                <itemReference>
-                  <reference value="Observation/514be5650538e4ea"/>
+                  <reference value="Observation/cd0582f4ed5f363e"/>
                </itemReference>
             </finding>
             <finding>
@@ -2012,6 +2012,11 @@
             <finding>
                <itemReference>
                   <reference value="Observation/30e59cac156f92cf"/>
+               </itemReference>
+            </finding>
+            <finding>
+               <itemReference>
+                  <reference value="Observation/03e994e4fe1bbccb"/>
                </itemReference>
             </finding>
             <finding>
@@ -2485,10 +2490,10 @@
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/Observation/514be5650538e4ea"/>
+      <fullUrl value="http://example.com/Observation/cd0582f4ed5f363e"/>
       <resource>
          <Observation>
-            <id value="514be5650538e4ea"/>
+            <id value="cd0582f4ed5f363e"/>
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Ecog"/>
             </meta>
@@ -2516,7 +2521,7 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="Observation/514be5650538e4ea"/>
+         <url value="Observation/cd0582f4ed5f363e"/>
       </request>
    </entry>
    <entry>
@@ -2587,6 +2592,41 @@
       <request>
          <method value="PUT"/>
          <url value="Observation/30e59cac156f92cf"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/03e994e4fe1bbccb"/>
+      <resource>
+         <Observation>
+            <id value="03e994e4fe1bbccb"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-WeitereKlassifikation"/>
+            </meta>
+            <status value="registered"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="LP248771-0"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/fc340e955e522dae"/>
+            </subject>
+            <focus>
+               <reference value="Condition/digff3baae5a2f77440"/>
+            </focus>
+            <effectiveDateTime value="2023-07-18"/>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="urn:problematic_duplicate:_diagnosis_and_progress"/>
+                  <code value="I"/>
+               </coding>
+            </valueCodeableConcept>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/03e994e4fe1bbccb"/>
       </request>
    </entry>
 </Bundle>

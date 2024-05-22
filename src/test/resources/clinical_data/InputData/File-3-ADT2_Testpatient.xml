@@ -191,6 +191,11 @@
 								<Name>Clark-Level</Name>
 								<Stadium>III</Stadium>
 							</Weitere_Klassifikation>
+							<Weitere_Klassifikation><!--problematic duplicate from diagnosis-->
+								<Datum>18.07.2023</Datum>
+								<Name>problematic duplicate: diagnosis and progress</Name>
+								<Stadium>I</Stadium>
+							</Weitere_Klassifikation>
 						</Menge_Weitere_Klassifikation>
 						<Modul_Allgemein>
 							<DatumSozialdienstkontakt>
@@ -457,9 +462,19 @@
 									<Name>UICC</Name>
 									<Stadium>II</Stadium>
 								</Weitere_Klassifikation>
-								<Weitere_Klassifikation>
+								<Weitere_Klassifikation><!--problematic duplicate internal-->
 									<Datum>18.07.2023</Datum>
 									<Name>WHO-Grading</Name>
+									<Stadium>I</Stadium>
+								</Weitere_Klassifikation>
+								<Weitere_Klassifikation><!--problematic duplicate internal-->
+									<Datum>18.07.2023</Datum>
+									<Name>WHO-Grading</Name>
+									<Stadium>I</Stadium>
+								</Weitere_Klassifikation>
+								<Weitere_Klassifikation><!--problematic duplicate from diagnosis-->
+									<Datum>18.07.2023</Datum>
+									<Name>problematic duplicate: diagnosis and progress</Name>
 									<Stadium>I</Stadium>
 								</Weitere_Klassifikation>
 							</Menge_Weitere_Klassifikation>

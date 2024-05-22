@@ -16,7 +16,7 @@
                      <code value="Lokal"/>
                   </coding>
                </type>
-               <value value="19fe6bfd1e3f5ba182a293b65fb27aa6"/>
+               <value value="74d5d4e4c777663db30dd772cf65111b"/>
             </identifier>
             <gender value="male"/>
             <birthDate value="1989-04-13"/>
@@ -155,10 +155,10 @@
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/Observation/f639f2db5875f1cf"/>
+      <fullUrl value="http://example.com/Observation/cd8184cad15f879f"/>
       <resource>
          <Observation>
-            <id value="f639f2db5875f1cf"/>
+            <id value="cd8184cad15f879f"/>
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Ecog"/>
             </meta>
@@ -186,7 +186,7 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="Observation/f639f2db5875f1cf"/>
+         <url value="Observation/cd8184cad15f879f"/>
       </request>
    </entry>
    <entry>
@@ -2147,7 +2147,7 @@
             </finding>
             <finding>
                <itemReference>
-                  <reference value="Observation/cbb42f1d3319446e"/>
+                  <reference value="Observation/9518f0d0c5f34d40"/>
                </itemReference>
             </finding>
             <finding>
@@ -2157,7 +2157,12 @@
             </finding>
             <finding>
                <itemReference>
-                  <reference value="Observation/a8a576ae4e5ac2ed"/>
+                  <reference value="Observation/09b16fce09c21227"/>
+               </itemReference>
+            </finding>
+            <finding>
+               <itemReference>
+                  <reference value="Observation/181d07b47999d4f5"/>
                </itemReference>
             </finding>
             <finding>
@@ -2680,10 +2685,10 @@
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/Observation/cbb42f1d3319446e"/>
+      <fullUrl value="http://example.com/Observation/9518f0d0c5f34d40"/>
       <resource>
          <Observation>
-            <id value="cbb42f1d3319446e"/>
+            <id value="9518f0d0c5f34d40"/>
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Ecog"/>
             </meta>
@@ -2711,7 +2716,7 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="Observation/cbb42f1d3319446e"/>
+         <url value="Observation/9518f0d0c5f34d40"/>
       </request>
    </entry>
    <entry>
@@ -2750,10 +2755,10 @@
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/Observation/a8a576ae4e5ac2ed"/>
+      <fullUrl value="http://example.com/Observation/09b16fce09c21227"/>
       <resource>
          <Observation>
-            <id value="a8a576ae4e5ac2ed"/>
+            <id value="09b16fce09c21227"/>
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-WeitereKlassifikation"/>
             </meta>
@@ -2770,7 +2775,7 @@
             <focus>
                <reference value="Condition/dig1f2f2da54770c86f"/>
             </focus>
-            <effectiveDateTime value="2023-07-12"/>
+            <effectiveDateTime value="2023-07-18"/>
             <valueCodeableConcept>
                <coding>
                   <system value="urn:WHO-Grading"/>
@@ -2781,7 +2786,42 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="Observation/a8a576ae4e5ac2ed"/>
+         <url value="Observation/09b16fce09c21227"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/181d07b47999d4f5"/>
+      <resource>
+         <Observation>
+            <id value="181d07b47999d4f5"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-WeitereKlassifikation"/>
+            </meta>
+            <status value="registered"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="LP248771-0"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/1302b6d11c5b628d"/>
+            </subject>
+            <focus>
+               <reference value="Condition/dig1f2f2da54770c86f"/>
+            </focus>
+            <effectiveDateTime value="2023-07-18"/>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="urn:problematic_duplicate:_diagnosis_and_progress"/>
+                  <code value="I"/>
+               </coding>
+            </valueCodeableConcept>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/181d07b47999d4f5"/>
       </request>
    </entry>
    <entry>
