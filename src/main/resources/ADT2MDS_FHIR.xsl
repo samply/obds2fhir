@@ -1158,6 +1158,18 @@
             </xsl:when>
             <xsl:when test="contains(string-join($toReplace, ','), 'SO')">
                 <xsl:value-of select="'SO'"/>
+            </xsl:when><!-- done official schema mapping; to following mappings still occur for some reason (probably some oBDS migration reason)-->
+            <xsl:when test="contains(string-join($toReplace, ','), 'CIZ')">
+                <xsl:value-of select="'CIZ'"/>
+            </xsl:when>
+            <xsl:when test="contains(string-join($toReplace, ','), 'CI')">
+                <xsl:value-of select="'CI'"/>
+            </xsl:when>
+            <xsl:when test="contains(string-join($toReplace, ','), 'CZ')">
+                <xsl:value-of select="'CZ'"/>
+            </xsl:when>
+            <xsl:when test="contains(string-join($toReplace, ','), 'IZ')">
+                <xsl:value-of select="'IZ'"/>
             </xsl:when>
         </xsl:choose>
     </xsl:function>
