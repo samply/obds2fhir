@@ -7,6 +7,8 @@ import org.apache.http.conn.ssl.SSLContextBuilder;
 import org.apache.http.conn.ssl.TrustAllStrategy;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.security.KeyManagementException;
@@ -16,6 +18,7 @@ import java.util.Base64;
 import java.util.concurrent.TimeUnit;
 
 public class Util {
+    private static final Logger logger = LoggerFactory.getLogger(Util.class);
 
     public static CloseableHttpClient getHttpClient(Boolean sslVerification){
         CloseableHttpClient httpclient;
@@ -47,33 +50,33 @@ public class Util {
             try {
                 httpResponse = httpclient.execute(httpGetRequest);
                 if (httpResponse.getStatusLine().getReasonPhrase().equals("OK") || httpResponse.getStatusLine().getStatusCode()==200) {
-                    System.out.println(servicename + " is accessible: " + URL);
+                    logger.info(servicename + " is accessible: " + URL);
                     serviceAvailable = true;
                 }
                 else {
                     if (waitForConnection){//if true, then recursively execute again
-                        System.out.println("Waiting for service " + servicename + ", trying again...");
+                        logger.info("Waiting for service " + servicename + ", trying again...");
                         TimeUnit.SECONDS.sleep(2);
                         checkConnections(servicename,URL,waitForConnection);
                     }
-                    System.out.println(servicename + " is NOT accessible: " + URL + httpResponse.getStatusLine());
+                    logger.info(servicename + " is NOT accessible: " + URL + httpResponse.getStatusLine());
                 }
                 httpclient.close();
             } catch (IOException | InterruptedException e) {
-                System.out.println("Error: RuntimeException while trying to access " + servicename + " at " + URL + " - Skipping relevant processes");
+                logger.warn("Exception while trying to access " + servicename + " at " + URL);
                 if (waitForConnection){//if true, then recursively execute again
-                    System.out.println("Waiting for service, trying again...");
+                    logger.info("Waiting for service "+servicename+" , trying again...");
                     try {
                         TimeUnit.SECONDS.sleep(5);
                     } catch (InterruptedException ex) {
-                        throw new RuntimeException(ex);
+                        logger.error("InterruptedException while waiting" + e);
                     }
                     checkConnections(servicename,URL,waitForConnection);
                 }
             }
         }
         else {
-            System.out.println(servicename + " url not specified. Skipping relevant processes");
+            logger.info(servicename + " url not specified. Skipping relevant processes");
         }
         return serviceAvailable;
     }

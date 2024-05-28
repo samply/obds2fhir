@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.stream.Collectors;
 import javax.xml.transform.*;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
@@ -17,9 +18,16 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.FileEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class Obds2fhir {
+    static {
+        System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", System.getenv().getOrDefault("LOG_LEVEL","INFO"));
+    }
+    private static final Logger logger = LoggerFactory.getLogger(Obds2fhir.class);
+
     private static final String INPUT_DATA ="/InputData/";
     private static final String oBDS_PATIENTS ="/tmp/oBDS_Patients/";
     private static final String ADT_PATIENTS ="/tmp/ADT_Patients/";
@@ -43,24 +51,24 @@ public class Obds2fhir {
         if (!System.getenv().getOrDefault("MAINZELLISTE_APIKEY","").isEmpty()){
             pseudonymizeFlag = Util.checkConnections("Mainzelliste", System.getenv().getOrDefault("MAINZELLISTE_URL",""), Boolean.parseBoolean(System.getenv().getOrDefault("WAIT_FOR_CONNECTION","false")));
         } else {
-            System.out.println("missing Mainzelliste Apikey - Skipping relevant processes");
+            logger.info("missing Mainzelliste Apikey - Skipping relevant processes");
         }
         boolean importFhirFlag = Util.checkConnections("Blaze FHIR Server", System.getenv().getOrDefault("STORE_PATH","") + "?_count=0", Boolean.parseBoolean(System.getenv().getOrDefault("WAIT_FOR_CONNECTION","false")));
 
         initializeTransformers(pseudonymizeFlag);
 
         long startTime = System.nanoTime();
-        System.out.println("Transforming to single Patients... \n");
+        logger.info("Transforming to single Patients...");
         processXmlFiles(INPUT_DATA,1);
         long stopTime = System.nanoTime();
-        System.out.println(DONE+(stopTime - startTime)/1000000000+ " seconds");
+        logger.info(DONE+(stopTime - startTime)/1000000000+ " seconds");
 
         startTime = System.nanoTime();
-        System.out.println("Transforming to FHIR... \n");
+        logger.info("Transforming to FHIR...");
         processXmlFiles(oBDS_PATIENTS, 2);
         processXmlFiles(ADT_PATIENTS, 2);
         stopTime = System.nanoTime();
-        System.out.println(DONE+(stopTime - startTime)/1000000000+ " seconds");
+        logger.info(DONE+(stopTime - startTime)/1000000000+ " seconds");
 
         if (importFhirFlag){
             HttpPost httppost = new HttpPost(System.getenv().getOrDefault("STORE_PATH",""));
@@ -71,10 +79,10 @@ public class Obds2fhir {
             httppost.addHeader("Authorization", "Basic " + encoding);
 
             startTime = System.nanoTime();
-            System.out.println("posting fhir resources to blaze store...\n");
+            logger.info("posting fhir resources to blaze store...");
             processXmlFiles(FHIR_PATIENTS, httppost,3);
             stopTime = System.nanoTime();
-            System.out.println(DONE+(stopTime - startTime)/1000000000+ " seconds");
+            logger.info(DONE+(stopTime - startTime)/1000000000+ " seconds");
         }
     }
 
@@ -84,20 +92,19 @@ public class Obds2fhir {
     }
 
     public static void processXmlFiles(String inputDir, HttpPost httppost, int step){
-        //System.out.print("load "+ filetype + " files...");
         File absoluteInputDir = new File(System.getenv().getOrDefault("FILE_PATH","") + inputDir);
         File[] listOfFiles = absoluteInputDir.listFiles();
         if (listOfFiles==null){
-            System.out.println("ABORTING: empty "+ absoluteInputDir +" dir");
+            logger.warn("ABORTING: empty " + absoluteInputDir +" dir");
         }
         else {
             int counter=0;
             Arrays.sort(listOfFiles);
+            logger.info("Iterating through files - "+ inputDir + "\n");
             for (File inputFile : listOfFiles) {
-                //System.out.println(inputFile);
                 if (inputFile.isFile() & inputFile.getName().toLowerCase().endsWith(".xml")) {
                     counter+=1;
-                    System.out.println("\u001B[AFile " + counter + " of " + (listOfFiles.length) + " / Filename: " + inputFile);
+                    logger.info("\u001B[AFile " + counter + " of " + (listOfFiles.length) + " / Filename: " + inputFile);
                     try {
                         String inputFileString = Files.readString(Paths.get(String.valueOf(inputFile)));
                         if (step==1){
@@ -120,22 +127,20 @@ public class Obds2fhir {
                         }
                     } catch (IOException e) {
                         counter-=1;
-                        System.out.print("ERROR - IOException with file " + inputFile);
-                        e.printStackTrace();
+                        logger.error("IOException with file " + inputFile + e);
                     } catch (TransformerException e) {
                         counter-=1;
-                        System.out.print("ERROR - TransformerException with file " + inputFile+"\n\n"+inputDir+"\n"+oBDS_PATIENTS+"\n");
-                        e.printStackTrace();
+                        logger.error("TransformerException with file " + inputFile + e);
                     } catch (RuntimeException e) {
                         counter-=1;
-                        System.out.print("ERROR - RuntimeException with file " + inputFile);
+                        logger.error("RuntimeException with file " + inputFile + e);
                     }
                 }
                 else if (inputFile.isFile() & inputFile.getName().toLowerCase().endsWith(".gitignore")) {
                     //do nothing
                 }
                 else {
-                    System.out.print("\n\t\u001B[31m" + "skipping file:" + "\u001B[0m" + " '" + inputFile.getName() + "' - not a valid xml file");
+                    logger.warn("\u001B[31m" + "skipping file:" + "\u001B[0m" + " '" + inputFile.getName() + "' - not a valid xml file");
                 }
             }
         }
@@ -155,8 +160,8 @@ public class Obds2fhir {
         httppost.setEntity(entity);
         HttpResponse response = httpclient.execute(httppost);
         if (!response.getStatusLine().getReasonPhrase().equals("OK")) {
-            System.out.println("Error - FHIR import: could not import file"+ inputFile.getName());
-            System.out.println(EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8));
+            logger.error("FHIR import: could not import file"+ inputFile.getName());
+            logger.error(EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8));
             inputFile.renameTo(new File(System.getenv().getOrDefault("FILE_PATH","") + ERRONEOUS));
         }
         else {
@@ -175,7 +180,7 @@ public class Obds2fhir {
     }
 
     public static void initializeTransformers(boolean pseudonymizeFlag) {
-        System.out.print("initialize transformers... ");
+        logger.info("initialize transformers... ");
         factory = (TransformerFactoryImpl) TransformerFactory.newInstance("net.sf.saxon.TransformerFactoryImpl", null);
         net.sf.saxon.Configuration saxonConfig = factory.getConfiguration();
         PatientPseudonymizer patientPseudonymizer = new PatientPseudonymizer();
@@ -198,8 +203,8 @@ public class Obds2fhir {
             MDS2FHIRTransformer.setParameter("filepath", System.getenv().getOrDefault("FILE_PATH",""));
             MDS2FHIRTransformer.setParameter("identifier_system", System.getenv().getOrDefault("IDENTIFIER_SYSTEM","http://dktk.dkfz.de/fhir/onco/core/CodeSystem/PseudonymArtCS"));
         } catch (TransformerConfigurationException e) {
-            System.out.print("Transformer configuration error");
+            logger.error("Transformer configuration error");
         }
-        System.out.println(DONE);
+        logger.info(DONE);
     }
 }
