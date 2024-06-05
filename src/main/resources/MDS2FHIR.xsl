@@ -1260,7 +1260,7 @@
                         <id value="{$TNM_ID}"/>
                         <meta>
                             <xsl:choose>
-                                <xsl:when test="./gesamtpraefix='pTNM' or ./gesamtpraefix='p' or ./c-p-u-Präfix_T='p' or ./c-p-u-Präfix_N='p' or ./c-p-u-Präfix_M='p'">
+                                <xsl:when test="gesamtpraefix='pTNM' or ./c-p-u-Präfix_T='p' or ./c-p-u-Präfix_N='p' or ./c-p-u-Präfix_M='p'">
                                     <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-TNMp"/>
                                 </xsl:when>
                                 <xsl:otherwise>
@@ -1271,7 +1271,7 @@
                         <status value="final"/>
                         <code>
                             <xsl:choose>
-                                <xsl:when test="./gesamtpraefix='pTNM' or ./gesamtpraefix='p' or ./c-p-u-Präfix_T='p' or ./c-p-u-Präfix_N='p' or ./c-p-u-Präfix_M='p'">
+                                <xsl:when test="gesamtpraefix='pTNM' or ./c-p-u-Präfix_T='p' or ./c-p-u-Präfix_N='p' or ./c-p-u-Präfix_M='p'">
                                     <coding>
                                         <system value="http://loinc.org"/>
                                         <code>
@@ -1279,7 +1279,7 @@
                                         </code>
                                     </coding>
                                 </xsl:when>
-                                <xsl:when test="./gesamtpraefix='cTNM' or ./gesamtpraefix='c' or ./c-p-u-Präfix_T='c' or ./c-p-u-Präfix_N='c' or ./c-p-u-Präfix_M='c'">
+                                <xsl:when test="gesamtpraefix='cTNM' or ./c-p-u-Präfix_T='c' or ./c-p-u-Präfix_N='c' or ./c-p-u-Präfix_M='c'">
                                     <coding>
                                         <system value="http://loinc.org"/>
                                         <code>
@@ -1299,126 +1299,108 @@
                             <reference value="Condition/{$Diagnosis_ID}"/>
                         </focus>
                         <effectiveDateTime value="{mds2fhir:transformDate(Datum)}"/>
-                        <xsl:if test="./UICC_Stadium">
+                        <xsl:if test="UICC_Stadium!=''">
                             <valueCodeableConcept>
                                 <coding>
                                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/UiccstadiumCS"/>
-                                    <xsl:if test="./TNM-Version">
-                                        <version value="{./TNM-Version}"/>
+                                    <xsl:if test="TNM-Version!=''">
+                                        <version value="{TNM-Version}"/>
                                     </xsl:if>
-                                    <code value="{./UICC_Stadium}"/>
+                                    <code value="{UICC_Stadium}"/>
                                 </coding>
                             </valueCodeableConcept>
                         </xsl:if>
-                        <xsl:if test="./TNM-T">
+                        <xsl:if test="TNM-T!=''">
                             <component>
-                                <xsl:if test="./c-p-u-Präfix_T">
+                                <xsl:if test="c-p-u-Präfix_T!=''">
                                     <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-TNMcpuPraefix">
                                         <valueCodeableConcept>
                                             <coding>
-                                                <code value="{./c-p-u-Präfix_T}"/>
+                                                <code value="{c-p-u-Präfix_T}"/>
                                             </coding>
                                         </valueCodeableConcept>
                                     </extension>
-                                    <extension/>
                                 </xsl:if>
                                 <code>
                                     <coding>
                                         <system value="http://loinc.org"/>
                                         <code>
-                                            <xsl:choose>
-                                                <xsl:when test="./c-p-u-Präfix_T='p'">
-                                                    <xsl:attribute name="value">21899-0</xsl:attribute>
-                                                </xsl:when>
-                                                <xsl:otherwise>
-                                                    <xsl:attribute name="value">21905-5</xsl:attribute>
-                                                </xsl:otherwise>
-                                            </xsl:choose>
+                                            <xsl:attribute name="value">
+                                                <xsl:value-of select="if (c-p-u-Präfix_T = 'p') then '21899-0' else '21905-5'" />
+                                            </xsl:attribute>
                                         </code>
                                     </coding>
                                 </code>
                                 <valueCodeableConcept>
                                     <coding>
                                         <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMTCS"/>
-                                        <code value="{./TNM-T}"/>
-                                        <xsl:if test="./TNM-Version">
-                                            <version value="{./TNM-Version}"/>
+                                        <code value="{TNM-T}"/>
+                                        <xsl:if test="TNM-Version!=''">
+                                            <version value="{TNM-Version}"/>
                                         </xsl:if>
                                     </coding>
                                 </valueCodeableConcept>
                             </component>
                         </xsl:if>
-                        <xsl:if test="./TNM-N">
+                        <xsl:if test="TNM-N!=''">
                             <component>
-                                <xsl:if test="./c-p-u-Präfix_N">
+                                <xsl:if test="c-p-u-Präfix_N!=''">
                                     <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-TNMcpuPraefix">
                                         <valueCodeableConcept>
                                             <coding>
-                                                <code value="{./c-p-u-Präfix_N}"/>
+                                                <code value="{c-p-u-Präfix_N}"/>
                                             </coding>
                                         </valueCodeableConcept>
                                     </extension>
-                                    <extension/>
                                 </xsl:if>
                                 <code>
                                     <coding>
                                         <system value="http://loinc.org"/>
                                         <code>
-                                            <xsl:choose>
-                                                <xsl:when test="./c-p-u-Präfix_N='p'">
-                                                    <xsl:attribute name="value">21900-6</xsl:attribute>
-                                                </xsl:when>
-                                                <xsl:otherwise>
-                                                    <xsl:attribute name="value">21906-3</xsl:attribute>
-                                                </xsl:otherwise>
-                                            </xsl:choose>
+                                            <xsl:attribute name="value">
+                                                <xsl:value-of select="if (c-p-u-Präfix_N = 'p') then '21900-6' else '21906-3'" />
+                                            </xsl:attribute>
                                         </code>
                                     </coding>
                                 </code>
                                 <valueCodeableConcept>
                                     <coding>
                                         <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMNCS"/>
-                                        <code value="{./TNM-N}"/>
-                                        <xsl:if test="./TNM-Version">
-                                            <version value="{./TNM-Version}"/>
+                                        <code value="{TNM-N}"/>
+                                        <xsl:if test="TNM-Version!=''">
+                                            <version value="{TNM-Version}"/>
                                         </xsl:if>
                                     </coding>
                                 </valueCodeableConcept>
                             </component>
                         </xsl:if>
-                        <xsl:if test="./TNM-M">
+                        <xsl:if test="TNM-M!=''">
                             <component>
-                                <xsl:if test="./c-p-u-Präfix_M">
+                                <xsl:if test="c-p-u-Präfix_M!=''">
                                     <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-TNMcpuPraefix">
                                         <valueCodeableConcept>
                                             <coding>
-                                                <code value="{./c-p-u-Präfix_M}"/>
+                                                <code value="{c-p-u-Präfix_M}"/>
                                             </coding>
                                         </valueCodeableConcept>
                                     </extension>
-                                    <extension/>
                                 </xsl:if>
                                 <code>
                                     <coding>
                                         <system value="http://loinc.org"/>
                                         <code>
-                                            <xsl:choose>
-                                                <xsl:when test="./c-p-u-Präfix_M='p'">
-                                                    <xsl:attribute name="value">21901-4</xsl:attribute>
-                                                </xsl:when>
-                                                <xsl:otherwise>
-                                                    <xsl:attribute name="value">21907-1</xsl:attribute>
-                                                </xsl:otherwise>
-                                            </xsl:choose>
+                                            <xsl:attribute name="value">
+                                                <xsl:value-of select="if (c-p-u-Präfix_M = 'p') then '21901-4' else '21907-1'" />
+                                            </xsl:attribute>
                                         </code>
                                     </coding>
                                 </code>
                                 <valueCodeableConcept>
                                     <coding>
                                         <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMMCS"/>
-                                        <code value="{./TNM-M}"/>
-                                        <xsl:if test="./TNM-Version">
-                                            <version value="{./TNM-Version}"/>
+                                        <code value="{TNM-M}"/>
+                                        <xsl:if test="TNM-Version!=''">
+                                            <version value="{TNM-Version}"/>
                                         </xsl:if>
                                     </coding>
                                 </valueCodeableConcept>
@@ -1435,14 +1417,9 @@
                                 <coding>
                                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMySymbolCS"/>
                                     <code>
-                                        <xsl:choose>
-                                            <xsl:when test="./TNM-y-Symbol='y'">
-                                                <xsl:attribute name="value">y</xsl:attribute>
-                                            </xsl:when>
-                                            <xsl:otherwise>
-                                                <xsl:attribute name="value">9</xsl:attribute>
-                                            </xsl:otherwise>
-                                        </xsl:choose>
+                                        <xsl:attribute name="value">
+                                            <xsl:value-of select="if (TNM-y-Symbol = 'y') then 'y' else '9'" />
+                                        </xsl:attribute>
                                     </code>
                                 </coding>
                             </valueCodeableConcept>
@@ -1458,34 +1435,33 @@
                                 <coding>
                                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMrSymbolCS"/>
                                     <code>
-                                        <xsl:choose>
-                                            <xsl:when test="./TNM-r-Symbol='r'">
-                                                <xsl:attribute name="value">r</xsl:attribute>
-                                            </xsl:when>
-                                            <xsl:otherwise>
-                                                <xsl:attribute name="value">9</xsl:attribute>
-                                            </xsl:otherwise>
-                                        </xsl:choose>
+                                        <xsl:attribute name="value">
+                                            <xsl:value-of select="if (TNM-r-Symbol = 'r') then 'r' else '9'" />
+                                        </xsl:attribute>
                                     </code>
                                 </coding>
                             </valueCodeableConcept>
                         </component>
-                        <xsl:if test="./TNM-m-Symbol">
-                            <component>
-                                <code>
-                                    <coding>
-                                        <system value="http://loinc.org"/>
-                                        <code value="42030-7"/>
-                                    </coding>
-                                </code>
-                                <valueCodeableConcept>
-                                    <coding>
-                                        <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMmSymbolCS"/>
-                                        <code value="{./TNM-m-Symbol}"/>
-                                    </coding>
-                                </valueCodeableConcept>
-                            </component>
-                        </xsl:if>
+                        <xsl:apply-templates select="TNM-m-Symbol">
+                            <xsl:with-param name="code" select="'42030-7'"/>
+                            <xsl:with-param name="system" select="'TNMmSymbolCS'"/>
+                        </xsl:apply-templates>
+                        <xsl:apply-templates select="L">
+                            <xsl:with-param name="code" select="'33739-4'"/>
+                            <xsl:with-param name="system" select="'TNMLKategorieCS'"/><!--TODO ff - link existiert nicht-->
+                        </xsl:apply-templates>
+                        <xsl:apply-templates select="V">
+                            <xsl:with-param name="code" select="'33740-2'"/>
+                            <xsl:with-param name="system" select="'TNMVKategorieCS'"/>
+                        </xsl:apply-templates>
+                        <xsl:apply-templates select="Pn">
+                            <xsl:with-param name="code" select="'92837-4'"/>
+                            <xsl:with-param name="system" select="'TNMPnKategorieCS'"/>
+                        </xsl:apply-templates>
+                        <xsl:apply-templates select="S">
+                            <xsl:with-param name="code" select="'21924-6'"/>
+                            <xsl:with-param name="system" select="'TNMSKategorieCS'"/>
+                        </xsl:apply-templates>
                     </Observation>
                 </resource>
                 <request>
@@ -1493,6 +1469,27 @@
                     <url value="Observation/{$TNM_ID}"/>
                 </request>
             </entry>
+        </xsl:if>
+    </xsl:template>
+
+    <xsl:template match="TNM-m-Symbol | L | V | Pn | S">
+        <xsl:param name="code"/>
+        <xsl:param name="system"/>
+        <xsl:if test=".!=''">
+            <component>
+                <code>
+                    <coding>
+                        <system value="http://loinc.org"/>
+                        <code value="{$code}"/>
+                    </coding>
+                </code>
+                <valueCodeableConcept>
+                    <coding>
+                        <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/{$system}"/>
+                        <code value="{.}"/>
+                    </coding>
+                </valueCodeableConcept>
+            </component>
         </xsl:if>
     </xsl:template>
 
