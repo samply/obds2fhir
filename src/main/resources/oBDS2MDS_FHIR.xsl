@@ -259,17 +259,15 @@
         <xsl:param name="Tumor_Id"/>
         <xsl:if test="Tumor_Histologiedatum !=''">
              <Histology>
-                 <xsl:attribute name="Histology_ID">
-                     <xsl:variable name="attribute">
-                         <xsl:choose>
-                             <xsl:when test="@Histologie_ID"><xsl:value-of select="@Histologie_ID"/></xsl:when>
-                             <xsl:otherwise>
-                                 <xsl:value-of select="'gen',Tumor_Histologiedatum"/>
-                             </xsl:otherwise>
-                         </xsl:choose>
-                     </xsl:variable>
-                     <xsl:value-of select="concat('hist', hash:hash($Patient_Id, $Tumor_Id, $attribute))" />
-                 </xsl:attribute>
+                 <xsl:variable name="Histology_ID">
+                     <xsl:choose>
+                         <xsl:when test="@Histologie_ID"><xsl:value-of select="hash:hash($Patient_Id, $Tumor_Id, @Histologie_ID)"/></xsl:when>
+                         <xsl:otherwise>
+                             <xsl:value-of select="hash:hash($Patient_Id, $Tumor_Id, concat('gen', Tumor_Histologiedatum, Morphologie_ICD_O/Code, Grading))"/>
+                         </xsl:otherwise>
+                     </xsl:choose>
+                 </xsl:variable>
+                 <xsl:attribute name="Histology_ID" select="concat('hist', $Histology_ID)"/>
                  <xsl:if test="Morphologie_ICD_O">
                      <xsl:for-each select="Morphologie_ICD_O">
                          <Morphologie_ICD_O>
@@ -286,7 +284,12 @@
                          </Morphologie_ICD_O>
                      </xsl:for-each>
                  </xsl:if>
-                 <xsl:apply-templates select="Tumor_Histologiedatum | Morphologie_Freitext | Grading | LK_untersucht | LK_befallen | Sentinel_LK_untersucht | Sentinel_LK_befallen"/>
+                 <xsl:apply-templates select="Tumor_Histologiedatum | Morphologie_Freitext"/>
+                 <xsl:if test="Grading"><Grading Grading_ID="{concat('grd', $Histology_ID)}"><xsl:value-of select="Grading"/></Grading></xsl:if>
+                 <xsl:if test="LK_untersucht"><LK_untersucht LK_untersucht_ID="{concat('lk_u', $Histology_ID)}"><xsl:value-of select="LK_untersucht"/></LK_untersucht></xsl:if>
+                 <xsl:if test="LK_befallen"><LK_befallen LK_befallen_ID="{concat('lk_b', $Histology_ID)}"><xsl:value-of select="LK_befallen"/></LK_befallen></xsl:if>
+                 <xsl:if test="Sentinel_LK_untersucht"><Sentinel_LK_untersucht Sentinel_LK_untersucht_ID="{concat('s_lk_u', $Histology_ID)}"><xsl:value-of select="Sentinel_LK_untersucht"/></Sentinel_LK_untersucht></xsl:if>
+                 <xsl:if test="Sentinel_LK_befallen"><Sentinel_LK_befallen Sentinel_LK_befallen_ID="{concat('s_lk_b', $Histology_ID)}"><xsl:value-of select="Sentinel_LK_befallen"/></Sentinel_LK_befallen></xsl:if>
              </Histology>
         </xsl:if>
     </xsl:template>
@@ -765,11 +768,6 @@
             </ECOG>
         </xsl:if>
     </xsl:template>
-    <xsl:template match="Grading">
-        <Grading>
-            <xsl:apply-templates select="node()"/>
-        </Grading>
-    </xsl:template>
     <xsl:template match="Primaertumor_Topographie_Freitext" >
         <Primaertumor_Topographie_Freitext>
             <xsl:apply-templates select="node() | @*"/>
@@ -801,26 +799,6 @@
         <Tumor_Histologiedatum>
             <xsl:apply-templates select="node()"/>
         </Tumor_Histologiedatum>
-    </xsl:template>
-    <xsl:template match="LK_untersucht" >
-        <LK_untersucht>
-            <xsl:apply-templates select="node()"/>
-        </LK_untersucht>
-    </xsl:template>
-    <xsl:template match="LK_befallen" >
-        <LK_befallen>
-            <xsl:apply-templates select="node()"/>
-        </LK_befallen>
-    </xsl:template>
-    <xsl:template match="Sentinel_LK_untersucht" >
-        <Sentinel_LK_untersucht>
-            <xsl:apply-templates select="node()"/>
-        </Sentinel_LK_untersucht>
-    </xsl:template>
-    <xsl:template match="Sentinel_LK_befallen" >
-        <Sentinel_LK_befallen>
-            <xsl:apply-templates select="node()"/>
-        </Sentinel_LK_befallen>
     </xsl:template>
     <xsl:template match="Diagnosedatum">
         <Tumor_Diagnosedatum>

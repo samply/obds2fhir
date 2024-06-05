@@ -1569,7 +1569,6 @@
         <xsl:param name="Diagnosis_ID"/>
         <xsl:if test="./Tumor_Histologiedatum !=''">
             <xsl:variable name="Histology_ID" select="mds2fhir:getID(./@Histology_ID, mds2fhir:transformDate(./Tumor_Histologiedatum), generate-id())" as="xs:string"/>
-            <xsl:variable name="Grading_ID" select="mds2fhir:getID(hash:hash($Patient_ID, ./@Histology_ID,'grading'), '', generate-id())" as="xs:string"/>
             <entry>
                 <fullUrl value="http://example.com/Observation/{$Histology_ID}"/>
                 <resource>
@@ -1627,7 +1626,21 @@
                             </xsl:if>
                         </valueCodeableConcept>
                         <hasMember>
-                            <reference value="Observation/{$Grading_ID}"/>
+                            <xsl:if test="Grading!=''">
+                                <reference value="Observation/{Grading/@Grading_ID}"/>
+                            </xsl:if>
+                            <xsl:if test="LK_untersucht!=''">
+                                <reference value="Observation/{LK_untersucht/@LK_untersucht_ID}"/>
+                            </xsl:if>
+                            <xsl:if test="LK_befallen!=''">
+                                <reference value="Observation/{LK_befallen/@LK_befallen_ID}"/>
+                            </xsl:if>
+                            <xsl:if test="Sentinel_LK_untersucht!=''">
+                                <reference value="Observation/{Sentinel_LK_untersucht/@Sentinel_LK_untersucht_ID}"/>
+                            </xsl:if>
+                            <xsl:if test="Sentinel_LK_befallen!=''">
+                                <reference value="Observation/{Sentinel_LK_befallen/@Sentinel_LK_befallen_ID}"/>
+                            </xsl:if>
                         </hasMember>
                     </Observation>
                 </resource>
@@ -1636,19 +1649,90 @@
                     <url value="Observation/{$Histology_ID}"/>
                 </request>
             </entry>
+            <xsl:if test="Grading!=''">
+                <entry>
+                    <fullUrl value="http://example.com/Observation/{Grading/@Grading_ID}"/>
+                    <resource>
+                        <Observation>
+                            <id value="{Grading/@Grading_ID}"/>
+                            <meta>
+                                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Grading"/>
+                            </meta>
+                            <status value="final"/>
+                            <code>
+                                <coding>
+                                    <system value="http://loinc.org"/>
+                                    <code value="59542-1"/>
+                                </coding>
+                            </code>
+                            <subject>
+                                <reference value="Patient/{$Patient_ID}"/>
+                            </subject>
+                            <focus>
+                                <reference value="Condition/{$Diagnosis_ID}"/>
+                            </focus>
+                            <valueCodeableConcept>
+                                <coding>
+                                    <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/GradingCS"/>
+                                    <xsl:if test="Grading">
+                                        <code value="{Grading}"/>
+                                    </xsl:if>
+                                </coding>
+                            </valueCodeableConcept>
+                        </Observation>
+                    </resource>
+                    <request>
+                        <method value="PUT"/>
+                        <url value="Observation/{Grading/@Grading_ID}"/>
+                    </request>
+                </entry>
+            </xsl:if>
+            <xsl:apply-templates select="LK_untersucht">
+                <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
+                <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
+                <xsl:with-param name="URL" select="'AnzahlUntersuchtenLymphknoten'"/>
+                <xsl:with-param name="LOINC" select="'85347-3'"/>
+            </xsl:apply-templates>
+            <xsl:apply-templates select="LK_befallen">
+                <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
+                <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
+                <xsl:with-param name="URL" select="'AnzahlBefallenenLymphknoten'"/>
+                <xsl:with-param name="LOINC" select="'21893-3'"/>
+            </xsl:apply-templates>
+            <xsl:apply-templates select="Sentinel_LK_untersucht">
+                <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
+                <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
+                <xsl:with-param name="URL" select="'AnzahlUntersuchtenSentinelLymphknoten'"/>
+                <xsl:with-param name="LOINC" select="'85347-3'"/>
+            </xsl:apply-templates>
+            <xsl:apply-templates select="Sentinel_LK_befallen">
+                <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
+                <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
+                <xsl:with-param name="URL" select="'AnzahlBefallenenSentinelLymphknoten'"/>
+                <xsl:with-param name="LOINC" select="'92832-5'"/>
+            </xsl:apply-templates>
+        </xsl:if>
+    </xsl:template>
+
+    <xsl:template match="LK_untersucht | LK_befallen | Sentinel_LK_untersucht | Sentinel_LK_befallen">
+        <xsl:param name="Patient_ID"/>
+        <xsl:param name="Diagnosis_ID"/>
+        <xsl:param name="URL"/>
+        <xsl:param name="LOINC"/>
+        <xsl:if test=".!=''">
             <entry>
-                <fullUrl value="http://example.com/Observation/{$Grading_ID}"/>
+                <fullUrl value="http://example.com/Observation/{@*}"/>
                 <resource>
                     <Observation>
-                        <id value="{$Grading_ID}"/>
+                        <id value="{@*}"/>
                         <meta>
-                            <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Grading"/>
+                            <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-{$URL}"/>
                         </meta>
                         <status value="final"/>
                         <code>
                             <coding>
                                 <system value="http://loinc.org"/>
-                                <code value="59542-1"/>
+                                <code value="{$LOINC}"/>
                             </coding>
                         </code>
                         <subject>
@@ -1657,19 +1741,14 @@
                         <focus>
                             <reference value="Condition/{$Diagnosis_ID}"/>
                         </focus>
-                        <valueCodeableConcept>
-                            <coding>
-                                <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/GradingCS"/>
-                                <xsl:if test="./Grading">
-                                    <code value="{./Grading}"/>
-                                </xsl:if>
-                            </coding>
-                        </valueCodeableConcept>
+                        <valueQuantity>
+                            <value value="{.}"/>
+                        </valueQuantity>
                     </Observation>
                 </resource>
                 <request>
                     <method value="PUT"/>
-                    <url value="Observation/{$Grading_ID}"/>
+                    <url value="Observation/{@*}"/>
                 </request>
             </entry>
         </xsl:if>
