@@ -524,7 +524,7 @@
             </xsl:variable>
             <xsl:attribute name="ST_ID" select="concat('st', concat($Patient_Id, $Tumor_Id, string-join($attribute, '')))"/>
             <xsl:apply-templates select="Meldeanlass | Intention | Stellung_OP"/>
-            <xsl:if test="Ende_Grund"><ST_Ende_Grund><xsl:value-of select="Ende_Grund"/></ST_Ende_Grund></xsl:if>
+            <xsl:if test="Ende_Grund!=''"><Ende_Grund><xsl:value-of select="Ende_Grund"/></Ende_Grund></xsl:if>
             <xsl:apply-templates select="Nebenwirkungen">
                 <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                 <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
@@ -628,56 +628,50 @@
         <xsl:for-each select="Bestrahlung[not(concat(Beginn,Ende,Applikationsart)=following::Bestrahlung/concat(Beginn,Ende,Applikationsart))]">
                 <Bestrahlung>
                     <xsl:attribute name="Betrahlung_ID" select="concat('sts', hash:hash($Patient_Id, $Tumor_Id, concat(Beginn,Ende,Applikationsart)))"/>
-                    <xsl:if test="Beginn"><ST_Beginn_Datum><xsl:value-of select="Beginn"/></ST_Beginn_Datum></xsl:if>
-                    <xsl:if test="Ende"><ST_Ende_Datum><xsl:value-of select="Ende"/></ST_Ende_Datum></xsl:if>
-                    <xsl:apply-templates select="Applikationsart"/>
+                    <xsl:if test="Beginn!=''"><Beginn_Datum><xsl:value-of select="Beginn"/></Beginn_Datum></xsl:if>
+                    <xsl:if test="Ende!=''"><Ende_Datum><xsl:value-of select="Ende"/></Ende_Datum></xsl:if>
+                    <xsl:apply-templates select="Applikationsart/Perkutan | Applikationsart/Kontakt | Applikationsart/Metabolisch | Applikationsart/Sonstige"/>
                 </Bestrahlung>
         </xsl:for-each>
     </xsl:template>
 
-    <xsl:template match="Applikationsart">
-        <Applikationsart>
-            <!-- common elements -->
-            <xsl:if test="node()/Zielgebiet">
-                <Zielgebiet><xsl:value-of select="node()/Zielgebiet"/></Zielgebiet>
-                <xsl:if test="node()/Zielgebiet/CodeVersion2021">
-                    <Zielgebiet_Version>CodeVersion2021</Zielgebiet_Version>
-                </xsl:if>
-                <xsl:if test="node()/Zielgebiet/CodeVersion2014">
-                    <Zielgebiet_Version>CodeVersion2014</Zielgebiet_Version>
-                </xsl:if>
-            </xsl:if>
-            <xsl:if test="node()/Seite_Zielgebiet"><Seite_Zielgebiet><xsl:value-of select="node()/Seite_Zielgebiet"/></Seite_Zielgebiet></xsl:if>
-            <xsl:if test="node()/Gesamtdosis"><Gesamtdosis><xsl:value-of select="node()/Gesamtdosis"/></Gesamtdosis></xsl:if>
-            <xsl:if test="node()/Einzeldosis"><Einzeldosis><xsl:value-of select="node()/Einzeldosis"/></Einzeldosis></xsl:if>
-            <!-- Perkutan & Kontakt & Metabolisch -->
-            <xsl:if test="node()/Strahlenart"><Strahlenart><xsl:value-of select="node()/Strahlenart"/></Strahlenart></xsl:if>
-            <!-- Perkutan & Kontakt -->
-            <xsl:if test="node()/Boost"><Boost><xsl:value-of select="node()/Boost"/></Boost></xsl:if>
-            <!-- Perkutan -->
-            <xsl:if test="node()/Radiochemo"><Radiochemo><xsl:value-of select="node()/Radiochemo"/></Radiochemo></xsl:if>
-            <xsl:if test="node()/Stereotaktisch"><Stereotaktisch><xsl:value-of select="node()/Stereotaktisch"/></Stereotaktisch></xsl:if>
-            <xsl:if test="node()/Atemgetriggert"><Atemgetriggert><xsl:value-of select="node()/Atemgetriggert"/></Atemgetriggert></xsl:if>
-            <!-- Kontakt -->
-            <xsl:if test="node()/Interstitiell_endokavitaer"><Interstitiell_endokavitaer><xsl:value-of select="node()/Interstitiell_endokavitaer"/></Interstitiell_endokavitaer></xsl:if>
-            <xsl:if test="node()/Rate_Type"><Rate_Type><xsl:value-of select="node()/Rate_Type"/></Rate_Type></xsl:if>
-            <!-- Metabolisch -->
-            <xsl:if test="Metabolisch/Metabolisch_Typ"><Metabolisch_Typ><xsl:value-of select="node()/Metabolisch_Typ"/></Metabolisch_Typ></xsl:if>
-        </Applikationsart>
+    <xsl:template match="Perkutan">
+        <Applikationsart>P</Applikationsart>
+        <xsl:if test="Radiochemo='RCJ'"><ApplikationsartTyp>RCJ</ApplikationsartTyp></xsl:if>
+        <xsl:if test="Radiochemo='RCN'"><ApplikationsartTyp>RCN</ApplikationsartTyp></xsl:if>
+        <xsl:if test="Stereotaktisch='ST'"><ApplikationsartTyp>ST</ApplikationsartTyp></xsl:if>
+        <xsl:if test="Atemgetriggert='4D'"><ApplikationsartTyp>4D</ApplikationsartTyp></xsl:if>
+        <ApplikationsartLegacy><xsl:value-of select="concat('P', Radiochemo, Stereotaktisch, Atemgetriggert)"/></ApplikationsartLegacy>
+        <xsl:apply-templates select="Zielgebiet | Seite_Zielgebiet | Strahlenart | Gesamtdosis | Einzeldosis | Boost"/>
     </xsl:template>
-
-    <xsl:template match="ST_Gesamtdosis">
-        <ST_Gesamtdosis>
+    <xsl:template match="Kontakt">
+        <Applikationsart><xsl:value-of select="Interstitiell_endokavitaer"/></Applikationsart><!--this value is either K or I - identical to ADT 2-->
+        <ApplikationsartTyp><xsl:value-of select="Rate_Type"/></ApplikationsartTyp><!--this value is either HDR, LDR or PDR - identical to ADT 2-->
+        <ApplikationsartLegacy><xsl:value-of select="concat(Interstitiell_endokavitaer, Rate_Type)"/></ApplikationsartLegacy>
+        <xsl:apply-templates select="Zielgebiet | Seite_Zielgebiet | Strahlenart | Gesamtdosis | Einzeldosis | Boost"/>
+    </xsl:template>
+    <xsl:template match="Metabolisch">
+        <Applikationsart>M</Applikationsart>
+        <ApplikationsartTyp><xsl:value-of select="Metabolisch_Typ"/></ApplikationsartTyp><!--this value is either SIRT or PRRT - identical to ADT 2; additional PSMA, RJT or RIT-->
+        <ApplikationsartLegacy><xsl:value-of select="concat('M', Metabolisch_Typ)"/></ApplikationsartLegacy>
+        <xsl:apply-templates select="Zielgebiet | Seite_Zielgebiet | Strahlenart | Gesamtdosis | Einzeldosis"/>
+    </xsl:template>
+    <xsl:template match="Sonstige">
+        <Applikationsart>S</Applikationsart>
+        <ApplikationsartLegacy>S</ApplikationsartLegacy>
+        <xsl:apply-templates select="Zielgebiet | Seite_Zielgebiet | Gesamtdosis | Einzeldosis"/>
+    </xsl:template>
+    <xsl:template match="Gesamtdosis">
+        <Gesamtdosis>
             <xsl:if test="Dosis"><Dosis><xsl:value-of select="Dosis"/></Dosis></xsl:if>
             <xsl:if test="Einheit"><Einheit><xsl:value-of select="Einheit"/></Einheit></xsl:if>
-        </ST_Gesamtdosis>
+        </Gesamtdosis>
     </xsl:template>
-
-    <xsl:template match="ST_Einzeldosis">
-        <ST_Einzeldosis>
+    <xsl:template match="Einzeldosis">
+        <Einzeldosis>
             <xsl:if test="Dosis"><Dosis><xsl:value-of select="Dosis"/></Dosis></xsl:if>
             <xsl:if test="Einheit"><Einheit><xsl:value-of select="Einheit"/></Einheit></xsl:if>
-        </ST_Einzeldosis>
+        </Einzeldosis>
     </xsl:template>
 
     <xsl:template match="Menge_Weitere_Klassifikation">
@@ -904,6 +898,26 @@
         <Therapieart>
             <xsl:apply-templates select="node() | @*"/>
         </Therapieart>
+    </xsl:template>
+    <xsl:template match="Zielgebiet">
+        <Zielgebiet>
+            <xsl:apply-templates select="node() | @*"/>
+        </Zielgebiet>
+    </xsl:template>
+    <xsl:template match="Seite_Zielgebiet">
+        <Seite_Zielgebiet>
+            <xsl:apply-templates select="node() | @*"/>
+        </Seite_Zielgebiet>
+    </xsl:template>
+    <xsl:template match="Strahlenart">
+        <Strahlenart>
+            <xsl:apply-templates select="node() | @*"/>
+        </Strahlenart>
+    </xsl:template>
+    <xsl:template match="Boost">
+        <Boost>
+            <xsl:apply-templates select="node() | @*"/>
+        </Boost>
     </xsl:template>
     <xsl:template match="Untersuchungsdatum_Verlauf">
         <Datum_Verlauf>

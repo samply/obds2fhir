@@ -383,7 +383,7 @@
                 <xsl:if test="TNM_Version"><TNM-Version><xsl:value-of select="TNM_Version"/></TNM-Version></xsl:if>
                 <xsl:if test="TNM_y_Symbol"><TNM-y-Symbol><xsl:value-of select="TNM_y_Symbol"/></TNM-y-Symbol></xsl:if>
                 <xsl:if test="TNM_r_Symbol"><TNM-r-Symbol><xsl:value-of select="TNM_r_Symbol"/></TNM-r-Symbol></xsl:if>
-                <xsl:if test="TNM_a_Symbol"><TNM-a-Symbol><xsl:value-of select="TNM-a-Symbol"/></TNM-a-Symbol></xsl:if>
+                <xsl:if test="TNM_a_Symbol"><TNM-a-Symbol><xsl:value-of select="TNM_a_Symbol"/></TNM-a-Symbol></xsl:if>
                 <xsl:if test="TNM_c_p_u_Praefix_T"><c-p-u-Präfix_T><xsl:value-of select="TNM_c_p_u_Praefix_T"/></c-p-u-Präfix_T></xsl:if>
                 <xsl:if test="TNM_T"><TNM-T><xsl:value-of select="TNM_T"/></TNM-T></xsl:if>
                 <xsl:if test="TNM_m_Symbol"><TNM-m-Symbol><xsl:value-of select="TNM_m_Symbol"/></TNM-m-Symbol></xsl:if>
@@ -691,28 +691,31 @@
         <xsl:param name="Tumor_Id"/>
         <Bestrahlung>
             <xsl:attribute name="Betrahlung_ID" select="concat('sts', hash:hash($Patient_Id, $Tumor_Id, concat(ST_Beginn_Datum, ST_Ende_Datum, ST_Applikationsart, ST_Zielgebiet, ST_Seite_Zielgebiet, ST_Gesamtdosis/Dosis, ST_Einzeldosis/Dosis)),'-',$counter)"/>
-            <xsl:if test="ST_Zielgebiet"><ST_Zielgebiet><xsl:value-of select="ST_Zielgebiet"/></ST_Zielgebiet></xsl:if>
-            <xsl:if test="ST_Seite_Zielgebiet"><ST_Seite_Zielgebiet><xsl:value-of select="ST_Seite_Zielgebiet"/></ST_Seite_Zielgebiet></xsl:if>
-            <xsl:if test="ST_Beginn_Datum"><ST_Beginn_Datum><xsl:value-of select="ST_Beginn_Datum"/></ST_Beginn_Datum></xsl:if>
-            <xsl:if test="ST_Ende_Datum"><ST_Ende_Datum><xsl:value-of select="ST_Ende_Datum"/></ST_Ende_Datum></xsl:if>
-            <xsl:if test="ST_Applikationsart"><ST_Applikationsart><xsl:value-of select="ST_Applikationsart"/></ST_Applikationsart></xsl:if>
+            <xsl:if test="ST_Beginn_Datum!=''"><Beginn_Datum><xsl:value-of select="ST_Beginn_Datum"/></Beginn_Datum></xsl:if>
+            <xsl:if test="ST_Ende_Datum!=''"><Ende_Datum><xsl:value-of select="ST_Ende_Datum"/></Ende_Datum></xsl:if>
+            <xsl:if test="ST_Applikationsart!=''">
+                <xsl:copy-of select="xsi:mapToApplicationtype(ST_Applikationsart)"/>
+                <ApplikationsartLegacy><xsl:value-of select="ST_Applikationsart"/></ApplikationsartLegacy>
+            </xsl:if>
+            <xsl:if test="ST_Zielgebiet!=''"><Zielgebiet><xsl:value-of select="ST_Zielgebiet"/></Zielgebiet></xsl:if>
+            <xsl:if test="ST_Seite_Zielgebiet!=''"><Seite_Zielgebiet><xsl:value-of select="ST_Seite_Zielgebiet"/></Seite_Zielgebiet></xsl:if>
             <xsl:apply-templates select="ST_Gesamtdosis"/>
             <xsl:apply-templates select="ST_Einzeldosis"/>
         </Bestrahlung>
     </xsl:template>
 
     <xsl:template match="ST_Gesamtdosis">
-        <ST_Gesamtdosis>
-            <xsl:if test="Dosis"><Dosis><xsl:value-of select="Dosis"/></Dosis></xsl:if>
-            <xsl:if test="Einheit"><Einheit><xsl:value-of select="Einheit"/></Einheit></xsl:if>
-        </ST_Gesamtdosis>
+        <Gesamtdosis>
+            <xsl:if test="Dosis!=''"><Dosis><xsl:value-of select="Dosis"/></Dosis></xsl:if>
+            <xsl:if test="Einheit!=''"><Einheit><xsl:value-of select="Einheit"/></Einheit></xsl:if>
+        </Gesamtdosis>
     </xsl:template>
 
     <xsl:template match="ST_Einzeldosis">
-        <ST_Einzeldosis>
-            <xsl:if test="Dosis"><Dosis><xsl:value-of select="Dosis"/></Dosis></xsl:if>
-            <xsl:if test="Einheit"><Einheit><xsl:value-of select="Einheit"/></Einheit></xsl:if>
-        </ST_Einzeldosis>
+        <Einzeldosis>
+            <xsl:if test="Dosis!=''"><Dosis><xsl:value-of select="Dosis"/></Dosis></xsl:if>
+            <xsl:if test="Einheit!=''"><Einheit><xsl:value-of select="Einheit"/></Einheit></xsl:if>
+        </Einzeldosis>
     </xsl:template>
 
     <xsl:template match="Menge_Weitere_Klassifikation">
@@ -886,9 +889,9 @@
         </Intention_OP>
     </xsl:template>
     <xsl:template match="ST_Intention">
-        <Intention_Strahlentherapie>
+        <Intention>
         <xsl:apply-templates select="node() | @*"/>
-        </Intention_Strahlentherapie>
+        </Intention>
     </xsl:template>
     <xsl:template match="SYST_Intention">
         <Intention_Chemotherapie>
@@ -896,9 +899,9 @@
         </Intention_Chemotherapie>
     </xsl:template>
     <xsl:template match="ST_Stellung_OP">
-        <Strahlentherapie_Stellung_zu_operativer_Therapie>
+        <Stellung_OP>
             <xsl:apply-templates select="node() | @*"/>
-        </Strahlentherapie_Stellung_zu_operativer_Therapie>
+        </Stellung_OP>
     </xsl:template>
     <xsl:template match="SYST_Stellung_OP">
         <Systemische_Therapie_Stellung_zu_operativer_Therapie>
@@ -938,9 +941,9 @@
         </OP_Datum>
     </xsl:template>
     <xsl:template match="ST_Ende_Grund">
-        <ST_Ende_Grund>
+        <Ende_Grund>
             <xsl:apply-templates select="node() | @*"/>
-        </ST_Ende_Grund>
+        </Ende_Grund>
     </xsl:template>
     <xsl:template match="Sterbedatum">
         <Sterbedatum>
@@ -1132,6 +1135,18 @@
                     <xsl:value-of select="'error -',$value"/>
                 </xsl:otherwise>
             </xsl:choose>
+        </xsl:if>
+    </xsl:function>
+
+    <xsl:function name="xsi:mapToApplicationtype">
+        <xsl:param name="applicationtype"/>
+        <xsl:variable name="prefix" select="substring($applicationtype, 1, 1)" />
+        <xsl:variable name="suffix" select="substring($applicationtype, 2)" />
+        <xsl:if test="$prefix = 'P' or $prefix = 'K' or $prefix = 'I' or $prefix = 'M' or $prefix = 'S'">
+            <Applikationsart><xsl:value-of select="$prefix"/></Applikationsart>
+            <xsl:if test="string-length($applicationtype) > 1">
+                <ApplikationsartTyp><xsl:value-of select="$suffix"/></ApplikationsartTyp>
+            </xsl:if>
         </xsl:if>
     </xsl:function>
 </xsl:stylesheet>

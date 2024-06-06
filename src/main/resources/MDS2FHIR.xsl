@@ -592,7 +592,6 @@
     </xsl:template>
 
     <xsl:template match="ST">
-        <xsl:param name="Progress_ID"/>
         <xsl:param name="Patient_ID"/>
         <xsl:param name="Diagnosis_ID"/>
         <xsl:variable name="Radiation_Therapy_ID" select="mds2fhir:getID(./@ST_ID,'', generate-id())" as="xs:string"/>
@@ -604,54 +603,29 @@
                     <meta>
                         <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Procedure-Strahlentherapie"/>
                     </meta>
-                    <!--                    TODO: Betrahlungen abdecken; Datum ergänzen-->
-                    <xsl:choose>
-                        <xsl:when test="./Strahlentherapie_Stellung_zu_operativer_Therapie"><!--legacy mapping-->
-                            <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-StellungZurOp">
-                                <valueCodeableConcept>
-                                    <coding>
-                                        <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTStellungOPCS"/>
-                                        <code value="{./Strahlentherapie_Stellung_zu_operativer_Therapie}"/>
-                                    </coding>
-                                </valueCodeableConcept>
-                            </extension>
-                        </xsl:when>
-                        <xsl:when test="./Stellung_OP"><!--oBDS-->
-                            <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-StellungZurOp">
-                                <valueCodeableConcept>
-                                    <coding>
-                                        <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTStellungOPCS"/>
-                                        <code value="{./Stellung_OP}"/>
-                                    </coding>
-                                </valueCodeableConcept>
-                            </extension>
-                        </xsl:when>
-                    </xsl:choose>
-                    <xsl:choose>
-                        <xsl:when test="./Intention_Strahlentherapie"><!--legacy mapping-->
-                            <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-SYSTIntention">
-                                <valueCodeableConcept>
-                                    <coding>
-                                        <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTIntentionCS"/>
-                                        <code value="{./Intention_Strahlentherapie}"/>
-                                    </coding>
-                                </valueCodeableConcept>
-                            </extension>
-                        </xsl:when>
-                        <xsl:when test="./Intention"><!--oBDS-->
-                            <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-SYSTIntention">
-                                <valueCodeableConcept>
-                                    <coding>
-                                        <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTIntentionCS"/>
-                                        <code value="{./Intention}"/>
-                                    </coding>
-                                </valueCodeableConcept>
-                            </extension>
-                        </xsl:when>
-                    </xsl:choose>
+                    <xsl:if test="Stellung_OP!=''">
+                        <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-StellungZurOp">
+                            <valueCodeableConcept>
+                                <coding>
+                                    <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTStellungOPCS"/>
+                                    <code value="{Stellung_OP}"/>
+                                </coding>
+                            </valueCodeableConcept>
+                        </extension>
+                    </xsl:if>
+                    <xsl:if test="Intention!=''">
+                        <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-SYSTIntention">
+                            <valueCodeableConcept>
+                                <coding>
+                                    <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTIntentionCS"/>
+                                    <code value="{Intention}"/>
+                                </coding>
+                            </valueCodeableConcept>
+                        </extension>
+                    </xsl:if>
                     <status>
                         <xsl:attribute name="value">
-                            <xsl:value-of select="mds2fhir:getTreatmentStatus(Meldeanlass,ST_Ende_Grund)"/>
+                            <xsl:value-of select="mds2fhir:getTreatmentStatus(Meldeanlass,Ende_Grund)"/>
                         </xsl:attribute>
                     </status>
                     <category>
@@ -704,27 +678,98 @@
         </xsl:apply-templates>
 
         <xsl:variable name="Radiation_Therapy_ID" select="mds2fhir:getID(./@ST_ID,'', generate-id())" as="xs:string"/>
-        <xsl:for-each select="./Bestrahlung">
-            <xsl:if test="./ST_Beginn_Datum !=''">
-                <xsl:variable name="Single_Radiation_Therapy_ID" select="mds2fhir:getID(./@Betrahlung_ID,mds2fhir:transformDate(./ST_Beginn_Datum), generate-id())" as="xs:string"/>
+        <xsl:for-each select="Bestrahlung">
+            <xsl:if test="Beginn_Datum !=''">
                 <entry>
-                    <fullUrl value="http://example.com/Procedure/{$Single_Radiation_Therapy_ID}"/>
+                    <fullUrl value="http://example.com/Procedure/{@Betrahlung_ID}"/>
                     <resource>
                         <Procedure>
-                            <id value="{$Single_Radiation_Therapy_ID}"/>
+                            <id value="{@Betrahlung_ID}"/>
                             <meta>
                                 <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Procedure-Strahlentherapie"/>
                             </meta>
+                            <xsl:if test="Applikationsart!='' or Zielgebiet!='' or Seite_Zielgebiet!='' or Gesamtdosis/Dosis!='' or Einzeldosis/Dosis!='' or Boost!=''">
+                                <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-Bestrahlung">
+                                    <xsl:if test="Applikationsart!=''">
+                                        <extension url="Applikationsart">
+                                            <valueCodeableConcept>
+                                                <coding>
+                                                    <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/ApplikationsartCS"/>
+                                                    <code value="{ApplikationsartLegacy}"/>
+                                                </coding>
+                                            </valueCodeableConcept>
+                                        </extension>
+                                    </xsl:if>
+                                    <!--TODO
+                                    <xsl:if test="Strahlenart!=''">
+                                        <extension url="Strahlenart">
+                                            <valueCodeableConcept>
+                                                <coding>
+                                                    <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/StrahlenartCS"/>
+                                                    <code value="{Strahlenart}"/>
+                                                </coding>
+                                            </valueCodeableConcept>
+                                        </extension>
+                                    </xsl:if>-->
+                                    <xsl:if test="Zielgebiet!=''">
+                                        <extension url="Zielgebiet">
+                                            <valueCodeableConcept>
+                                                <coding>
+                                                    <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/ZielgebietCS"/>
+                                                    <code value="{Zielgebiet}"/>
+                                                </coding>
+                                            </valueCodeableConcept>
+                                        </extension>
+                                    </xsl:if>
+                                    <xsl:if test="Seite_Zielgebiet!=''">
+                                        <extension url="SeiteZielgebiet">
+                                            <valueCodeableConcept>
+                                                <coding>
+                                                    <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SeitenlokalisationCS"/>
+                                                    <code value="{Seite_Zielgebiet}"/>
+                                                </coding>
+                                            </valueCodeableConcept>
+                                        </extension>
+                                    </xsl:if>
+                                    <xsl:if test="Gesamtdosis/Dosis!=''">
+                                        <extension url="Gesamtdosis">
+                                            <valueQuantity>
+                                                <value value="{Gesamtdosis/Dosis}"/>
+                                                <xsl:if test="Gesamtdosis/Einheit!=''"><unit value="{Gesamtdosis/Einheit}"/></xsl:if>
+                                                <system value="http://dktk.dkfz.de/fhir/onco/core/ValueSet/StrahlungseinheitVS"/>
+                                            </valueQuantity>
+                                        </extension>
+                                    </xsl:if>
+                                    <xsl:if test="Einzeldosis/Dosis!=''">
+                                        <extension url="Einzeldosis">
+                                            <valueQuantity>
+                                                <value value="{Einzeldosis/Dosis}"/>
+                                                <xsl:if test="Einzeldosis/Einheit!=''"><unit value="{Einzeldosis/Einheit}"/></xsl:if>
+                                                <system value="http://dktk.dkfz.de/fhir/onco/core/ValueSet/StrahlungseinheitVS"/>
+                                            </valueQuantity>
+                                        </extension>
+                                    </xsl:if>
+                                    <xsl:if test="Boost!=''">
+                                        <extension url="Boost">
+                                            <valueCodeableConcept>
+                                                <coding>
+                                                    <code value="{Boost}"/>
+                                                </coding>
+                                            </valueCodeableConcept>
+                                        </extension>
+                                    </xsl:if>
+                                </extension>
+                            </xsl:if>
                             <partOf>
                                 <reference value="Procedure/{$Radiation_Therapy_ID}"/>
                             </partOf>
                             <xsl:choose>
-                                <xsl:when test="./ST_Ende_Datum">
+                                <xsl:when test="Ende_Datum">
                                     <xsl:choose>
-                                        <xsl:when test="ST_Ende_Grund='E'">
+                                        <xsl:when test="Ende_Grund='E'">
                                             <status value="completed"/>
                                         </xsl:when>
-                                        <xsl:when test="ST_Ende_Grund='U'">
+                                        <xsl:when test="Ende_Grund='U'">
                                             <status value="unknown"/>
                                         </xsl:when>
                                         <xsl:otherwise>
@@ -734,7 +779,7 @@
                                 </xsl:when>
                                 <xsl:otherwise>
                                     <xsl:choose>
-                                        <xsl:when test="./ST_Beginn_Datum">
+                                        <xsl:when test="Beginn_Datum">
                                             <status value="in-progress"/>
                                         </xsl:when>
                                         <xsl:otherwise>
@@ -760,13 +805,13 @@
                             <subject>
                                 <reference value="Patient/{$Patient_ID}"/>
                             </subject>
-                            <xsl:if test="./ST_Beginn_Datum or ./ST_Ende_Datum">
+                            <xsl:if test="Beginn_Datum or Ende_Datum">
                                 <performedPeriod>
-                                    <xsl:if test="./ST_Beginn_Datum">
-                                        <start value="{mds2fhir:transformDate(./ST_Beginn_Datum)}"/>
+                                    <xsl:if test="Beginn_Datum">
+                                        <start value="{mds2fhir:transformDate(Beginn_Datum)}"/>
                                     </xsl:if>
-                                    <xsl:if test="./ST_Ende_Datum">
-                                        <end value="{mds2fhir:transformDate(./ST_Ende_Datum)}"/>
+                                    <xsl:if test="Ende_Datum">
+                                        <end value="{mds2fhir:transformDate(Ende_Datum)}"/>
                                     </xsl:if>
                                 </performedPeriod>
                             </xsl:if>
@@ -777,7 +822,7 @@
                     </resource>
                     <request>
                         <method value="PUT"/>
-                        <url value="Procedure/{$Single_Radiation_Therapy_ID}"/>
+                        <url value="Procedure/{@Betrahlung_ID}"/>
                     </request>
                 </entry>
             </xsl:if>
@@ -1448,7 +1493,7 @@
                         </xsl:apply-templates>
                         <xsl:apply-templates select="L">
                             <xsl:with-param name="code" select="'33739-4'"/>
-                            <xsl:with-param name="system" select="'TNMLKategorieCS'"/><!--TODO ff - link existiert nicht-->
+                            <xsl:with-param name="system" select="'TNMLKategorieCS'"/>
                         </xsl:apply-templates>
                         <xsl:apply-templates select="V">
                             <xsl:with-param name="code" select="'33740-2'"/>
@@ -1688,7 +1733,7 @@
                 <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
                 <xsl:with-param name="Diagnosis_ID" select="$Diagnosis_ID"/>
                 <xsl:with-param name="URL" select="'AnzahlUntersuchtenLymphknoten'"/>
-                <xsl:with-param name="LOINC" select="'85347-3'"/>
+                <xsl:with-param name="LOINC" select="'21894-1'"/>
             </xsl:apply-templates>
             <xsl:apply-templates select="LK_befallen">
                 <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
@@ -1876,7 +1921,7 @@
                     <event>
                         <coding>
                             <xsl:choose>
-                                <xsl:when test="starts-with(lower-case(Typ), 'meddra')"><!--TODO to lowercase-->
+                                <xsl:when test="starts-with(lower-case(Typ), 'meddra')">
                                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/MedDRA_CodeCS"/>
                                 </xsl:when>
                                 <xsl:when test="starts-with(lower-case(Typ), 'ctc')">
