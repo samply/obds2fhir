@@ -11,17 +11,17 @@
 	<Menge_Patient>
 		<Patient Patient_ID="testpatient-oBDS-1">
 			<Patienten_Stammdaten>
-				<!--				<Versichertendaten_GKV>
-                                    <IKNR>thisValueIsIgnored</IKNR>
-                                    <GKV_Versichertennummer>thisValueIsIgnored</GKV_Versichertennummer>
-                                </Versichertendaten_GKV>-->
-				<!--				<Versichertendaten_PKV>
-                                    <IKNR>thisValueIsIgnored</IKNR>
-                                    <PKV_Versichertennummer>thisValueIsIgnored</PKV_Versichertennummer>
-                                    <Beihilfetraeger>thisValueIsIgnored</Beihilfetraeger>
-                                </Versichertendaten_PKV>-->
+				<!--<Versichertendaten_GKV>
+                    <IKNR>thisValueIsIgnored</IKNR>
+                    <GKV_Versichertennummer>thisValueIsIgnored</GKV_Versichertennummer>
+				</Versichertendaten_GKV>-->
+				<!--<Versichertendaten_PKV>
+                    <IKNR>thisValueIsIgnored</IKNR>
+                    <PKV_Versichertennummer>thisValueIsIgnored</PKV_Versichertennummer>
+                    <Beihilfetraeger>thisValueIsIgnored</Beihilfetraeger>
+                </Versichertendaten_PKV>-->
 				<Versichertendaten_Sonstige>
-					<!--					<Ersatzkode>thisValueIsIgnored</Ersatzkode>-->
+					<!--<Ersatzkode>thisValueIsIgnored</Ersatzkode>-->
 					<IKNR>thisValueIsIgnored</IKNR>
 					<KrankenkassenName>thisValueIsIgnored</KrankenkassenName>
 					<Versichertennummer>thisValueIsIgnored</Versichertennummer>
@@ -366,14 +366,14 @@
 								<PLZ>thisValueIsIgnored</PLZ>
 								<Ort>thisValueIsIgnored</Ort>
 							</strukturiert>
-							<!--							<unstrukturiert>
-                                                            <Adresse1>thisValueIsIgnored</Adresse1>
-                                                            <Adresse2>thisValueIsIgnored</Adresse2>
-                                                            <Adresse3>thisValueIsIgnored</Adresse3>
-                                                            <Adresse4>thisValueIsIgnored</Adresse4>
-                                                            <Adresse5>thisValueIsIgnored</Adresse5>
-                                                            <Adresse6>thisValueIsIgnored</Adresse6>
-                                                        </unstrukturiert>-->
+							<!--<unstrukturiert>
+                                <Adresse1>thisValueIsIgnored</Adresse1>
+                                <Adresse2>thisValueIsIgnored</Adresse2>
+                                <Adresse3>thisValueIsIgnored</Adresse3>
+                                <Adresse4>thisValueIsIgnored</Adresse4>
+                                <Adresse5>thisValueIsIgnored</Adresse5>
+                                <Adresse6>thisValueIsIgnored</Adresse6>
+                            </unstrukturiert>-->
 							<Ident_Nummern>
 								<IKNR>thisValueIsIgnored</IKNR>
 								<LANR>thisValueIsIgnored</LANR>
@@ -473,10 +473,10 @@
 									<Kuerzel>ABD</Kuerzel>
 								</Komplikation>
 								<Komplikation>
-									-                                    <ICD>
-									<Code>E31</Code>
-									<Version>10 2000 GM</Version>
-								</ICD>
+									<ICD>
+										<Code>E31</Code>
+										<Version>10 2000 GM</Version>
+									</ICD>
 								</Komplikation>
 							</Menge_Komplikation>
 						</Komplikationen>
@@ -528,7 +528,7 @@
 								<Ende>2024-05-29</Ende>
 								<Applikationsart>
 									<Perkutan>
-										<Radiochemo>RCN</Radiochemo>
+										<Radiochemo>RCJ</Radiochemo>
 										<Zielgebiet>
 											<CodeVersion2021>9.10</CodeVersion2021><!--caution, different nodes: CodeVersion2014|CodeVersion2021-->
 										</Zielgebiet>
@@ -549,22 +549,64 @@
 								<Beginn>2024-05-30</Beginn>
 								<Ende>2024-06-03</Ende>
 								<Applikationsart>
-									<Perkutan>
-										<Radiochemo>RCN</Radiochemo>
+									<Kontakt>
+										<Interstitiell_endokavitaer>K</Interstitiell_endokavitaer>
+										<Rate_Type>LDR</Rate_Type>
 										<Zielgebiet>
-											<CodeVersion2021>9.10</CodeVersion2021>
+											<CodeVersion2014>3.3.</CodeVersion2014>
 										</Zielgebiet>
 										<Seite_Zielgebiet>L</Seite_Zielgebiet>
+										<Strahlenart>UH</Strahlenart>
 										<Gesamtdosis>
-											<Dosis>32</Dosis>
+											<Dosis>13</Dosis>
 											<Einheit>Gy</Einheit>
 										</Gesamtdosis>
 										<Einzeldosis>
-											<Dosis>3</Dosis>
+											<Dosis>2</Dosis>
 											<Einheit>Gy</Einheit>
 										</Einzeldosis>
-										<Boost>N</Boost>
-									</Perkutan>
+									</Kontakt>
+								</Applikationsart>
+							</Bestrahlung>
+							<Bestrahlung>
+								<Beginn>2024-07-01</Beginn>
+								<Ende>2024-07-21</Ende>
+								<Applikationsart>
+									<Metabolisch>
+										<Metabolisch_Typ>PRRT</Metabolisch_Typ>
+										<Zielgebiet>
+											<CodeVersion2014>2.1.</CodeVersion2014>
+										</Zielgebiet>
+										<Seite_Zielgebiet>L</Seite_Zielgebiet>
+										<Gesamtdosis>
+											<Dosis>200</Dosis>
+											<Einheit>GBq</Einheit>
+										</Gesamtdosis>
+										<Einzeldosis>
+											<Dosis>3150</Dosis>
+											<Einheit>kBq</Einheit>
+										</Einzeldosis>
+									</Metabolisch>
+								</Applikationsart>
+							</Bestrahlung>
+							<Bestrahlung>
+								<Beginn>2025-01-01</Beginn>
+								<Ende>2025-02-13</Ende>
+								<Applikationsart>
+									<Sonstige>
+										<Zielgebiet>
+											<CodeVersion2014>8.9.</CodeVersion2014>
+										</Zielgebiet>
+										<Seite_Zielgebiet>U</Seite_Zielgebiet>
+										<Gesamtdosis>
+											<Dosis>3</Dosis>
+											<Einheit>Gy</Einheit>
+										</Gesamtdosis>
+										<Einzeldosis>
+											<Dosis>0.1</Dosis>
+											<Einheit>Gy</Einheit>
+										</Einzeldosis>
+									</Sonstige>
 								</Applikationsart>
 							</Bestrahlung>
 						</Menge_Bestrahlung>

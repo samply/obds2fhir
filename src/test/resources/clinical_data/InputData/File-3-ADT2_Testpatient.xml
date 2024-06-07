@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ADT_GEKID xmlns="http://www.gekid.de/namespace"
-		   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		   xsi:schemaLocation="http://www.gekid.de/namespace" Schema_Version="2.0.0">
+<ADT_GEKID xmlns="http://www.gekid.de/namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gekid.de/namespace" Schema_Version="2.0.0">
 	<Absender Absender_ID="12" Software_ID="13" Installations_ID="15">
 		<Absender_Bezeichnung>DKFZ</Absender_Bezeichnung>
 		<Absender_Ansprechpartner>Pierre Delpy</Absender_Ansprechpartner>
@@ -299,7 +297,7 @@
 									<ST_Seite_Zielgebiet>L</ST_Seite_Zielgebiet>
 									<ST_Beginn_Datum>13.05.2024</ST_Beginn_Datum>
 									<ST_Ende_Datum>29.05.2024</ST_Ende_Datum>
-									<ST_Applikationsart>Perkutan</ST_Applikationsart>
+									<ST_Applikationsart>PRCJ</ST_Applikationsart>
 									<ST_Gesamtdosis>
 										<Dosis>30</Dosis>
 										<Einheit>Gy</Einheit>
@@ -310,17 +308,62 @@
 									</ST_Einzeldosis>
 								</Bestrahlung>
 								<Bestrahlung>
-									<ST_Zielgebiet>8.2.</ST_Zielgebiet>
+									<ST_Zielgebiet>3.3.</ST_Zielgebiet>
 									<ST_Seite_Zielgebiet>L</ST_Seite_Zielgebiet>
 									<ST_Beginn_Datum>30.05.2024</ST_Beginn_Datum>
 									<ST_Ende_Datum>03.06.2024</ST_Ende_Datum>
-									<ST_Applikationsart>Perkutan</ST_Applikationsart>
+									<ST_Applikationsart>KLDR</ST_Applikationsart>
 									<ST_Gesamtdosis>
-										<Dosis>32</Dosis>
+										<Dosis>13</Dosis>
 										<Einheit>Gy</Einheit>
 									</ST_Gesamtdosis>
 									<ST_Einzeldosis>
+										<Dosis>2</Dosis>
+										<Einheit>Gy</Einheit>
+									</ST_Einzeldosis>
+								</Bestrahlung>
+								<Bestrahlung>
+									<ST_Zielgebiet>3.3.</ST_Zielgebiet>
+									<ST_Seite_Zielgebiet>L</ST_Seite_Zielgebiet>
+									<ST_Beginn_Datum>01.07.2024</ST_Beginn_Datum>
+									<ST_Ende_Datum>21.07.2024</ST_Ende_Datum>
+									<ST_Applikationsart>MPPRT</ST_Applikationsart>
+									<ST_Gesamtdosis>
+										<Dosis>200</Dosis>
+										<Einheit>GBq</Einheit>
+									</ST_Gesamtdosis>
+									<ST_Einzeldosis>
+										<Dosis>0.000315</Dosis>
+										<Einheit>GBq</Einheit>
+									</ST_Einzeldosis>
+								</Bestrahlung>
+								<Bestrahlung>
+									<ST_Zielgebiet>2.1.</ST_Zielgebiet>
+									<ST_Seite_Zielgebiet>L</ST_Seite_Zielgebiet>
+									<ST_Beginn_Datum>30.05.2024</ST_Beginn_Datum>
+									<ST_Ende_Datum>03.06.2024</ST_Ende_Datum>
+									<ST_Applikationsart>KLDR</ST_Applikationsart>
+									<ST_Gesamtdosis>
+										<Dosis>13</Dosis>
+										<Einheit>Gy</Einheit>
+									</ST_Gesamtdosis>
+									<ST_Einzeldosis>
+										<Dosis>2</Dosis>
+										<Einheit>Gy</Einheit>
+									</ST_Einzeldosis>
+								</Bestrahlung>
+								<Bestrahlung>
+									<ST_Zielgebiet>8.9.</ST_Zielgebiet>
+									<ST_Seite_Zielgebiet>U</ST_Seite_Zielgebiet>
+									<ST_Beginn_Datum>01.01.2025</ST_Beginn_Datum>
+									<ST_Ende_Datum>13.02.2025</ST_Ende_Datum>
+									<ST_Applikationsart>MPPRT</ST_Applikationsart>
+									<ST_Gesamtdosis>
 										<Dosis>3</Dosis>
+										<Einheit>Gy</Einheit>
+									</ST_Gesamtdosis>
+									<ST_Einzeldosis>
+										<Dosis>0.1</Dosis>
 										<Einheit>Gy</Einheit>
 									</ST_Einzeldosis>
 								</Bestrahlung>
@@ -372,7 +415,7 @@
 								<SYST_Therapieart>CH</SYST_Therapieart>
 								<SYST_Therapieart>IM</SYST_Therapieart>
 								<SYST_Therapieart>HO</SYST_Therapieart>
-								<SYST_Therapieart>ZS</SYST_Therapieart> <!--TODO-->
+								<SYST_Therapieart>ZS</SYST_Therapieart><!--TODO-->
 							</Menge_Therapieart>
 							<SYST_Therapieart_Anmerkung>thisValueIsIgnored</SYST_Therapieart_Anmerkung>
 							<SYST_Protokoll>Atezolizumab/ Bevacizumab</SYST_Protokoll>
@@ -400,9 +443,9 @@
 									<Nebenwirkung_Version>4</Nebenwirkung_Version>
 								</SYST_Nebenwirkung>
 								<SYST_Nebenwirkung>
-									<Nebenwirkung_Grad>1</Nebenwirkung_Grad>
+									<Nebenwirkung_Grad>K</Nebenwirkung_Grad>
 									<Nebenwirkung_Art>Grad_maximal2_oder_unbekannt</Nebenwirkung_Art>
-									<Nebenwirkung_Version></Nebenwirkung_Version>
+									<Nebenwirkung_Version/>
 								</SYST_Nebenwirkung>
 							</Menge_Nebenwirkung>
 							<Modul_Allgemein>
@@ -414,6 +457,24 @@
 								</DatumStudienrekrutierung>
 							</Modul_Allgemein>
 							<Anmerkung>thisValueIsIgnored</Anmerkung>
+						</SYST>
+						<SYST SYST_ID="test">
+							<SYST_Intention>K</SYST_Intention>
+							<SYST_Stellung_OP>O</SYST_Stellung_OP>
+							<Menge_Therapieart>
+								<SYST_Therapieart>CI</SYST_Therapieart>
+							</Menge_Therapieart>
+							<SYST_Therapieart_Anmerkung>Chemo- + Immun-/Antikörpertherapie</SYST_Therapieart_Anmerkung>
+							<SYST_Protokoll>Pola -R-CHP</SYST_Protokoll>
+							<SYST_Beginn_Datum>24.07.2023</SYST_Beginn_Datum>
+							<Menge_Substanz>
+								<SYST_Substanz>PolatuzumabVedotin</SYST_Substanz>
+								<SYST_Substanz>Rituximab</SYST_Substanz>
+								<SYST_Substanz>Cyclophosphamid</SYST_Substanz>
+								<SYST_Substanz>Doxorubicin</SYST_Substanz>
+								<SYST_Substanz>Prednison</SYST_Substanz>
+							</Menge_Substanz>
+							<SYST_Ende_Datum>18.10.2023</SYST_Ende_Datum>
 						</SYST>
 					</Menge_SYST>
 				</Meldung>
