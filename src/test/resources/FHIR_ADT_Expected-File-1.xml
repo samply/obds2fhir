@@ -165,9 +165,17 @@
             </valueCodeableConcept>
             <hasMember>
                <reference value="Observation/grd9703e136bf80bded"/>
+            </hasMember>
+            <hasMember>
                <reference value="Observation/lku9703e136bf80bded"/>
+            </hasMember>
+            <hasMember>
                <reference value="Observation/lkb9703e136bf80bded"/>
+            </hasMember>
+            <hasMember>
                <reference value="Observation/slku9703e136bf80bded"/>
+            </hasMember>
+            <hasMember>
                <reference value="Observation/slkb9703e136bf80bded"/>
             </hasMember>
          </Observation>
@@ -367,9 +375,17 @@
             </valueCodeableConcept>
             <hasMember>
                <reference value="Observation/grd23a2e14771a10ff6"/>
+            </hasMember>
+            <hasMember>
                <reference value="Observation/lku23a2e14771a10ff6"/>
+            </hasMember>
+            <hasMember>
                <reference value="Observation/lkb23a2e14771a10ff6"/>
+            </hasMember>
+            <hasMember>
                <reference value="Observation/slku23a2e14771a10ff6"/>
+            </hasMember>
+            <hasMember>
                <reference value="Observation/slkb23a2e14771a10ff6"/>
             </hasMember>
          </Observation>
@@ -1144,9 +1160,17 @@
             </valueCodeableConcept>
             <hasMember>
                <reference value="Observation/grd500ea452ba205922"/>
+            </hasMember>
+            <hasMember>
                <reference value="Observation/lku500ea452ba205922"/>
+            </hasMember>
+            <hasMember>
                <reference value="Observation/lkb500ea452ba205922"/>
+            </hasMember>
+            <hasMember>
                <reference value="Observation/slku500ea452ba205922"/>
+            </hasMember>
+            <hasMember>
                <reference value="Observation/slkb500ea452ba205922"/>
             </hasMember>
          </Observation>
@@ -1595,9 +1619,17 @@
             </valueCodeableConcept>
             <hasMember>
                <reference value="Observation/grd608ddf47e60bd663"/>
+            </hasMember>
+            <hasMember>
                <reference value="Observation/lku608ddf47e60bd663"/>
+            </hasMember>
+            <hasMember>
                <reference value="Observation/lkb608ddf47e60bd663"/>
+            </hasMember>
+            <hasMember>
                <reference value="Observation/slku608ddf47e60bd663"/>
+            </hasMember>
+            <hasMember>
                <reference value="Observation/slkb608ddf47e60bd663"/>
             </hasMember>
          </Observation>
@@ -3214,9 +3246,17 @@
             </valueCodeableConcept>
             <hasMember>
                <reference value="Observation/grd3819c1270fab0383"/>
+            </hasMember>
+            <hasMember>
                <reference value="Observation/lku3819c1270fab0383"/>
+            </hasMember>
+            <hasMember>
                <reference value="Observation/lkb3819c1270fab0383"/>
+            </hasMember>
+            <hasMember>
                <reference value="Observation/slku3819c1270fab0383"/>
+            </hasMember>
+            <hasMember>
                <reference value="Observation/slkb3819c1270fab0383"/>
             </hasMember>
          </Observation>
@@ -3895,9 +3935,17 @@
             </valueCodeableConcept>
             <hasMember>
                <reference value="Observation/grdc0c169622d5bf839"/>
+            </hasMember>
+            <hasMember>
                <reference value="Observation/lkuc0c169622d5bf839"/>
+            </hasMember>
+            <hasMember>
                <reference value="Observation/lkbc0c169622d5bf839"/>
+            </hasMember>
+            <hasMember>
                <reference value="Observation/slkuc0c169622d5bf839"/>
+            </hasMember>
+            <hasMember>
                <reference value="Observation/slkbc0c169622d5bf839"/>
             </hasMember>
          </Observation>

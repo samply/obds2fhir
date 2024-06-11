@@ -331,9 +331,17 @@
             </valueCodeableConcept>
             <hasMember>
                <reference value="Observation/grdb7bd2dea7b9d637b"/>
+            </hasMember>
+            <hasMember>
                <reference value="Observation/lkub7bd2dea7b9d637b"/>
+            </hasMember>
+            <hasMember>
                <reference value="Observation/lkbb7bd2dea7b9d637b"/>
+            </hasMember>
+            <hasMember>
                <reference value="Observation/slkub7bd2dea7b9d637b"/>
+            </hasMember>
+            <hasMember>
                <reference value="Observation/slkbb7bd2dea7b9d637b"/>
             </hasMember>
          </Observation>

@@ -1667,23 +1667,31 @@
                                 <text value="{mds2fhir:fix-free-text(Morphologie_Freitext)}"/>
                             </xsl:if>
                         </valueCodeableConcept>
-                        <hasMember>
-                            <xsl:if test="Grading!=''">
+                        <xsl:if test="Grading!=''">
+                            <hasMember>
                                 <reference value="Observation/{Grading/@Grading_ID}"/>
-                            </xsl:if>
-                            <xsl:if test="LK_untersucht!=''">
+                            </hasMember>
+                        </xsl:if>
+                        <xsl:if test="LK_untersucht!=''">
+                            <hasMember>
                                 <reference value="Observation/{LK_untersucht/@LK_untersucht_ID}"/>
-                            </xsl:if>
-                            <xsl:if test="LK_befallen!=''">
+                            </hasMember>
+                        </xsl:if>
+                        <xsl:if test="LK_befallen!=''">
+                            <hasMember>
                                 <reference value="Observation/{LK_befallen/@LK_befallen_ID}"/>
-                            </xsl:if>
-                            <xsl:if test="Sentinel_LK_untersucht!=''">
+                            </hasMember>
+                        </xsl:if>
+                        <xsl:if test="Sentinel_LK_untersucht!=''">
+                            <hasMember>
                                 <reference value="Observation/{Sentinel_LK_untersucht/@Sentinel_LK_untersucht_ID}"/>
-                            </xsl:if>
-                            <xsl:if test="Sentinel_LK_befallen!=''">
+                            </hasMember>
+                        </xsl:if>
+                        <xsl:if test="Sentinel_LK_befallen!=''">
+                            <hasMember>
                                 <reference value="Observation/{Sentinel_LK_befallen/@Sentinel_LK_befallen_ID}"/>
-                            </xsl:if>
-                        </hasMember>
+                            </hasMember>
+                        </xsl:if>
                     </Observation>
                 </resource>
                 <request>
