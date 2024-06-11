@@ -16,6 +16,7 @@ services:
       SALT: "createLocalCustomSalt"
       #SSL_CERTIFICATE_VALIDATION: "true"
       #ADD_DEPARTMENTS: "false"
+      LOG_LEVEL: "INFO"
     volumes:
       - ./clinical_data:/obds2fhir/clinical_data
       #- /etc/bridgehead/traefik-tls:/.../:ro
