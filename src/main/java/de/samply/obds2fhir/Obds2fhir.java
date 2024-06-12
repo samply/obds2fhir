@@ -127,12 +127,15 @@ public class Obds2fhir {
                         }
                     } catch (IOException e) {
                         counter-=1;
+                        inputFile.renameTo(new File(System.getenv().getOrDefault("FILE_PATH","") + ERRONEOUS + inputFile.getName()));
                         logger.error("IOException with file " + inputFile + e);
                     } catch (TransformerException e) {
                         counter-=1;
+                        inputFile.renameTo(new File(System.getenv().getOrDefault("FILE_PATH","") + ERRONEOUS + inputFile.getName()));
                         logger.error("TransformerException with file " + inputFile + e);
                     } catch (RuntimeException e) {
                         counter-=1;
+                        inputFile.renameTo(new File(System.getenv().getOrDefault("FILE_PATH","") + ERRONEOUS + inputFile.getName()));
                         logger.error("RuntimeException with file " + inputFile + e);
                     }
                 }
