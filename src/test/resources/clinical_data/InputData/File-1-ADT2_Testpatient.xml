@@ -45,7 +45,7 @@
 								<Morphologie_Freitext>Morphologie_Freitext0</Morphologie_Freitext>
 								<Grading>1</Grading>
 								<LK_untersucht>50</LK_untersucht>
-								<LK_befallen>50</LK_befallen>
+								<LK_befallen> 50</LK_befallen><!--for some reason this partially occurs-->
 								<Sentinel_LK_untersucht>50</Sentinel_LK_untersucht>
 								<Sentinel_LK_befallen>50</Sentinel_LK_befallen>
 							</Histologie>

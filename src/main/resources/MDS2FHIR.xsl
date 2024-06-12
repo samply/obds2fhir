@@ -1792,7 +1792,7 @@
                             <reference value="Condition/{$Diagnosis_ID}"/>
                         </focus>
                         <valueQuantity>
-                            <value value="{.}"/>
+                            <value value="{number(.)}"/>
                         </valueQuantity>
                     </Observation>
                 </resource>
