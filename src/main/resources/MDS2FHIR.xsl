@@ -293,7 +293,7 @@
                                     <code value="{./Tumor/Lokalisation}"/>
                                 </xsl:if>
                                 <xsl:if test="./Primaertumor_Topographie_Freitext != ''">
-                                    <display value="{./Primaertumor_Topographie_Freitext}"/>
+                                    <display value="{mds2fhir:fix-free-text(Primaertumor_Topographie_Freitext)}"/>
                                 </xsl:if>
                             </coding>
                             <xsl:if test="./Tumor/Seitenlokalisation">
@@ -2239,6 +2239,6 @@
 
     <xsl:function name="mds2fhir:fix-free-text">
         <xsl:param name="text" />
-        <xsl:value-of select="replace(replace(replace(translate($text,' ', '_'), 'ä', 'ae'), 'ö', 'oe'), 'ü', 'ue')"/>
+        <xsl:value-of select="replace(replace(replace(replace(replace(replace(translate($text,' ', '_'), 'ä', 'ae'), 'Ä', 'Ae'), 'ö', 'oe'), 'Ö', 'Oe'), 'ü', 'ue'), 'Ü', 'Ue')"/>
     </xsl:function>
 </xsl:stylesheet>

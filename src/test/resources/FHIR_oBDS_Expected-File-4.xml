@@ -108,7 +108,7 @@
                   <system value="urn:oid:2.16.840.1.113883.6.43.1"/>
                   <version value="33"/>
                   <code value="C44.5"/>
-                  <display value="oberer quadrant"/>
+                  <display value="oberer_quadrant"/>
                </coding>
                <coding>
                   <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SeitenlokalisationCS"/>

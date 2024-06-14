@@ -164,7 +164,7 @@ public class Obds2fhir {
         HttpResponse response = httpclient.execute(httppost);
         if (!response.getStatusLine().getReasonPhrase().equals("OK")) {
             logger.error("FHIR import: could not import file"+ inputFile.getName());
-            logger.error(EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8));
+            logger.error(EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8)+"\n");
             inputFile.renameTo(new File(System.getenv().getOrDefault("FILE_PATH","") + ERRONEOUS));
         }
         else {
