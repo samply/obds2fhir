@@ -561,23 +561,51 @@
 						</Verlauf>
 					</Menge_Verlauf>
 					<Menge_Biomaterial>
-						<Biomaterial Biomaterial_ID="1">
-							<Patienten_mit_Biomaterial>ja</Patienten_mit_Biomaterial>
+						<Biomaterial Biomaterial_ID="1-wrongProbentyp"><!--missing Probentyp -> should be ignored-->
+							<Patienten_mit_Biomaterial>ja</Patienten_mit_Biomaterial><!--ignored since FHIR-->
+							<Probenart>Tumorgewebe</Probenart>
+							<Fixierungsart>Paraffin(FFPE)</Fixierungsart>
+						</Biomaterial>
+						<Biomaterial Biomaterial_ID="1-rightProbentyp">
+							<Probentyp>Gewebeprobe</Probentyp>
+							<Probenart>Tumorgewebe</Probenart>
+							<Fixierungsart>Paraffin(FFPE)</Fixierungsart>
+						</Biomaterial>
+						<Biomaterial Biomaterial_ID="1-wrongDate1">
+							<Probentyp>Gewebeprobe</Probentyp>
 							<Probenart>Tumorgewebe</Probenart>
 							<Entnahmedatum>2021</Entnahmedatum>
 							<Fixierungsart>Paraffin(FFPE)</Fixierungsart>
 						</Biomaterial>
-						<Biomaterial Biomaterial_ID="2">
-							<Patienten_mit_Biomaterial>ja</Patienten_mit_Biomaterial>
+						<Biomaterial Biomaterial_ID="1-wrongDate2">
 							<Probentyp>Gewebeprobe</Probentyp>
+							<Probenart>Tumorgewebe</Probenart>
 							<Entnahmedatum>07.2021</Entnahmedatum>
+							<Fixierungsart>Paraffin(FFPE)</Fixierungsart>
+						</Biomaterial>
+						<Biomaterial Biomaterial_ID="1-rightDate">
+							<Probentyp>Gewebeprobe</Probentyp>
+							<Probenart>Tumorgewebe</Probenart>
+							<Entnahmedatum>03.07.2021</Entnahmedatum>
+							<Fixierungsart>Paraffin(FFPE)</Fixierungsart>
+						</Biomaterial>
+						<Biomaterial Biomaterial_ID="1-minimal">
+							<Probentyp>Gewebeprobe</Probentyp>
+						</Biomaterial>
+						<Biomaterial Biomaterial_ID="2-otherFixierungsart">
+							<Probentyp>Gewebeprobe</Probentyp>
+							<Probenart>Tumorgewebe</Probenart>
+							<Entnahmedatum>03.07.2021</Entnahmedatum>
+							<Fixierungsart>Kryo/Frisch (FF)</Fixierungsart>
+						</Biomaterial>
+						<Biomaterial Biomaterial_ID="3-minimal">
+							<Probentyp>Flüssigprobe</Probentyp>
+							<Entnahmedatum>16.07.2021</Entnahmedatum>
 						</Biomaterial>
 						<Biomaterial Biomaterial_ID="3">
-							<Patienten_mit_Biomaterial>ja</Patienten_mit_Biomaterial>
 							<Probentyp>Flüssigprobe</Probentyp>
-							<Probenart>Tumorgewebe</Probenart>
-							<Entnahmedatum>16.07.2021</Entnahmedatum>
-							<Fixierungsart>Paraffin(FFPE)</Fixierungsart>
+							<Probenart>Vollblut</Probenart>
+							<Entnahmedatum>11.12.2021</Entnahmedatum>
 						</Biomaterial>
 						<Biomaterial Biomaterial_ID="4">
 							<Patienten_mit_Biomaterial>nein</Patienten_mit_Biomaterial>

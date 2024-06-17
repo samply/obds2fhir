@@ -2637,7 +2637,7 @@
 																			<xs:element name="Biomaterial" maxOccurs="unbounded">
 																				<xs:complexType>
 																					<xs:sequence>
-																						<xs:element name="Patienten_mit_Biomaterial">
+																						<xs:element name="Patienten_mit_Biomaterial" minOccurs="0">
 																							<xs:annotation>
 																								<xs:documentation>designation:: Patienten mit Biomaterial urn:dktk:dataelement:50:2 definition:: Es sollen nur Patienten angezeigt werden, für die Biomaterial asserviert worden ist</xs:documentation>
 																							</xs:annotation>

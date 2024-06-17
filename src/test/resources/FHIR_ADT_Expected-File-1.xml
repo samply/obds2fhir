@@ -28,10 +28,166 @@
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/Specimen/bioa823f38f3f764a89"/>
+      <fullUrl value="http://example.com/Specimen/bio08c57d26db215355"/>
       <resource>
          <Specimen>
-            <id value="bioa823f38f3f764a89"/>
+            <id value="bio08c57d26db215355"/>
+            <meta>
+               <profile value="https://fhir.bbmri.de/StructureDefinition/Specimen"/>
+            </meta>
+            <type>
+               <coding>
+                  <system value="https://fhir.bbmri.de/CodeSystem/SampleMaterialType"/>
+                  <code value="tissue-ffpe"/>
+               </coding>
+            </type>
+            <subject>
+               <reference value="Patient/653ae947f9c1f8f6"/>
+            </subject>
+         </Specimen>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Specimen/bio08c57d26db215355"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Specimen/bio12f8b154b25cf6f1"/>
+      <resource>
+         <Specimen>
+            <id value="bio12f8b154b25cf6f1"/>
+            <meta>
+               <profile value="https://fhir.bbmri.de/StructureDefinition/Specimen"/>
+            </meta>
+            <type>
+               <coding>
+                  <system value="https://fhir.bbmri.de/CodeSystem/SampleMaterialType"/>
+                  <code value="tissue-ffpe"/>
+               </coding>
+            </type>
+            <subject>
+               <reference value="Patient/653ae947f9c1f8f6"/>
+            </subject>
+            <collection>
+               <collectedDateTime value="2021"/>
+            </collection>
+         </Specimen>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Specimen/bio12f8b154b25cf6f1"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Specimen/bio48fbd4cd8880c079"/>
+      <resource>
+         <Specimen>
+            <id value="bio48fbd4cd8880c079"/>
+            <meta>
+               <profile value="https://fhir.bbmri.de/StructureDefinition/Specimen"/>
+            </meta>
+            <type>
+               <coding>
+                  <system value="https://fhir.bbmri.de/CodeSystem/SampleMaterialType"/>
+                  <code value="tissue-ffpe"/>
+               </coding>
+            </type>
+            <subject>
+               <reference value="Patient/653ae947f9c1f8f6"/>
+            </subject>
+            <collection>
+               <collectedDateTime value="2021-07"/>
+            </collection>
+         </Specimen>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Specimen/bio48fbd4cd8880c079"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Specimen/bio6d850bd5da72a6be"/>
+      <resource>
+         <Specimen>
+            <id value="bio6d850bd5da72a6be"/>
+            <meta>
+               <profile value="https://fhir.bbmri.de/StructureDefinition/Specimen"/>
+            </meta>
+            <type>
+               <coding>
+                  <system value="https://fhir.bbmri.de/CodeSystem/SampleMaterialType"/>
+                  <code value="tissue-ffpe"/>
+               </coding>
+            </type>
+            <subject>
+               <reference value="Patient/653ae947f9c1f8f6"/>
+            </subject>
+            <collection>
+               <collectedDateTime value="2021-07-03"/>
+            </collection>
+         </Specimen>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Specimen/bio6d850bd5da72a6be"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Specimen/bio2e4e9f850aeb36f5"/>
+      <resource>
+         <Specimen>
+            <id value="bio2e4e9f850aeb36f5"/>
+            <meta>
+               <profile value="https://fhir.bbmri.de/StructureDefinition/Specimen"/>
+            </meta>
+            <type>
+               <coding>
+                  <system value="https://fhir.bbmri.de/CodeSystem/SampleMaterialType"/>
+                  <code value="tissue-other"/>
+               </coding>
+            </type>
+            <subject>
+               <reference value="Patient/653ae947f9c1f8f6"/>
+            </subject>
+         </Specimen>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Specimen/bio2e4e9f850aeb36f5"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Specimen/bio389d48e1d1e8c637"/>
+      <resource>
+         <Specimen>
+            <id value="bio389d48e1d1e8c637"/>
+            <meta>
+               <profile value="https://fhir.bbmri.de/StructureDefinition/Specimen"/>
+            </meta>
+            <type>
+               <coding>
+                  <system value="https://fhir.bbmri.de/CodeSystem/SampleMaterialType"/>
+                  <code value="tissue-frozen"/>
+               </coding>
+            </type>
+            <subject>
+               <reference value="Patient/653ae947f9c1f8f6"/>
+            </subject>
+            <collection>
+               <collectedDateTime value="2021-07-03"/>
+            </collection>
+         </Specimen>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Specimen/bio389d48e1d1e8c637"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Specimen/biofe831bf4ea2964eb"/>
+      <resource>
+         <Specimen>
+            <id value="biofe831bf4ea2964eb"/>
             <meta>
                <profile value="https://fhir.bbmri.de/StructureDefinition/Specimen"/>
             </meta>
@@ -46,6 +202,33 @@
             </subject>
             <collection>
                <collectedDateTime value="2021-07-16"/>
+            </collection>
+         </Specimen>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Specimen/biofe831bf4ea2964eb"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Specimen/bioa823f38f3f764a89"/>
+      <resource>
+         <Specimen>
+            <id value="bioa823f38f3f764a89"/>
+            <meta>
+               <profile value="https://fhir.bbmri.de/StructureDefinition/Specimen"/>
+            </meta>
+            <type>
+               <coding>
+                  <system value="https://fhir.bbmri.de/CodeSystem/SampleMaterialType"/>
+                  <code value="whole-blood"/>
+               </coding>
+            </type>
+            <subject>
+               <reference value="Patient/653ae947f9c1f8f6"/>
+            </subject>
+            <collection>
+               <collectedDateTime value="2021-12-11"/>
             </collection>
          </Specimen>
       </resource>

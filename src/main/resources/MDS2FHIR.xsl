@@ -141,7 +141,7 @@
     <xsl:template match="Sample" mode="sample">
         <xsl:param name="Patient_ID" select="../@Patient_ID"/>
         <xsl:variable name="Sample_ID" select="@Sample_ID"/>
-        <xsl:if test="./Probentyp and (./Fixierungsart or ./Probenart)">
+        <xsl:if test="Probentyp!=''">
             <entry>
                 <fullUrl value="http://example.com/Specimen/{$Sample_ID}"/>
                 <resource>
@@ -155,66 +155,46 @@
                                 <system value="https://fhir.bbmri.de/CodeSystem/SampleMaterialType"/>
                                 <code>
                                     <xsl:choose>
-                                        <xsl:when test="./Probentyp='Gewebeprobe'">
+                                        <xsl:when test="lower-case(normalize-space(Probentyp)) = 'gewebeprobe'">
                                             <xsl:choose>
-                                                <xsl:when test="./Fixierungsart='Kryo/Frisch (FF)'">
-                                                    <xsl:choose>
-                                                        <xsl:when test="./Probenart='Tumorgewebe'">
-                                                            <xsl:attribute name="value">tumor-tissue-frozen</xsl:attribute>
-                                                        </xsl:when>
-                                                        <xsl:when test="./Probenart='Normalgewebe'">
-                                                            <xsl:attribute name="value">normal-tissue-frozen</xsl:attribute>
-                                                        </xsl:when>
-                                                        <xsl:otherwise>
-                                                            <xsl:attribute name="value">other-tissue-frozen</xsl:attribute>
-                                                        </xsl:otherwise>
-                                                    </xsl:choose>
+                                                <xsl:when test="starts-with(lower-case(normalize-space(Fixierungsart)), 'kryo') or starts-with(lower-case(normalize-space(Probenart)), 'frisch')">
+                                                    <xsl:attribute name="value">tissue-frozen</xsl:attribute>
                                                 </xsl:when>
-                                                <xsl:when test="./Fixierungsart='Paraffin (FFPE)'">
-                                                    <xsl:choose>
-                                                        <xsl:when test="./Probenart='Tumorgewebe'">
-                                                            <xsl:attribute name="value">tumor-tissue-ffpe</xsl:attribute>
-                                                        </xsl:when>
-                                                        <xsl:when test="./Probenart='Normalgewebe'">
-                                                            <xsl:attribute name="value">normal-tissue-ffpe</xsl:attribute>
-                                                        </xsl:when>
-                                                        <xsl:otherwise>
-                                                            <xsl:attribute name="value">other-tissue-ffpe</xsl:attribute>
-                                                        </xsl:otherwise>
-                                                    </xsl:choose>
+                                                <xsl:when test="starts-with(lower-case(normalize-space(Fixierungsart)), 'paraffin')">
+                                                    <xsl:attribute name="value">tissue-ffpe</xsl:attribute>
                                                 </xsl:when>
                                                 <xsl:otherwise>
                                                     <xsl:attribute name="value">tissue-other</xsl:attribute>
                                                 </xsl:otherwise>
                                             </xsl:choose>
                                         </xsl:when>
-                                        <xsl:when test="./Probentyp='Flüssigprobe'">
+                                        <xsl:when test="lower-case(normalize-space(Probentyp)) = 'flüssigprobe'">
                                             <xsl:choose>
-                                                <xsl:when test="./Probenart='Vollblut'">
+                                                <xsl:when test="lower-case(normalize-space(Probenart)) = 'vollblut'">
                                                     <xsl:attribute name="value">whole-blood</xsl:attribute>
                                                 </xsl:when>
-                                                <xsl:when test="./Probenart='Serum'">
+                                                <xsl:when test="ends-with(lower-case(normalize-space(Probenart)), 'serum')">
                                                     <xsl:attribute name="value">blood-serum</xsl:attribute>
                                                 </xsl:when>
-                                                <xsl:when test="./Probenart='Plasma'">
+                                                <xsl:when test="starts-with(lower-case(normalize-space(Probenart)), 'plasma')">
                                                     <xsl:attribute name="value">blood-plasma</xsl:attribute>
                                                 </xsl:when>
-                                                <xsl:when test="./Probenart='Urin'">
+                                                <xsl:when test="starts-with(lower-case(normalize-space(Probenart)), 'urin')">
                                                     <xsl:attribute name="value">urine</xsl:attribute>
                                                 </xsl:when>
-                                                <xsl:when test="./Probenart='Liquor'">
+                                                <xsl:when test="ends-with(lower-case(normalize-space(Probenart)), 'liquor')">
                                                     <xsl:attribute name="value">csf-liquor</xsl:attribute>
                                                 </xsl:when>
-                                                <xsl:when test="./Probenart='Knochenmark'">
+                                                <xsl:when test="starts-with(lower-case(normalize-space(Probenart)), 'knochenmark')">
                                                     <xsl:attribute name="value">bone-marrow</xsl:attribute>
                                                 </xsl:when>
-                                                <xsl:when test="./Probenart='DNA'">
+                                                <xsl:when test="ends-with(lower-case(normalize-space(Probenart)), 'dna')">
                                                     <xsl:attribute name="value">dna</xsl:attribute>
                                                 </xsl:when>
-                                                <xsl:when test="./Probenart='RNA'">
+                                                <xsl:when test="ends-with(lower-case(normalize-space(Probenart)), 'rna')">
                                                     <xsl:attribute name="value">rna</xsl:attribute>
                                                 </xsl:when>
-                                                <xsl:when test="./Probenart='Protein'">
+                                                <xsl:when test="lower-case(normalize-space(Probenart)) = 'protein'">
                                                     <xsl:attribute name="value">derivative-other</xsl:attribute>
                                                 </xsl:when>
                                                 <xsl:otherwise>
@@ -229,9 +209,9 @@
                         <subject>
                             <reference value="Patient/{$Patient_ID}"/>
                         </subject>
-                        <xsl:if test="./Entnahmedatum">
+                        <xsl:if test="Entnahmedatum!=''">
                             <collection>
-                                <collectedDateTime value="{mds2fhir:transformDate(./Entnahmedatum)}"/>
+                                <collectedDateTime value="{mds2fhir:transformDate(Entnahmedatum)}"/>
                             </collection>
                         </xsl:if>
                     </Specimen>
