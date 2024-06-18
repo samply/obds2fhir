@@ -77,10 +77,10 @@
                     <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                 </xsl:apply-templates>
             </xsl:if>-->
-            <xsl:for-each select="./Menge_Meldung/Meldung[not(Tumorzuordnung/@Tumor_ID=preceding-sibling::*/Tumorzuordnung/@Tumor_ID)]">
+            <xsl:for-each select="Menge_Meldung/Meldung[not(Tumorzuordnung/@Tumor_ID=preceding-sibling::*/Tumorzuordnung/@Tumor_ID)]">
                 <xsl:apply-templates select="../../Menge_Meldung"><!--apply sequential tumor related reports -->
                     <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
-                    <xsl:with-param name="Tumor_Id" select="./Tumorzuordnung/@Tumor_ID"/>
+                    <xsl:with-param name="Tumor_Id" select="Tumorzuordnung/@Tumor_ID"/>
                 </xsl:apply-templates>
             </xsl:for-each>
         </Patient>

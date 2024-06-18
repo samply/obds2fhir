@@ -607,7 +607,7 @@
 							<Probenart>Vollblut</Probenart>
 							<Entnahmedatum>11.12.2021</Entnahmedatum>
 						</Biomaterial>
-						<Biomaterial Biomaterial_ID="4">
+						<Biomaterial Biomaterial_ID="wrong">
 							<Patienten_mit_Biomaterial>nein</Patienten_mit_Biomaterial>
 						</Biomaterial>
 					</Menge_Biomaterial>

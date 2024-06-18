@@ -236,10 +236,10 @@
                         <meta>
                             <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Condition-Primaerdiagnose"/>
                         </meta>
-                        <xsl:for-each select="./Tumor/Metastasis">
+                        <xsl:for-each select="Tumor/Metastasis">
                             <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-Fernmetastasen">
                                 <valueReference>
-                                    <reference value="Observation/{mds2fhir:getID(./@Metastasis_ID, mds2fhir:transformDate(./Datum_diagnostische_Sicherung), generate-id())}"/>
+                                    <reference value="Observation/{@Metastasis_ID}"/>
                                 </valueReference>
                             </extension>
                         </xsl:for-each>
@@ -977,7 +977,7 @@
                         <xsl:for-each select="./Metastasis">
                             <finding>
                                 <itemReference>
-                                    <reference value="Observation/{mds2fhir:getID(./@Metastasis_ID, mds2fhir:transformDate(./Datum_diagnostische_Sicherung), generate-id())}"/>
+                                    <reference value="Observation/{@Metastasis_ID}"/>
                                 </itemReference>
                             </finding>
                         </xsl:for-each>
@@ -1522,13 +1522,12 @@
         <xsl:param name="Patient_ID"/>
         <xsl:param name="Diagnosis_ID"/>
         <xsl:param name="Datum_Verlauf"/>
-        <xsl:if test="./Datum_diagnostische_Sicherung !=''">
-            <xsl:variable name="Metastasis_ID" select="mds2fhir:getID(./@Metastasis_ID, mds2fhir:transformDate(./Datum_diagnostische_Sicherung), generate-id())" as="xs:string"/>
+        <xsl:if test="Datum_diagnostische_Sicherung!='' and Lokalisation_Fernmetastasen!=''">
             <entry>
-                <fullUrl value="http://example.com/Observation/{$Metastasis_ID}"/>
+                <fullUrl value="http://example.com/Observation/{@Metastasis_ID}"/>
                 <resource>
                     <Observation>
-                        <id value="{$Metastasis_ID}"/>
+                        <id value="{@Metastasis_ID}"/>
                         <meta>
                             <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Fernmetastasen"/>
                         </meta>
@@ -1546,41 +1545,30 @@
                             <reference value="Condition/{$Diagnosis_ID}"/>
                         </focus>
                         <xsl:choose>
-                            <xsl:when test="./Datum_diagnostische_Sicherung">
-                                <effectiveDateTime value="{mds2fhir:transformDate(./Datum_diagnostische_Sicherung)}"/>
+                            <xsl:when test="Datum_diagnostische_Sicherung">
+                                <effectiveDateTime value="{mds2fhir:transformDate(Datum_diagnostische_Sicherung)}"/>
                             </xsl:when>
                             <xsl:when test="$Datum_Verlauf">
                                 <effectiveDateTime value="{mds2fhir:transformDate($Datum_Verlauf)}"/>
                             </xsl:when>
                         </xsl:choose>
-                        <xsl:if test="./Fernmetastasen_vorhanden">
-                            <valueCodeableConcept>
-                                <coding>
-                                    <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/JNUCS"/>
-                                    <xsl:choose>
-                                        <xsl:when test="./Fernmetastasen_vorhanden = 'nicht erfasst'">
-                                            <code value="U"/>
-                                        </xsl:when>
-                                        <xsl:otherwise>
-                                            <code value="{./Fernmetastasen_vorhanden}"/>
-                                        </xsl:otherwise>
-                                    </xsl:choose>
-                                </coding>
-                            </valueCodeableConcept>
-                        </xsl:if>
-                        <xsl:if test="./Lokalisation_Fernmetastasen">
-                            <bodySite>
-                                <coding>
-                                    <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/FMLokalisationCS"/>
-                                    <code value="{./Lokalisation_Fernmetastasen}"/>
-                                </coding>
-                            </bodySite>
-                        </xsl:if>
+                        <valueCodeableConcept>
+                            <coding>
+                                <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/JNUCS"/>
+                                <code value="J"/>
+                            </coding>
+                        </valueCodeableConcept>
+                        <bodySite>
+                            <coding>
+                                <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/FMLokalisationCS"/>
+                                <code value="{Lokalisation_Fernmetastasen}"/>
+                            </coding>
+                        </bodySite>
                     </Observation>
                 </resource>
                 <request>
                     <method value="PUT"/>
-                    <url value="Observation/{$Metastasis_ID}"/>
+                    <url value="Observation/{@Metastasis_ID}"/>
                 </request>
             </entry>
         </xsl:if>

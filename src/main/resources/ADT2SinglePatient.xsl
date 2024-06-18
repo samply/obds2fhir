@@ -17,7 +17,7 @@
         <xsl:for-each select="Menge_Patient/Patient">
             <xsl:result-document method="xml" href="file:{$filepath}/tmp/ADT_Patients/Patient_{hash:hash(Patienten_Stammdaten/@Patient_ID,'','')}_ADT_{$customPrefix}.xml">
             <!--<xsl:result-document method="xml" href="Patient_{Patienten_Stammdaten/@Patient_ID}.xml">-->
-                <ADT_GEKID Schema_Version="2.2.1">
+                <ADT_GEKID Schema_Version="2.2.3">
                     <xsl:copy-of select="/ADT_GEKID/@*" />
                     <Menge_Patient>
                         <xsl:copy-of select="../@* | ." />

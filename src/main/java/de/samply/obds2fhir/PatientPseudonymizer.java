@@ -111,7 +111,7 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
             this.httpclient = HttpClients.createDefault();
             httppost = createHttpPost(preprocessIDAT(prename), preprocessIDAT(surname), preprocessIDAT(formername), birthday, birthmonth, birthyear, gender);
             response = httpclient.execute(httppost);
-            logger.info("\u001B[A"+"\u001B[100C" + "Unallowed character in patient "+ identifier + " ... autocorrected\n");
+            logger.warn("\u001B[A"+"\u001B[100C" + "Unallowed character in patient "+ identifier + " ... autocorrected\n");
         }
         if (response.getStatusLine().getStatusCode()!=201) {
             logger.error("Pseudonymization response: " +  response.getStatusLine().getStatusCode());
