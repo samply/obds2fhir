@@ -73,28 +73,19 @@
             <xsl:apply-templates select="Menge_Meldung/Meldung/Menge_Biomaterial/Biomaterial[not(@Biomaterial_ID=following::*/@Biomaterial_ID)]">
                 <xsl:with-param name="Patient_Id" select="Patienten_Stammdaten/@Patient_ID"/>
             </xsl:apply-templates>
-            <xsl:choose>
-                <xsl:when test="./Menge_Meldung/Meldung/Diagnose">
-                    <xsl:for-each select="./Menge_Meldung/Meldung/Diagnose[not(@Tumor_ID=following::Diagnose/@Tumor_ID)]"><!--use foreach loop to allow multiple Diagnoses for one Patient AND ignore multiple identical diagnoses-->
-                        <xsl:if test="@Tumor_ID">
-                           <xsl:apply-templates select="../../../Menge_Meldung" mode="withIds">
-                               <xsl:with-param name="Tumor_Id" select="@Tumor_ID"/><!-- For multiple Diagnoses: assign ID for appropriate structure-->
-                               <xsl:with-param name="Patient_Id" select="Patienten_Stammdaten/@Patient_ID"/>
-                           </xsl:apply-templates>
-                       </xsl:if>
-                    </xsl:for-each>
-                </xsl:when>
-                <xsl:when test="not(./Menge_Meldung/Meldung/Diagnose) and ./Menge_Meldung/Meldung/Tumorzuordnung/@Tumor_ID"><!-- use Tumorzuordnung if no Diagnosis is delivered at all; requires Tumor IDs -->
-                    <!--handle multiple different or similar Tumorzuordnung and place them in the correct tree structure-->
-                    <xsl:for-each select="./Menge_Meldung/Meldung/Tumorzuordnung[not(@Tumor_ID=../preceding-sibling::*/Tumorzuordnung/@Tumor_ID)]">
-                        <xsl:variable name="TumorID"><xsl:value-of select="./@Tumor_ID"/></xsl:variable>
-                         <xsl:apply-templates select="../../../Menge_Meldung" mode="withIds">
-                             <xsl:with-param name="Tumor_Id" select="$TumorID"/>
-                             <xsl:with-param name="Patient_Id" select="Patienten_Stammdaten/@Patient_ID"/>
-                         </xsl:apply-templates>
-                    </xsl:for-each>
-                </xsl:when>
-            </xsl:choose>
+            <xsl:for-each select="Menge_Meldung/Meldung[not(Tumorzuordnung/@Tumor_ID=preceding-sibling::*/Tumorzuordnung/@Tumor_ID)]">
+                <xsl:choose>
+                    <xsl:when test="Tumorzuordnung/@Tumor_ID">
+                        <xsl:apply-templates select="../../Menge_Meldung"><!--apply sequential tumor related reports -->
+                            <xsl:with-param name="Tumor_Id" select="Tumorzuordnung/@Tumor_ID"/>
+                            <xsl:with-param name="Patient_Id" select="../../Patienten_Stammdaten/@Patient_ID"/>
+                        </xsl:apply-templates>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:message terminate="yes">ERROR: Meldung ohne Tumorzuordnung</xsl:message>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:for-each>
         </Patient>
     </xsl:template>
 
@@ -118,7 +109,7 @@
         </Sample>
     </xsl:template>
 
-    <xsl:template match="Menge_Meldung" mode="withIds">
+    <xsl:template match="Menge_Meldung">
         <xsl:param name="Tumor_Id"/>
         <xsl:param name="Patient_Id"/>
         <xsl:variable name="Tumor_Meldung" select="Meldung[Tumorzuordnung/@Tumor_ID=$Tumor_Id]"/>

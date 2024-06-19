@@ -561,7 +561,7 @@
             <valueCodeableConcept>
                <coding>
                   <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/JNUCS"/>
-                  <code value="ja"/>
+                  <code value="J"/>
                </coding>
             </valueCodeableConcept>
             <bodySite>
@@ -602,7 +602,7 @@
             <valueCodeableConcept>
                <coding>
                   <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/JNUCS"/>
-                  <code value="ja"/>
+                  <code value="J"/>
                </coding>
             </valueCodeableConcept>
             <bodySite>
@@ -643,7 +643,7 @@
             <valueCodeableConcept>
                <coding>
                   <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/JNUCS"/>
-                  <code value="ja"/>
+                  <code value="J"/>
                </coding>
             </valueCodeableConcept>
             <bodySite>
@@ -684,7 +684,7 @@
             <valueCodeableConcept>
                <coding>
                   <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/JNUCS"/>
-                  <code value="ja"/>
+                  <code value="J"/>
                </coding>
             </valueCodeableConcept>
             <bodySite>
@@ -725,7 +725,7 @@
             <valueCodeableConcept>
                <coding>
                   <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/JNUCS"/>
-                  <code value="ja"/>
+                  <code value="J"/>
                </coding>
             </valueCodeableConcept>
             <bodySite>
@@ -766,7 +766,7 @@
             <valueCodeableConcept>
                <coding>
                   <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/JNUCS"/>
-                  <code value="ja"/>
+                  <code value="J"/>
                </coding>
             </valueCodeableConcept>
             <bodySite>
@@ -807,7 +807,7 @@
             <valueCodeableConcept>
                <coding>
                   <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/JNUCS"/>
-                  <code value="ja"/>
+                  <code value="J"/>
                </coding>
             </valueCodeableConcept>
             <bodySite>
@@ -848,7 +848,7 @@
             <valueCodeableConcept>
                <coding>
                   <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/JNUCS"/>
-                  <code value="ja"/>
+                  <code value="J"/>
                </coding>
             </valueCodeableConcept>
             <bodySite>
@@ -889,7 +889,7 @@
             <valueCodeableConcept>
                <coding>
                   <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/JNUCS"/>
-                  <code value="ja"/>
+                  <code value="J"/>
                </coding>
             </valueCodeableConcept>
             <bodySite>
@@ -930,7 +930,7 @@
             <valueCodeableConcept>
                <coding>
                   <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/JNUCS"/>
-                  <code value="ja"/>
+                  <code value="J"/>
                </coding>
             </valueCodeableConcept>
             <bodySite>
@@ -971,7 +971,7 @@
             <valueCodeableConcept>
                <coding>
                   <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/JNUCS"/>
-                  <code value="ja"/>
+                  <code value="J"/>
                </coding>
             </valueCodeableConcept>
             <bodySite>
@@ -1012,7 +1012,7 @@
             <valueCodeableConcept>
                <coding>
                   <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/JNUCS"/>
-                  <code value="ja"/>
+                  <code value="J"/>
                </coding>
             </valueCodeableConcept>
             <bodySite>
@@ -3150,7 +3150,7 @@
             <valueCodeableConcept>
                <coding>
                   <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/JNUCS"/>
-                  <code value="ja"/>
+                  <code value="J"/>
                </coding>
             </valueCodeableConcept>
             <bodySite>
@@ -3191,7 +3191,7 @@
             <valueCodeableConcept>
                <coding>
                   <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/JNUCS"/>
-                  <code value="ja"/>
+                  <code value="J"/>
                </coding>
             </valueCodeableConcept>
             <bodySite>
