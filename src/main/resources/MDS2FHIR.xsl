@@ -344,7 +344,6 @@
     </xsl:template>
 
     <xsl:template match="SYST">
-        <xsl:param name="Progress_ID"/>
         <xsl:param name="Patient_ID"/>
         <xsl:param name="Diagnosis_ID"/>
         <xsl:if test="./Systemische_Therapie_Beginn !=''">
