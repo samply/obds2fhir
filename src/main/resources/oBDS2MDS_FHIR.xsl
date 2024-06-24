@@ -19,11 +19,9 @@
             <xsl:apply-templates select="node()| @*"/>
         </Patienten>
     </xsl:template>
-
-    <!--Generate first Level PATIENT entity (Elements: Geschlecht | Geburtsdatum | Datum_des_letztbekannten_Vitalstatus | Vitalstatus | DKTK_ID | DKTK_LOCAL_ID)-->
     <xsl:template match="Patient">
         <Patient>
-            <xsl:variable name="Patient_Id" select="@Patient_ID"/>
+            <xsl:variable name="Patient_Id" select="if ($keep_internal_id=true()) then @Patient_ID else hash:hash(@Patient_ID,'','')"/>
             <xsl:variable name="Geburtsdatum" select="Patienten_Stammdaten/Geburtsdatum"/>
             <xsl:variable name="Geburtstag" select="string(replace($Geburtsdatum,'\d\d\d\d\-\d\d\-(\d\d)$','$1'))"/>
             <xsl:variable name="Geburtsmonat" select="string(replace($Geburtsdatum,'\d\d\d\d\-(\d\d)\-\d\d$','$1'))"/>
@@ -37,22 +35,14 @@
             xsi:ReplaceEmpty($Geburtsmonat),
             xsi:ReplaceEmpty($Geburtsjahr),
             xsi:ReplaceEmpty(@Patient_ID))"/>
-            <xsl:attribute name="Patient_ID">
-                <xsl:choose>
-                    <xsl:when test="$keep_internal_id=true()"><xsl:value-of select="$Patient_Id"/></xsl:when>
-                    <xsl:otherwise><xsl:value-of select="hash:hash($Patient_Id,'','')"/></xsl:otherwise>
-                </xsl:choose>
-            </xsl:attribute>
-            <xsl:apply-templates select="Patienten_Stammdaten/Geschlecht"/>
-            <xsl:apply-templates select="Patienten_Stammdaten/Geburtsdatum"/>
+            <xsl:attribute name="Patient_ID" select="$Patient_Id"/>
+            <xsl:apply-templates select="Patienten_Stammdaten/Geschlecht | Patienten_Stammdaten/Geburtsdatum"/>
             <!--<DKTK_ID>TODO</DKTK_ID>-->
             <DKTK_LOCAL_ID><xsl:value-of select="$Patient_Pseudonym"/></DKTK_LOCAL_ID>
-            <Vitalstatus_Gesamt>
-                <xsl:attribute name="Vitalstatus_ID"><xsl:value-of select="hash:hash($Patient_Id,'vital','')"/></xsl:attribute>
-                <xsl:choose>
-                    <xsl:when test="Patienten_Stammdaten/Vitalstatus_Datum"><Datum_des_letztbekannten_Vitalstatus><xsl:value-of select="Patienten_Stammdaten/Vitalstatus_Datum"/></Datum_des_letztbekannten_Vitalstatus></xsl:when>
-                    <xsl:otherwise><xsl:copy-of select="xsi:Datum_des_letztbekannten_Vitalstatus(Menge_Meldung)"/></xsl:otherwise>
-                </xsl:choose>
+            <Vitalstatus_Gesamt Vitalstatus_ID="{concat('vital', $Patient_Id)}">
+                <Datum_des_letztbekannten_Vitalstatus>
+                    <xsl:value-of select="if (Patienten_Stammdaten/Vitalstatus_Datum != '') then 'Patienten_Stammdaten/Vitalstatus_Datum' else xsi:Datum_des_letztbekannten_Vitalstatus(Menge_Meldung)"/>
+                </Datum_des_letztbekannten_Vitalstatus>
                 <xsl:choose>
                     <xsl:when test="lower-case(Patienten_Stammdaten/Vitalstatus)='verstorben'"><Vitalstatus>verstorben</Vitalstatus></xsl:when>
                     <xsl:when test="lower-case(Patienten_Stammdaten/Vitalstatus)='lebend'"><Vitalstatus >lebend</Vitalstatus></xsl:when>
@@ -79,20 +69,18 @@
             </xsl:if>-->
             <xsl:for-each select="Menge_Meldung/Meldung[not(Tumorzuordnung/@Tumor_ID=preceding-sibling::*/Tumorzuordnung/@Tumor_ID)]">
                 <xsl:apply-templates select="../../Menge_Meldung"><!--apply sequential tumor related reports -->
-                    <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
+                    <xsl:with-param name="Patient_Id" select="../../@Patient_ID"/>
                     <xsl:with-param name="Tumor_Id" select="Tumorzuordnung/@Tumor_ID"/>
                 </xsl:apply-templates>
             </xsl:for-each>
         </Patient>
     </xsl:template>
 
-    <!--Generate second Level DIAGNOSIS entity (Elements: Alter_bei_Erstdiagnose | Tumor_Diagnosedatum | Diagnose | ICD-Katalog_Version )-->
     <xsl:template match="Menge_Meldung">
         <xsl:param name="Patient_Id"/>
         <xsl:param name="Tumor_Id"/>
         <xsl:variable name="Tumor_Meldungen" select="Meldung[Tumorzuordnung/@Tumor_ID=$Tumor_Id]"/>
         <xsl:variable name="diagnoseDatum" select="$Tumor_Meldungen[1]/Tumorzuordnung/Diagnosedatum"/>
-
         <Diagnosis>
             <xsl:variable name="Diagnosis_Id" select="concat('dig', hash:hash($Patient_Id, $Tumor_Id, ''))"/>
             <xsl:attribute name="Diagnosis_ID" select="$Diagnosis_Id"/>
@@ -101,25 +89,24 @@
                 <xsl:apply-templates select="
                     $diagnoseDatum |
                     $Tumor_Meldungen[1]/Tumorzuordnung/Primaertumor_ICD |
-                    $Tumor_Meldungen/Diagnose/Primaertumor_Diagnosetext |
-                    $Tumor_Meldungen/Diagnose/Primaertumor_Topographie_Freitext |
-                    $Tumor_Meldungen/Diagnose/Diagnosesicherung"/>
+                    ($Tumor_Meldungen/(Diagnose|Pathologie)/Primaertumor_Diagnosetext)[last()] |
+                    ($Tumor_Meldungen/(Diagnose|Pathologie)/Primaertumor_Topographie_Freitext)[last()] |
+                    ($Tumor_Meldungen/(Diagnose|Pathologie)/Diagnosesicherung)[last()]"/>
                 <xsl:apply-templates select="
                     $Tumor_Meldungen/Diagnose/Allgemeiner_Leistungszustand |
-                    $Tumor_Meldungen/Diagnose/Menge_Weitere_Klassifikation">
+                    $Tumor_Meldungen/(Diagnose|Pathologie)/Menge_Weitere_Klassifikation">
                     <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                     <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
                     <xsl:with-param name="Origin" select="$diagnoseDatum"/>
                 </xsl:apply-templates>
             </xsl:if>
-            <!--Generate third Level TUMOR entity (Elements:  Lokalisation | ICD-O_Katalog_Topographie_Version |  Seitenlokalisation ) -->
             <Tumor>
                 <xsl:attribute name="Tumor_ID" select="$Diagnosis_Id"/>
                 <xsl:if test="$Tumor_Meldungen/Diagnose"><!-- don't create those elements if no Diagnose is delivered -->
-                    <xsl:apply-templates select="$Tumor_Meldungen/Diagnose/Primaertumor_Topographie_ICD_O | $Tumor_Meldungen[1]/Tumorzuordnung/Seitenlokalisation"/>
+                    <xsl:apply-templates select="($Tumor_Meldungen/(Diagnose|Pathologie)/Primaertumor_Topographie_ICD_O)[last()] | $Tumor_Meldungen[1]/Tumorzuordnung/Seitenlokalisation"/>
                 </xsl:if>
                 <!--Initiate all TUMOR child nodes-->
-                <xsl:apply-templates select="$Tumor_Meldungen/Diagnose">
+                <xsl:apply-templates select="$Tumor_Meldungen/Diagnose | $Tumor_Meldungen/Pathologie">
                     <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                     <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
                 </xsl:apply-templates>
@@ -199,7 +186,7 @@
         </Diagnosis>
     </xsl:template>
 
-    <xsl:template match="Diagnose">
+    <xsl:template match="Diagnose | Pathologie">
         <xsl:param name="Patient_Id"/>
         <xsl:param name="Tumor_Id"/>
         <xsl:for-each select="cTNM|pTNM">
@@ -263,7 +250,7 @@
                      <xsl:choose>
                          <xsl:when test="@Histologie_ID"><xsl:value-of select="hash:hash($Patient_Id, $Tumor_Id, @Histologie_ID)"/></xsl:when>
                          <xsl:otherwise>
-                             <xsl:value-of select="hash:hash($Patient_Id, $Tumor_Id, concat('gen', Tumor_Histologiedatum, Morphologie_ICD_O/Code, Grading))"/>
+                             <xsl:value-of select="hash:hash($Patient_Id, $Tumor_Id, concat('gen', Tumor_Histologiedatum, string-join(Morphologie_ICD_O/Code, ''), Grading))"/>
                          </xsl:otherwise>
                      </xsl:choose>
                  </xsl:variable>
@@ -298,7 +285,7 @@
         <xsl:param name="counter"/>
         <xsl:param name="Patient_Id"/>
         <xsl:param name="Tumor_Id"/>
-        <xsl:if test="Lokalisation and Diagnosedatum">
+        <xsl:if test="Lokalisation!='' and Diagnosedatum!=''">
            <Metastasis>
                <xsl:attribute name="Metastasis_ID">
                    <xsl:variable name="attribute" select="'gen',concat(Diagnosedatum,Lokalisation,$counter)"/>

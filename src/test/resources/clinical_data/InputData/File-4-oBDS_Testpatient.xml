@@ -253,103 +253,90 @@
 						</Morphologie_ICD_O>
 					</Tumorzuordnung>
 					<Pathologie Befund_ID="Befund_ID1">
-						<Primaertumor_Diagnosetext>thisValueIsIgnored</Primaertumor_Diagnosetext>
-						<Primaertumor_Topographie_ICD_O>
-							<Code>thisValueIsIgnored</Code>
-							<Version>thisValueIsIgnored</Version>
-						</Primaertumor_Topographie_ICD_O>
-						<Primaertumor_Topographie_Freitext>thisValueIsIgnored</Primaertumor_Topographie_Freitext>
-						<Diagnosesicherung>thisValueIsIgnored</Diagnosesicherung>
-						<Histologie Histologie_ID="040232">
+						<Primaertumor_Diagnosetext>Malignes Melanom oberer Rücken mittig-pathologie</Primaertumor_Diagnosetext>
+						<Primaertumor_Topographie_Freitext>oberer quadrant-pathologie</Primaertumor_Topographie_Freitext>
+						<Diagnosesicherung>2-pathologie</Diagnosesicherung>
+						<Histologie Histologie_ID="040232-pathologie">
 							<Tumor_Histologiedatum Datumsgenauigkeit="E">2024-03-02</Tumor_Histologiedatum>
-							<Histologie_EinsendeNr>thisValueIsIgnored</Histologie_EinsendeNr>
+							<Histologie_EinsendeNr>1923-pathologie</Histologie_EinsendeNr>
 							<Morphologie_ICD_O>
-								<Code>thisValueIsIgnored</Code>
-								<Version>thisValueIsIgnored</Version>
+								<Code>8721/3-pathologie</Code>
+								<Version>33-pathologie</Version>
 							</Morphologie_ICD_O>
 							<Morphologie_ICD_O>
-								<Code>thisValueIsIgnored</Code>
-								<Version>thisValueIsIgnored</Version>
+								<Code>8722/3-pathologie</Code>
+								<Version>31-pathologie</Version>
 							</Morphologie_ICD_O>
-							<Morphologie_Freitext>thisValueIsIgnored</Morphologie_Freitext>
-							<Grading>thisValueIsIgnored</Grading>
-							<LK_untersucht>thisValueIsIgnored</LK_untersucht>
-							<LK_befallen>thisValueIsIgnored</LK_befallen>
-							<Sentinel_LK_untersucht>thisValueIsIgnored</Sentinel_LK_untersucht>
-							<Sentinel_LK_befallen>thisValueIsIgnored</Sentinel_LK_befallen>
+							<Morphologie_Freitext>Noduläres malignes Melanom (NM)-pathologie</Morphologie_Freitext>
+							<Grading>T</Grading>
+							<LK_untersucht>50-pathologie</LK_untersucht>
+							<LK_befallen>50-pathologie</LK_befallen>
+							<Sentinel_LK_untersucht>50-pathologie</Sentinel_LK_untersucht>
+							<Sentinel_LK_befallen>50-pathologie</Sentinel_LK_befallen>
 						</Histologie>
 						<Menge_FM>
 							<Fernmetastase>
 								<Diagnosedatum Datumsgenauigkeit="E">2024-03-02</Diagnosedatum>
-								<Lokalisation>thisValueIsIgnored</Lokalisation>
+								<Lokalisation>PUL</Lokalisation>
 							</Fernmetastase>
 							<Fernmetastase>
 								<Diagnosedatum Datumsgenauigkeit="E">2024-03-02</Diagnosedatum>
-								<Lokalisation>thisValueIsIgnored</Lokalisation>
+								<Lokalisation>OSS</Lokalisation>
 							</Fernmetastase>
 						</Menge_FM>
 						<cTNM ID="1619002">
-							<Datum>thisValueIsIgnored</Datum>
-							<Version>thisValueIsIgnored</Version>
-							<y_Symbol>thisValueIsIgnored</y_Symbol>
-							<r_Symbol>thisValueIsIgnored</r_Symbol>
-							<a_Symbol>thisValueIsIgnored</a_Symbol>
-							<c_p_u_Praefix_T>thisValueIsIgnored</c_p_u_Praefix_T>
-							<T>thisValueIsIgnored</T>
-							<m_Symbol>thisValueIsIgnored</m_Symbol>
-							<c_p_u_Praefix_N>thisValueIsIgnored</c_p_u_Praefix_N>
-							<N>thisValueIsIgnored</N>
-							<c_p_u_Praefix_M>thisValueIsIgnored</c_p_u_Praefix_M>
-							<M>thisValueIsIgnored</M>
-							<L>thisValueIsIgnored</L>
-							<V>thisValueIsIgnored</V>
-							<Pn>thisValueIsIgnored</Pn>
-							<S>thisValueIsIgnored</S>
-							<UICC_Stadium>thisValueIsIgnored</UICC_Stadium>
+							<Datum>2024-05-29</Datum>
+							<Version>8-pathologie</Version>
+							<y_Symbol>y</y_Symbol>
+							<r_Symbol>r</r_Symbol>
+							<a_Symbol>a</a_Symbol>
+							<c_p_u_Praefix_T>u</c_p_u_Praefix_T>
+							<T>1a</T>
+							<m_Symbol>m1</m_Symbol>
+							<c_p_u_Praefix_N>c</c_p_u_Praefix_N>
+							<N>0</N>
+							<c_p_u_Praefix_M>c</c_p_u_Praefix_M>
+							<M>0</M>
+							<L>L0</L>
+							<V>Vx</V>
+							<Pn>PnX</Pn>
+							<S>SX</S>
+							<UICC_Stadium>IB</UICC_Stadium>
 						</cTNM>
 						<pTNM ID="1733002">
-							<Datum>thisValueIsIgnored</Datum>
-							<Version>thisValueIsIgnored</Version>
-							<y_Symbol>thisValueIsIgnored</y_Symbol>
-							<r_Symbol>thisValueIsIgnored</r_Symbol>
-							<a_Symbol>thisValueIsIgnored</a_Symbol>
-							<c_p_u_Praefix_T>thisValueIsIgnored</c_p_u_Praefix_T>
-							<T>thisValueIsIgnored</T>
-							<m_Symbol>thisValueIsIgnored</m_Symbol>
-							<c_p_u_Praefix_N>thisValueIsIgnored</c_p_u_Praefix_N>
-							<N>thisValueIsIgnored</N>
-							<c_p_u_Praefix_M>thisValueIsIgnored</c_p_u_Praefix_M>
-							<M>thisValueIsIgnored</M>
-							<L>thisValueIsIgnored</L>
-							<V>thisValueIsIgnored</V>
-							<Pn>thisValueIsIgnored</Pn>
-							<S>thisValueIsIgnored</S>
-							<UICC_Stadium>thisValueIsIgnored</UICC_Stadium>
+							<Datum>2024-03-31</Datum>
+							<Version>8-pathologie</Version>
+							<c_p_u_Praefix_T>p</c_p_u_Praefix_T>
+							<T>1a</T>
+							<c_p_u_Praefix_N>p</c_p_u_Praefix_N>
+							<N>0</N>
+							<c_p_u_Praefix_M>p</c_p_u_Praefix_M>
+							<UICC_Stadium>IB2</UICC_Stadium>
 						</pTNM>
-						<Lokale_Beurteilung_Residualstatus>thisValueIsIgnored</Lokale_Beurteilung_Residualstatus>
+						<Lokale_Beurteilung_Residualstatus>R1-pathologie</Lokale_Beurteilung_Residualstatus>
 						<Menge_Weitere_Klassifikation>
-							<Weitere_Klassifikation>
+							<Weitere_Klassifikation><!--problematic duplicate from pathology-->
 								<Datum Datumsgenauigkeit="E">2024-03-02</Datum>
-								<Name>thisValueIsIgnored</Name>
-								<Stadium>thisValueIsIgnored</Stadium>
+								<Name>Breslow</Name>
+								<Stadium>13,1</Stadium>
 							</Weitere_Klassifikation>
-							<Weitere_Klassifikation>
-								<Datum Datumsgenauigkeit="E">2024-03-02</Datum>
-								<Name>thisValueIsIgnored</Name>
-								<Stadium>thisValueIsIgnored</Stadium>
+							<Weitere_Klassifikation><!--problematic duplicate from diagnosis AND pathology-->
+								<Datum Datumsgenauigkeit="E">2023-07-18</Datum>
+								<Name>problematic duplicate: diagnosis and progress</Name>
+								<Stadium>I</Stadium>
 							</Weitere_Klassifikation>
 						</Menge_Weitere_Klassifikation>
 						<Menge_Genetik>
 							<Genetische_Variante>
 								<Datum Datumsgenauigkeit="E">2024-03-02</Datum>
-								<Bezeichnung>thisValueIsIgnored</Bezeichnung>
-								<Auspraegung>thisValueIsIgnored</Auspraegung>
+								<Bezeichnung>pathologie</Bezeichnung>
+								<Auspraegung>pathologie</Auspraegung>
 								<!--								<Sonstige_Auspraegung>thisValueIsIgnored</Sonstige_Auspraegung>-->
 							</Genetische_Variante>
 							<Genetische_Variante>
 								<Datum Datumsgenauigkeit="E">2024-03-02</Datum>
-								<Bezeichnung>thisValueIsIgnored</Bezeichnung>
-								<Auspraegung>thisValueIsIgnored</Auspraegung>
+								<Bezeichnung>pathologie</Bezeichnung>
+								<Auspraegung>pathologie</Auspraegung>
 								<!--								<Sonstige_Auspraegung>thisValueIsIgnored</Sonstige_Auspraegung>-->
 							</Genetische_Variante>
 						</Menge_Genetik>
@@ -381,7 +368,7 @@
 								<ZANR>thisValueIsIgnored</ZANR>
 							</Ident_Nummern>
 						</Einsender>
-						<Befundtext>thisValueIsIgnored</Befundtext>
+						<Befundtext>pathologie</Befundtext>
 					</Pathologie>
 				</Meldung>
 				<Meldung Meldung_ID="12015" Melder_ID="3101">

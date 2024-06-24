@@ -46,8 +46,7 @@
                 <xsl:when test="lower-case(normalize-space(Patienten_Stammdaten/DKTK_Einwilligung_erfolgt)) = 'true'"><DKTK_Einwilligung_erfolgt>true</DKTK_Einwilligung_erfolgt></xsl:when>
                 <xsl:otherwise><DKTK_Einwilligung_erfolgt>false</DKTK_Einwilligung_erfolgt></xsl:otherwise>
             </xsl:choose>
-            <Vitalstatus_Gesamt>
-                <xsl:attribute name="Vitalstatus_ID"><xsl:value-of select="concat(vital, $Patient_Id)"/></xsl:attribute>
+            <Vitalstatus_Gesamt Vitalstatus_ID="{concat('vital', $Patient_Id)}">
                 <Datum_des_letztbekannten_Vitalstatus>
                     <xsl:value-of select="if (Patienten_Stammdaten/Vitalstatus_Datum != '') then 'Patienten_Stammdaten/Vitalstatus_Datum' else xsi:Datum_des_letztbekannten_Vitalstatus(Menge_Meldung)"/>
                 </Datum_des_letztbekannten_Vitalstatus>
@@ -422,7 +421,6 @@
                 </Komplikationen>
             </xsl:if>
             <xsl:apply-templates select="Residualstatus[not(concat(Lokale_Beurteilung_Residualstatus,Gesamtbeurteilung_Residualstatus)=following-sibling::*/concat(Lokale_Beurteilung_Residualstatus,Gesamtbeurteilung_Residualstatus))]"/>
-
             <xsl:for-each select="TNM">
                 <xsl:choose>
                     <xsl:when test="@TNM_ID">
