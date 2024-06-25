@@ -1330,7 +1330,7 @@
                                     <xsl:if test="TNM-Version!=''">
                                         <version value="{TNM-Version}"/>
                                     </xsl:if>
-                                    <code value="{UICC_Stadium}"/>
+                                    <code value="{UICC_Stadium[1]}"/>
                                 </coding>
                             </valueCodeableConcept>
                         </xsl:if>

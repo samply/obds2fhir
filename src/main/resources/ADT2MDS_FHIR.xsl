@@ -305,7 +305,7 @@
                     <xsl:variable name="attribute">
                         <xsl:choose>
                             <xsl:when test="@TNM_ID"><xsl:value-of select="@TNM_ID"/></xsl:when>
-                            <xsl:otherwise><xsl:value-of select="'gen',concat(string-join(xsi:DatumID(TNM_Datum)),TNM_T,TNM_N,TNM_M,TNM_c_p_u_Praefix_T,TNM_c_p_u_Praefix_N,TNM_c_p_u_Praefix_M)"/></xsl:otherwise>
+                            <xsl:otherwise><xsl:value-of select="'gen',concat(string-join(xsi:DatumID(TNM_Datum)),TNM_T,TNM_N,TNM_M,TNM_c_p_u_Praefix_T,TNM_c_p_u_Praefix_N,TNM_c_p_u_Praefix_M,name(.))"/></xsl:otherwise>
                         </xsl:choose>
                     </xsl:variable>
                     <xsl:value-of select="concat('tnm', hash:hash($Patient_Id, $Tumor_Id, $attribute))" />
@@ -327,7 +327,18 @@
                 <xsl:if test="TNM_V"><V><xsl:value-of select="TNM_V"/></V></xsl:if>
                 <xsl:if test="TNM_Pn"><Pn><xsl:value-of select="TNM_Pn"/></Pn></xsl:if>
                 <xsl:if test="TNM_S"><S><xsl:value-of select="TNM_S"/></S></xsl:if>
-                <xsl:if test="UICC"><UICC_Stadium><xsl:value-of select="UICC"/></UICC_Stadium></xsl:if>
+                <xsl:choose>
+                    <xsl:when test="UICC!=''">
+                        <UICC_Stadium><xsl:value-of select="UICC"/></UICC_Stadium>
+                    </xsl:when>
+                    <xsl:when test="../Menge_Weitere_Klassifikation">
+                        <xsl:for-each select="../Menge_Weitere_Klassifikation/Weitere_Klassifikation">
+                            <xsl:if test="contains(lower-case(normalize-space(Name)), 'uicc')">
+                                <UICC_Stadium><xsl:value-of select="Stadium"/></UICC_Stadium>
+                            </xsl:if>
+                        </xsl:for-each>
+                    </xsl:when>
+                </xsl:choose>
             </TNM>
         </xsl:if>
     </xsl:template>

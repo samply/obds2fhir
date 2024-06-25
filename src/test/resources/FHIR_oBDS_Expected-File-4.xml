@@ -3363,7 +3363,7 @@
                <coding>
                   <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/UiccstadiumCS"/>
                   <version value="8"/>
-                  <code value="I"/>
+                  <code value="II"/>
                </coding>
             </valueCodeableConcept>
             <component>

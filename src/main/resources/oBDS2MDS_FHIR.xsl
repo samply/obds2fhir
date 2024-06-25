@@ -305,13 +305,20 @@
             <xsl:variable name="attribute">
                 <xsl:choose>
                     <xsl:when test="@ID"><xsl:value-of select="@ID"/></xsl:when>
-                    <xsl:otherwise><xsl:value-of select="'gen',concat(Datum,T,N,M,c_p_u_Praefix_T,c_p_u_Praefix_N,c_p_u_Praefix_M)"/></xsl:otherwise>
+                    <xsl:otherwise><xsl:value-of select="'gen',concat(Datum,T,N,M,c_p_u_Praefix_T,c_p_u_Praefix_N,c_p_u_Praefix_M,name(.))"/></xsl:otherwise>
                 </xsl:choose>
             </xsl:variable>
             <TNM>
                 <xsl:attribute name="TNM_ID" select="concat('tnm', hash:hash($Patient_Id, $Tumor_Id, $attribute))" />
                 <gesamtpraefix><xsl:value-of select="name(.)"/></gesamtpraefix>
                 <xsl:apply-templates select="node()"/>
+                <xsl:if test="not(UICC_Stadium!='')">
+                    <xsl:for-each select="../Menge_Weitere_Klassifikation/Weitere_Klassifikation">
+                        <xsl:if test="contains(lower-case(normalize-space(Name)), 'uicc')">
+                            <UICC_Stadium><xsl:value-of select="Stadium"/></UICC_Stadium>
+                        </xsl:if>
+                    </xsl:for-each>
+                </xsl:if>
             </TNM>
         </xsl:if>
     </xsl:template>
