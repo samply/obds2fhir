@@ -122,7 +122,7 @@
             <recordedDate value="2024-03-02"/>
             <stage>
                <assessment>
-                  <reference value="Observation/tnmffea9c85fc6dd2d8"/>
+                  <reference value="Observation/tnmb3de14d4e86f95ef"/>
                </assessment>
             </stage>
             <stage>
@@ -1029,10 +1029,10 @@
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/Observation/tnmffea9c85fc6dd2d8"/>
+      <fullUrl value="http://example.com/Observation/tnmb3de14d4e86f95ef"/>
       <resource>
          <Observation>
-            <id value="tnmffea9c85fc6dd2d8"/>
+            <id value="tnmb3de14d4e86f95ef"/>
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-TNMc"/>
             </meta>
@@ -1225,7 +1225,7 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="Observation/tnmffea9c85fc6dd2d8"/>
+         <url value="Observation/tnmb3de14d4e86f95ef"/>
       </request>
    </entry>
    <entry>
@@ -1782,7 +1782,7 @@
                   </coding>
                </valueCodeableConcept>
             </extension>
-            <status value="completed"/>
+            <status value="not-done"/>
             <category>
                <coding>
                   <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTTherapieartCS"/>
@@ -2342,7 +2342,7 @@
                   <text value="Atezolizumab/_Bevacizumab"/>
                </valueCodeableConcept>
             </extension>
-            <status value="completed"/>
+            <status value="not-taken"/>
             <category>
                <coding>
                   <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTTherapieartCS"/>

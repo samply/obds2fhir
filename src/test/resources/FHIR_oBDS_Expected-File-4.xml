@@ -2397,7 +2397,7 @@
                   </coding>
                </valueCodeableConcept>
             </extension>
-            <status value="completed"/>
+            <status value="not-done"/>
             <category>
                <coding>
                   <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTTherapieartCS"/>
@@ -2894,7 +2894,7 @@
                   <text value="Atezolizumab/_Bevacizumab"/>
                </valueCodeableConcept>
             </extension>
-            <status value="completed"/>
+            <status value="not-taken"/>
             <category>
                <coding>
                   <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTTherapieartCS"/>

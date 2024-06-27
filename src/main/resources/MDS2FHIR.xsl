@@ -423,7 +423,7 @@
                         </xsl:if>
                         <status>
                             <xsl:attribute name="value">
-                                <xsl:value-of select="mds2fhir:getTreatmentStatus(Meldeanlass,SYST_Ende_Grund)"/>
+                                <xsl:value-of select="mds2fhir:getMedicationStatementTreatmentStatus(Meldeanlass,SYST_Ende_Grund)"/>
                             </xsl:attribute>
                         </status>
                         <xsl:if test="Therapieart">
@@ -604,7 +604,7 @@
                     </xsl:if>
                     <status>
                         <xsl:attribute name="value">
-                            <xsl:value-of select="mds2fhir:getTreatmentStatus(Meldeanlass,Ende_Grund)"/>
+                            <xsl:value-of select="mds2fhir:getProcedureTreatmentStatus(Meldeanlass,Ende_Grund)"/>
                         </xsl:attribute>
                     </status>
                     <category>
@@ -2176,7 +2176,7 @@
         </xsl:choose>
     </xsl:function>
 
-    <xsl:function name="mds2fhir:getTreatmentStatus">
+    <xsl:function name="mds2fhir:getMedicationStatementTreatmentStatus">
         <xsl:param name="meldeanlass"/>
         <xsl:param name="endeGrund"/>
         <xsl:choose>
@@ -2194,6 +2194,34 @@
             </xsl:when>
             <xsl:when test="$meldeanlass='behandlungsbeginn'">
                 <xsl:value-of select="'active'"/>
+            </xsl:when>
+            <xsl:when test="$meldeanlass='behandlungsende'">
+                <xsl:value-of select="'completed'"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="'unknown'"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+
+    <xsl:function name="mds2fhir:getProcedureTreatmentStatus">
+        <xsl:param name="meldeanlass"/>
+        <xsl:param name="endeGrund"/>
+        <xsl:choose>
+            <xsl:when test="$endeGrund='E'">
+                <xsl:value-of select="'completed'"/>
+            </xsl:when>
+            <xsl:when test="$endeGrund='U'">
+                <xsl:value-of select="'unknown'"/>
+            </xsl:when>
+            <xsl:when test="$endeGrund='A' or $endeGrund='P' or $endeGrund='S'">
+                <xsl:value-of select="'stopped'"/>
+            </xsl:when>
+            <xsl:when test="$endeGrund='V'">
+                <xsl:value-of select="'not-done'"/>
+            </xsl:when>
+            <xsl:when test="$meldeanlass='behandlungsbeginn'">
+                <xsl:value-of select="'in-progress'"/>
             </xsl:when>
             <xsl:when test="$meldeanlass='behandlungsende'">
                 <xsl:value-of select="'completed'"/>

@@ -597,7 +597,7 @@
 								</Applikationsart>
 							</Bestrahlung>
 						</Menge_Bestrahlung>
-						<Ende_Grund>E</Ende_Grund>
+						<Ende_Grund>V</Ende_Grund>
 						<Nebenwirkungen>
 							<Grad_maximal2_oder_unbekannt>1</Grad_maximal2_oder_unbekannt>
 							<Menge_Nebenwirkung>
@@ -664,7 +664,7 @@
 								</ATC>
 							</Substanz>
 						</Menge_Substanz>
-						<Ende_Grund>E</Ende_Grund>
+						<Ende_Grund>V</Ende_Grund>
 						<Ende>2023-09-15</Ende>
 						<Nebenwirkungen>
 							<Menge_Nebenwirkung>
