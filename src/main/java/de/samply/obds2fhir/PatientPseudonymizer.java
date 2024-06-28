@@ -1,4 +1,4 @@
-package de.samply.adt2fhir;
+package de.samply.obds2fhir;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -27,8 +27,12 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PatientPseudonymizer extends ExtensionFunctionDefinition {
+    private static final Logger logger = LoggerFactory.getLogger(PatientPseudonymizer.class);
+
     private String mainzelliste_url;
     private boolean anonymize=false;
     private MainzellisteConnection mainzellisteConnection;
@@ -46,12 +50,14 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
                 net.sf.saxon.value.SequenceType.SINGLE_STRING,
                 net.sf.saxon.value.SequenceType.SINGLE_STRING,
                 net.sf.saxon.value.SequenceType.SINGLE_STRING,
+                net.sf.saxon.value.SequenceType.SINGLE_STRING,
+                net.sf.saxon.value.SequenceType.SINGLE_STRING,
                 net.sf.saxon.value.SequenceType.SINGLE_STRING };
     }
 
     @Override
     public StructuredQName getFunctionQName() {
-        return new StructuredQName("hash", "java:de.samply.adt2fhir", "pseudonymize");
+        return new StructuredQName("hash", "java:de.samply.obds2fhir", "pseudonymize");
     }
 
     @Override
@@ -70,16 +76,18 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
                 String prename = args[1].iterate().next().getStringValue();
                 String surname = args[2].iterate().next().getStringValue();
                 String formername = args[3].iterate().next().getStringValue();
-                String birthdate = args[4].iterate().next().getStringValue();
-                String identifier = args[5].iterate().next().getStringValue();
+                String birthday = args[4].iterate().next().getStringValue();
+                String birthmonth = args[5].iterate().next().getStringValue();
+                String birthyear = args[6].iterate().next().getStringValue();
+                String identifier = args[7].iterate().next().getStringValue();
 
                 if (anonymize) {
-                    output = DigestUtils.sha256Hex(gender + prename + surname + formername + birthdate + identifier + salt).substring(32);
+                    output = DigestUtils.sha256Hex(gender + prename + surname + formername + birthday + birthmonth + birthyear + identifier + salt).substring(32);
                 } else {
                     try {
-                        output=pseudonymizationCall(gender, prename, surname, formername, birthdate, identifier);
+                        output=pseudonymizationCall(gender, prename, surname, formername, birthday, birthmonth, birthyear, identifier);
                     } catch (URISyntaxException | MainzellisteNetworkException | InvalidSessionException | IOException e) {
-                        e.printStackTrace();
+                        logger.error("Pseudonymization error: " + e);
                     }
                 }
                 return StringValue.makeStringValue(output);
@@ -88,26 +96,25 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
         };
     }
 
-    private String pseudonymizationCall(String gender, String prename, String surname, String formername, String birthdate, String identifier) throws URISyntaxException, MainzellisteNetworkException, InvalidSessionException, IOException {
+    private String pseudonymizationCall(String gender, String prename, String surname, String formername, String birthday, String birthmonth, String birthyear, String identifier) throws URISyntaxException, MainzellisteNetworkException, InvalidSessionException, IOException {
         String pseudonym="";
-        String[] birthdateParts = !birthdate.equals("empty") ? birthdate.split("[.]") : new String[]{"empty", "empty", "empty"};
         this.addPatientToken = session.getToken(token);
-        HttpPost httppost = createHttpPost(prename, surname, formername, birthdateParts[0], birthdateParts[1], birthdateParts[2], gender);
+        HttpPost httppost = createHttpPost(prename, surname, formername, birthday, birthmonth, birthyear, gender);
         HttpResponse response = httpclient.execute(httppost);
         if (response.getStatusLine().getStatusCode()==401) {
             createMainzellisteSession();
             this.addPatientToken = session.getToken(token);
             response = httpclient.execute(new HttpPost(mainzelliste_url+"/patients?tokenId="+addPatientToken));
-            System.out.println("Creating new session");
+            logger.info("Creating new session");
         }
         if (response.getStatusLine().getStatusCode()==400){
             this.httpclient = HttpClients.createDefault();
-            httppost = createHttpPost(preprocessIDAT(prename), preprocessIDAT(surname), preprocessIDAT(formername), birthdateParts[0], birthdateParts[1], birthdateParts[2], gender);
+            httppost = createHttpPost(preprocessIDAT(prename), preprocessIDAT(surname), preprocessIDAT(formername), birthday, birthmonth, birthyear, gender);
             response = httpclient.execute(httppost);
-            System.out.println("\u001B[A"+"\u001B[100C" + "Unallowed character in patient "+ identifier + " ... autocorrected\n");
+            logger.warn("\u001B[A"+"\u001B[100C" + "Unallowed character in patient "+ identifier + " ... autocorrected\n");
         }
         if (response.getStatusLine().getStatusCode()!=201) {
-            System.out.println("ERROR - Pseudonymization response: " +  response.getStatusLine().getStatusCode());
+            logger.error("Pseudonymization response: " +  response.getStatusLine().getStatusCode());
         }
         String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
 
@@ -121,6 +128,7 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
 
     public void initialize (boolean pseudonymize){
         if (pseudonymize){
+            logger.debug("Pseudonymization is activated, setting environment");
             this.anonymize=false;
             this.mainzelliste_url=System.getenv("MAINZELLISTE_URL");
             String mainzelliste_apikey=System.getenv("MAINZELLISTE_APIKEY");
@@ -128,24 +136,27 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
                 this.mainzellisteConnection = new MainzellisteConnection(mainzelliste_url, mainzelliste_apikey);
                 this.token = new AddPatientToken();
                 AuditTrailLog auditTrailLog = new AuditTrailLog();
-                auditTrailLog.setUsername("adt2fhir");
+                auditTrailLog.setUsername("obds2fhir");
                 auditTrailLog.setRemoteSystem(String.valueOf(InetAddress.getLocalHost()));
                 auditTrailLog.setReasonForChange("Add Patient");
                 this.token.setAuditTrailLog(auditTrailLog);
                 this.token.addIdType(System.getenv("IDTYPE"));
-                this.httpclient = HttpClients.createDefault();
+                this.httpclient = Util.getHttpClient(Boolean.parseBoolean(System.getenv().getOrDefault("SSL_CERTIFICATE_VALIDATION","true")));
                 createMainzellisteSession();
             } catch (URISyntaxException | MainzellisteNetworkException | InvalidSessionException | UnknownHostException e) {
+                logger.error("Can not initialize Mainzelliste connection: " + e);
                 throw new RuntimeException(e);
             }
         }
         else {
+            logger.debug("Pseudonymization is deactivated");
             this.anonymize=true;
             this.salt=System.getenv("SALT");
         }
     }
 
     private void createMainzellisteSession() throws InvalidSessionException, MainzellisteNetworkException {
+        logger.debug("creating Mainzelliste Session");
         this.session = mainzellisteConnection.createSession();
     }
 
@@ -162,12 +173,22 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
         if (!birthyear.equals("empty")) idat.add(new BasicNameValuePair("Geburtsjahr", birthyear));
         if (!gender.equals("empty")) idat.add(new BasicNameValuePair("Geschlecht", gender));
         idat.add(new BasicNameValuePair("sureness", "true"));
-
+        logger.debug("Posting IDAT to Mainzelliste: " +
+                        "Vorname - " + preprocessIDAT(prename, ".", "*") +
+                        "Nachname - " + preprocessIDAT(surname, ".", "*") +
+                        "Fruehere_Namen - " + preprocessIDAT(formername, ".", "*") +
+                        "Geburtstag - " + preprocessIDAT(birthday, ".", "*") +
+                        "Geburtsmonat - " + preprocessIDAT(birthmonth, ".", "*") +
+                        "Geburtsjahr - " + preprocessIDAT(birthyear, ".", "*") +
+                        "Geschlecht - " + preprocessIDAT(gender, ".", "*"));
         httppost.setEntity(new UrlEncodedFormEntity(idat, StandardCharsets.UTF_8));
         return httppost;
     }
 
     private String preprocessIDAT (String name){
-        return name.replaceAll("[^a-zA-ZäÄöÖüÜßéÉ]", "");
+        return preprocessIDAT(name, "[^a-zA-ZäÄöÖüÜßéÉ]", "");
+    }
+    private String preprocessIDAT (String name, String regex, String replacement){
+        return name.replaceAll(regex, replacement);
     }
 }

@@ -1,4 +1,4 @@
-<Bundle xmlns="http://hl7.org/fhir" xmlns:hash="java:de.samply.adt2fhir">
+<Bundle xmlns="http://hl7.org/fhir" xmlns:hash="java:de.samply.obds2fhir">
    <id value="259e9720bd2aeef9"/>
    <type value="transaction"/>
    <entry>
@@ -52,7 +52,6 @@
             </subject>
             <onsetDateTime value="2021-04-13"/>
             <recordedDate value="2021-04-13"/>
-            <evidence/>
          </Condition>
       </resource>
       <request>
@@ -68,7 +67,7 @@
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Procedure-Strahlentherapie"/>
             </meta>
-            <status value="unknown"/>
+            <status value="stopped"/>
             <category>
                <coding>
                   <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTTherapieartCS"/>
