@@ -1,10 +1,14 @@
-# oBDS2FHIR
+# oBDS2FHIR / ADT2FHIR
 
-oBDS2FHIR (formerly ADT2FHIR) is a tool to transform files exported by German tumor documentation systems into FHIR bundles for use in the [Bridgehead](https://github.com/samply/bridgehead) (or other FHIR-based software).
+oBDS2FHIR (also called ADT2FHIR) is a tool to transform files exported by German tumor documentation systems into FHIR bundles for use in the [Bridgehead](https://github.com/samply/bridgehead) (or other FHIR-based software).
 
 Using the two XSLT files ([oBDS2MDS.xsl](https://github.com/samply/obds2fhir/blob/main/src/main/resources/oBDS2MDS_FHIR.xsl) and [MDS2FHIR.xsl](https://github.com/samply/obds2fhir/blob/main/src/main/resources/MDS2FHIR.xsl)), XML files conforming to [oBDS](https://basisdatensatz.de/xml/) or the legacy version [ADT/GEKID V2*](https://basisdatensatz.de/xml/) can be transformed into FHIR resources conforming to [de.dktk.oncology](https://simplifier.net/packages/de.dktk.oncology/).
 
 This software was originally created for the [German Cancer Consortium's Clinical Communication Platform](https://dktk.dkfz.de/) and has since been made open source.
+
+## Two names, one software
+
+**ADT2FHIR** was originally developed in 2020 to integrate the ADT/GEKID dataset, which was hence renamed to Onkologischer Basisdatensatz (oBDS). Thus, ADT2FHIR is now also known as **oBDS2FHIR** (terms are used synonymously).
 
 ## Usage
 
