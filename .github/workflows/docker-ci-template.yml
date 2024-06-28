@@ -36,7 +36,7 @@ jobs:
       # build-args: |
       #   foo: bar
       # Define the target platforms of the docker build (default "linux/amd64,linux/arm64/v8")
-      # build-platforms: "linux/amd64"
+      build-platforms: "linux/amd64"
       # If your actions generate an artifact in a previous build step, you can tell this workflow to download it
       # '*' will download all artifacts to subdirectories.
       # artifact-name: '' # the default '' doesn't try to download an artifact

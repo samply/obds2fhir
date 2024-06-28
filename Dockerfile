@@ -5,8 +5,6 @@ COPY . ./
 RUN mvn clean install -U
 
 FROM eclipse-temurin:17-jre-alpine
-RUN apk upgrade
-#RUN	apt-get update && apt-get install -y curl iputils-ping wget
 COPY --from=build /app/target/obds2fhir*with-dependencies.jar /obds2fhir/obds2fhir.jar
 ADD src/docker/start.sh                         /obds2fhir/
 RUN chmod +x                                    /obds2fhir/start.sh
