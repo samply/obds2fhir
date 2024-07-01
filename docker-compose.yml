@@ -4,7 +4,7 @@ volumes:
 
 services:
   obds2fhir:
-    image: docker.verbis.dkfz.de/ccp/obds2fhir:main
+    image: docker.verbis.dkfz.de/cache/samply/obds2fhir:develop
     environment:
       #FILE_PATH: "/obds2fhir/clinical_data"
       STORE_PATH: "http://host.docker.internal:8090/fhir"

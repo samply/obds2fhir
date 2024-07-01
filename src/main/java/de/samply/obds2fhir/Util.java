@@ -38,12 +38,11 @@ public class Util {
     }
 
     public static boolean checkConnections(String servicename, String URL, boolean waitForConnection) {
-        boolean serviceAvailable = false;
-        CloseableHttpClient httpclient = null;
+        CloseableHttpClient httpclient;
         httpclient = getHttpClient(Boolean.parseBoolean(System.getenv().getOrDefault("SSL_CERTIFICATE_VALIDATION","")));
         HttpResponse httpResponse;
         HttpGet httpGetRequest;
-        if (URL != null && !URL.isEmpty()) {
+        if (URL != null && URL.startsWith("http")) {
             httpGetRequest = new HttpGet(URL);
             String encoding = Base64.getEncoder().encodeToString(System.getenv().getOrDefault("STORE_AUTH","").getBytes());
             httpGetRequest.addHeader("Authorization", "Basic " + encoding);
@@ -51,7 +50,7 @@ public class Util {
                 httpResponse = httpclient.execute(httpGetRequest);
                 if (httpResponse.getStatusLine().getReasonPhrase().equals("OK") || httpResponse.getStatusLine().getStatusCode()==200) {
                     logger.info(servicename + " is accessible: " + URL);
-                    serviceAvailable = true;
+                    return true;
                 }
                 else {
                     if (waitForConnection){//if true, then recursively execute again
@@ -78,7 +77,7 @@ public class Util {
         else {
             logger.info(servicename + " url not specified. Skipping relevant processes");
         }
-        return serviceAvailable;
+        return false;
     }
 
     public static int getFileVersion(String xmlContent) throws IllegalArgumentException {
