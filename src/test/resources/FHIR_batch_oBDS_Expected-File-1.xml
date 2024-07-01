@@ -1,11 +1,11 @@
 <Bundle xmlns="http://hl7.org/fhir" xmlns:hash="java:de.samply.obds2fhir">
-   <id value="159e9710bd1eeef9"/>
+   <id value="1302b6d11c5b628d"/>
    <type value="batch"/>
    <entry>
-      <fullUrl value="http://example.com/Observation/2e044b903a73bfe6"/>
+      <fullUrl value="http://example.com/Observation/vital1302b6d11c5b628d"/>
       <resource>
          <Observation>
-            <id value="2e044b903a73bfe6"/>
+            <id value="vital1302b6d11c5b628d"/>
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Vitalstatus"/>
             </meta>
@@ -17,9 +17,9 @@
                </coding>
             </code>
             <subject>
-               <reference value="Patient/159e9710bd1eeef9"/>
+               <reference value="Patient/1302b6d11c5b628d"/>
             </subject>
-            <effectiveDateTime value="2021-08-23"/>
+            <effectiveDateTime value="2024-07-20"/>
             <valueCodeableConcept>
                <coding>
                   <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VitalstatusCS"/>
@@ -30,7 +30,7 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="Observation/2e044b903a73bfe6"/>
+         <url value="Observation/vital1302b6d11c5b628d"/>
       </request>
    </entry>
 </Bundle>

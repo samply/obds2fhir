@@ -2633,6 +2633,14 @@
                      </coding>
                   </valueCodeableConcept>
                </extension>
+               <extension url="Strahlenart">
+                  <valueCodeableConcept>
+                     <coding>
+                        <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/StrahlenartCS"/>
+                        <code value="UH"/>
+                     </coding>
+                  </valueCodeableConcept>
+               </extension>
                <extension url="Zielgebiet">
                   <valueCodeableConcept>
                      <coding>

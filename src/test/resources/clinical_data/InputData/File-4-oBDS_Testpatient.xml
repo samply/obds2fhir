@@ -874,6 +874,40 @@
 			</Menge_Meldung>
 			<Anmerkung>thisValueIsIgnored</Anmerkung>
 		</Patient>
+		<Patient Patient_ID="testpatient-oBDS-2">
+			<Patienten_Stammdaten>
+				<Nachname>Mustermann</Nachname>
+				<Vornamen>Max</Vornamen>
+				<Geburtsname>Beispielname</Geburtsname>
+				<Geschlecht>M</Geschlecht>
+				<Geburtsdatum Datumsgenauigkeit="E">1989-04-13</Geburtsdatum>
+			</Patienten_Stammdaten>
+			<Menge_Meldung>
+				<Meldung Meldung_ID="12122" Melder_ID="3101">
+					<Tumorzuordnung Tumor_ID="012002">
+						<Primaertumor_ICD>
+							<Code>C43.4</Code>
+							<Version>10 2024 GM</Version>
+						</Primaertumor_ICD>
+						<Diagnosedatum Datumsgenauigkeit="E">2024-03-02</Diagnosedatum>
+						<Seitenlokalisation>M</Seitenlokalisation>
+						<Morphologie_ICD_O>
+							<Code>8721/3</Code>
+							<Version>33</Version>
+						</Morphologie_ICD_O>
+					</Tumorzuordnung>
+					<Diagnose>
+						<Primaertumor_Diagnosetext>Malignes Melanom oberer Rücken mittig</Primaertumor_Diagnosetext>
+						<Primaertumor_Topographie_ICD_O>
+							<Code>C44.5</Code>
+							<Version>33</Version>
+						</Primaertumor_Topographie_ICD_O>
+						<Primaertumor_Topographie_Freitext>oberer quadrant</Primaertumor_Topographie_Freitext>
+						<Diagnosesicherung>2</Diagnosesicherung>
+					</Diagnose>
+				</Meldung>
+			</Menge_Meldung>
+		</Patient>
 	</Menge_Patient>
 	<Menge_Melder>
 		<Melder ID="3101">

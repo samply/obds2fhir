@@ -38,12 +38,11 @@ public class Util {
     }
 
     public static boolean checkConnections(String servicename, String URL, boolean waitForConnection) {
-        boolean serviceAvailable = false;
-        CloseableHttpClient httpclient = null;
+        CloseableHttpClient httpclient;
         httpclient = getHttpClient(Boolean.parseBoolean(System.getenv().getOrDefault("SSL_CERTIFICATE_VALIDATION","")));
         HttpResponse httpResponse;
         HttpGet httpGetRequest;
-        if (URL != null && !URL.isEmpty()) {
+        if (URL != null && URL.startsWith("http")) {
             httpGetRequest = new HttpGet(URL);
             String encoding = Base64.getEncoder().encodeToString(System.getenv().getOrDefault("STORE_AUTH","").getBytes());
             httpGetRequest.addHeader("Authorization", "Basic " + encoding);
@@ -51,13 +50,13 @@ public class Util {
                 httpResponse = httpclient.execute(httpGetRequest);
                 if (httpResponse.getStatusLine().getReasonPhrase().equals("OK") || httpResponse.getStatusLine().getStatusCode()==200) {
                     logger.info(servicename + " is accessible: " + URL);
-                    serviceAvailable = true;
+                    return true;
                 }
                 else {
                     if (waitForConnection){//if true, then recursively execute again
                         logger.info("Waiting for service " + servicename + ", trying again...");
                         TimeUnit.SECONDS.sleep(2);
-                        checkConnections(servicename,URL,waitForConnection);
+                        return checkConnections(servicename,URL,waitForConnection);
                     }
                     logger.info(servicename + " is NOT accessible: " + URL + httpResponse.getStatusLine());
                 }
@@ -71,14 +70,14 @@ public class Util {
                     } catch (InterruptedException ex) {
                         logger.error("InterruptedException while waiting" + e);
                     }
-                    checkConnections(servicename,URL,waitForConnection);
+                    return checkConnections(servicename,URL,waitForConnection);
                 }
             }
         }
         else {
             logger.info(servicename + " url not specified. Skipping relevant processes");
         }
-        return serviceAvailable;
+        return false;
     }
 
     public static int getFileVersion(String xmlContent) throws IllegalArgumentException {

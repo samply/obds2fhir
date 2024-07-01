@@ -22,23 +22,32 @@
     <xsl:template match="Patient">
         <Patient>
             <xsl:variable name="Patient_Id" select="if ($keep_internal_id=true()) then @Patient_ID else hash:hash(@Patient_ID,'','')"/>
+            <xsl:attribute name="Patient_ID" select="$Patient_Id"/>
             <xsl:variable name="Geburtsdatum" select="Patienten_Stammdaten/Geburtsdatum"/>
             <xsl:variable name="Geburtstag" select="string(replace($Geburtsdatum,'\d\d\d\d\-\d\d\-(\d\d)$','$1'))"/>
             <xsl:variable name="Geburtsmonat" select="string(replace($Geburtsdatum,'\d\d\d\d\-(\d\d)\-\d\d$','$1'))"/>
             <xsl:variable name="Geburtsjahr" select="string(replace($Geburtsdatum,'(\d\d\d\d)\-\d\d\-\d\d$','$1'))"/>
-            <xsl:variable name="Patient_Pseudonym" select="hash:pseudonymize(
-            xsi:ReplaceEmpty(Patienten_Stammdaten/Geschlecht),
-            xsi:ReplaceEmpty(Patienten_Stammdaten/Vornamen),
-            xsi:ReplaceEmpty(Patienten_Stammdaten/Nachname),
-            xsi:ReplaceEmpty(Patienten_Stammdaten/Geburtsname),
-            xsi:ReplaceEmpty($Geburtstag),
-            xsi:ReplaceEmpty($Geburtsmonat),
-            xsi:ReplaceEmpty($Geburtsjahr),
-            xsi:ReplaceEmpty(@Patient_ID))"/>
-            <xsl:attribute name="Patient_ID" select="$Patient_Id"/>
+            <xsl:choose>
+                <xsl:when test="Patienten_Stammdaten/Geschlecht!='' and $Geburtsdatum!='' and Patienten_Stammdaten/Vornamen !='' and Patienten_Stammdaten/Nachname!=''">
+                    <DKTK_LOCAL_ID>
+                        <xsl:value-of select="hash:pseudonymize(
+                        xsi:ReplaceEmpty(Patienten_Stammdaten/Geschlecht),
+                        xsi:ReplaceEmpty(Patienten_Stammdaten/Vornamen),
+                        xsi:ReplaceEmpty(Patienten_Stammdaten/Nachname),
+                        xsi:ReplaceEmpty(Patienten_Stammdaten/Geburtsname),
+                        xsi:ReplaceEmpty($Geburtstag),
+                        xsi:ReplaceEmpty($Geburtsmonat),
+                        xsi:ReplaceEmpty($Geburtsjahr),
+                        xsi:ReplaceEmpty(@Patient_ID))"/>
+                    </DKTK_LOCAL_ID>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message><xsl:value-of select="'Warn: Missing IDAT for Patient', @Patient_ID, ' !&#10;&#10;'"/></xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
             <xsl:apply-templates select="Patienten_Stammdaten/Geschlecht | Patienten_Stammdaten/Geburtsdatum"/>
             <!--<DKTK_ID>TODO</DKTK_ID>-->
-            <DKTK_LOCAL_ID><xsl:value-of select="$Patient_Pseudonym"/></DKTK_LOCAL_ID>
+
             <Vitalstatus_Gesamt Vitalstatus_ID="{concat('vital', $Patient_Id)}">
                 <Datum_des_letztbekannten_Vitalstatus>
                     <xsl:value-of select="if (Patienten_Stammdaten/Vitalstatus_Datum != '') then 'Patienten_Stammdaten/Vitalstatus_Datum' else xsi:Datum_des_letztbekannten_Vitalstatus(Menge_Meldung)"/>
@@ -996,28 +1005,14 @@
     <!--!!!!!!!!!!FUNCTION DEFINITIONS!!!!!!!!!!-->
     <xsl:function name="xsi:Datum_des_letztbekannten_Vitalstatus">
         <xsl:param name="meldungen"/>
-        <Datum_des_letztbekannten_Vitalstatus>
-            <xsl:choose>
-                <xsl:when test="$meldungen/Meldung/Tod/Sterbedatum">
-                    <xsl:value-of select="$meldungen/Meldung/Tod/Sterbedatum"/>
-                </xsl:when>
-                <xsl:when test="$meldungen/Meldung/Verlauf/Untersuchungsdatum_Verlauf">
-                    <xsl:variable name="nodes" select="$meldungen/Meldung/Verlauf/Untersuchungsdatum_Verlauf"/>
-                    <xsl:variable name="mostRecentNode" select="$nodes[xs:date(.) = max($nodes/xs:date(.))]"/>
-                    <xsl:value-of select="$mostRecentNode"/>
-                </xsl:when>
-                <!--TODO check
-                <xsl:when test="$meldungen/Meldung/OP/Datum">
-                    <xsl:value-of select="max($meldungen/Meldung/OP/Datum)"/>
-                </xsl:when>
-                <xsl:when test="$meldungen/Meldung/ST/Menge_Bestrahlung/Bestrahlung/Beginn | $meldungen/Meldung/ST/Menge_Bestrahlung/Bestrahlung/Ende">
-                    <xsl:value-of select="max($meldungen/Meldung/ST/Menge_Bestrahlung/Bestrahlung/Beginn | $meldungen/Meldung/ST/Menge_Bestrahlung/Bestrahlung/Ende)"/>
-                </xsl:when>-->
-                <xsl:otherwise>
-                    <xsl:value-of select="max($meldungen/Meldung/Tumorzuordnung/Diagnosedatum)"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </Datum_des_letztbekannten_Vitalstatus>
+        <xsl:choose>
+            <xsl:when test="$meldungen/Meldung/Tod/Sterbedatum">
+                <xsl:value-of select="$meldungen/Meldung/Tod/Sterbedatum"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="max($meldungen//(Diagnosedatum|Datum|Beginn|Ende|Untersuchungsdatum_Verlauf)/xs:date(xsi:Get-FHIR-date(.)))"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:function>
 
     <xsl:function name="xsi:ReplaceEmpty">
@@ -1029,6 +1024,24 @@
             <xsl:otherwise>
                 <xsl:value-of select="'empty'"/>
             </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+
+    <xsl:function name="xsi:Get-FHIR-date">
+        <xsl:param name="date"/>
+        <xsl:choose>
+            <xsl:when test="matches($date, '^\d{4}-\d{2}-\d{2}$')">
+                <xsl:value-of select="concat(substring($date, 1, 4), '-',
+                    if (substring($date, 6, 2) = '00') then '01' else substring($date, 6, 2), '-',
+                    if (substring($date, 9, 2) = '00') then '01' else substring($date, 9, 2))"/>
+            </xsl:when>
+            <xsl:when test="matches($date, '^\d{4}-\d{2}$')">
+                <xsl:value-of select="concat(substring($date, 1, 4), '-',
+                    if (substring($date, 6, 2) = '00') then '01' else substring($date, 6, 2), '-01')"/>
+            </xsl:when>
+            <xsl:when test="matches($date, '^\d{4}$')">
+                <xsl:value-of select="concat($date, '-01-01')"/>
+            </xsl:when>
         </xsl:choose>
     </xsl:function>
 
