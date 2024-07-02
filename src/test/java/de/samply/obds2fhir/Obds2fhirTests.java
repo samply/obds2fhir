@@ -50,7 +50,7 @@ public class Obds2fhirTests {
     }
     @Test
     @Order(4)
-    public void compareBatch () throws IOException {
+    public void compareBatchADT () throws IOException {
         String filename = DigestUtils.sha256Hex("testpatient-ADT-1"+System.getenv().getOrDefault("SALT","")).substring(48);
         String result = "tmp/FHIR_Patients/FHIR_batch_Patient_"+filename+"_ADT_1.xml";
         String expected = "FHIR_batch_ADT_Expected-File-1.xml";
@@ -58,6 +58,14 @@ public class Obds2fhirTests {
     }
     @Test
     @Order(5)
+    public void compareBatchOBDS () throws IOException {
+        String filename = DigestUtils.sha256Hex("testpatient-oBDS-1"+System.getenv().getOrDefault("SALT","")).substring(48);
+        String result = "tmp/FHIR_Patients/FHIR_batch_Patient_"+filename+"_oBDS_4.xml";
+        String expected = "FHIR_batch_oBDS_Expected-File-1.xml";
+        assertTrue(compare(result, expected));
+    }
+    @Test
+    @Order(6)
     public void comparePatientSyntheticADT () throws IOException {
         String filename = DigestUtils.sha256Hex("testpatient-ADT-3"+System.getenv().getOrDefault("SALT","")).substring(48);
         String result = "tmp/FHIR_Patients/FHIR_Patient_"+filename+"_ADT_3.xml";
@@ -65,7 +73,7 @@ public class Obds2fhirTests {
         assertTrue(compare(result, expected));
     }
     @Test
-    @Order(6)
+    @Order(7)
     public void comparePatientSyntheticOBDS () throws IOException {
         String filename = DigestUtils.sha256Hex("testpatient-oBDS-1"+System.getenv().getOrDefault("SALT","")).substring(48);
         String result = "tmp/FHIR_Patients/FHIR_Patient_"+filename+"_oBDS_4.xml";
