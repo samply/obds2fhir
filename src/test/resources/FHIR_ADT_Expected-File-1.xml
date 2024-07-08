@@ -69,7 +69,7 @@
                <reference value="Patient/653ae947f9c1f8f6"/>
             </subject>
             <collection>
-               <collectedDateTime value="2021"/>
+               <collectedDateTime value="2021-01-01"/>
             </collection>
          </Specimen>
       </resource>
@@ -96,7 +96,7 @@
                <reference value="Patient/653ae947f9c1f8f6"/>
             </subject>
             <collection>
-               <collectedDateTime value="2021-07"/>
+               <collectedDateTime value="2021-07-01"/>
             </collection>
          </Specimen>
       </resource>
@@ -247,17 +247,17 @@
             </meta>
             <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-Fernmetastasen">
                <valueReference>
-                  <reference value="Observation/fm690137d27a9c916a"/>
+                  <reference value="Observation/fme78bd2ccb7999c35"/>
                </valueReference>
             </extension>
             <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-Fernmetastasen">
                <valueReference>
-                  <reference value="Observation/fmd0fa9f83512be54f"/>
+                  <reference value="Observation/fmc98f0165dace877c"/>
                </valueReference>
             </extension>
             <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-Fernmetastasen">
                <valueReference>
-                  <reference value="Observation/fm35ae8f5ed12275da"/>
+                  <reference value="Observation/fm434638101b207980"/>
                </valueReference>
             </extension>
             <code>
@@ -737,10 +737,10 @@
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/Observation/fm690137d27a9c916a"/>
+      <fullUrl value="http://example.com/Observation/fme78bd2ccb7999c35"/>
       <resource>
          <Observation>
-            <id value="fm690137d27a9c916a"/>
+            <id value="fme78bd2ccb7999c35"/>
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Fernmetastasen"/>
             </meta>
@@ -774,14 +774,14 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="Observation/fm690137d27a9c916a"/>
+         <url value="Observation/fme78bd2ccb7999c35"/>
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/Observation/fmd0fa9f83512be54f"/>
+      <fullUrl value="http://example.com/Observation/fmc98f0165dace877c"/>
       <resource>
          <Observation>
-            <id value="fmd0fa9f83512be54f"/>
+            <id value="fmc98f0165dace877c"/>
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Fernmetastasen"/>
             </meta>
@@ -815,14 +815,14 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="Observation/fmd0fa9f83512be54f"/>
+         <url value="Observation/fmc98f0165dace877c"/>
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/Observation/fm35ae8f5ed12275da"/>
+      <fullUrl value="http://example.com/Observation/fm434638101b207980"/>
       <resource>
          <Observation>
-            <id value="fm35ae8f5ed12275da"/>
+            <id value="fm434638101b207980"/>
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Fernmetastasen"/>
             </meta>
@@ -856,7 +856,7 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="Observation/fm35ae8f5ed12275da"/>
+         <url value="Observation/fm434638101b207980"/>
       </request>
    </entry>
    <entry>
@@ -3222,12 +3222,12 @@
             </finding>
             <finding>
                <itemReference>
-                  <reference value="Observation/fmee4737a1792baf84"/>
+                  <reference value="Observation/fm974154bab1625a0e"/>
                </itemReference>
             </finding>
             <finding>
                <itemReference>
-                  <reference value="Observation/2ce961bfb4d871ff"/>
+                  <reference value="Observation/376c8e912d918a3b"/>
                </itemReference>
             </finding>
             <finding>
@@ -3808,10 +3808,10 @@
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/Observation/fmee4737a1792baf84"/>
+      <fullUrl value="http://example.com/Observation/fm974154bab1625a0e"/>
       <resource>
          <Observation>
-            <id value="fmee4737a1792baf84"/>
+            <id value="fm974154bab1625a0e"/>
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Fernmetastasen"/>
             </meta>
@@ -3845,14 +3845,14 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="Observation/fmee4737a1792baf84"/>
+         <url value="Observation/fm974154bab1625a0e"/>
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/Observation/2ce961bfb4d871ff"/>
+      <fullUrl value="http://example.com/Observation/376c8e912d918a3b"/>
       <resource>
          <Observation>
-            <id value="2ce961bfb4d871ff"/>
+            <id value="376c8e912d918a3b"/>
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Ecog"/>
             </meta>
@@ -3880,7 +3880,7 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="Observation/2ce961bfb4d871ff"/>
+         <url value="Observation/376c8e912d918a3b"/>
       </request>
    </entry>
    <entry>
@@ -3911,12 +3911,12 @@
             </finding>
             <finding>
                <itemReference>
-                  <reference value="Observation/fm85ffb69151da8cc8"/>
+                  <reference value="Observation/fme650f211a4f7dc36"/>
                </itemReference>
             </finding>
             <finding>
                <itemReference>
-                  <reference value="Observation/9468e54d4467f914"/>
+                  <reference value="Observation/cd461aafd9f52a58"/>
                </itemReference>
             </finding>
             <finding>
@@ -4497,10 +4497,10 @@
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/Observation/fm85ffb69151da8cc8"/>
+      <fullUrl value="http://example.com/Observation/fme650f211a4f7dc36"/>
       <resource>
          <Observation>
-            <id value="fm85ffb69151da8cc8"/>
+            <id value="fme650f211a4f7dc36"/>
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Fernmetastasen"/>
             </meta>
@@ -4534,14 +4534,14 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="Observation/fm85ffb69151da8cc8"/>
+         <url value="Observation/fme650f211a4f7dc36"/>
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/Observation/9468e54d4467f914"/>
+      <fullUrl value="http://example.com/Observation/cd461aafd9f52a58"/>
       <resource>
          <Observation>
-            <id value="9468e54d4467f914"/>
+            <id value="cd461aafd9f52a58"/>
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Ecog"/>
             </meta>
@@ -4569,7 +4569,7 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="Observation/9468e54d4467f914"/>
+         <url value="Observation/cd461aafd9f52a58"/>
       </request>
    </entry>
 </Bundle>

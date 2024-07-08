@@ -117,7 +117,7 @@
                 </xsl:variable>
                 <xsl:value-of select="concat('bio', hash:hash($Patient_Id, '', string-join($attribute, '')))" />
             </xsl:attribute>
-            <xsl:if test="Entnahmedatum!=''"><Entnahmedatum><xsl:value-of select="Entnahmedatum"/></Entnahmedatum></xsl:if>
+            <xsl:if test="$Entnahmedatum!=''"><Entnahmedatum><xsl:value-of select="$Entnahmedatum"/></Entnahmedatum></xsl:if>
             <xsl:if test="Fixierungsart!=''"><Fixierungsart><xsl:value-of select="Fixierungsart"/></Fixierungsart></xsl:if>
             <xsl:if test="Probentyp!=''"><Probentyp><xsl:value-of select="Probentyp"/></Probentyp></xsl:if>
             <xsl:if test="Probenart!=''"><Probenart><xsl:value-of select="Probenart"/></Probenart></xsl:if>
@@ -300,14 +300,14 @@
         <xsl:param name="counter"/>
         <xsl:param name="Patient_Id"/>
         <xsl:param name="Tumor_Id"/>
-        <xsl:if test="FM_Lokalisation!='' and FM_Diagnosedatum!=''">
+        <xsl:variable name="FM_Diagnosedatum" select="xsi:Get-FHIR-date(FM_Diagnosedatum)"/>
+        <xsl:if test="FM_Lokalisation!='' and $FM_Diagnosedatum!=''">
            <Metastasis>
                <xsl:attribute name="Metastasis_ID">
-                   <xsl:variable name="attribute" select="'gen',concat(string-join(FM_Diagnosedatum,''),FM_Lokalisation,$counter)"/>
+                   <xsl:variable name="attribute" select="'gen',concat(string-join($FM_Diagnosedatum,''),FM_Lokalisation,$counter)"/>
                    <xsl:value-of select="concat('fm', hash:hash($Patient_Id, $Tumor_Id, string-join($attribute, '')))" />
                </xsl:attribute>
-               <xsl:apply-templates select="FM_Diagnosedatum"/>
-               <xsl:apply-templates select="FM_Lokalisation"/>
+               <xsl:apply-templates select="FM_Diagnosedatum | FM_Lokalisation"/>
                <Fernmetastasen_vorhanden>ja</Fernmetastasen_vorhanden>
           </Metastasis>
         </xsl:if>

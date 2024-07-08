@@ -53,7 +53,7 @@ public class Util {
                     return true;
                 }
                 else {
-                    if (waitForConnection){//if true, then recursively execute again
+                    if (waitForConnection){
                         logger.info("Waiting for service " + servicename + ", trying again...");
                         TimeUnit.SECONDS.sleep(2);
                         return checkConnections(servicename,URL,waitForConnection);
