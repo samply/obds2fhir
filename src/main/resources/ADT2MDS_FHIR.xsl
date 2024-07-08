@@ -545,40 +545,25 @@
         <xsl:param name="Patient_Id"/>
         <xsl:param name="Tumor_Id"/>
         <xsl:param name="Therapy_Id"/>
-        <xsl:apply-templates select="ST_Nebenwirkung[not(concat(Nebenwirkung_Grad,Nebenwirkung_Art,Nebenwirkung_Version)=following-sibling::*/concat(Nebenwirkung_Grad,Nebenwirkung_Art,Nebenwirkung_Version))]">
-                <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
+        <xsl:apply-templates select="ST_Nebenwirkung[not(concat(Nebenwirkung_Grad,Nebenwirkung_Art,Nebenwirkung_Version)=following::ST_Nebenwirkung/concat(Nebenwirkung_Grad,Nebenwirkung_Art,Nebenwirkung_Version))]">
+            <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
             <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
             <xsl:with-param name="Therapy_Id" select="$Therapy_Id"/>
-            </xsl:apply-templates>
-        <xsl:apply-templates select="SYST_Nebenwirkung[not(concat(Nebenwirkung_Grad,Nebenwirkung_Art,Nebenwirkung_Version)=following-sibling::*/concat(Nebenwirkung_Grad,Nebenwirkung_Art,Nebenwirkung_Version))]">
-                <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
-                <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
-                <xsl:with-param name="Therapy_Id" select="$Therapy_Id"/>
-            </xsl:apply-templates>
+        </xsl:apply-templates>
+        <xsl:apply-templates select="SYST_Nebenwirkung[not(concat(Nebenwirkung_Grad,Nebenwirkung_Art,Nebenwirkung_Version)=following::SYST_Nebenwirkung/concat(Nebenwirkung_Grad,Nebenwirkung_Art,Nebenwirkung_Version))]">
+            <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
+            <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
+            <xsl:with-param name="Therapy_Id" select="$Therapy_Id"/>
+        </xsl:apply-templates>
     </xsl:template>
 
-    <xsl:template match="ST_Nebenwirkung">
+    <xsl:template match="ST_Nebenwirkung | SYST_Nebenwirkung">
         <xsl:param name="Patient_Id"/>
         <xsl:param name="Tumor_Id"/>
         <xsl:param name="Therapy_Id"/>
         <xsl:if test="Nebenwirkung_Grad!=''">
             <Nebenwirkung>
                 <xsl:attribute name="Nebenwirkung_ID" select="concat('stn', hash:hash($Patient_Id, $Tumor_Id, concat($Therapy_Id, Nebenwirkung_Art, Nebenwirkung_Grad, Nebenwirkung_Version)))"/>
-                <Grad><xsl:value-of select="Nebenwirkung_Grad"/></Grad>
-                <xsl:if test="Nebenwirkung_Version!=''"><Version><xsl:value-of select="Nebenwirkung_Version"/></Version></xsl:if>
-                <xsl:if test="Nebenwirkung_Art!=''"><Art><xsl:value-of select="Nebenwirkung_Art"/></Art></xsl:if>
-                <Typ>ADT2</Typ>
-            </Nebenwirkung>
-        </xsl:if>
-    </xsl:template>
-
-    <xsl:template match="SYST_Nebenwirkung">
-        <xsl:param name="Patient_Id"/>
-        <xsl:param name="Tumor_Id"/>
-        <xsl:param name="Therapy_Id"/>
-        <xsl:if test="Nebenwirkung_Grad!=''">
-            <Nebenwirkung>
-                <xsl:attribute name="Nebenwirkung_ID" select="concat('syn', hash:hash($Patient_Id, $Tumor_Id, concat($Therapy_Id, Nebenwirkung_Art, Nebenwirkung_Grad, Nebenwirkung_Version)))"/>
                 <Grad><xsl:value-of select="Nebenwirkung_Grad"/></Grad>
                 <xsl:if test="Nebenwirkung_Version!=''"><Version><xsl:value-of select="Nebenwirkung_Version"/></Version></xsl:if>
                 <xsl:if test="Nebenwirkung_Art!=''"><Art><xsl:value-of select="Nebenwirkung_Art"/></Art></xsl:if>

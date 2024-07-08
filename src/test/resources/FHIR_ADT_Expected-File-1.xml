@@ -2607,6 +2607,40 @@
       </request>
    </entry>
    <entry>
+      <fullUrl value="http://example.com/AdverseEvent/stn98e950c86cf6032b"/>
+      <resource>
+         <AdverseEvent>
+            <id value="stn98e950c86cf6032b"/>
+            <actuality value="actual"/>
+            <event>
+               <coding>
+                  <system value="urn:ADT2"/>
+                  <version value="5.0"/>
+                  <code value="testReplica"/>
+               </coding>
+            </event>
+            <subject>
+               <reference value="Patient/653ae947f9c1f8f6"/>
+            </subject>
+            <severity>
+               <coding>
+                  <system value="http://hl7.org/fhir/us/ctcae/CodeSystem/ctcae-grade-code-system"/>
+                  <code value="4"/>
+               </coding>
+            </severity>
+            <suspectEntity>
+               <instance>
+                  <reference value="Procedure/st23a2e14771a10ff6"/>
+               </instance>
+            </suspectEntity>
+         </AdverseEvent>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="AdverseEvent/stn98e950c86cf6032b"/>
+      </request>
+   </entry>
+   <entry>
       <fullUrl value="http://example.com/Procedure/sts2aefe05e504f89be-0"/>
       <resource>
          <Procedure>
@@ -2848,10 +2882,10 @@
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/AdverseEvent/syn61887bc55c50979a"/>
+      <fullUrl value="http://example.com/AdverseEvent/stn61887bc55c50979a"/>
       <resource>
          <AdverseEvent>
-            <id value="syn61887bc55c50979a"/>
+            <id value="stn61887bc55c50979a"/>
             <actuality value="actual"/>
             <event>
                <coding>
@@ -2878,14 +2912,14 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="AdverseEvent/syn61887bc55c50979a"/>
+         <url value="AdverseEvent/stn61887bc55c50979a"/>
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/AdverseEvent/synd6b0a95b8ae35b9a"/>
+      <fullUrl value="http://example.com/AdverseEvent/stnd6b0a95b8ae35b9a"/>
       <resource>
          <AdverseEvent>
-            <id value="synd6b0a95b8ae35b9a"/>
+            <id value="stnd6b0a95b8ae35b9a"/>
             <actuality value="actual"/>
             <event>
                <coding>
@@ -2912,7 +2946,7 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="AdverseEvent/synd6b0a95b8ae35b9a"/>
+         <url value="AdverseEvent/stnd6b0a95b8ae35b9a"/>
       </request>
    </entry>
    <entry>
@@ -3059,10 +3093,10 @@
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/AdverseEvent/syn22c1cdb397fbd598"/>
+      <fullUrl value="http://example.com/AdverseEvent/stn22c1cdb397fbd598"/>
       <resource>
          <AdverseEvent>
-            <id value="syn22c1cdb397fbd598"/>
+            <id value="stn22c1cdb397fbd598"/>
             <actuality value="actual"/>
             <event>
                <coding>
@@ -3089,20 +3123,20 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="AdverseEvent/syn22c1cdb397fbd598"/>
+         <url value="AdverseEvent/stn22c1cdb397fbd598"/>
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/AdverseEvent/syn1db98dcf87157799"/>
+      <fullUrl value="http://example.com/AdverseEvent/stn98e950c86cf6032b"/>
       <resource>
          <AdverseEvent>
-            <id value="syn1db98dcf87157799"/>
+            <id value="stn98e950c86cf6032b"/>
             <actuality value="actual"/>
             <event>
                <coding>
                   <system value="urn:ADT2"/>
-                  <version value="4"/>
-                  <code value="Nebenwirkung_Art7"/>
+                  <version value="5.0"/>
+                  <code value="testReplica"/>
                </coding>
             </event>
             <subject>
@@ -3111,7 +3145,7 @@
             <severity>
                <coding>
                   <system value="http://hl7.org/fhir/us/ctcae/CodeSystem/ctcae-grade-code-system"/>
-                  <code value="K"/>
+                  <code value="4"/>
                </coding>
             </severity>
             <suspectEntity>
@@ -3123,7 +3157,7 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="AdverseEvent/syn1db98dcf87157799"/>
+         <url value="AdverseEvent/stn98e950c86cf6032b"/>
       </request>
    </entry>
    <entry>
