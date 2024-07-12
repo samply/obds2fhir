@@ -3817,6 +3817,189 @@
       </request>
    </entry>
    <entry>
+      <fullUrl value="http://example.com/ClinicalImpression/vrl41e5e9ea73339b32"/>
+      <resource>
+         <ClinicalImpression>
+            <id value="vrl41e5e9ea73339b32"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-ClinicalImpression-Verlauf"/>
+            </meta>
+            <status value="completed"/>
+            <subject>
+               <reference value="Patient/1302b6d11c5b628d"/>
+            </subject>
+            <effectiveDateTime value="2023-07-30"/>
+            <problem>
+               <reference value="Condition/dig1f2f2da54770c86f"/>
+            </problem>
+            <finding>
+               <itemReference>
+                  <reference value="Observation/vrl41e5e9ea73339b32krz"/>
+               </itemReference>
+            </finding>
+            <finding>
+               <itemReference>
+                  <reference value="Observation/vrl41e5e9ea73339b32tsl"/>
+               </itemReference>
+            </finding>
+            <finding>
+               <itemReference>
+                  <reference value="Observation/vrl41e5e9ea73339b32fmn"/>
+               </itemReference>
+            </finding>
+            <finding>
+               <itemReference>
+                  <reference value="Observation/vrl41e5e9ea73339b32asp"/>
+               </itemReference>
+            </finding>
+         </ClinicalImpression>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="ClinicalImpression/vrl41e5e9ea73339b32"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/vrl41e5e9ea73339b32krz"/>
+      <resource>
+         <Observation>
+            <id value="vrl41e5e9ea73339b32krz"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-LokalerTumorstatus"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="LA4583-6"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/1302b6d11c5b628d"/>
+            </subject>
+            <focus>
+               <reference value="Condition/dig1f2f2da54770c86f"/>
+            </focus>
+            <effectiveDateTime value="2023-07-30"/>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VerlaufLokalerTumorstatusCS"/>
+                  <code value="P"/>
+               </coding>
+            </valueCodeableConcept>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/vrl41e5e9ea73339b32krz"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/vrl41e5e9ea73339b32tsl"/>
+      <resource>
+         <Observation>
+            <id value="vrl41e5e9ea73339b32tsl"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-TumorstatusLymphknoten"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="LA4370-8"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/1302b6d11c5b628d"/>
+            </subject>
+            <focus>
+               <reference value="Condition/dig1f2f2da54770c86f"/>
+            </focus>
+            <effectiveDateTime value="2023-07-30"/>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VerlaufTumorstatusLymphknotenCS"/>
+                  <code value="U"/>
+               </coding>
+            </valueCodeableConcept>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/vrl41e5e9ea73339b32tsl"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/vrl41e5e9ea73339b32fmn"/>
+      <resource>
+         <Observation>
+            <id value="vrl41e5e9ea73339b32fmn"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-TumorstatusFernmetastasen"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="LA4226-2"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/1302b6d11c5b628d"/>
+            </subject>
+            <focus>
+               <reference value="Condition/dig1f2f2da54770c86f"/>
+            </focus>
+            <effectiveDateTime value="2023-07-30"/>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VerlaufTumorstatusFernmetastasenCS"/>
+                  <code value="X"/>
+               </coding>
+            </valueCodeableConcept>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/vrl41e5e9ea73339b32fmn"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/vrl41e5e9ea73339b32asp"/>
+      <resource>
+         <Observation>
+            <id value="vrl41e5e9ea73339b32asp"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-GesamtbeurteilungTumorstatus"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="21976-6"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/1302b6d11c5b628d"/>
+            </subject>
+            <focus>
+               <reference value="Condition/dig1f2f2da54770c86f"/>
+            </focus>
+            <effectiveDateTime value="2023-07-30"/>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/GesamtbeurteilungTumorstatusCS"/>
+                  <code value="X"/>
+               </coding>
+            </valueCodeableConcept>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/vrl41e5e9ea73339b32asp"/>
+      </request>
+   </entry>
+   <entry>
       <fullUrl value="http://example.com/CarePlan/tkz6b65836252023468"/>
       <resource>
          <CarePlan>

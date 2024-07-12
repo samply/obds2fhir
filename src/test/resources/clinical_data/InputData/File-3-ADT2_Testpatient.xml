@@ -562,7 +562,7 @@
 									<NU>thisValueIsIgnored</NU>
 								</DatumStudienrekrutierung>
 							</Modul_Allgemein>
-							<Tod>
+							<!--<Tod>
 								<Sterbedatum>20.07.2024</Sterbedatum>
 								<Tod_tumorbedingt>J</Tod_tumorbedingt>
 								<Menge_Todesursache>
@@ -570,7 +570,7 @@
 									<Todesursache_ICD>todo</Todesursache_ICD>
 									<Todesursache_ICD_Version>10 2024 GM</Todesursache_ICD_Version>
 								</Menge_Todesursache>
-							</Tod>
+							</Tod>-->
 							<Anmerkung>thisValueIsIgnored</Anmerkung>
 						</Verlauf>
 					</Menge_Verlauf>
@@ -623,8 +623,83 @@
 						</Zusatzitem>
 					</Menge_Zusatzitem>
 				</Meldung>
+				<Meldung Meldung_ID="2000-12020" Melder_ID="EXTERN">
+					<Meldedatum>27.05.2024</Meldedatum>
+					<Meldebegruendung>I</Meldebegruendung>
+					<Meldeanlass>statusmeldung</Meldeanlass>
+					<Tumorzuordnung><!--non valid Tumor_ID - ignored; BUT apply unassigned death information-->
+						<Primaertumor_ICD_Version>Sonstige</Primaertumor_ICD_Version>
+					</Tumorzuordnung>
+					<Menge_Verlauf>
+						<Verlauf>
+							<Untersuchungsdatum_Verlauf>19.07.2023</Untersuchungsdatum_Verlauf>
+							<Gesamtbeurteilung_Tumorstatus>P</Gesamtbeurteilung_Tumorstatus>
+							<Tod>
+								<Sterbedatum>20.07.2024</Sterbedatum>
+								<Tod_tumorbedingt>J</Tod_tumorbedingt>
+								<Menge_Todesursache>
+									<Todesursache_ICD>C43.4</Todesursache_ICD>
+									<Todesursache_ICD>Sonstige</Todesursache_ICD>
+									<Todesursache_ICD_Version>10 2024 GM</Todesursache_ICD_Version>
+								</Menge_Todesursache>
+							</Tod>
+						</Verlauf>
+					</Menge_Verlauf>
+				</Meldung>
+				<Meldung>
+					<Menge_Biomaterial>
+						<Biomaterial Biomaterial_ID="">
+							<Patienten_mit_Biomaterial>nein</Patienten_mit_Biomaterial>
+							<Probenart></Probenart>
+						</Biomaterial>
+						<Biomaterial Biomaterial_ID="as">
+							<Patienten_mit_Biomaterial>ja</Patienten_mit_Biomaterial>
+							<Probentyp>Gewebeprobe</Probentyp>
+							<Probenart>Tumorgewebe</Probenart>
+							<Entnahmedatum>23.03.1999</Entnahmedatum>
+							<Fixierungsart>Paraffin(FFPE)</Fixierungsart>
+						</Biomaterial>
+					</Menge_Biomaterial>
+				</Meldung>
+				<!--</Menge_Meldung>
+                <Anmerkung>thisValueIsIgnored</Anmerkung>
+            </Patient>
+            <Patient>
+                <Patienten_Stammdaten Patient_ID="testpatient-ADT-test">
+                    <Patienten_Nachname>Mustermann</Patienten_Nachname>
+                    <Patienten_Vornamen>Max</Patienten_Vornamen>
+                    <Patienten_Geburtsname>Beispielname</Patienten_Geburtsname>
+                    <Patienten_Geschlecht>M</Patienten_Geschlecht>
+                    <Patienten_Geburtsdatum>13.04.1989</Patienten_Geburtsdatum>
+                </Patienten_Stammdaten>
+                <Menge_Meldung>-->
+				<Meldung Meldung_ID="12122" Melder_ID="3101">
+					<Tumorzuordnung Tumor_ID="012001">
+						<Primaertumor_ICD_Code>C43.4</Primaertumor_ICD_Code>
+						<Primaertumor_ICD_Version>10 2024 GM</Primaertumor_ICD_Version>
+						<Diagnosedatum>02.03.2024</Diagnosedatum>
+						<Seitenlokalisation>M</Seitenlokalisation>
+					</Tumorzuordnung>
+					<Menge_Verlauf>
+						<Verlauf Verlauf_ID="2000-698943"><!--non valid Verlauf, no real content - ignored-->
+							<Untersuchungsdatum_Verlauf>29.07.2024</Untersuchungsdatum_Verlauf>
+							<Gesamtbeurteilung_Tumorstatus>X</Gesamtbeurteilung_Tumorstatus>
+							<Verlauf_Lokaler_Tumorstatus>X</Verlauf_Lokaler_Tumorstatus>
+							<Verlauf_Tumorstatus_Lymphknoten>U</Verlauf_Tumorstatus_Lymphknoten>
+							<Verlauf_Tumorstatus_Fernmetastasen>X</Verlauf_Tumorstatus_Fernmetastasen>
+							<Allgemeiner_Leistungszustand>U</Allgemeiner_Leistungszustand>
+						</Verlauf>
+						<Verlauf Verlauf_ID="2000-698944"><!--valid Verlauf, at least one element without missing information-->
+							<Untersuchungsdatum_Verlauf>30.07.2024</Untersuchungsdatum_Verlauf>
+							<Gesamtbeurteilung_Tumorstatus>X</Gesamtbeurteilung_Tumorstatus>
+							<Verlauf_Lokaler_Tumorstatus>X</Verlauf_Lokaler_Tumorstatus>
+							<Verlauf_Tumorstatus_Lymphknoten>P</Verlauf_Tumorstatus_Lymphknoten>
+							<Verlauf_Tumorstatus_Fernmetastasen>X</Verlauf_Tumorstatus_Fernmetastasen>
+							<Allgemeiner_Leistungszustand>U</Allgemeiner_Leistungszustand>
+						</Verlauf>
+					</Menge_Verlauf>
+				</Meldung>
 			</Menge_Meldung>
-			<Anmerkung>thisValueIsIgnored</Anmerkung>
 		</Patient>
 	</Menge_Patient>
 	<Menge_Melder>
