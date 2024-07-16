@@ -53,10 +53,10 @@ public class Util {
                     return true;
                 }
                 else {
-                    if (waitForConnection){//if true, then recursively execute again
+                    if (waitForConnection){
                         logger.info("Waiting for service " + servicename + ", trying again...");
                         TimeUnit.SECONDS.sleep(2);
-                        checkConnections(servicename,URL,waitForConnection);
+                        return checkConnections(servicename,URL,waitForConnection);
                     }
                     logger.info(servicename + " is NOT accessible: " + URL + httpResponse.getStatusLine());
                 }
@@ -70,7 +70,7 @@ public class Util {
                     } catch (InterruptedException ex) {
                         logger.error("InterruptedException while waiting" + e);
                     }
-                    checkConnections(servicename,URL,waitForConnection);
+                    return checkConnections(servicename,URL,waitForConnection);
                 }
             }
         }

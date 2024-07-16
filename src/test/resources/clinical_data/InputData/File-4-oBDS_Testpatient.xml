@@ -788,7 +788,7 @@
 						<Allgemeiner_Leistungszustand>0</Allgemeiner_Leistungszustand>
 					</Verlauf>
 				</Meldung>
-				<Meldung Meldung_ID="12019" Melder_ID="3102">
+				<!--<Meldung Meldung_ID="12019" Melder_ID="3102">
 					<Tumorzuordnung Tumor_ID="012001">
 						<Primaertumor_ICD>
 							<Code>C43.4</Code>
@@ -815,7 +815,7 @@
 							</Todesursache_ICD>
 						</Menge_Todesursachen>
 					</Tod>
-				</Meldung>
+				</Meldung>-->
 				<Meldung Meldung_ID="12020" Melder_ID="3101"><!--Tumorkonferenz igrnored in ADT, Therapieempfehlung in oBDS-->
 					<Tumorzuordnung Tumor_ID="012001">
 						<Primaertumor_ICD>
@@ -871,8 +871,83 @@
 					</Menge_Zusatzitem>
 					<Anmerkung>thisValueIsIgnored</Anmerkung>
 				</Meldung>
-			</Menge_Meldung>
+				<Meldung Meldung_ID="2000-12020" Melder_ID="3101">
+					<Meldebegruendung>I</Meldebegruendung>
+					<Tumorzuordnung><!--non valid Tumor_ID - ignored; BUT apply unassigned death information-->
+						<Primaertumor_ICD>
+							<Code>Sonstige</Code>
+							<Version>Sonstige</Version>
+						</Primaertumor_ICD>
+					</Tumorzuordnung>
+					<Tod Abschluss_ID="121">
+						<Sterbedatum>2024-07-20</Sterbedatum>
+						<Tod_tumorbedingt>J</Tod_tumorbedingt>
+						<Menge_Todesursachen>
+							<Todesursache_ICD>
+								<Code>C43.4</Code>
+								<Version>10 2024 GM</Version>
+							</Todesursache_ICD>
+							<Todesursache_ICD>
+								<Code>Sonstige</Code>
+								<Version>10 2024 GM</Version>
+							</Todesursache_ICD>
+						</Menge_Todesursachen>
+					</Tod>
+				</Meldung>
+				<Meldung>
+					<Menge_Biomaterial>
+						<Biomaterial Biomaterial_ID="">
+							<Patienten_mit_Biomaterial>nein</Patienten_mit_Biomaterial>
+							<Probenart></Probenart>
+						</Biomaterial>
+						<Biomaterial Biomaterial_ID="as">
+							<Patienten_mit_Biomaterial>ja</Patienten_mit_Biomaterial>
+							<Probentyp>Gewebeprobe</Probentyp>
+							<Probenart>Tumorgewebe</Probenart>
+							<Entnahmedatum>23.03.1999</Entnahmedatum>
+							<Fixierungsart>Paraffin(FFPE)</Fixierungsart>
+						</Biomaterial>
+					</Menge_Biomaterial>
+				</Meldung>
+			<!--</Menge_Meldung>
 			<Anmerkung>thisValueIsIgnored</Anmerkung>
+		</Patient>
+		<Patient Patient_ID="testpatient-oBDS-test">
+			<Patienten_Stammdaten>
+				<Nachname>Mustermann</Nachname>
+				<Vornamen>Max</Vornamen>
+				<Geburtsname>Beispielname</Geburtsname>
+				<Geschlecht>M</Geschlecht>
+				<Geburtsdatum Datumsgenauigkeit="E">1989-04-13</Geburtsdatum>
+			</Patienten_Stammdaten>
+			<Menge_Meldung>-->
+				<Meldung Meldung_ID="12122" Melder_ID="3101">
+					<Tumorzuordnung Tumor_ID="012001">
+						<Primaertumor_ICD>
+							<Code>C43.4</Code>
+							<Version>10 2024 GM</Version>
+						</Primaertumor_ICD>
+						<Diagnosedatum Datumsgenauigkeit="E">2024-03-02</Diagnosedatum>
+					</Tumorzuordnung>
+					<Verlauf Verlauf_ID="2000-698943"><!--non valid Verlauf, no real content - ignored-->
+						<Untersuchungsdatum_Verlauf>2023-07-29</Untersuchungsdatum_Verlauf>
+						<Gesamtbeurteilung_Tumorstatus>X</Gesamtbeurteilung_Tumorstatus>
+						<Verlauf_Lokaler_Tumorstatus>X</Verlauf_Lokaler_Tumorstatus>
+						<Verlauf_Tumorstatus_Lymphknoten>U</Verlauf_Tumorstatus_Lymphknoten>
+						<Verlauf_Tumorstatus_Fernmetastasen>X</Verlauf_Tumorstatus_Fernmetastasen>
+						<Allgemeiner_Leistungszustand>U</Allgemeiner_Leistungszustand>
+					</Verlauf>
+					<Verlauf Verlauf_ID="2000-698944"><!--valid Verlauf, at least one element without missing information-->
+						<Meldeanlass>statusmeldung</Meldeanlass>
+						<Untersuchungsdatum_Verlauf>2023-07-30</Untersuchungsdatum_Verlauf>
+						<Gesamtbeurteilung_Tumorstatus>X</Gesamtbeurteilung_Tumorstatus>
+						<Verlauf_Lokaler_Tumorstatus>P</Verlauf_Lokaler_Tumorstatus>
+						<Verlauf_Tumorstatus_Lymphknoten>U</Verlauf_Tumorstatus_Lymphknoten>
+						<Verlauf_Tumorstatus_Fernmetastasen>X</Verlauf_Tumorstatus_Fernmetastasen>
+						<Allgemeiner_Leistungszustand>U</Allgemeiner_Leistungszustand>
+					</Verlauf>
+				</Meldung>
+			</Menge_Meldung>
 		</Patient>
 	</Menge_Patient>
 	<Menge_Melder>

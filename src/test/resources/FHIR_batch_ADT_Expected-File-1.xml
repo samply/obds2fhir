@@ -9,7 +9,7 @@
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Vitalstatus"/>
             </meta>
-            <status value="registered"/>
+            <status value="final"/>
             <code>
                <coding>
                   <system value="http://loinc.org"/>

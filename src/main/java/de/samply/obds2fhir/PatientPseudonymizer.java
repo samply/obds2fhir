@@ -99,7 +99,7 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
     private String pseudonymizationCall(String gender, String prename, String surname, String formername, String birthday, String birthmonth, String birthyear, String identifier) throws URISyntaxException, MainzellisteNetworkException, InvalidSessionException, IOException {
         String pseudonym="";
         this.addPatientToken = session.getToken(token);
-        HttpPost httppost = createHttpPost(prename, surname, formername, birthday, birthmonth, birthyear, gender);
+        HttpPost httppost = createHttpPost(prename, surname, formername, birthday, birthmonth, birthyear, gender, identifier);
         HttpResponse response = httpclient.execute(httppost);
         if (response.getStatusLine().getStatusCode()==401) {
             createMainzellisteSession();
@@ -109,7 +109,7 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
         }
         if (response.getStatusLine().getStatusCode()==400){
             this.httpclient = HttpClients.createDefault();
-            httppost = createHttpPost(preprocessIDAT(prename), preprocessIDAT(surname), preprocessIDAT(formername), birthday, birthmonth, birthyear, gender);
+            httppost = createHttpPost(preprocessIDAT(prename), preprocessIDAT(surname), preprocessIDAT(formername), birthday, birthmonth, birthyear, gender, identifier);
             response = httpclient.execute(httppost);
             logger.warn("\u001B[A"+"\u001B[100C" + "Unallowed character in patient "+ identifier + " ... autocorrected\n");
         }
@@ -160,7 +160,7 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
         this.session = mainzellisteConnection.createSession();
     }
 
-    private HttpPost createHttpPost (String prename, String surname, String formername, String birthday, String birthmonth, String birthyear, String gender) {
+    private HttpPost createHttpPost (String prename, String surname, String formername, String birthday, String birthmonth, String birthyear, String gender, String identifier) {
         HttpPost httppost= new HttpPost(mainzelliste_url+"/patients?tokenId="+addPatientToken);
         httppost.addHeader("content-type", "application/x-www-form-urlencoded");
         httppost.addHeader("mainzellisteApiVersion", "3.2");
@@ -172,6 +172,7 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
         if (!birthmonth.equals("empty")) idat.add(new BasicNameValuePair("Geburtsmonat", birthmonth));
         if (!birthyear.equals("empty")) idat.add(new BasicNameValuePair("Geburtsjahr", birthyear));
         if (!gender.equals("empty")) idat.add(new BasicNameValuePair("Geschlecht", gender));
+        if (!identifier.equals("empty")) idat.add(new BasicNameValuePair("locallyUniqueId", identifier));
         idat.add(new BasicNameValuePair("sureness", "true"));
         logger.debug("Posting IDAT to Mainzelliste: " +
                         "Vorname - " + preprocessIDAT(prename, ".", "*") +
@@ -180,7 +181,8 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
                         "Geburtstag - " + preprocessIDAT(birthday, ".", "*") +
                         "Geburtsmonat - " + preprocessIDAT(birthmonth, ".", "*") +
                         "Geburtsjahr - " + preprocessIDAT(birthyear, ".", "*") +
-                        "Geschlecht - " + preprocessIDAT(gender, ".", "*"));
+                        "Geschlecht - " + preprocessIDAT(gender, ".", "*") +
+                        "locallyUniqueId - " + preprocessIDAT(identifier, ".", "*"));
         httppost.setEntity(new UrlEncodedFormEntity(idat, StandardCharsets.UTF_8));
         return httppost;
     }

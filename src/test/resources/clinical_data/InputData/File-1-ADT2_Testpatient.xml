@@ -276,6 +276,11 @@
 									<Nebenwirkung_Art>Nebenwirkung_Art1</Nebenwirkung_Art>
 									<Nebenwirkung_Version>4</Nebenwirkung_Version>
 								</ST_Nebenwirkung>
+								<ST_Nebenwirkung>
+									<Nebenwirkung_Grad>4</Nebenwirkung_Grad>
+									<Nebenwirkung_Art>testReplica</Nebenwirkung_Art>
+									<Nebenwirkung_Version>5.0</Nebenwirkung_Version>
+								</ST_Nebenwirkung>
 							</Menge_Nebenwirkung>
 							<Modul_Allgemein>
 								<DatumSozialdienstkontakt>
@@ -338,6 +343,16 @@
 									<Nebenwirkung_Art>Nebenwirkung_Art3</Nebenwirkung_Art>
 									<Nebenwirkung_Version>4</Nebenwirkung_Version>
 								</ST_Nebenwirkung>
+								<ST_Nebenwirkung>
+									<Nebenwirkung_Grad>4</Nebenwirkung_Grad>
+									<Nebenwirkung_Art>testReplica</Nebenwirkung_Art>
+									<Nebenwirkung_Version>5.0</Nebenwirkung_Version>
+								</ST_Nebenwirkung>
+								<ST_Nebenwirkung>
+									<Nebenwirkung_Grad>4</Nebenwirkung_Grad>
+									<Nebenwirkung_Art>testReplica</Nebenwirkung_Art>
+									<Nebenwirkung_Version>5.0</Nebenwirkung_Version>
+								</ST_Nebenwirkung>
 							</Menge_Nebenwirkung>
 							<Modul_Allgemein>
 								<DatumSozialdienstkontakt>
@@ -393,6 +408,11 @@
 									<Nebenwirkung_Art>Nebenwirkung_Art5</Nebenwirkung_Art>
 									<Nebenwirkung_Version>4</Nebenwirkung_Version>
 								</SYST_Nebenwirkung>
+								<SYST_Nebenwirkung>
+									<Nebenwirkung_Grad>4</Nebenwirkung_Grad>
+									<Nebenwirkung_Art>testReplica</Nebenwirkung_Art>
+									<Nebenwirkung_Version>5.0</Nebenwirkung_Version>
+								</SYST_Nebenwirkung>
 							</Menge_Nebenwirkung>
 							<Modul_Allgemein>
 								<DatumSozialdienstkontakt>
@@ -431,9 +451,14 @@
 									<Nebenwirkung_Version>4</Nebenwirkung_Version>
 								</SYST_Nebenwirkung>
 								<SYST_Nebenwirkung>
-									<Nebenwirkung_Grad>K</Nebenwirkung_Grad>
-									<Nebenwirkung_Art>Nebenwirkung_Art7</Nebenwirkung_Art>
-									<Nebenwirkung_Version>4</Nebenwirkung_Version>
+									<Nebenwirkung_Grad>4</Nebenwirkung_Grad>
+									<Nebenwirkung_Art>testReplica</Nebenwirkung_Art>
+									<Nebenwirkung_Version>5.0</Nebenwirkung_Version>
+								</SYST_Nebenwirkung>
+								<SYST_Nebenwirkung>
+									<Nebenwirkung_Grad>4</Nebenwirkung_Grad>
+									<Nebenwirkung_Art>testReplica</Nebenwirkung_Art>
+									<Nebenwirkung_Version>5.0</Nebenwirkung_Version>
 								</SYST_Nebenwirkung>
 							</Menge_Nebenwirkung>
 							<Modul_Allgemein>
@@ -491,7 +516,7 @@
 									<FM_Lokalisation>PUL</FM_Lokalisation>
 								</Fernmetastase>
 							</Menge_FM>
-							<Allgemeiner_Leistungszustand>0</Allgemeiner_Leistungszustand>
+							<Allgemeiner_Leistungszustand>3</Allgemeiner_Leistungszustand>
 						</Verlauf>
 					</Menge_Verlauf>
 				</Meldung>

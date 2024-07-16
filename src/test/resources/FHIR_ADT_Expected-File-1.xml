@@ -69,7 +69,7 @@
                <reference value="Patient/653ae947f9c1f8f6"/>
             </subject>
             <collection>
-               <collectedDateTime value="2021"/>
+               <collectedDateTime value="2021-01-01"/>
             </collection>
          </Specimen>
       </resource>
@@ -96,7 +96,7 @@
                <reference value="Patient/653ae947f9c1f8f6"/>
             </subject>
             <collection>
-               <collectedDateTime value="2021-07"/>
+               <collectedDateTime value="2021-07-01"/>
             </collection>
          </Specimen>
       </resource>
@@ -247,17 +247,17 @@
             </meta>
             <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-Fernmetastasen">
                <valueReference>
-                  <reference value="Observation/fm690137d27a9c916a"/>
+                  <reference value="Observation/fme78bd2ccb7999c35"/>
                </valueReference>
             </extension>
             <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-Fernmetastasen">
                <valueReference>
-                  <reference value="Observation/fmd0fa9f83512be54f"/>
+                  <reference value="Observation/fmc98f0165dace877c"/>
                </valueReference>
             </extension>
             <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-Fernmetastasen">
                <valueReference>
-                  <reference value="Observation/fm35ae8f5ed12275da"/>
+                  <reference value="Observation/fm434638101b207980"/>
                </valueReference>
             </extension>
             <code>
@@ -737,10 +737,10 @@
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/Observation/fm690137d27a9c916a"/>
+      <fullUrl value="http://example.com/Observation/fme78bd2ccb7999c35"/>
       <resource>
          <Observation>
-            <id value="fm690137d27a9c916a"/>
+            <id value="fme78bd2ccb7999c35"/>
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Fernmetastasen"/>
             </meta>
@@ -774,14 +774,14 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="Observation/fm690137d27a9c916a"/>
+         <url value="Observation/fme78bd2ccb7999c35"/>
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/Observation/fmd0fa9f83512be54f"/>
+      <fullUrl value="http://example.com/Observation/fmc98f0165dace877c"/>
       <resource>
          <Observation>
-            <id value="fmd0fa9f83512be54f"/>
+            <id value="fmc98f0165dace877c"/>
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Fernmetastasen"/>
             </meta>
@@ -815,14 +815,14 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="Observation/fmd0fa9f83512be54f"/>
+         <url value="Observation/fmc98f0165dace877c"/>
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/Observation/fm35ae8f5ed12275da"/>
+      <fullUrl value="http://example.com/Observation/fm434638101b207980"/>
       <resource>
          <Observation>
-            <id value="fm35ae8f5ed12275da"/>
+            <id value="fm434638101b207980"/>
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Fernmetastasen"/>
             </meta>
@@ -856,7 +856,7 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="Observation/fm35ae8f5ed12275da"/>
+         <url value="Observation/fm434638101b207980"/>
       </request>
    </entry>
    <entry>
@@ -2243,10 +2243,10 @@
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/AdverseEvent/stndf2f26b2f8a0d20e"/>
+      <fullUrl value="http://example.com/AdverseEvent/nbndf2f26b2f8a0d20e"/>
       <resource>
          <AdverseEvent>
-            <id value="stndf2f26b2f8a0d20e"/>
+            <id value="nbndf2f26b2f8a0d20e"/>
             <actuality value="actual"/>
             <event>
                <coding>
@@ -2273,14 +2273,14 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="AdverseEvent/stndf2f26b2f8a0d20e"/>
+         <url value="AdverseEvent/nbndf2f26b2f8a0d20e"/>
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/AdverseEvent/stn33d668b571543e15"/>
+      <fullUrl value="http://example.com/AdverseEvent/nbn33d668b571543e15"/>
       <resource>
          <AdverseEvent>
-            <id value="stn33d668b571543e15"/>
+            <id value="nbn33d668b571543e15"/>
             <actuality value="actual"/>
             <event>
                <coding>
@@ -2307,7 +2307,7 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="AdverseEvent/stn33d668b571543e15"/>
+         <url value="AdverseEvent/nbn33d668b571543e15"/>
       </request>
    </entry>
    <entry>
@@ -2539,10 +2539,10 @@
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/AdverseEvent/stn0dc23eb48eb7c78f"/>
+      <fullUrl value="http://example.com/AdverseEvent/nbn0dc23eb48eb7c78f"/>
       <resource>
          <AdverseEvent>
-            <id value="stn0dc23eb48eb7c78f"/>
+            <id value="nbn0dc23eb48eb7c78f"/>
             <actuality value="actual"/>
             <event>
                <coding>
@@ -2569,14 +2569,14 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="AdverseEvent/stn0dc23eb48eb7c78f"/>
+         <url value="AdverseEvent/nbn0dc23eb48eb7c78f"/>
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/AdverseEvent/stn0840ab56e6e3669f"/>
+      <fullUrl value="http://example.com/AdverseEvent/nbn0840ab56e6e3669f"/>
       <resource>
          <AdverseEvent>
-            <id value="stn0840ab56e6e3669f"/>
+            <id value="nbn0840ab56e6e3669f"/>
             <actuality value="actual"/>
             <event>
                <coding>
@@ -2603,7 +2603,41 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="AdverseEvent/stn0840ab56e6e3669f"/>
+         <url value="AdverseEvent/nbn0840ab56e6e3669f"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/AdverseEvent/nbn98e950c86cf6032b"/>
+      <resource>
+         <AdverseEvent>
+            <id value="nbn98e950c86cf6032b"/>
+            <actuality value="actual"/>
+            <event>
+               <coding>
+                  <system value="urn:ADT2"/>
+                  <version value="5.0"/>
+                  <code value="testReplica"/>
+               </coding>
+            </event>
+            <subject>
+               <reference value="Patient/653ae947f9c1f8f6"/>
+            </subject>
+            <severity>
+               <coding>
+                  <system value="http://hl7.org/fhir/us/ctcae/CodeSystem/ctcae-grade-code-system"/>
+                  <code value="4"/>
+               </coding>
+            </severity>
+            <suspectEntity>
+               <instance>
+                  <reference value="Procedure/st23a2e14771a10ff6"/>
+               </instance>
+            </suspectEntity>
+         </AdverseEvent>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="AdverseEvent/nbn98e950c86cf6032b"/>
       </request>
    </entry>
    <entry>
@@ -2848,10 +2882,10 @@
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/AdverseEvent/syn61887bc55c50979a"/>
+      <fullUrl value="http://example.com/AdverseEvent/nbn61887bc55c50979a"/>
       <resource>
          <AdverseEvent>
-            <id value="syn61887bc55c50979a"/>
+            <id value="nbn61887bc55c50979a"/>
             <actuality value="actual"/>
             <event>
                <coding>
@@ -2878,14 +2912,14 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="AdverseEvent/syn61887bc55c50979a"/>
+         <url value="AdverseEvent/nbn61887bc55c50979a"/>
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/AdverseEvent/synd6b0a95b8ae35b9a"/>
+      <fullUrl value="http://example.com/AdverseEvent/nbnd6b0a95b8ae35b9a"/>
       <resource>
          <AdverseEvent>
-            <id value="synd6b0a95b8ae35b9a"/>
+            <id value="nbnd6b0a95b8ae35b9a"/>
             <actuality value="actual"/>
             <event>
                <coding>
@@ -2912,7 +2946,7 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="AdverseEvent/synd6b0a95b8ae35b9a"/>
+         <url value="AdverseEvent/nbnd6b0a95b8ae35b9a"/>
       </request>
    </entry>
    <entry>
@@ -3059,10 +3093,10 @@
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/AdverseEvent/syn22c1cdb397fbd598"/>
+      <fullUrl value="http://example.com/AdverseEvent/nbn22c1cdb397fbd598"/>
       <resource>
          <AdverseEvent>
-            <id value="syn22c1cdb397fbd598"/>
+            <id value="nbn22c1cdb397fbd598"/>
             <actuality value="actual"/>
             <event>
                <coding>
@@ -3089,20 +3123,20 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="AdverseEvent/syn22c1cdb397fbd598"/>
+         <url value="AdverseEvent/nbn22c1cdb397fbd598"/>
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/AdverseEvent/syn1db98dcf87157799"/>
+      <fullUrl value="http://example.com/AdverseEvent/nbn98e950c86cf6032b"/>
       <resource>
          <AdverseEvent>
-            <id value="syn1db98dcf87157799"/>
+            <id value="nbn98e950c86cf6032b"/>
             <actuality value="actual"/>
             <event>
                <coding>
                   <system value="urn:ADT2"/>
-                  <version value="4"/>
-                  <code value="Nebenwirkung_Art7"/>
+                  <version value="5.0"/>
+                  <code value="testReplica"/>
                </coding>
             </event>
             <subject>
@@ -3111,7 +3145,7 @@
             <severity>
                <coding>
                   <system value="http://hl7.org/fhir/us/ctcae/CodeSystem/ctcae-grade-code-system"/>
-                  <code value="K"/>
+                  <code value="4"/>
                </coding>
             </severity>
             <suspectEntity>
@@ -3123,7 +3157,7 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="AdverseEvent/syn1db98dcf87157799"/>
+         <url value="AdverseEvent/nbn98e950c86cf6032b"/>
       </request>
    </entry>
    <entry>
@@ -3222,12 +3256,12 @@
             </finding>
             <finding>
                <itemReference>
-                  <reference value="Observation/fmee4737a1792baf84"/>
+                  <reference value="Observation/fm974154bab1625a0e"/>
                </itemReference>
             </finding>
             <finding>
                <itemReference>
-                  <reference value="Observation/2ce961bfb4d871ff"/>
+                  <reference value="Observation/32f377216c3afc44"/>
                </itemReference>
             </finding>
             <finding>
@@ -3808,10 +3842,10 @@
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/Observation/fmee4737a1792baf84"/>
+      <fullUrl value="http://example.com/Observation/fm974154bab1625a0e"/>
       <resource>
          <Observation>
-            <id value="fmee4737a1792baf84"/>
+            <id value="fm974154bab1625a0e"/>
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Fernmetastasen"/>
             </meta>
@@ -3845,14 +3879,14 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="Observation/fmee4737a1792baf84"/>
+         <url value="Observation/fm974154bab1625a0e"/>
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/Observation/2ce961bfb4d871ff"/>
+      <fullUrl value="http://example.com/Observation/32f377216c3afc44"/>
       <resource>
          <Observation>
-            <id value="2ce961bfb4d871ff"/>
+            <id value="32f377216c3afc44"/>
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Ecog"/>
             </meta>
@@ -3873,14 +3907,14 @@
             <valueCodeableConcept>
                <coding>
                   <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/EcogCS"/>
-                  <code value="0"/>
+                  <code value="3"/>
                </coding>
             </valueCodeableConcept>
          </Observation>
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="Observation/2ce961bfb4d871ff"/>
+         <url value="Observation/32f377216c3afc44"/>
       </request>
    </entry>
    <entry>
@@ -3911,12 +3945,12 @@
             </finding>
             <finding>
                <itemReference>
-                  <reference value="Observation/fm85ffb69151da8cc8"/>
+                  <reference value="Observation/fme650f211a4f7dc36"/>
                </itemReference>
             </finding>
             <finding>
                <itemReference>
-                  <reference value="Observation/9468e54d4467f914"/>
+                  <reference value="Observation/cd461aafd9f52a58"/>
                </itemReference>
             </finding>
             <finding>
@@ -4497,10 +4531,10 @@
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/Observation/fm85ffb69151da8cc8"/>
+      <fullUrl value="http://example.com/Observation/fme650f211a4f7dc36"/>
       <resource>
          <Observation>
-            <id value="fm85ffb69151da8cc8"/>
+            <id value="fme650f211a4f7dc36"/>
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Fernmetastasen"/>
             </meta>
@@ -4534,14 +4568,14 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="Observation/fm85ffb69151da8cc8"/>
+         <url value="Observation/fme650f211a4f7dc36"/>
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/Observation/9468e54d4467f914"/>
+      <fullUrl value="http://example.com/Observation/cd461aafd9f52a58"/>
       <resource>
          <Observation>
-            <id value="9468e54d4467f914"/>
+            <id value="cd461aafd9f52a58"/>
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Ecog"/>
             </meta>
@@ -4569,7 +4603,7 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="Observation/9468e54d4467f914"/>
+         <url value="Observation/cd461aafd9f52a58"/>
       </request>
    </entry>
 </Bundle>
