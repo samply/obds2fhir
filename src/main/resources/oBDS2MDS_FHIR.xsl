@@ -156,7 +156,7 @@
                             <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
                         </xsl:apply-templates>
                         </xsl:when>
-                        <xsl:otherwise><xsl:apply-templates select=".[not(SYST_Beginn_Datum=following::SYST/SYST_Beginn_Datum)]">
+                        <xsl:otherwise><xsl:apply-templates select=".[not(concat(SYST_Beginn_Datum,string-join(Therapieart,''))=following::SYST/concat(SYST_Beginn_Datum,string-join(Therapieart,'')))]">
                             <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                             <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
                         </xsl:apply-templates>
@@ -552,7 +552,7 @@
                <xsl:variable name="attribute">
                    <xsl:choose>
                        <xsl:when test="@SYST_ID!=''"><xsl:value-of select="@SYST_ID"/></xsl:when>
-                       <xsl:otherwise><xsl:value-of select="'gen',Beginn"/></xsl:otherwise>
+                       <xsl:otherwise><xsl:value-of select="'gen',concat(SYST_Beginn_Datum,string-join(Therapieart,''))"/></xsl:otherwise>
                    </xsl:choose>
                </xsl:variable>
                <xsl:attribute name="SYST_ID" select="concat('syst', hash:hash($Patient_Id, $Tumor_Id, string-join($attribute, '')))"/>

@@ -269,10 +269,10 @@
 							</Morphologie_ICD_O>
 							<Morphologie_Freitext>Noduläres malignes Melanom (NM)-pathologie</Morphologie_Freitext>
 							<Grading>T</Grading>
-							<LK_untersucht>50-pathologie</LK_untersucht>
-							<LK_befallen>50-pathologie</LK_befallen>
-							<Sentinel_LK_untersucht>50-pathologie</Sentinel_LK_untersucht>
-							<Sentinel_LK_befallen>50-pathologie</Sentinel_LK_befallen>
+							<LK_untersucht>50</LK_untersucht>
+							<LK_befallen>50</LK_befallen>
+							<Sentinel_LK_untersucht>50</Sentinel_LK_untersucht>
+							<Sentinel_LK_befallen>50</Sentinel_LK_befallen>
 						</Histologie>
 						<Menge_FM>
 							<Fernmetastase>
@@ -697,6 +697,38 @@
 							</Studienteilnahme>
 						</Modul_Allgemein>
 					</SYST>
+					<SYST>
+						<Therapieart>CH</Therapieart>
+						<Therapieart>HO</Therapieart>
+						<Beginn Datumsgenauigkeit="E">2023-05-27</Beginn>
+					</SYST>
+					<SYST><!--needs to be ignored-->
+						<Therapieart>CH</Therapieart>
+						<Therapieart>HO</Therapieart>
+						<Beginn Datumsgenauigkeit="E">2023-05-27</Beginn>
+					</SYST>
+					<SYST>
+						<Therapieart>IM</Therapieart>
+						<Beginn Datumsgenauigkeit="E">2023-05-27</Beginn>
+					</SYST>
+				</Meldung>
+				<Meldung Meldung_ID="12017" Melder_ID="3101">
+					<Tumorzuordnung Tumor_ID="012001">
+						<Primaertumor_ICD>
+							<Code>C43.4</Code>
+							<Version>10 2024 GM</Version>
+						</Primaertumor_ICD>
+						<Diagnosedatum Datumsgenauigkeit="E">2024-03-02</Diagnosedatum>
+					</Tumorzuordnung>
+					<SYST>
+						<Therapieart>HO</Therapieart><!--needs to generate separate ID-->
+						<Beginn Datumsgenauigkeit="E">2023-05-27</Beginn>
+					</SYST>
+					<SYST><!--needs to be ignored-->
+						<Therapieart>CH</Therapieart>
+						<Therapieart>HO</Therapieart>
+						<Beginn Datumsgenauigkeit="E">2023-05-27</Beginn>
+					</SYST>
 				</Meldung>
 				<Meldung Meldung_ID="12018" Melder_ID="3101">
 					<Tumorzuordnung Tumor_ID="012001">
@@ -945,6 +977,183 @@
 						<Verlauf_Tumorstatus_Lymphknoten>U</Verlauf_Tumorstatus_Lymphknoten>
 						<Verlauf_Tumorstatus_Fernmetastasen>X</Verlauf_Tumorstatus_Fernmetastasen>
 						<Allgemeiner_Leistungszustand>U</Allgemeiner_Leistungszustand>
+					</Verlauf>
+				</Meldung>
+				<Meldung Meldung_ID="12123" Melder_ID="3101"><!-- check diagnosis internal tnm ID duplicates-->
+					<Tumorzuordnung Tumor_ID="012002">
+						<Primaertumor_ICD>
+							<Code>C12.1</Code>
+							<Version>10 2024 GM</Version>
+						</Primaertumor_ICD>
+						<Diagnosedatum Datumsgenauigkeit="E">2000-01-01</Diagnosedatum>
+						<Seitenlokalisation>M</Seitenlokalisation>
+					</Tumorzuordnung>
+					<Diagnose>
+						<Primaertumor_Topographie_ICD_O>
+							<Code>C12.1</Code>
+						</Primaertumor_Topographie_ICD_O>
+						<cTNM ID="1733001-duplicate"><!-- identical tnm ID-->
+							<Datum>2000-01-01</Datum>
+							<Version>8</Version>
+							<y_Symbol>y</y_Symbol>
+							<r_Symbol>r</r_Symbol>
+							<a_Symbol>a</a_Symbol>
+							<c_p_u_Praefix_T>u</c_p_u_Praefix_T>
+							<T>2</T>
+							<m_Symbol>m1</m_Symbol>
+							<c_p_u_Praefix_N>p</c_p_u_Praefix_N>
+							<N>0</N>
+							<c_p_u_Praefix_M>p</c_p_u_Praefix_M>
+							<M>1</M>
+							<L>L0</L>
+							<V>V1</V>
+							<UICC_Stadium>IB</UICC_Stadium>
+						</cTNM>
+						<pTNM ID="1733001-duplicate"><!-- identical tnm ID-->
+							<Datum>2000-01-01</Datum>
+							<Version>8</Version>
+							<y_Symbol>y</y_Symbol>
+							<r_Symbol>r</r_Symbol>
+							<a_Symbol>a</a_Symbol>
+							<c_p_u_Praefix_T>u</c_p_u_Praefix_T>
+							<T>2</T>
+							<m_Symbol>m1</m_Symbol>
+							<c_p_u_Praefix_N>p</c_p_u_Praefix_N>
+							<N>0</N>
+							<c_p_u_Praefix_M>p</c_p_u_Praefix_M>
+							<M>1</M>
+							<L>L0</L>
+							<V>V1</V>
+							<UICC_Stadium>IB</UICC_Stadium>
+						</pTNM>
+					</Diagnose>
+				</Meldung>
+				<Meldung Meldung_ID="12123-no-ID" Melder_ID="3101"><!-- check diagnosis internal tnm content duplicates-->
+					<Tumorzuordnung Tumor_ID="012002-no-ID">
+						<Primaertumor_ICD>
+							<Code>C13.1</Code>
+							<Version>10 2024 GM</Version>
+						</Primaertumor_ICD>
+						<Diagnosedatum Datumsgenauigkeit="E">2001-01-01</Diagnosedatum>
+						<Seitenlokalisation>M</Seitenlokalisation>
+					</Tumorzuordnung>
+					<Diagnose>
+						<Primaertumor_Topographie_ICD_O>
+							<Code>C13.1</Code>
+						</Primaertumor_Topographie_ICD_O>
+						<cTNM><!-- identical tnm content - no ID-->
+							<Datum>2001-01-01</Datum>
+							<Version>8</Version>
+							<y_Symbol>y</y_Symbol>
+							<r_Symbol>r</r_Symbol>
+							<a_Symbol>a</a_Symbol>
+							<c_p_u_Praefix_T>u</c_p_u_Praefix_T>
+							<T>2</T>
+							<m_Symbol>m1</m_Symbol>
+							<c_p_u_Praefix_N>p</c_p_u_Praefix_N>
+							<N>0</N>
+							<c_p_u_Praefix_M>p</c_p_u_Praefix_M>
+							<M>1</M>
+							<L>L0</L>
+							<V>V1</V>
+							<UICC_Stadium>IB</UICC_Stadium>
+						</cTNM>
+						<pTNM><!-- identical tnm content - no ID-->
+							<Datum>2001-01-01</Datum>
+							<Version>8</Version>
+							<y_Symbol>y</y_Symbol>
+							<r_Symbol>r</r_Symbol>
+							<a_Symbol>a</a_Symbol>
+							<c_p_u_Praefix_T>u</c_p_u_Praefix_T>
+							<T>2</T>
+							<m_Symbol>m1</m_Symbol>
+							<c_p_u_Praefix_N>p</c_p_u_Praefix_N>
+							<N>0</N>
+							<c_p_u_Praefix_M>p</c_p_u_Praefix_M>
+							<M>1</M>
+							<L>L0</L>
+							<V>V1</V>
+							<UICC_Stadium>IB</UICC_Stadium>
+						</pTNM>
+					</Diagnose>
+				</Meldung>
+				<Meldung Meldung_ID="12124" Melder_ID="3101"><!-- check overarching tnm ID duplicates-->
+					<Tumorzuordnung Tumor_ID="012003">
+						<Primaertumor_ICD>
+							<Code>C14.1</Code>
+							<Version>10 2024 GM</Version>
+						</Primaertumor_ICD>
+						<Diagnosedatum Datumsgenauigkeit="E">2002-01-01</Diagnosedatum>
+						<Seitenlokalisation>M</Seitenlokalisation>
+					</Tumorzuordnung>
+					<Diagnose>
+						<Primaertumor_Topographie_ICD_O>
+							<Code>C14.1</Code>
+						</Primaertumor_Topographie_ICD_O>
+						<cTNM ID="1832003-duplicate"><!-- identical tnm ID-->
+							<Datum>2002-01-01</Datum>
+							<Version>8</Version>
+							<y_Symbol>y</y_Symbol>
+							<r_Symbol>r</r_Symbol>
+							<a_Symbol>a</a_Symbol>
+							<c_p_u_Praefix_T>u</c_p_u_Praefix_T>
+							<T>2</T>
+							<m_Symbol>m1</m_Symbol>
+							<c_p_u_Praefix_N>p</c_p_u_Praefix_N>
+							<N>0</N>
+							<c_p_u_Praefix_M>p</c_p_u_Praefix_M>
+							<M>1</M>
+							<L>L0</L>
+							<V>V1</V>
+							<UICC_Stadium>IB</UICC_Stadium>
+						</cTNM>
+						<pTNM ID="1832003-duplicate"><!-- identical tnm ID-->
+							<Datum>2002-01-01</Datum>
+							<Version>8</Version>
+							<y_Symbol>y</y_Symbol>
+							<r_Symbol>r</r_Symbol>
+							<a_Symbol>a</a_Symbol>
+							<c_p_u_Praefix_T>u</c_p_u_Praefix_T>
+							<T>2</T>
+							<m_Symbol>m1</m_Symbol>
+							<c_p_u_Praefix_N>p</c_p_u_Praefix_N>
+							<N>0</N>
+							<c_p_u_Praefix_M>p</c_p_u_Praefix_M>
+							<M>1</M>
+							<L>L0</L>
+							<V>V1</V>
+							<UICC_Stadium>IB</UICC_Stadium>
+						</pTNM>
+					</Diagnose>
+				</Meldung>
+				<Meldung Meldung_ID="12124" Melder_ID="3101">
+					<Tumorzuordnung Tumor_ID="012003">
+						<Primaertumor_ICD>
+							<Code>C14.1</Code>
+							<Version>10 2024 GM</Version>
+						</Primaertumor_ICD>
+						<Diagnosedatum Datumsgenauigkeit="E">2002-01-01</Diagnosedatum>
+						<Seitenlokalisation>M</Seitenlokalisation>
+					</Tumorzuordnung>
+					<Verlauf Verlauf_ID="012003-verlauf">
+						<Untersuchungsdatum_Verlauf>2002-01-01</Untersuchungsdatum_Verlauf>
+						<TNM ID="1832003-duplicate"><!-- identical tnm ID (diag and verlauf)-->
+							<Datum>2002-01-01</Datum>
+							<Version>8</Version>
+							<y_Symbol>y</y_Symbol>
+							<r_Symbol>r</r_Symbol>
+							<a_Symbol>a</a_Symbol>
+							<c_p_u_Praefix_T>u</c_p_u_Praefix_T>
+							<T>2</T>
+							<m_Symbol>m1</m_Symbol>
+							<c_p_u_Praefix_N>p</c_p_u_Praefix_N>
+							<N>0</N>
+							<c_p_u_Praefix_M>p</c_p_u_Praefix_M>
+							<M>1</M>
+							<L>L0</L>
+							<V>V1</V>
+							<UICC_Stadium>IB</UICC_Stadium>
+						</TNM>
 					</Verlauf>
 				</Meldung>
 			</Menge_Meldung>

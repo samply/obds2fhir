@@ -1300,7 +1300,7 @@
             </outcome>
             <complication>
                <coding>
-                  <system value="http://fhir.de/ValueSet/bfarm/icd-10-gm"/>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/OPKomplikationenCS"/>
                   <code value="N"/>
                </coding>
             </complication>
@@ -2234,6 +2234,10 @@
                   <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/GesamtbeurteilungResidualstatusCS"/>
                   <code value="R0"/>
                </coding>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/EndeGrundCS"/>
+                  <code value="A"/>
+               </coding>
             </outcome>
          </Procedure>
       </resource>
@@ -2243,10 +2247,10 @@
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/AdverseEvent/nbndf2f26b2f8a0d20e"/>
+      <fullUrl value="http://example.com/AdverseEvent/nbn6449555a9c0dcf44"/>
       <resource>
          <AdverseEvent>
-            <id value="nbndf2f26b2f8a0d20e"/>
+            <id value="nbn6449555a9c0dcf44"/>
             <actuality value="actual"/>
             <event>
                <coding>
@@ -2273,14 +2277,14 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="AdverseEvent/nbndf2f26b2f8a0d20e"/>
+         <url value="AdverseEvent/nbn6449555a9c0dcf44"/>
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/AdverseEvent/nbn33d668b571543e15"/>
+      <fullUrl value="http://example.com/AdverseEvent/nbn2e635900f2475a8e"/>
       <resource>
          <AdverseEvent>
-            <id value="nbn33d668b571543e15"/>
+            <id value="nbn2e635900f2475a8e"/>
             <actuality value="actual"/>
             <event>
                <coding>
@@ -2307,7 +2311,7 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="AdverseEvent/nbn33d668b571543e15"/>
+         <url value="AdverseEvent/nbn2e635900f2475a8e"/>
       </request>
    </entry>
    <entry>
@@ -2530,6 +2534,10 @@
                   <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/GesamtbeurteilungResidualstatusCS"/>
                   <code value="R0"/>
                </coding>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/EndeGrundCS"/>
+                  <code value="A"/>
+               </coding>
             </outcome>
          </Procedure>
       </resource>
@@ -2539,10 +2547,10 @@
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/AdverseEvent/nbn0dc23eb48eb7c78f"/>
+      <fullUrl value="http://example.com/AdverseEvent/nbn830c0b70421d57e6"/>
       <resource>
          <AdverseEvent>
-            <id value="nbn0dc23eb48eb7c78f"/>
+            <id value="nbn830c0b70421d57e6"/>
             <actuality value="actual"/>
             <event>
                <coding>
@@ -2569,14 +2577,14 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="AdverseEvent/nbn0dc23eb48eb7c78f"/>
+         <url value="AdverseEvent/nbn830c0b70421d57e6"/>
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/AdverseEvent/nbn0840ab56e6e3669f"/>
+      <fullUrl value="http://example.com/AdverseEvent/nbn5820b5873729451e"/>
       <resource>
          <AdverseEvent>
-            <id value="nbn0840ab56e6e3669f"/>
+            <id value="nbn5820b5873729451e"/>
             <actuality value="actual"/>
             <event>
                <coding>
@@ -2603,14 +2611,14 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="AdverseEvent/nbn0840ab56e6e3669f"/>
+         <url value="AdverseEvent/nbn5820b5873729451e"/>
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/AdverseEvent/nbn98e950c86cf6032b"/>
+      <fullUrl value="http://example.com/AdverseEvent/nbna723073caf9fd246"/>
       <resource>
          <AdverseEvent>
-            <id value="nbn98e950c86cf6032b"/>
+            <id value="nbna723073caf9fd246"/>
             <actuality value="actual"/>
             <event>
                <coding>
@@ -2637,7 +2645,7 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="AdverseEvent/nbn98e950c86cf6032b"/>
+         <url value="AdverseEvent/nbna723073caf9fd246"/>
       </request>
    </entry>
    <entry>
@@ -2854,14 +2862,6 @@
                </coding>
             </category>
             <medicationCodeableConcept>
-               <coding>
-                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTSubstanzCS"/>
-                  <code value="SYST_Substanz0"/>
-               </coding>
-               <coding>
-                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTSubstanzCS"/>
-                  <code value="SYST_Substanz1"/>
-               </coding>
                <text value="SYST_Substanz0;SYST_Substanz1"/>
             </medicationCodeableConcept>
             <subject>
@@ -2882,10 +2882,10 @@
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/AdverseEvent/nbn61887bc55c50979a"/>
+      <fullUrl value="http://example.com/AdverseEvent/nbna6235557c2bc2167"/>
       <resource>
          <AdverseEvent>
-            <id value="nbn61887bc55c50979a"/>
+            <id value="nbna6235557c2bc2167"/>
             <actuality value="actual"/>
             <event>
                <coding>
@@ -2912,14 +2912,14 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="AdverseEvent/nbn61887bc55c50979a"/>
+         <url value="AdverseEvent/nbna6235557c2bc2167"/>
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/AdverseEvent/nbnd6b0a95b8ae35b9a"/>
+      <fullUrl value="http://example.com/AdverseEvent/nbnfa8339f3c62b7b2a"/>
       <resource>
          <AdverseEvent>
-            <id value="nbnd6b0a95b8ae35b9a"/>
+            <id value="nbnfa8339f3c62b7b2a"/>
             <actuality value="actual"/>
             <event>
                <coding>
@@ -2946,7 +2946,7 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="AdverseEvent/nbnd6b0a95b8ae35b9a"/>
+         <url value="AdverseEvent/nbnfa8339f3c62b7b2a"/>
       </request>
    </entry>
    <entry>
@@ -3065,14 +3065,6 @@
                </coding>
             </category>
             <medicationCodeableConcept>
-               <coding>
-                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTSubstanzCS"/>
-                  <code value="SYST_Substanz2"/>
-               </coding>
-               <coding>
-                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTSubstanzCS"/>
-                  <code value="SYST_Substanz3"/>
-               </coding>
                <text value="SYST_Substanz2;SYST_Substanz3"/>
             </medicationCodeableConcept>
             <subject>
@@ -3093,10 +3085,10 @@
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/AdverseEvent/nbn22c1cdb397fbd598"/>
+      <fullUrl value="http://example.com/AdverseEvent/nbnd4d3e52a3669ab9c"/>
       <resource>
          <AdverseEvent>
-            <id value="nbn22c1cdb397fbd598"/>
+            <id value="nbnd4d3e52a3669ab9c"/>
             <actuality value="actual"/>
             <event>
                <coding>
@@ -3123,14 +3115,14 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="AdverseEvent/nbn22c1cdb397fbd598"/>
+         <url value="AdverseEvent/nbnd4d3e52a3669ab9c"/>
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/AdverseEvent/nbn98e950c86cf6032b"/>
+      <fullUrl value="http://example.com/AdverseEvent/nbndaa4dcb984b31818"/>
       <resource>
          <AdverseEvent>
-            <id value="nbn98e950c86cf6032b"/>
+            <id value="nbndaa4dcb984b31818"/>
             <actuality value="actual"/>
             <event>
                <coding>
@@ -3157,7 +3149,7 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="AdverseEvent/nbn98e950c86cf6032b"/>
+         <url value="AdverseEvent/nbndaa4dcb984b31818"/>
       </request>
    </entry>
    <entry>

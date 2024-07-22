@@ -580,6 +580,7 @@
 								<Tod_tumorbedingt>J</Tod_tumorbedingt>
 								<Menge_Todesursache>
 									<Todesursache_ICD>C61</Todesursache_ICD>
+									<Todesursache_ICD>C12</Todesursache_ICD>
 									<Todesursache_ICD_Version>10 2004 GM</Todesursache_ICD_Version>
 								</Menge_Todesursache>
 							</Tod>
