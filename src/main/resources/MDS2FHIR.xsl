@@ -442,16 +442,18 @@
                             </category>
                         </xsl:if>
                         <medicationCodeableConcept>
-                            <xsl:for-each select="SYST_Substanz[normalize-space(.)!='' or .='/']">
+                            <!--<xsl:for-each select="SYST_Substanz[normalize-space(.)!='' or .='/']">
                                 <coding>
                                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTSubstanzCS"/>
                                     <code value="{mds2fhir:fix-free-text(.)}"/>
                                 </coding>
-                            </xsl:for-each>
-                            <xsl:for-each select="SYST_Substanz-ATC[.!='']">
+                            </xsl:for-each>TODO add later-->
+                            <xsl:for-each select="SYST_Substanz-ATC[Code!='']">
                                 <coding>
-                                    <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SYSTSubstanzATCCS"/>
-                                    <version value="{Version}"/>
+                                    <system value="http://fhir.de/CodeSystem/bfarm/atc"/>
+                                    <xsl:if test="Version!=''">
+                                        <version value="{Version}"/>
+                                    </xsl:if>
                                     <code value="{Code}"/>
                                 </coding>
                             </xsl:for-each>
@@ -643,6 +645,12 @@
                                 <coding>
                                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/GesamtbeurteilungResidualstatusCS"/>
                                     <code value="{Gesamtbeurteilung_Resttumor}"/>
+                                </coding>
+                            </xsl:if>
+                            <xsl:if test="Ende_Grund!=''">
+                                <coding>
+                                    <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/EndeGrundCS"/>
+                                    <code value="{Ende_Grund}"/>
                                 </coding>
                             </xsl:if>
                         </outcome>
@@ -890,7 +898,7 @@
                             <complication>
                                 <xsl:for-each select="Komplikationen/Komplikation[. != '']">
                                     <coding>
-                                        <system value="http://fhir.de/ValueSet/bfarm/icd-10-gm"/>
+                                        <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/OPKomplikationenCS"/>
                                         <code value="{.}"/>
                                     </coding>
                                 </xsl:for-each>
@@ -1965,6 +1973,54 @@
                     <url value="Observation/{@Vitalstatus_ID}"/>
                 </request>
             </entry>
+            <xsl:if test="Tod/Tod_tumorbedingt!='' or Tod/Menge_Todesursachen/Todesursache_ICD/Code!=''">
+                <xsl:variable name="TodUrsacheID" select="replace(@Vitalstatus_ID, '^.{5}', 'tod')"/>
+                <entry>
+                    <fullUrl value="http://example.com/Observation/{$TodUrsacheID}" />
+                    <resource>
+                        <Observation>
+                            <id value="{$TodUrsacheID}" />
+                            <meta>
+                                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-TodUrsache" />
+                            </meta>
+                            <status value="final" />
+                            <code>
+                                <coding>
+                                    <system value="http://loinc.org" />
+                                    <code value="68343-3" />
+                                </coding>
+                            </code>
+                            <subject>
+                                <reference value="Patient/{$Patient_ID}"/>
+                            </subject>
+                            <xsl:if test="Tod/Sterbedatum!=''">
+                                <effectiveDateTime value="{Tod/Sterbedatum}" />
+                            </xsl:if>
+                            <valueCodeableConcept>
+                                <xsl:for-each select="Tod/Menge_Todesursachen/Todesursache_ICD[Code!='']">
+                                    <coding>
+                                        <system value="http://fhir.de/CodeSystem/bfarm/icd-10-gm" />
+                                        <xsl:if test="Version!=''">
+                                            <version value="{Version}"/>
+                                        </xsl:if>
+                                        <code value="{Code}" />
+                                    </coding>
+                                </xsl:for-each>
+                                <xsl:if test="Tod/Tod_tumorbedingt!=''">
+                                    <coding>
+                                        <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/JNUCS" />
+                                        <code value="{Tod/Tod_tumorbedingt}" />
+                                    </coding>
+                                </xsl:if>
+                            </valueCodeableConcept>
+                        </Observation>
+                    </resource>
+                    <request>
+                        <method value="PUT" />
+                        <url value="Observation/{$TodUrsacheID}" />
+                    </request>
+                </entry>
+            </xsl:if>
         </xsl:if>
     </xsl:template>
 

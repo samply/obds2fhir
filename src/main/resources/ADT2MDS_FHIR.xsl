@@ -81,7 +81,7 @@
                     <xsl:apply-templates select="Menge_Meldung/Meldung/Menge_Biomaterial/Biomaterial[not(@Biomaterial_ID=following::*/@Biomaterial_ID)]">
                         <xsl:with-param name="Patient_Id" select="Patienten_Stammdaten/@Patient_ID"/>
                     </xsl:apply-templates>
-                    <xsl:for-each select="Menge_Meldung/Meldung[not(Tumorzuordnung/@Tumor_ID=preceding-sibling::*/Tumorzuordnung/@Tumor_ID) and not(Menge_Biomaterial)]">
+                    <xsl:for-each select="Menge_Meldung/Meldung[not(Tumorzuordnung/@Tumor_ID=preceding-sibling::*/Tumorzuordnung/@Tumor_ID)]">
                         <xsl:choose>
                             <xsl:when test="Tumorzuordnung/@Tumor_ID[.!='']">
                                 <xsl:apply-templates select="../../Menge_Meldung"><!--apply sequential tumor related reports -->
@@ -200,7 +200,7 @@
                             <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
                         </xsl:apply-templates>
                         </xsl:when>
-                        <xsl:otherwise><xsl:apply-templates select=".[not(SYST_Beginn_Datum=following::SYST[../../Tumorzuordnung/@Tumor_ID=$Tumor_Id]/SYST_Beginn_Datum)]">
+                        <xsl:otherwise><xsl:apply-templates select=".[not(concat(SYST_Beginn_Datum,Menge_Therapieart)=following::SYST[../../Tumorzuordnung/@Tumor_ID=$Tumor_Id]/concat(SYST_Beginn_Datum,Menge_Therapieart))]">
                             <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                             <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
                         </xsl:apply-templates>
@@ -233,14 +233,19 @@
             <xsl:choose>
                 <xsl:when test="@TNM_ID!=''">
                     <xsl:apply-templates select=".[
-                        not(@TNM_ID = (following::TNM[../../../Tumorzuordnung/@Tumor_ID = $Tumor_Id])/@TNM_ID)]">
+                        not(@TNM_ID = (following::TNM[../../../Tumorzuordnung/@Tumor_ID = $Tumor_Id])/@TNM_ID) and
+                        not(@TNM_ID = (following::pTNM[../@Tumor_ID = $Tumor_Id])/@TNM_ID) and
+                        not(@TNM_ID = (following::cTNM[../@Tumor_ID = $Tumor_Id])/@TNM_ID)]">
                         <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                         <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
                     </xsl:apply-templates>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:apply-templates select=".[
-                        not(concat(TNM_Datum,TNM_T,TNM_N,TNM_M,TNM_c_p_u_Praefix_T,TNM_c_p_u_Praefix_N,TNM_c_p_u_Praefix_M)=following::TNM[../../../Tumorzuordnung/@Tumor_ID=$Tumor_Id]/concat(TNM_Datum,TNM_T,TNM_N,TNM_M,TNM_c_p_u_Praefix_T,TNM_c_p_u_Praefix_N,TNM_c_p_u_Praefix_M))]">
+                        not(concat(TNM_Datum,TNM_T,TNM_N,TNM_M,TNM_c_p_u_Praefix_T,TNM_c_p_u_Praefix_N,TNM_c_p_u_Praefix_M)=following::TNM[../../../Tumorzuordnung/@Tumor_ID=$Tumor_Id]/concat(TNM_Datum,TNM_T,TNM_N,TNM_M,TNM_c_p_u_Praefix_T,TNM_c_p_u_Praefix_N,TNM_c_p_u_Praefix_M)) and
+                        not(concat(TNM_Datum,TNM_T,TNM_N,TNM_M,TNM_c_p_u_Praefix_T,TNM_c_p_u_Praefix_N,TNM_c_p_u_Praefix_M)=following::pTNM[../@Tumor_ID=$Tumor_Id]/concat(TNM_Datum,TNM_T,TNM_N,TNM_M,TNM_c_p_u_Praefix_T,TNM_c_p_u_Praefix_N,TNM_c_p_u_Praefix_M))  and
+                        not(concat(TNM_Datum,TNM_T,TNM_N,TNM_M,TNM_c_p_u_Praefix_T,TNM_c_p_u_Praefix_N,TNM_c_p_u_Praefix_M)=following::cTNM[../@Tumor_ID=$Tumor_Id]/concat(TNM_Datum,TNM_T,TNM_N,TNM_M,TNM_c_p_u_Praefix_T,TNM_c_p_u_Praefix_N,TNM_c_p_u_Praefix_M))
+                        ]">
                         <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                         <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
                     </xsl:apply-templates>
@@ -534,8 +539,13 @@
             <xsl:variable name="attribute">
                 <xsl:choose>
                     <xsl:when test="@SYST_ID!=''"><xsl:value-of select="@SYST_ID"/></xsl:when>
-                    <xsl:when test="$SYST_Datum!=''"><xsl:value-of select="'gen',$SYST_Datum"/></xsl:when>
-                    <xsl:otherwise>gen:missing_ID_and_Date</xsl:otherwise>
+                    <xsl:when test="SYST_Beginn_Datum!=''"><xsl:value-of select="concat('gen',SYST_Beginn_Datum,string-join(Menge_Therapieart/SYST_Therapieart, ''))"/></xsl:when>
+                    <xsl:otherwise>
+                        <xsl:message>
+                            WARN: SYST without both ID and date <xsl:value-of select="//@Patient_ID"/> !
+                        </xsl:message>
+                        gen:missing_ID_and_Date
+                    </xsl:otherwise>
                 </xsl:choose></xsl:variable>
             <xsl:attribute name="SYST_ID" select="concat('syst', hash:hash($Patient_Id, $Tumor_Id, string-join($attribute, '')))"/>
             <xsl:apply-templates select="SYST_Intention | SYST_Stellung_OP | Menge_Therapieart | SYST_Ende_Grund | Residualstatus | SYST_Beginn_Datum | SYST_Ende_Datum | SYST_Protokoll | Menge_Substanz"/>
@@ -556,12 +566,12 @@
         <xsl:apply-templates select="ST_Nebenwirkung[not(concat(Nebenwirkung_Grad,Nebenwirkung_Art,Nebenwirkung_Version)=following::ST_Nebenwirkung/concat(Nebenwirkung_Grad,Nebenwirkung_Art,Nebenwirkung_Version))]">
             <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
             <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
-            <xsl:with-param name="Therapy_Id" select="$Therapy_Id"/>
+            <xsl:with-param name="Therapy_Id" select="concat($Therapy_Id,'st')"/>
         </xsl:apply-templates>
         <xsl:apply-templates select="SYST_Nebenwirkung[not(concat(Nebenwirkung_Grad,Nebenwirkung_Art,Nebenwirkung_Version)=following::SYST_Nebenwirkung/concat(Nebenwirkung_Grad,Nebenwirkung_Art,Nebenwirkung_Version))]">
             <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
             <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
-            <xsl:with-param name="Therapy_Id" select="$Therapy_Id"/>
+            <xsl:with-param name="Therapy_Id" select="concat($Therapy_Id,'sys')"/>
         </xsl:apply-templates>
     </xsl:template>
 

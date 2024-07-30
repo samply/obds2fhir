@@ -4,7 +4,7 @@ WORKDIR /app
 COPY . ./
 RUN mvn clean install -U
 
-FROM eclipse-temurin:17-jre-alpine
+FROM bellsoft/liberica-openjre-alpine:17
 COPY --from=build /app/target/obds2fhir*with-dependencies.jar /obds2fhir/obds2fhir.jar
 ADD src/docker/start.sh                         /obds2fhir/
 RUN chmod +x                                    /obds2fhir/start.sh

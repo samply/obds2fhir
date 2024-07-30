@@ -33,4 +33,46 @@
          <url value="Observation/vital1302b6d11c5b628d"/>
       </request>
    </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/tod1302b6d11c5b628d"/>
+      <resource>
+         <Observation>
+            <id value="tod1302b6d11c5b628d"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-TodUrsache"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="68343-3"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/1302b6d11c5b628d"/>
+            </subject>
+            <effectiveDateTime value="2024-07-20"/>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://fhir.de/CodeSystem/bfarm/icd-10-gm"/>
+                  <version value="10 2024 GM"/>
+                  <code value="C43.4"/>
+               </coding>
+               <coding>
+                  <system value="http://fhir.de/CodeSystem/bfarm/icd-10-gm"/>
+                  <version value="10 2024 GM"/>
+                  <code value="Sonstige"/>
+               </coding>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/JNUCS"/>
+                  <code value="J"/>
+               </coding>
+            </valueCodeableConcept>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/tod1302b6d11c5b628d"/>
+      </request>
+   </entry>
 </Bundle>
