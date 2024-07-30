@@ -633,7 +633,7 @@
                     <reasonReference>
                         <reference value="Condition/{$Diagnosis_ID}"/>
                     </reasonReference>
-                    <xsl:if test="Lokale_Beurteilung_Resttumor!='' or Gesamtbeurteilung_Resttumor!=''"><!--legacy ADT, not present in oBDS-->
+                    <xsl:if test="Ende_Grund!='' or Lokale_Beurteilung_Resttumor!='' or Gesamtbeurteilung_Resttumor!=''"><!--legacy ADT, not present in oBDS-->
                         <outcome>
                             <xsl:if test="Lokale_Beurteilung_Resttumor!=''">
                                 <coding>

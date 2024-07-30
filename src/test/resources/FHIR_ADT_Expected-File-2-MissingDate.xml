@@ -88,6 +88,12 @@
             <reasonReference>
                <reference value="Condition/digab15dafaa615fee6"/>
             </reasonReference>
+            <outcome>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/EndeGrundCS"/>
+                  <code value="A"/>
+               </coding>
+            </outcome>
          </Procedure>
       </resource>
       <request>
