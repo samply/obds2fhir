@@ -2418,6 +2418,12 @@
             <reasonReference>
                <reference value="Condition/dig1f2f2da54770c86f"/>
             </reasonReference>
+            <outcome>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/EndeGrundCS"/>
+                  <code value="V"/>
+               </coding>
+            </outcome>
          </Procedure>
       </resource>
       <request>
