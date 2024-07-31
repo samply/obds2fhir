@@ -2533,10 +2533,10 @@
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/Procedure/stsf6a2876a834ef8ef"/>
+      <fullUrl value="http://example.com/Procedure/stsde3ebabc59509400"/>
       <resource>
          <Procedure>
-            <id value="stsf6a2876a834ef8ef"/>
+            <id value="stsde3ebabc59509400"/>
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Procedure-Strahlentherapie"/>
             </meta>
@@ -2545,7 +2545,15 @@
                   <valueCodeableConcept>
                      <coding>
                         <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/ApplikationsartCS"/>
-                        <code value="PRCJ"/>
+                        <code value="PRCJST4D"/>
+                     </coding>
+                  </valueCodeableConcept>
+               </extension>
+               <extension url="Strahlenart">
+                  <valueCodeableConcept>
+                     <coding>
+                        <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/StrahlenartCS"/>
+                        <code value="UH"/>
                      </coding>
                   </valueCodeableConcept>
                </extension>
@@ -2619,7 +2627,7 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="Procedure/stsf6a2876a834ef8ef"/>
+         <url value="Procedure/stsde3ebabc59509400"/>
       </request>
    </entry>
    <entry>
