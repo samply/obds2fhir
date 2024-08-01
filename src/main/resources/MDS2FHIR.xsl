@@ -1323,14 +1323,14 @@
                             <reference value="Condition/{$Diagnosis_ID}"/>
                         </focus>
                         <effectiveDateTime value="{mds2fhir:transformDate(Datum)}"/>
-                        <xsl:if test="UICC_Stadium!=''">
+                        <xsl:if test="TNM-Version!=''">
                             <valueCodeableConcept>
                                 <coding>
                                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/UiccstadiumCS"/>
-                                    <xsl:if test="TNM-Version!=''">
-                                        <version value="{TNM-Version}"/>
+                                    <version value="{TNM-Version}"/>
+                                    <xsl:if test="UICC_Stadium!=''">
+                                        <code value="{UICC_Stadium[1]}"/>
                                     </xsl:if>
-                                    <code value="{UICC_Stadium[1]}"/>
                                 </coding>
                             </valueCodeableConcept>
                         </xsl:if>
@@ -1359,9 +1359,6 @@
                                     <coding>
                                         <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMTCS"/>
                                         <code value="{TNM-T}"/>
-                                        <xsl:if test="TNM-Version!=''">
-                                            <version value="{TNM-Version}"/>
-                                        </xsl:if>
                                     </coding>
                                 </valueCodeableConcept>
                             </component>
@@ -1391,9 +1388,6 @@
                                     <coding>
                                         <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMNCS"/>
                                         <code value="{TNM-N}"/>
-                                        <xsl:if test="TNM-Version!=''">
-                                            <version value="{TNM-Version}"/>
-                                        </xsl:if>
                                     </coding>
                                 </valueCodeableConcept>
                             </component>
@@ -1423,9 +1417,6 @@
                                     <coding>
                                         <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMMCS"/>
                                         <code value="{TNM-M}"/>
-                                        <xsl:if test="TNM-Version!=''">
-                                            <version value="{TNM-Version}"/>
-                                        </xsl:if>
                                     </coding>
                                 </valueCodeableConcept>
                             </component>
