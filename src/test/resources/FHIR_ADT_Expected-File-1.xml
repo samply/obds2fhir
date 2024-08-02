@@ -881,6 +881,12 @@
                <reference value="Condition/digc8edfdcb9555eed6"/>
             </focus>
             <effectiveDateTime value="2021-03-16"/>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/UiccstadiumCS"/>
+                  <version value="6"/>
+               </coding>
+            </valueCodeableConcept>
             <component>
                <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-TNMcpuPraefix">
                   <valueCodeableConcept>
@@ -899,7 +905,6 @@
                   <coding>
                      <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMTCS"/>
                      <code value="4e"/>
-                     <version value="6"/>
                   </coding>
                </valueCodeableConcept>
             </component>
@@ -921,7 +926,6 @@
                   <coding>
                      <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMNCS"/>
                      <code value="(sn)(mol+)"/>
-                     <version value="6"/>
                   </coding>
                </valueCodeableConcept>
             </component>
@@ -943,7 +947,6 @@
                   <coding>
                      <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMMCS"/>
                      <code value="2(cy-)"/>
-                     <version value="6"/>
                   </coding>
                </valueCodeableConcept>
             </component>
@@ -1074,6 +1077,12 @@
                <reference value="Condition/digc8edfdcb9555eed6"/>
             </focus>
             <effectiveDateTime value="1991-03-16"/>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/UiccstadiumCS"/>
+                  <version value="6"/>
+               </coding>
+            </valueCodeableConcept>
             <component>
                <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-TNMcpuPraefix">
                   <valueCodeableConcept>
@@ -1092,7 +1101,6 @@
                   <coding>
                      <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMTCS"/>
                      <code value="4e"/>
-                     <version value="6"/>
                   </coding>
                </valueCodeableConcept>
             </component>
@@ -1114,7 +1122,6 @@
                   <coding>
                      <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMNCS"/>
                      <code value="(sn)(mol+)"/>
-                     <version value="6"/>
                   </coding>
                </valueCodeableConcept>
             </component>
@@ -1136,7 +1143,6 @@
                   <coding>
                      <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMMCS"/>
                      <code value="2(cy-)"/>
-                     <version value="6"/>
                   </coding>
                </valueCodeableConcept>
             </component>
@@ -1568,7 +1574,6 @@
                   <coding>
                      <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMTCS"/>
                      <code value="4e"/>
-                     <version value="6"/>
                   </coding>
                </valueCodeableConcept>
             </component>
@@ -1590,7 +1595,6 @@
                   <coding>
                      <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMNCS"/>
                      <code value="(sn)(mol+)"/>
-                     <version value="6"/>
                   </coding>
                </valueCodeableConcept>
             </component>
@@ -1612,7 +1616,6 @@
                   <coding>
                      <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMMCS"/>
                      <code value="2(cy-)"/>
-                     <version value="6"/>
                   </coding>
                </valueCodeableConcept>
             </component>
@@ -2027,7 +2030,6 @@
                   <coding>
                      <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMTCS"/>
                      <code value="4e"/>
-                     <version value="6"/>
                   </coding>
                </valueCodeableConcept>
             </component>
@@ -2049,7 +2051,6 @@
                   <coding>
                      <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMNCS"/>
                      <code value="(sn)(mol+)"/>
-                     <version value="6"/>
                   </coding>
                </valueCodeableConcept>
             </component>
@@ -2071,7 +2072,6 @@
                   <coding>
                      <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMMCS"/>
                      <code value="2(cy-)"/>
-                     <version value="6"/>
                   </coding>
                </valueCodeableConcept>
             </component>
@@ -3680,7 +3680,6 @@
                   <coding>
                      <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMTCS"/>
                      <code value="4e"/>
-                     <version value="6"/>
                   </coding>
                </valueCodeableConcept>
             </component>
@@ -3702,7 +3701,6 @@
                   <coding>
                      <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMNCS"/>
                      <code value="(sn)(mol+)"/>
-                     <version value="6"/>
                   </coding>
                </valueCodeableConcept>
             </component>
@@ -3724,7 +3722,6 @@
                   <coding>
                      <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMMCS"/>
                      <code value="2(cy-)"/>
-                     <version value="6"/>
                   </coding>
                </valueCodeableConcept>
             </component>
@@ -4369,7 +4366,6 @@
                   <coding>
                      <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMTCS"/>
                      <code value="4e"/>
-                     <version value="6"/>
                   </coding>
                </valueCodeableConcept>
             </component>
@@ -4391,7 +4387,6 @@
                   <coding>
                      <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMNCS"/>
                      <code value="(sn)(mol+)"/>
-                     <version value="6"/>
                   </coding>
                </valueCodeableConcept>
             </component>
@@ -4413,7 +4408,6 @@
                   <coding>
                      <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/TNMMCS"/>
                      <code value="2(cy-)"/>
-                     <version value="6"/>
                   </coding>
                </valueCodeableConcept>
             </component>

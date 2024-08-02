@@ -516,10 +516,13 @@
 								<Applikationsart>
 									<Perkutan>
 										<Radiochemo>RCJ</Radiochemo>
+										<Stereotaktisch>ST</Stereotaktisch>
+										<Atemgetriggert>4D</Atemgetriggert>
 										<Zielgebiet>
 											<CodeVersion2021>9.10</CodeVersion2021><!--caution, different nodes: CodeVersion2014|CodeVersion2021-->
 										</Zielgebiet>
 										<Seite_Zielgebiet>L</Seite_Zielgebiet>
+										<Strahlenart>UH</Strahlenart>
 										<Gesamtdosis>
 											<Dosis>30</Dosis>
 											<Einheit>Gy</Einheit>
