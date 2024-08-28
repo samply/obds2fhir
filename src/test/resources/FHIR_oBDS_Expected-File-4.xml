@@ -2597,7 +2597,7 @@
             </category>
             <code>
                <coding>
-                  <system value="http://fhir.de/CodeSystem/dimdi/ops"/>
+                  <system value="http://fhir.de/CodeSystem/bfarm/ops"/>
                   <code value="8-52"/>
                   <display value="Strahlentherapie"/>
                </coding>
@@ -2688,7 +2688,7 @@
             </category>
             <code>
                <coding>
-                  <system value="http://fhir.de/CodeSystem/dimdi/ops"/>
+                  <system value="http://fhir.de/CodeSystem/bfarm/ops"/>
                   <code value="8-52"/>
                   <display value="Strahlentherapie"/>
                </coding>
@@ -2771,7 +2771,7 @@
             </category>
             <code>
                <coding>
-                  <system value="http://fhir.de/CodeSystem/dimdi/ops"/>
+                  <system value="http://fhir.de/CodeSystem/bfarm/ops"/>
                   <code value="8-52"/>
                   <display value="Strahlentherapie"/>
                </coding>
@@ -2854,7 +2854,7 @@
             </category>
             <code>
                <coding>
-                  <system value="http://fhir.de/CodeSystem/dimdi/ops"/>
+                  <system value="http://fhir.de/CodeSystem/bfarm/ops"/>
                   <code value="8-52"/>
                   <display value="Strahlentherapie"/>
                </coding>

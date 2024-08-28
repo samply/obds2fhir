@@ -787,7 +787,7 @@
                             </category>
                             <code>
                                 <coding>
-                                    <system value="http://fhir.de/CodeSystem/dimdi/ops"/>
+                                    <system value="http://fhir.de/CodeSystem/bfarm/ops"/>
                                     <code value="8-52"/>
                                     <display value="Strahlentherapie"/>
                                 </coding>
@@ -1323,12 +1323,14 @@
                             <reference value="Condition/{$Diagnosis_ID}"/>
                         </focus>
                         <effectiveDateTime value="{mds2fhir:transformDate(Datum)}"/>
-                        <xsl:if test="TNM-Version!=''">
+                        <xsl:if test="TNM-Version!='' or UICC_Stadium[1]!=''">
                             <valueCodeableConcept>
                                 <coding>
                                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/UiccstadiumCS"/>
-                                    <version value="{TNM-Version}"/>
-                                    <xsl:if test="UICC_Stadium!=''">
+                                    <xsl:if test="TNM-Version!=''">
+                                        <version value="{TNM-Version}"/>
+                                    </xsl:if>
+                                    <xsl:if test="UICC_Stadium[1]!=''">
                                         <code value="{UICC_Stadium[1]}"/>
                                     </xsl:if>
                                 </coding>
