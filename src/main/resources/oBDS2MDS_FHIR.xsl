@@ -578,11 +578,11 @@
         <xsl:param name="Therapy_Id"/>
         <xsl:for-each select="Menge_Nebenwirkung/Nebenwirkung[Grad!='']">
             <Nebenwirkung>
-                <xsl:attribute name="Nebenwirkung_ID" select="hash:hash($Patient_Id, $Tumor_Id, concat($Therapy_Id, Art/node(), Grad, Version))"/>
+                <xsl:attribute name="Nebenwirkung_ID" select="hash:hash($Patient_Id, $Tumor_Id, concat($Therapy_Id, Art/*|text(), Grad, Version))"/>
                 <Grad><xsl:value-of select="Grad"/></Grad>
                 <xsl:if test="Version!=''"><Version><xsl:value-of select="Version"/></Version></xsl:if>
-                <xsl:if test="Art/node()!=''">
-                    <Art><xsl:value-of select="Art/node()"/></Art>
+                <xsl:if test="Art/*|text()!=''">
+                    <Art><xsl:value-of select="Art/*|text()"/></Art>
                     <xsl:choose>
                         <xsl:when test="Art/MedDRA_Code!=''">
                             <Typ>MedDRA_Code</Typ>
