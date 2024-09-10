@@ -2672,7 +2672,7 @@
 																									</xs:enumeration>
 																									<xs:enumeration value="Normalgewebe">
 																										<xs:annotation>
-																											<xs:documentation> Paraffin </xs:documentation>
+																											<xs:documentation> Normalgewebe </xs:documentation>
 																										</xs:annotation>
 																									</xs:enumeration>
 																									<xs:enumeration value="Vollblut">

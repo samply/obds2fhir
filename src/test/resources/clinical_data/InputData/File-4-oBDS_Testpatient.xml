@@ -929,20 +929,64 @@
 						</Menge_Todesursachen>
 					</Tod>
 				</Meldung>
-				<Meldung>
-					<Menge_Biomaterial>
-						<Biomaterial Biomaterial_ID="">
-							<Patienten_mit_Biomaterial>nein</Patienten_mit_Biomaterial>
-							<Probenart></Probenart>
-						</Biomaterial>
-						<Biomaterial Biomaterial_ID="as">
-							<Patienten_mit_Biomaterial>ja</Patienten_mit_Biomaterial>
-							<Probentyp>Gewebeprobe</Probentyp>
-							<Probenart>Tumorgewebe</Probenart>
-							<Entnahmedatum>23.03.1999</Entnahmedatum>
-							<Fixierungsart>Paraffin(FFPE)</Fixierungsart>
-						</Biomaterial>
-					</Menge_Biomaterial>
+				<Meldung Meldung_ID="oBDS-sample1" Melder_ID="3101">
+					<Samples>
+						<Sample Sample_ID="Sample_ID1">
+							<Project>http://dktk.dkfz.de/fhir/sid/exliquid-specimen</Project>
+							<Status>unsatisfactory</Status>
+							<Sampletype>whole-blood</Sampletype>
+							<Collectiontime>2024-09-04</Collectiontime>
+							<SpecimenQuantity>
+								<QuantityValue>5</QuantityValue>
+								<Unit>ml</Unit>
+							</SpecimenQuantity>
+							<BodySite>
+								<Code>C12</Code>
+								<Version>31</Version>
+							</BodySite>
+						</Sample>
+						<Sample Sample_ID="Sample_ID1-child" Parent_ID="Sample_ID1">
+							<Project>http://dktk.dkfz.de/fhir/sid/exliquid-specimen</Project>
+							<Status>available</Status>
+							<Sampletype>peripheral-blood-cells-vital</Sampletype>
+							<Collectiontime>2024-09-04</Collectiontime>
+							<SpecimenQuantity>
+								<QuantityValue>1</QuantityValue>
+								<Unit>ml</Unit>
+							</SpecimenQuantity>
+							<BodySite>
+								<Code>C12</Code>
+								<Version>31</Version>
+							</BodySite>
+						</Sample>
+					</Samples>
+				</Meldung>
+				<Meldung Meldung_ID="oBDS-sample2" Melder_ID="3101">
+					<Meldebegruendung>I</Meldebegruendung>
+					<Einwilligung_nicht_meldepflichtig>J</Einwilligung_nicht_meldepflichtig>
+					<Zertifizierung>1</Zertifizierung>
+					<Eigene_Leistung>J</Eigene_Leistung>
+					<Tumorzuordnung Tumor_ID="012001">
+						<Primaertumor_ICD>
+							<Code>C43.4</Code>
+							<Version>10 2024 GM</Version>
+						</Primaertumor_ICD>
+						<Diagnosedatum Datumsgenauigkeit="E">2024-03-02</Diagnosedatum>
+					</Tumorzuordnung>
+					<Samples>
+						<Sample Sample_ID="Sample_ID2">
+							<Status>entered-in-error</Status>
+							<Sampletype>ascites</Sampletype>
+							<Collectiontime>2022-01-13</Collectiontime>
+							<SpecimenQuantity>
+								<QuantityValue>200</QuantityValue>
+								<Unit>Bq</Unit>
+							</SpecimenQuantity>
+						</Sample>
+						<Sample Sample_ID="Sample_ID2">
+							<Sampletype>ascites</Sampletype>
+						</Sample>
+					</Samples>
 				</Meldung>
 			<!--</Menge_Meldung>
 			<Anmerkung>thisValueIsIgnored</Anmerkung>

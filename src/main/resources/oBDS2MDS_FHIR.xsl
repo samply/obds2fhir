@@ -70,12 +70,10 @@
                     </xsl:for-each>
                 </Organisationen>
             </xsl:if>
-        <!--pass children entities SAMPLE and DIAGNOSIS for further processing; TODO redo for oBDS
-            <xsl:if test="./Menge_Meldung/Meldung/Menge_Biomaterial/Biomaterial">
-                <xsl:apply-templates select="Menge_Meldung/Meldung/Menge_Biomaterial/Biomaterial[not(@Biomaterial_ID=following::*/@Biomaterial_ID[../../../../../Patienten_Stammdaten/@Patient_ID=$Patient_Id])]">
-                    <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
-                </xsl:apply-templates>
-            </xsl:if>-->
+        <!--pass children entities SAMPLE and DIAGNOSIS for further processing-->
+            <xsl:apply-templates select="Menge_Meldung/Meldung/Samples/Sample">
+                <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
+            </xsl:apply-templates>
             <xsl:for-each select="Menge_Meldung/Meldung[Tumorzuordnung/@Tumor_ID!='' and not(Tumorzuordnung/@Tumor_ID=preceding-sibling::*/Tumorzuordnung/@Tumor_ID) and not(Menge_Biomaterial)]">
                 <xsl:apply-templates select="../../Menge_Meldung"><!--apply sequential tumor related reports -->
                     <xsl:with-param name="Patient_Id" select="../../@Patient_ID"/>
@@ -83,6 +81,31 @@
                 </xsl:apply-templates>
             </xsl:for-each>
         </Patient>
+    </xsl:template>
+
+    <xsl:template match="Sample">
+        <xsl:param name="Patient_Id"/>
+        <xsl:if test="Sampletype!=''">
+            <Sample>
+                <xsl:attribute name="Sample_ID" >
+                            <xsl:if test="not(@Sample_ID!='')">
+                                <xsl:message terminate="yes" select="'ERROR: Missing Sample_ID in Patient:', $Patient_Id"/>
+                            </xsl:if>
+                    <xsl:value-of select="concat('bio', hash:hash($Patient_Id, @Sample_ID, ''))" />
+                </xsl:attribute>
+                <xsl:if test="../../Tumorzuordnung/@Tumor_ID!=''">
+                    <tumorID>
+                        <xsl:value-of select="concat('dig', hash:hash($Patient_Id, ../../Tumorzuordnung/@Tumor_ID, ''))"/>
+                    </tumorID>
+                </xsl:if>
+                <xsl:if test="@Parent_ID!=''">
+                    <parentID>
+                        <xsl:value-of select="concat('bio', hash:hash($Patient_Id, @Parent_ID, ''))"/>
+                    </parentID>
+                </xsl:if>
+                <xsl:apply-templates select="Project | Status | Sampletype | Collectiontime | SpecimenQuantity | BodySite"/>
+            </Sample>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template match="Menge_Meldung">
@@ -723,6 +746,68 @@
 
 
     <!--Rename elements according to MDS-->
+    <xsl:template match="Project" >
+        <Project>
+            <xsl:apply-templates select="node() | @*"/>
+        </Project>
+    </xsl:template>
+    <xsl:template match="Status" >
+        <Status>
+            <xsl:apply-templates select="node() | @*"/>
+        </Status>
+    </xsl:template>
+    <xsl:template match="Sampletype" >
+        <Sampletype>
+            <xsl:apply-templates select="node() | @*"/>
+        </Sampletype>
+    </xsl:template>
+    <xsl:template match="Collectiontime" >
+        <Collectiontime>
+            <xsl:value-of select="."/>
+        </Collectiontime>
+    </xsl:template>
+    <xsl:template match="SpecimenQuantity" >
+        <xsl:if test="QuantityValue!='' or Unit!=''">
+            <SpecimenQuantity>
+                <xsl:if test="QuantityValue!=''">
+                    <QuantityValue>
+                        <xsl:value-of select="QuantityValue"/>
+                    </QuantityValue>
+                </xsl:if>
+                <xsl:if test="Unit!=''">
+                    <Unit>
+                        <xsl:value-of select="Unit"/>
+                    </Unit>
+                </xsl:if>
+            </SpecimenQuantity>
+        </xsl:if>
+    </xsl:template>
+    <xsl:template match="BodySite" >
+        <xsl:if test="Code!='' or Version!=''">
+            <BodySite>
+                <xsl:if test="Code!=''">
+                    <Code>
+                        <xsl:value-of select="Code"/>
+                    </Code>
+                </xsl:if>
+                <xsl:if test="Version!=''">
+                    <Version>
+                        <xsl:value-of select="Version"/>
+                    </Version>
+                </xsl:if>
+            </BodySite>
+        </xsl:if>
+    </xsl:template>
+    <xsl:template match="Project" >
+        <Project>
+            <xsl:apply-templates select="node() | @*"/>
+        </Project>
+    </xsl:template>
+    <xsl:template match="Project" >
+        <Project>
+            <xsl:apply-templates select="node() | @*"/>
+        </Project>
+    </xsl:template>
     <xsl:template match="Geschlecht" >
         <Geschlecht>
             <xsl:apply-templates select="node()"/>

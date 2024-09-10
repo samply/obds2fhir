@@ -86,11 +86,14 @@
                     </entry>
                 </xsl:if>
                 <!-- Patienten > Patient > Sample -->
-                <xsl:apply-templates select="./Sample" mode="sample">
+                <xsl:apply-templates select="Sample[Probentyp!='']" mode="ADT">
+                    <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
+                </xsl:apply-templates>
+                <xsl:apply-templates select="Sample[Sampletype!='']" mode="oBDS">
                     <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
                 </xsl:apply-templates>
                 <!-- Patienten > Patient > Diagnose -->
-                <xsl:apply-templates select="./Diagnosis" mode="diagnosis">
+                <xsl:apply-templates select="Diagnosis" mode="diagnosis">
                     <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
                 </xsl:apply-templates>
             </Bundle>
@@ -142,90 +145,166 @@
         </xsl:if>
     </xsl:template>
 
-    <xsl:template match="Sample" mode="sample">
+    <xsl:template match="Sample" mode="ADT">
         <xsl:param name="Patient_ID" select="../@Patient_ID"/>
         <xsl:variable name="Sample_ID" select="@Sample_ID"/>
-        <xsl:if test="Probentyp!=''">
-            <entry>
-                <fullUrl value="http://example.com/Specimen/{$Sample_ID}"/>
-                <resource>
-                    <Specimen>
-                        <id value="{$Sample_ID}"/>
-                        <meta>
-                            <profile value="https://fhir.bbmri.de/StructureDefinition/Specimen"/>
-                        </meta>
-                        <type>
-                            <coding>
-                                <system value="https://fhir.bbmri.de/CodeSystem/SampleMaterialType"/>
-                                <code>
-                                    <xsl:choose>
-                                        <xsl:when test="lower-case(normalize-space(Probentyp)) = 'gewebeprobe'">
-                                            <xsl:choose>
-                                                <xsl:when test="starts-with(lower-case(normalize-space(Fixierungsart)), 'kryo') or starts-with(lower-case(normalize-space(Probenart)), 'frisch')">
-                                                    <xsl:attribute name="value">tissue-frozen</xsl:attribute>
-                                                </xsl:when>
-                                                <xsl:when test="starts-with(lower-case(normalize-space(Fixierungsart)), 'paraffin')">
-                                                    <xsl:attribute name="value">tissue-ffpe</xsl:attribute>
-                                                </xsl:when>
-                                                <xsl:otherwise>
-                                                    <xsl:attribute name="value">tissue-other</xsl:attribute>
-                                                </xsl:otherwise>
-                                            </xsl:choose>
-                                        </xsl:when>
-                                        <xsl:when test="lower-case(normalize-space(Probentyp)) = 'flüssigprobe'">
-                                            <xsl:choose>
-                                                <xsl:when test="lower-case(normalize-space(Probenart)) = 'vollblut'">
-                                                    <xsl:attribute name="value">whole-blood</xsl:attribute>
-                                                </xsl:when>
-                                                <xsl:when test="ends-with(lower-case(normalize-space(Probenart)), 'serum')">
-                                                    <xsl:attribute name="value">blood-serum</xsl:attribute>
-                                                </xsl:when>
-                                                <xsl:when test="starts-with(lower-case(normalize-space(Probenart)), 'plasma')">
-                                                    <xsl:attribute name="value">blood-plasma</xsl:attribute>
-                                                </xsl:when>
-                                                <xsl:when test="starts-with(lower-case(normalize-space(Probenart)), 'urin')">
-                                                    <xsl:attribute name="value">urine</xsl:attribute>
-                                                </xsl:when>
-                                                <xsl:when test="ends-with(lower-case(normalize-space(Probenart)), 'liquor')">
-                                                    <xsl:attribute name="value">csf-liquor</xsl:attribute>
-                                                </xsl:when>
-                                                <xsl:when test="starts-with(lower-case(normalize-space(Probenart)), 'knochenmark')">
-                                                    <xsl:attribute name="value">bone-marrow</xsl:attribute>
-                                                </xsl:when>
-                                                <xsl:when test="ends-with(lower-case(normalize-space(Probenart)), 'dna')">
-                                                    <xsl:attribute name="value">dna</xsl:attribute>
-                                                </xsl:when>
-                                                <xsl:when test="ends-with(lower-case(normalize-space(Probenart)), 'rna')">
-                                                    <xsl:attribute name="value">rna</xsl:attribute>
-                                                </xsl:when>
-                                                <xsl:when test="lower-case(normalize-space(Probenart)) = 'protein'">
-                                                    <xsl:attribute name="value">derivative-other</xsl:attribute>
-                                                </xsl:when>
-                                                <xsl:otherwise>
-                                                    <xsl:attribute name="value">liquid-other</xsl:attribute>
-                                                </xsl:otherwise>
-                                            </xsl:choose>
-                                        </xsl:when>
-                                    </xsl:choose>
-                                </code>
-                            </coding>
-                        </type>
-                        <subject>
-                            <reference value="Patient/{$Patient_ID}"/>
-                        </subject>
-                        <xsl:if test="Entnahmedatum!=''">
-                            <collection>
-                                <collectedDateTime value="{mds2fhir:transformDate(Entnahmedatum)}"/>
-                            </collection>
-                        </xsl:if>
-                    </Specimen>
-                </resource>
-                <request>
-                    <method value="PUT"/>
-                    <url value="Specimen/{$Sample_ID}"/>
-                </request>
-            </entry>
-        </xsl:if>
+        <entry>
+            <fullUrl value="http://example.com/Specimen/{$Sample_ID}"/>
+            <resource>
+                <Specimen>
+                    <id value="{$Sample_ID}"/>
+                    <meta>
+                        <profile value="https://fhir.bbmri.de/StructureDefinition/Specimen"/>
+                    </meta>
+                    <type>
+                        <coding>
+                            <system value="https://fhir.bbmri.de/CodeSystem/SampleMaterialType"/>
+                            <code>
+                                <xsl:choose>
+                                    <xsl:when test="lower-case(normalize-space(Probentyp)) = 'gewebeprobe'">
+                                        <xsl:choose>
+                                            <xsl:when test="starts-with(lower-case(normalize-space(Fixierungsart)), 'kryo') or starts-with(lower-case(normalize-space(Probenart)), 'frisch')">
+                                                <xsl:attribute name="value">tissue-frozen</xsl:attribute>
+                                            </xsl:when>
+                                            <xsl:when test="starts-with(lower-case(normalize-space(Fixierungsart)), 'paraffin')">
+                                                <xsl:attribute name="value">tissue-ffpe</xsl:attribute>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <xsl:attribute name="value">tissue-other</xsl:attribute>
+                                            </xsl:otherwise>
+                                        </xsl:choose>
+                                    </xsl:when>
+                                    <xsl:when test="lower-case(normalize-space(Probentyp)) = 'flüssigprobe'">
+                                        <xsl:choose>
+                                            <xsl:when test="lower-case(normalize-space(Probenart)) = 'vollblut'">
+                                                <xsl:attribute name="value">whole-blood</xsl:attribute>
+                                            </xsl:when>
+                                            <xsl:when test="ends-with(lower-case(normalize-space(Probenart)), 'serum')">
+                                                <xsl:attribute name="value">blood-serum</xsl:attribute>
+                                            </xsl:when>
+                                            <xsl:when test="starts-with(lower-case(normalize-space(Probenart)), 'plasma')">
+                                                <xsl:attribute name="value">blood-plasma</xsl:attribute>
+                                            </xsl:when>
+                                            <xsl:when test="starts-with(lower-case(normalize-space(Probenart)), 'urin')">
+                                                <xsl:attribute name="value">urine</xsl:attribute>
+                                            </xsl:when>
+                                            <xsl:when test="ends-with(lower-case(normalize-space(Probenart)), 'liquor')">
+                                                <xsl:attribute name="value">csf-liquor</xsl:attribute>
+                                            </xsl:when>
+                                            <xsl:when test="starts-with(lower-case(normalize-space(Probenart)), 'knochenmark')">
+                                                <xsl:attribute name="value">bone-marrow</xsl:attribute>
+                                            </xsl:when>
+                                            <xsl:when test="ends-with(lower-case(normalize-space(Probenart)), 'dna')">
+                                                <xsl:attribute name="value">dna</xsl:attribute>
+                                            </xsl:when>
+                                            <xsl:when test="ends-with(lower-case(normalize-space(Probenart)), 'rna')">
+                                                <xsl:attribute name="value">rna</xsl:attribute>
+                                            </xsl:when>
+                                            <xsl:when test="lower-case(normalize-space(Probenart)) = 'protein'">
+                                                <xsl:attribute name="value">derivative-other</xsl:attribute>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <xsl:attribute name="value">liquid-other</xsl:attribute>
+                                            </xsl:otherwise>
+                                        </xsl:choose>
+                                    </xsl:when>
+                                </xsl:choose>
+                            </code>
+                        </coding>
+                    </type>
+                    <subject>
+                        <reference value="Patient/{$Patient_ID}"/>
+                    </subject>
+                    <xsl:if test="Entnahmedatum!=''">
+                        <collection>
+                            <collectedDateTime value="{mds2fhir:transformDate(Entnahmedatum)}"/>
+                        </collection>
+                    </xsl:if>
+                </Specimen>
+            </resource>
+            <request>
+                <method value="PUT"/>
+                <url value="Specimen/{$Sample_ID}"/>
+            </request>
+        </entry>
+    </xsl:template>
+
+    <xsl:template match="Sample" mode="oBDS">
+        <xsl:param name="Patient_ID" select="../@Patient_ID"/>
+        <xsl:variable name="Sample_ID" select="@Sample_ID"/>
+        <entry>
+            <fullUrl value="http://example.com/Specimen/{$Sample_ID}"/>
+            <resource>
+                <Specimen>
+                    <id value="{$Sample_ID}"/>
+                    <meta>
+                        <profile value="https://fhir.bbmri.de/StructureDefinition/Specimen"/>
+                    </meta>
+                    <!-- TODO add reference to condition if avialable
+                    <xsl:if test="tumorID!=''">
+                        <extension>
+                            <reference value="Condition/{tumorID}"/>
+                        </extension>
+                    </xsl:if>-->
+                    <xsl:if test="Project!=''">
+                        <identifier>
+                            <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/Projects" />
+                            <value value="{Project}" />
+                        </identifier>
+                    </xsl:if>
+                    <xsl:if test="Status!=''">
+                        <status value="{Status}" />
+                    </xsl:if>
+                    <type>
+                        <coding>
+                            <system value="https://fhir.bbmri.de/CodeSystem/SampleMaterialType" />
+                            <code value="{Sampletype}" />
+                        </coding>
+                    </type>
+                    <subject>
+                        <reference value="Patient/{$Patient_ID}" />
+                    </subject>
+                    <xsl:if test="parentID!=''">
+                        <parent>
+                            <reference value="Specimen/{parentID}" />
+                        </parent>
+                    </xsl:if>
+                    <xsl:if test="Collectiontime!='' or BodySite/Code!=''">
+                        <collection>
+                            <xsl:if test="Collectiontime!=''">
+                                    <collectedDateTime value="{Collectiontime}" />
+                            </xsl:if>
+                            <xsl:if test="BodySite/Code!=''">
+                                <bodySite>
+                                    <coding>
+                                        <system value="urn:oid:1.3.6.1.4.1.19376.1.3.11.36" />
+                                        <code value="{BodySite/Code}" />
+                                        <xsl:if test="BodySite/Version!=''">
+                                            <version value="{BodySite/Version}"/>
+                                        </xsl:if>
+                                    </coding>
+                                </bodySite>
+                            </xsl:if>
+                        </collection>
+                    </xsl:if>
+                    <xsl:if test="SpecimenQuantity/QuantityValue!=''">
+                        <container>
+                            <specimenQuantity>
+                                <value value="{SpecimenQuantity/QuantityValue}" />
+                                <xsl:if test="SpecimenQuantity/Unit!=''">
+                                        <unit value="{SpecimenQuantity/Unit}" />
+                                </xsl:if>
+                                <system value="http://unitsofmeasure.org" />
+                            </specimenQuantity>
+                        </container>
+                    </xsl:if>
+                </Specimen>
+            </resource>
+            <request>
+                <method value="PUT"/>
+                <url value="Specimen/{$Sample_ID}"/>
+            </request>
+        </entry>
     </xsl:template>
 
     <xsl:template match="Diagnosis" mode="diagnosis">

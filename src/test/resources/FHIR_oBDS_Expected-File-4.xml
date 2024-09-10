@@ -28,6 +28,160 @@
       </request>
    </entry>
    <entry>
+      <fullUrl value="http://example.com/Specimen/bio644974f7c86b960a"/>
+      <resource>
+         <Specimen>
+            <id value="bio644974f7c86b960a"/>
+            <meta>
+               <profile value="https://fhir.bbmri.de/StructureDefinition/Specimen"/>
+            </meta>
+            <identifier>
+               <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/Projects"/>
+               <value value="http://dktk.dkfz.de/fhir/sid/exliquid-specimen"/>
+            </identifier>
+            <status value="unsatisfactory"/>
+            <type>
+               <coding>
+                  <system value="https://fhir.bbmri.de/CodeSystem/SampleMaterialType"/>
+                  <code value="whole-blood"/>
+               </coding>
+            </type>
+            <subject>
+               <reference value="Patient/1302b6d11c5b628d"/>
+            </subject>
+            <collection>
+               <collectedDateTime value="2024-09-04"/>
+               <bodySite>
+                  <coding>
+                     <system value="urn:oid:1.3.6.1.4.1.19376.1.3.11.36"/>
+                     <code value="C12"/>
+                     <version value="31"/>
+                  </coding>
+               </bodySite>
+            </collection>
+            <container>
+               <specimenQuantity>
+                  <value value="5"/>
+                  <unit value="ml"/>
+                  <system value="http://unitsofmeasure.org"/>
+               </specimenQuantity>
+            </container>
+         </Specimen>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Specimen/bio644974f7c86b960a"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Specimen/bio4399fc25198c082f"/>
+      <resource>
+         <Specimen>
+            <id value="bio4399fc25198c082f"/>
+            <meta>
+               <profile value="https://fhir.bbmri.de/StructureDefinition/Specimen"/>
+            </meta>
+            <identifier>
+               <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/Projects"/>
+               <value value="http://dktk.dkfz.de/fhir/sid/exliquid-specimen"/>
+            </identifier>
+            <status value="available"/>
+            <type>
+               <coding>
+                  <system value="https://fhir.bbmri.de/CodeSystem/SampleMaterialType"/>
+                  <code value="peripheral-blood-cells-vital"/>
+               </coding>
+            </type>
+            <subject>
+               <reference value="Patient/1302b6d11c5b628d"/>
+            </subject>
+            <parent>
+               <reference value="Specimen/bio644974f7c86b960a"/>
+            </parent>
+            <collection>
+               <collectedDateTime value="2024-09-04"/>
+               <bodySite>
+                  <coding>
+                     <system value="urn:oid:1.3.6.1.4.1.19376.1.3.11.36"/>
+                     <code value="C12"/>
+                     <version value="31"/>
+                  </coding>
+               </bodySite>
+            </collection>
+            <container>
+               <specimenQuantity>
+                  <value value="1"/>
+                  <unit value="ml"/>
+                  <system value="http://unitsofmeasure.org"/>
+               </specimenQuantity>
+            </container>
+         </Specimen>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Specimen/bio4399fc25198c082f"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Specimen/bio40336efc81b4c354"/>
+      <resource>
+         <Specimen>
+            <id value="bio40336efc81b4c354"/>
+            <meta>
+               <profile value="https://fhir.bbmri.de/StructureDefinition/Specimen"/>
+            </meta>
+            <status value="entered-in-error"/>
+            <type>
+               <coding>
+                  <system value="https://fhir.bbmri.de/CodeSystem/SampleMaterialType"/>
+                  <code value="ascites"/>
+               </coding>
+            </type>
+            <subject>
+               <reference value="Patient/1302b6d11c5b628d"/>
+            </subject>
+            <collection>
+               <collectedDateTime value="2022-01-13"/>
+            </collection>
+            <container>
+               <specimenQuantity>
+                  <value value="200"/>
+                  <unit value="Bq"/>
+                  <system value="http://unitsofmeasure.org"/>
+               </specimenQuantity>
+            </container>
+         </Specimen>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Specimen/bio40336efc81b4c354"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Specimen/bio40336efc81b4c354"/>
+      <resource>
+         <Specimen>
+            <id value="bio40336efc81b4c354"/>
+            <meta>
+               <profile value="https://fhir.bbmri.de/StructureDefinition/Specimen"/>
+            </meta>
+            <type>
+               <coding>
+                  <system value="https://fhir.bbmri.de/CodeSystem/SampleMaterialType"/>
+                  <code value="ascites"/>
+               </coding>
+            </type>
+            <subject>
+               <reference value="Patient/1302b6d11c5b628d"/>
+            </subject>
+         </Specimen>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Specimen/bio40336efc81b4c354"/>
+      </request>
+   </entry>
+   <entry>
       <fullUrl value="http://example.com/Condition/dig1f2f2da54770c86f"/>
       <resource>
          <Condition>
