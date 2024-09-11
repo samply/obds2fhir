@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<oBDS xmlns="http://www.basisdatensatz.de/oBDS/XML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Schema_Version="3.0.2-sample">
+	<Menge_Patient>
+		<Patient Patient_ID="testpatient-oBDS-1">
+			<Patienten_Stammdaten>
+				<Nachname>Mustermann</Nachname>
+				<Vornamen>Maxa</Vornamen>
+				<Geburtsname>Beispielname</Geburtsname>
+				<Menge_Frueherer_Name>
+					<Frueherer_Name>Examplename</Frueherer_Name>
+				</Menge_Frueherer_Name>
+				<Geschlecht>M</Geschlecht>
+				<Geburtsdatum Datumsgenauigkeit="E">1993-07-13</Geburtsdatum>
+			</Patienten_Stammdaten>
+			<Menge_Meldung>
+				<Meldung>
+					<Samples>
+						<Sample Sample_ID="Sample_ID1">
+							<Status>available</Status>
+							<Sampletype>whole-blood</Sampletype>
+							<Collectiontime>2024-09-04</Collectiontime>
+							<SpecimenQuantity>
+								<QuantityValue>5</QuantityValue>
+								<Unit>ml</Unit>
+							</SpecimenQuantity>
+						</Sample>
+						<Sample Sample_ID="Sample_ID1-child" Parent_ID="Sample_ID1">
+							<Status>available</Status>
+							<Sampletype>peripheral-blood-cells-vital</Sampletype>
+							<Collectiontime>2024-09-04</Collectiontime>
+							<BodySite>
+								<Code>C59.2</Code>
+								<Version>31</Version>
+							</BodySite>
+						</Sample>
+					</Samples>
+				</Meldung>
+				<Meldung>
+					<Tumorzuordnung Tumor_ID="012001"/>
+					<Samples>
+						<Sample Sample_ID="Sample_ID2" Parent_ID="Sample_ID1">
+							<Project>http://dktk.dkfz.de/fhir/sid/exliquid-specimen</Project>
+							<Status>available</Status>
+							<Sampletype>whole-blood</Sampletype>
+							<Collectiontime>2006-05-04</Collectiontime>
+							<SpecimenQuantity>
+								<QuantityValue>1</QuantityValue>
+								<Unit>ml</Unit>
+							</SpecimenQuantity>
+							<BodySite>
+								<Code>C39.0</Code>
+								<Version>31</Version>
+							</BodySite>
+						</Sample>
+						<Sample Sample_ID="Sample_ID3">
+							<Sampletype>ascites</Sampletype>
+						</Sample>
+					</Samples>
+				</Meldung>
+				<Meldung>
+					<Tumorzuordnung Tumor_ID="Tumor_ID21">
+						<Primaertumor_ICD>
+							<Code>C20</Code>
+							<Version>10 2000 GM</Version>
+						</Primaertumor_ICD>
+						<Diagnosedatum Datumsgenauigkeit="E">2024-09-11</Diagnosedatum>
+						<Seitenlokalisation>L</Seitenlokalisation>
+						<Morphologie_ICD_O>
+							<Code>8213/0</Code>
+							<Version>33</Version>
+						</Morphologie_ICD_O>
+					</Tumorzuordnung>
+					<Samples>
+						<Sample Sample_ID="Sample_ID24" Parent_ID="Sample_ID1">
+							<Project>http://dktk.dkfz.de/fhir/sid/exliquid-specimen</Project>
+							<Status>available</Status>
+							<Sampletype>whole-blood</Sampletype>
+							<Collectiontime>2006-05-04</Collectiontime>
+							<SpecimenQuantity>
+								<QuantityValue>0</QuantityValue>
+								<Unit>Unit0</Unit>
+							</SpecimenQuantity>
+							<BodySite>
+								<Code>C01.0</Code>
+								<Version>31</Version>
+							</BodySite>
+						</Sample>
+					</Samples>
+				</Meldung>
+			</Menge_Meldung>
+		</Patient>
+	</Menge_Patient>
+</oBDS>
