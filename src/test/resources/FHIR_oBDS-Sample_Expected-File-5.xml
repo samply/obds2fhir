@@ -173,4 +173,53 @@
          <url value="Specimen/bioa632f6eca27ec259"/>
       </request>
    </entry>
+   <entry>
+      <fullUrl value="http://example.com/Specimen/bio72e8c8d78bd47e2f"/>
+      <resource>
+         <Specimen>
+            <id value="bio72e8c8d78bd47e2f"/>
+            <meta>
+               <profile value="https://fhir.bbmri.de/StructureDefinition/Specimen"/>
+            </meta>
+            <identifier>
+               <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/Projects"/>
+               <value value="http://dktk.dkfz.de/fhir/sid/exliquid-specimen"/>
+            </identifier>
+            <status value="available"/>
+            <type>
+               <coding>
+                  <system value="https://fhir.bbmri.de/CodeSystem/SampleMaterialType"/>
+                  <code value="whole-blood"/>
+               </coding>
+            </type>
+            <subject>
+               <reference value="Patient/1302b6d11c5b628d"/>
+            </subject>
+            <parent>
+               <reference value="Specimen/bio644974f7c86b960a"/>
+            </parent>
+            <collection>
+               <collectedDateTime value="2006-05-04"/>
+               <bodySite>
+                  <coding>
+                     <system value="urn:oid:1.3.6.1.4.1.19376.1.3.11.36"/>
+                     <code value="C01.0"/>
+                     <version value="31"/>
+                  </coding>
+               </bodySite>
+            </collection>
+            <container>
+               <specimenQuantity>
+                  <value value="0"/>
+                  <unit value="Unit0"/>
+                  <system value="http://unitsofmeasure.org"/>
+               </specimenQuantity>
+            </container>
+         </Specimen>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Specimen/bio72e8c8d78bd47e2f"/>
+      </request>
+   </entry>
 </Bundle>
