@@ -983,7 +983,7 @@
 								<Unit>Bq</Unit>
 							</SpecimenQuantity>
 						</Sample>
-						<Sample Sample_ID="Sample_ID2">
+						<Sample Sample_ID="Sample_ID3">
 							<Sampletype>ascites</Sampletype>
 						</Sample>
 					</Samples>
