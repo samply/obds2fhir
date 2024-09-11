@@ -798,16 +798,6 @@
             </BodySite>
         </xsl:if>
     </xsl:template>
-    <xsl:template match="Project" >
-        <Project>
-            <xsl:apply-templates select="node() | @*"/>
-        </Project>
-    </xsl:template>
-    <xsl:template match="Project" >
-        <Project>
-            <xsl:apply-templates select="node() | @*"/>
-        </Project>
-    </xsl:template>
     <xsl:template match="Geschlecht" >
         <Geschlecht>
             <xsl:apply-templates select="node()"/>
