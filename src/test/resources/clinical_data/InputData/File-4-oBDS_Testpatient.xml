@@ -933,7 +933,7 @@
 					<Samples>
 						<Sample Sample_ID="Sample_ID1">
 							<Project>http://dktk.dkfz.de/fhir/sid/exliquid-specimen</Project>
-							<Status>unsatisfactory</Status>
+							<Status>available</Status>
 							<Sampletype>whole-blood</Sampletype>
 							<Collectiontime>2024-09-04</Collectiontime>
 							<SpecimenQuantity>

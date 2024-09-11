@@ -39,7 +39,7 @@
                <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/Projects"/>
                <value value="http://dktk.dkfz.de/fhir/sid/exliquid-specimen"/>
             </identifier>
-            <status value="unsatisfactory"/>
+            <status value="available"/>
             <type>
                <coding>
                   <system value="https://fhir.bbmri.de/CodeSystem/SampleMaterialType"/>
