@@ -12,7 +12,11 @@
 							<xs:element name="Patient" maxOccurs="unbounded">
 								<xs:complexType>
 									<xs:sequence>
-										<xs:element name="Patienten_Stammdaten" type="Patienten_Stammdaten_Melder_Typ"/>
+										<xs:element name="Patienten_Stammdaten" type="Patienten_Stammdaten_Melder_Typ">
+											<xs:annotation>
+												<xs:documentation>Woher die Probe stammt. Dies ist die Referenz zum Patienten (FHIR:Specimen.subject) (PatientenID) </xs:documentation>
+											</xs:annotation>
+										</xs:element>
 										<xs:element name="Menge_Meldung">
 											<xs:complexType>
 												<xs:sequence>
@@ -20,9 +24,7 @@
 														<xs:complexType>
 															<xs:sequence>
 																<xs:element name="Tumorzuordnung" type="Tumorzuordnung_Typ" minOccurs="0"/>
-																<xs:choice>
-																	<xs:element name="Samples" type="Samples_Type"/>
-																</xs:choice>
+																<xs:element name="Samples" type="Samples_Type"/>
 															</xs:sequence>
 														</xs:complexType>
 													</xs:element>
@@ -112,6 +114,12 @@
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:complexType name="Tumorzuordnung_Typ">
+		<xs:sequence>
+			<xs:element name="Primaertumor_ICD" type="Tumor_ICD_Typ" minOccurs="0"/>
+			<xs:element name="Diagnosedatum" type="Datum_Tag_oder_Monat_oder_Jahr_oder_nicht_genau_Typ" minOccurs="0"/>
+			<xs:element name="Seitenlokalisation" type="Seitenlokalisation_Typ" minOccurs="0"/>
+			<xs:element name="Morphologie_ICD_O" type="Morphologie_ICD_O_Typ" minOccurs="0"/>
+		</xs:sequence>
 		<xs:attribute name="Tumor_ID" type="FreitextID_Typ" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="Patienten_Stammdaten_Melder_Typ">
@@ -119,6 +127,8 @@
 			<xs:documentation>Typ zur Verwendung in Meldungen, im RüD wird ein abweichender Typ mit Menge_Adresse verwendet werden</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
+			<xs:element name="Patienten_ID" type="FreitextID_Typ" minOccurs="0" />
+			<xs:element name="Patienten_Pseudonym" type="FreitextID_Typ" minOccurs="0" />
 			<xs:element name="Nachname" type="Namenstring255_Typ"/>
 			<xs:element name="Vornamen" type="Namenstring255_Typ"/>
 			<xs:element name="Geburtsname" type="Namenstring255_Typ" minOccurs="0"/>
@@ -439,6 +449,45 @@
 			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
+	<xs:simpleType name="Seitenlokalisation_Typ">
+		<xs:annotation>
+			<xs:documentation>Organspezifische Angabe der betroffenen Seite</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="L">
+				<xs:annotation>
+					<xs:documentation>Links</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="R">
+				<xs:annotation>
+					<xs:documentation>Rechts</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="B">
+				<xs:annotation>
+					<xs:documentation>Beidseitig (bei bestimmten Tumoren 2 Meldungen
+						angeben)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="M">
+				<xs:annotation>
+					<xs:documentation>Mittellinie/mittig</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="U">
+				<xs:annotation>
+					<xs:documentation>Unbekannt</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="T">
+				<xs:annotation>
+					<xs:documentation>Trifft nicht zu (Seitenangabe nicht sinnvoll, einschließlich
+						Systemerkrankungen)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
 	<!-- dktk-Änderung: Erweiterung um die Biobank-Daten -->
 	<!-- MDS-B (Biomaterial-Daten) Der Meldedatensatz für Biomaterial -->
 	<xs:complexType name="Samples_Type">
@@ -610,7 +659,7 @@
 						</xs:element>
 						<xs:element name="BodySite" type="Topographie_ICD_O_Typ" minOccurs="0">
 							<xs:annotation>
-								<xs:documentation>Entnahmestelle als ICD-O-3 Topographie Code</xs:documentation>
+								<xs:documentation>Entnahmestelle als ICD-O-3 Topographie Code. Bei Gewebeprobe der anatomischen Topographie, an der die Probe entnommen wurde.(FHIR:Specimen.collection.bodySite.coding.code)</xs:documentation>
 							</xs:annotation>
 						</xs:element>
 					</xs:sequence>
