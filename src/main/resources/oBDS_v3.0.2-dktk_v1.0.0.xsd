@@ -31,7 +31,7 @@
 																<xs:element name="Eigene_Leistung" type="JNU_Typ">
 																	<xs:annotation>
 																		<xs:documentation>
-																			Aus Gründen unter anderem der Qualitätssicherung ist eine explizite Angabe von Ja oder Nein erforderlich. 
+																			Aus Gründen unter anderem der Qualitätssicherung ist eine explizite Angabe von Ja oder Nein erforderlich.
 																			Die Ausprägung "unbekannt" darf nur verwendet werden, wenn es sich um historische Sätze handelt, für die die Situation nicht zu klären ist.
 																			Für aktuelle Sätze muss diese Information bekannt und in den Systemen hinterlegbar sein.
 																		</xs:documentation>
@@ -47,6 +47,7 @@
 																	<xs:element name="Verlauf" type="Verlauf_Typ"/>
 																	<xs:element name="Tod" type="Tod_Typ"/>
 																	<xs:element name="Tumorkonferenz" type="Tumorkonferenz_Typ"/>
+																	<xs:element name="Samples" type="Samples_Type"/>
 																</xs:choice>
 																<xs:element name="Menge_Zusatzitem" type="Menge_Zusatzitem_Typ" minOccurs="0"/>
 																<xs:element name="Anmerkung" type="FreitextAnmerkung_Typ" minOccurs="0"/>
@@ -90,8 +91,8 @@
 						<xs:enumeration value="3.0.2">
 							<xs:annotation>
 								<xs:documentation>
-								- Erweiterung der zulässigen ICD-10-Versionen über das Jahr 2023 hinaus
-								- Ergänzung Diagnosesicherung 7.1-3 und 8 (§65c 2023/63/c1) </xs:documentation>
+									- Erweiterung der zulässigen ICD-10-Versionen über das Jahr 2023 hinaus
+									- Ergänzung Diagnosesicherung 7.1-3 und 8 (§65c 2023/63/c1) </xs:documentation>
 							</xs:annotation>
 						</xs:enumeration>
 					</xs:restriction>
@@ -233,7 +234,7 @@
 	<xs:simpleType name="Zertifizierung_Typ">
 		<xs:annotation>
 			<xs:documentation>Die Kennzeichnung dürfte normalerweise bei Diagnosemeldungen oder Verlaufsmeldungen erfolgen, da diese die relevanten Ereingnisse abbilden.
-			Hinweis: es fehlt Patientenfall (Hämato-onkologische Neoplasien)</xs:documentation>
+				Hinweis: es fehlt Patientenfall (Hämato-onkologische Neoplasien)</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="1">
@@ -288,9 +289,9 @@
 			<xs:element name="Geschlecht">
 				<xs:annotation>
 					<xs:documentation>
-Es wird, wenn möglich, das Geschlecht verwendet, wie es im Melderegister und auf der Gesundheitskarte vermerkt ist. 
-Es ist zu beachten, dass X=unbestimmtes Geschlecht (amtlich: keine Angabe) einer expliziten Angabe im Personenstandsregister entspricht und auf keinen Fall mit U=unbekannt gleichzusetzen ist. 
-"Unbekannt" bedeutet, dass dem Melder das Geschlecht tatsächlich unbekannt ist und stellt eine absolute Ausnahmesituation dar, da beispielsweise eine Versichertenkarte das amtliche Geschlecht enthält. 
+						Es wird, wenn möglich, das Geschlecht verwendet, wie es im Melderegister und auf der Gesundheitskarte vermerkt ist.
+						Es ist zu beachten, dass X=unbestimmtes Geschlecht (amtlich: keine Angabe) einer expliziten Angabe im Personenstandsregister entspricht und auf keinen Fall mit U=unbekannt gleichzusetzen ist.
+						"Unbekannt" bedeutet, dass dem Melder das Geschlecht tatsächlich unbekannt ist und stellt eine absolute Ausnahmesituation dar, da beispielsweise eine Versichertenkarte das amtliche Geschlecht enthält.
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
@@ -681,7 +682,7 @@ Es ist zu beachten, dass X=unbestimmtes Geschlecht (amtlich: keine Angabe) einer
 						<xs:element name="Lokalisation">
 							<xs:annotation>
 								<xs:documentation>
-									Lokalisation der Fernmetastase 
+									Lokalisation der Fernmetastase
 									PUL = Lunge
 									OSS = Knochen
 									HEP = Leber
@@ -771,7 +772,7 @@ Es ist zu beachten, dass X=unbestimmtes Geschlecht (amtlich: keine Angabe) einer
 			<xs:element name="Grad_maximal2_oder_unbekannt">
 				<xs:annotation>
 					<xs:documentation>
-						Gibt an, zu welchem Schweregrad von Nebenwirkungen es bei der Bestrahlung gekommen ist (sogenannte akute Nebenwirkungen bis zum 90 Tag nach Bestrahlungsbeginn) 
+						Gibt an, zu welchem Schweregrad von Nebenwirkungen es bei der Bestrahlung gekommen ist (sogenannte akute Nebenwirkungen bis zum 90 Tag nach Bestrahlungsbeginn)
 						Art der Nebenwirkung nach CTC + Schweregrad
 						K = keine
 						1 = mild
@@ -888,7 +889,7 @@ Es ist zu beachten, dass X=unbestimmtes Geschlecht (amtlich: keine Angabe) einer
 	<xs:simpleType name="R_Typ">
 		<xs:annotation>
 			<xs:documentation>R0/1/2/X werden im TNM-Buch beschrieben, R1(cy+) und R1(is) stammen aus dem TNM-Supplement.
-Wichtig ist zu wissen, dass RX ein expliziter Code ist, während U tatsächlich das Nicht-Vorhandensein der Information kennzeichnet</xs:documentation>
+				Wichtig ist zu wissen, dass RX ein expliziter Code ist, während U tatsächlich das Nicht-Vorhandensein der Information kennzeichnet</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="R0">
@@ -955,9 +956,9 @@ Wichtig ist zu wissen, dass RX ein expliziter Code ist, während U tatsächlich 
 							<xs:element name="Auspraegung">
 								<xs:annotation>
 									<xs:documentation>
-Die Ausprägungen können in Abhängigkeit von der Art der Untersuchung unterschiedliche Wertebereiche und Bezeichnungen haben.
-Für einige Untersuchungen wird die Auswahlliste keine passenden Werte haben, da wahrscheinlich zu keinem Zeitpunkt eine vollständige Ausprägungsliste erstellbar ist.
-Dafür ist statt einer Ausprägung das Freitextfeld Sonstige_Auspraegung vorgesehen.
+										Die Ausprägungen können in Abhängigkeit von der Art der Untersuchung unterschiedliche Wertebereiche und Bezeichnungen haben.
+										Für einige Untersuchungen wird die Auswahlliste keine passenden Werte haben, da wahrscheinlich zu keinem Zeitpunkt eine vollständige Ausprägungsliste erstellbar ist.
+										Dafür ist statt einer Ausprägung das Freitextfeld Sonstige_Auspraegung vorgesehen.
 									</xs:documentation>
 								</xs:annotation>
 								<xs:simpleType>
@@ -1075,13 +1076,13 @@ Dafür ist statt einer Ausprägung das Freitextfeld Sonstige_Auspraegung vorgese
 			<xs:element name="Her2neuStatus" type="Hormonrezeptor_Typ" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					Rezeptorstatus Positiv/Negativ (gemäß immunreaktiven Scores nach Leitlinie)
-					P = Positiv, d. h. 
+						Rezeptorstatus Positiv/Negativ (gemäß immunreaktiven Scores nach Leitlinie)
+						P = Positiv, d. h.
 						IHC +++ oder
 						IHC ++ und ISH (FISH, CISH o. Ä.) positiv
-					N = Negativ
-					U = Unbekannt
-					Bei FISH "borderline" muss die Festlegung auf negativ oder positiv durch den Kliniker in Absprache mit dem Pathologen erfolgen.
+						N = Negativ
+						U = Unbekannt
+						Bei FISH "borderline" muss die Festlegung auf negativ oder positiv durch den Kliniker in Absprache mit dem Pathologen erfolgen.
 					</xs:documentation>
 				</xs:annotation>
 			</xs:element>
@@ -1304,12 +1305,12 @@ Dafür ist statt einer Ausprägung das Freitextfeld Sonstige_Auspraegung vorgese
 			<xs:element name="GradRektumAnastomoseninsuffizienz" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					Rektum:
-					Grad A (keine therapeutische Konsequenz)
-					Grad B (Antibiotikagabe oder interventionelle Drainage oder transanale Lavage/Drainage)
-					Grad C ((Re)-Laparotomie)
-					Für Indikator Anastomoseninsuffizienz nach elektivem Eingriff mit Anastomosenanlage
-					Ausprägung gem. Rahbari, N.N., et al., Definition and grading of anastomotic leakage following anterior resection of the rectum: a proposal by the International Study Group of Rectal Cancer.Surgery, 2010. 147(3): p. 339-51.
+						Rektum:
+						Grad A (keine therapeutische Konsequenz)
+						Grad B (Antibiotikagabe oder interventionelle Drainage oder transanale Lavage/Drainage)
+						Grad C ((Re)-Laparotomie)
+						Für Indikator Anastomoseninsuffizienz nach elektivem Eingriff mit Anastomosenanlage
+						Ausprägung gem. Rahbari, N.N., et al., Definition and grading of anastomotic leakage following anterior resection of the rectum: a proposal by the International Study Group of Rectal Cancer.Surgery, 2010. 147(3): p. 339-51.
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
@@ -1374,9 +1375,9 @@ Dafür ist statt einer Ausprägung das Freitextfeld Sonstige_Auspraegung vorgese
 	<xs:complexType name="GleasonScore_Typ">
 		<xs:annotation>
 			<xs:documentation>
-			Wert des Gleason-Score:
-			GleasonGradPrimaer + GleasonGradSekundaer = GleasonScoreErgebnis
-			mod. nach ISUP 2005 bei primärem Ca-Nachweis und im OP-Präparat
+				Wert des Gleason-Score:
+				GleasonGradPrimaer + GleasonGradSekundaer = GleasonScoreErgebnis
+				mod. nach ISUP 2005 bei primärem Ca-Nachweis und im OP-Präparat
 			</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
@@ -1497,21 +1498,21 @@ Dafür ist statt einer Ausprägung das Freitextfeld Sonstige_Auspraegung vorgese
 					<xs:element name="DatumStanzen" type="Datum_Tag_genau_Typ" minOccurs="0">
 						<xs:annotation>
 							<xs:documentation>
-							Datum der Entnahme der Stanzen
+								Datum der Entnahme der Stanzen
 							</xs:documentation>
 						</xs:annotation>
 					</xs:element>
 					<xs:element name="AnzahlStanzen" type="AnzahlStanzen_Typ" minOccurs="0">
 						<xs:annotation>
 							<xs:documentation>
-							Anzahl der entnommenen Stanzen
+								Anzahl der entnommenen Stanzen
 							</xs:documentation>
 						</xs:annotation>
 					</xs:element>
 					<xs:element name="AnzahlPosStanzen" type="AnzahlStanzen_Typ" minOccurs="0">
 						<xs:annotation>
 							<xs:documentation>
-							Anzahl der positiven Stanzen
+								Anzahl der positiven Stanzen
 							</xs:documentation>
 						</xs:annotation>
 					</xs:element>
@@ -1527,21 +1528,21 @@ Dafür ist statt einer Ausprägung das Freitextfeld Sonstige_Auspraegung vorgese
 			<xs:element name="DatumStanzen" type="Datum_Tag_genau_Typ" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					Datum der Entnahme der Stanzen
+						Datum der Entnahme der Stanzen
 					</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="AnzahlStanzen" type="AnzahlStanzen_Typ" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					Anzahl der entnommenen Stanzen
+						Anzahl der entnommenen Stanzen
 					</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="AnzahlPosStanzen" type="AnzahlStanzen_Typ" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					Anzahl der positiven Stanzen
+						Anzahl der positiven Stanzen
 					</xs:documentation>
 				</xs:annotation>
 			</xs:element>
@@ -1549,7 +1550,7 @@ Dafür ist statt einer Ausprägung das Freitextfeld Sonstige_Auspraegung vorgese
 			<xs:element name="PSA" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					Aktuell relevanter PSA-Wert als Fließkommazahl in ng/ml (max. 3 Dezimalstellen nach dem Dezimalpunkt)
+						Aktuell relevanter PSA-Wert als Fließkommazahl in ng/ml (max. 3 Dezimalstellen nach dem Dezimalpunkt)
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
@@ -1563,14 +1564,14 @@ Dafür ist statt einer Ausprägung das Freitextfeld Sonstige_Auspraegung vorgese
 			<xs:element name="DatumPSA" type="Datum_Tag_genau_Typ" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					Datum der Blutentnahme zur PSA-Bestimmung
+						Datum der Blutentnahme zur PSA-Bestimmung
 					</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="KomplPostOP_ClavienDindo" type="JNU_Typ" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					Komplikation der Clavien-Dindo Grade III oder IV innerhalb der ersten 6 Monate nach Radikaler Prostatektomie
+						Komplikation der Clavien-Dindo Grade III oder IV innerhalb der ersten 6 Monate nach Radikaler Prostatektomie
 					</xs:documentation>
 				</xs:annotation>
 			</xs:element>
@@ -1579,15 +1580,15 @@ Dafür ist statt einer Ausprägung das Freitextfeld Sonstige_Auspraegung vorgese
 	<xs:simpleType name="Sicherheitsabstand_Primaertumor_Typ">
 		<xs:annotation>
 			<xs:documentation>
-			Minimaler Sicherheitsabstand zum Primärtumor in Millimeter.
-			Ausprägungen:
-			-1 = nicht zu beurteilen
-			0 = kein Abstand
-			n = Abstand in mm (natürliche Zahl) 
-                  Hinweis:
-                  Es ist der endgültige kumulative Sicherheitsabstand, d. h. nach definitiver operativer Versorgung zu verwenden. 
-                  Es soll die sichere Untergrenze angegeben werden. 
-                  Ein Abstand von 0 entspricht lokal R1 oder R2, bzw. randständig. 
+				Minimaler Sicherheitsabstand zum Primärtumor in Millimeter.
+				Ausprägungen:
+				-1 = nicht zu beurteilen
+				0 = kein Abstand
+				n = Abstand in mm (natürliche Zahl)
+				Hinweis:
+				Es ist der endgültige kumulative Sicherheitsabstand, d. h. nach definitiver operativer Versorgung zu verwenden.
+				Es soll die sichere Untergrenze angegeben werden.
+				Ein Abstand von 0 entspricht lokal R1 oder R2, bzw. randständig.
 			</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:integer">
@@ -1614,11 +1615,11 @@ Dafür ist statt einer Ausprägung das Freitextfeld Sonstige_Auspraegung vorgese
 					<xs:element name="Ulzeration" type="JNU_Typ" minOccurs="0">
 						<xs:annotation>
 							<xs:documentation>
-							Pathologisches Kriterium der Ulzeration erfüllt.
-							Hinweis:
-							Dieses Feld soll nur im TNM-Stadium pT1b angegeben werden, 
-							da dieses Stadium mit und ohne Ulzerationen definiert ist.
-							(Quelle: TNM-Klassifikation, 8. Auflage 2020, S. 188).
+								Pathologisches Kriterium der Ulzeration erfüllt.
+								Hinweis:
+								Dieses Feld soll nur im TNM-Stadium pT1b angegeben werden,
+								da dieses Stadium mit und ohne Ulzerationen definiert ist.
+								(Quelle: TNM-Klassifikation, 8. Auflage 2020, S. 188).
 							</xs:documentation>
 						</xs:annotation>
 					</xs:element>
@@ -1633,11 +1634,11 @@ Dafür ist statt einer Ausprägung das Freitextfeld Sonstige_Auspraegung vorgese
 			<xs:element name="LDH" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					LDH-Wert in Unit/Liter (U/l).
-					Hinweis:
-					Für die Umrechung von Katal/l nach Unit/l gilt:
-					1µkat/l = 60 U/l
-					100 U/l = 1.67 µkat/l.
+						LDH-Wert in Unit/Liter (U/l).
+						Hinweis:
+						Für die Umrechung von Katal/l nach Unit/l gilt:
+						1µkat/l = 60 U/l
+						100 U/l = 1.67 µkat/l.
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
@@ -1707,8 +1708,8 @@ Dafür ist statt einer Ausprägung das Freitextfeld Sonstige_Auspraegung vorgese
 			</xs:element>
 			<xs:element name="GPOH_Therapiestudienpatient" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>Therapiestudien, Therapieoptimierungsstudien, Therapieprotokolle oder tumorspezifische Register unter dem Dach der GPOH. 
-"ja": Patient kommt für eine Studie/Register in Frage bzw wurde der Studien-/Registerleitung mitgeteilt, bei jedem Meldeanlass</xs:documentation>
+					<xs:documentation>Therapiestudien, Therapieoptimierungsstudien, Therapieprotokolle oder tumorspezifische Register unter dem Dach der GPOH.
+						"ja": Patient kommt für eine Studie/Register in Frage bzw wurde der Studien-/Registerleitung mitgeteilt, bei jedem Meldeanlass</xs:documentation>
 				</xs:annotation>
 				<xs:complexType>
 					<xs:choice>
@@ -1813,7 +1814,7 @@ Dafür ist statt einer Ausprägung das Freitextfeld Sonstige_Auspraegung vorgese
 	<xs:simpleType name="Allgemeiner_Leistungszustand_Typ">
 		<xs:annotation>
 			<xs:documentation>
-			ECOG oder Karnofsky
+				ECOG oder Karnofsky
 			</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:string">
@@ -2008,8 +2009,8 @@ Dafür ist statt einer Ausprägung das Freitextfeld Sonstige_Auspraegung vorgese
 						</xs:enumeration>
 						<xs:enumeration value="p">
 							<xs:annotation>
-								<xs:documentation> Feststellung der Kategorie erfolgte durch eine pathohistologische Untersuchung, mit der auch der höchste Grad der jeweiligen Kategorie hätte festgestellt werden können 
-											</xs:documentation>
+								<xs:documentation> Feststellung der Kategorie erfolgte durch eine pathohistologische Untersuchung, mit der auch der höchste Grad der jeweiligen Kategorie hätte festgestellt werden können
+								</xs:documentation>
 							</xs:annotation>
 						</xs:enumeration>
 						<xs:enumeration value="u">
@@ -2138,18 +2139,18 @@ Dafür ist statt einer Ausprägung das Freitextfeld Sonstige_Auspraegung vorgese
 			<xs:element name="S" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					
-						Serumtumormarker 
-						SX = Werte der Serumtumormarker nicht verfügbar oder entsprechende Untersuchungen nicht vorgenommen 
-						S0 = Serumtumormarker innerhalb der normalen Grenzen 
-						S1–S3 = Wenigstens einer der Serumtumormarker erhöht 
-									LDH					HCG					AFP 
-						S1			&lt; 1,5N		und		&lt; 5000		und		&lt; 1000 
-						S2			1,5-10N		oder	5000-50000  oder	1000-10000 
+
+						Serumtumormarker
+						SX = Werte der Serumtumormarker nicht verfügbar oder entsprechende Untersuchungen nicht vorgenommen
+						S0 = Serumtumormarker innerhalb der normalen Grenzen
+						S1–S3 = Wenigstens einer der Serumtumormarker erhöht
+						LDH					HCG					AFP
+						S1			&lt; 1,5N		und		&lt; 5000		und		&lt; 1000
+						S2			1,5-10N		oder	5000-50000  oder	1000-10000
 						S3			&gt; 10 N		oder	&gt; 50000		oder	&gt; 10000
-						N = obere Grenze des Normalwertes 
+						N = obere Grenze des Normalwertes
 						(Quelle: TNM-Klassifikation, 8. Auflage 2020, S.252)
-					
+
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
@@ -2349,7 +2350,7 @@ Dafür ist statt einer Ausprägung das Freitextfeld Sonstige_Auspraegung vorgese
 	<xs:simpleType name="ISO3166Alpha2Code_Typ">
 		<xs:annotation>
 			<xs:documentation>Die Codes werden als regulärer Ausdruck zweier Großbuchstaben implementiert, um nicht bei Änderungen eine neue Schemaversion herausgeben zu müssen.
-			Die übermittelten Codes müssen https://www.iso.org/iso-3166-country-codes.html entsprechen.</xs:documentation>
+				Die übermittelten Codes müssen https://www.iso.org/iso-3166-country-codes.html entsprechen.</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:string">
 			<xs:pattern value="[A-Z]{2}"/>
@@ -2478,7 +2479,7 @@ Dafür ist statt einer Ausprägung das Freitextfeld Sonstige_Auspraegung vorgese
 	<xs:complexType name="Versichertendaten_Sonstige_Typ">
 		<xs:annotation>
 			<xs:documentation>
-				Diese Felder sind nur dann zu nutzen, wenn keine gültigen Angaben zu GKV oder PKV vorliegen. 
+				Diese Felder sind nur dann zu nutzen, wenn keine gültigen Angaben zu GKV oder PKV vorliegen.
 				Außerdem bildet dieser Typ einige Spezialfälle ab, bei denen eine Kassen-IKNR zwar mit 10 beginnt,
 				die Versicherten jedoch keine eGK-Nummer bekommen (aus dem Bereich Post, Polizei, ...)
 			</xs:documentation>
@@ -3032,8 +3033,8 @@ Dafür ist statt einer Ausprägung das Freitextfeld Sonstige_Auspraegung vorgese
 	<xs:simpleType name="oBDS_Zielgebiet2014_Typ">
 		<xs:annotation>
 			<xs:documentation>
-Zielgebietschlüssel nach oBDS 2014
-				</xs:documentation>
+				Zielgebietschlüssel nach oBDS 2014
+			</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="1.">
@@ -3915,10 +3916,10 @@ Zielgebietschlüssel nach oBDS 2014
 			<xs:element name="Diagnosesicherung">
 				<xs:annotation>
 					<xs:documentation>
-				Höchste erreichte Diagnosesicherheit zum Diagnosedatum (siehe BfArM, ICD-O-3.2: Ergänzende Informationen, Abschnitt 4.5. "Sicherheit der Diagnose").
-				ohne 1 = Klinisch ohne tumorspezifische Diagnostik (nur körperliche Untersuchung) 
-				ohne 2 = Klinisch: Klinische Diagnose vor dem Sterbedatum durchgeführt; schließt diagnostische Techniken, inklusive Röntgen, Endoskopie, weitere bildgebende Verfahren, Ultraschall, exploratorische Chirurgie (Laparatomie, etc.) und Autopsie, ohne mikroskopische Gewebediagnose, ein.  
-				</xs:documentation>
+						Höchste erreichte Diagnosesicherheit zum Diagnosedatum (siehe BfArM, ICD-O-3.2: Ergänzende Informationen, Abschnitt 4.5. "Sicherheit der Diagnose").
+						ohne 1 = Klinisch ohne tumorspezifische Diagnostik (nur körperliche Untersuchung)
+						ohne 2 = Klinisch: Klinische Diagnose vor dem Sterbedatum durchgeführt; schließt diagnostische Techniken, inklusive Röntgen, Endoskopie, weitere bildgebende Verfahren, Ultraschall, exploratorische Chirurgie (Laparatomie, etc.) und Autopsie, ohne mikroskopische Gewebediagnose, ein.
+					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
 					<xs:restriction base="xs:string">
@@ -4026,9 +4027,9 @@ Zielgebietschlüssel nach oBDS 2014
 			<xs:element name="Intention">
 				<xs:annotation>
 					<xs:documentation>
-							Gibt an, mit welchem Ziel die Operation geplant wurde.
-							Die Angabe S = Sonstiges wird z.B. bei Tracheostomie vor Radiochenotherapie bei Kopf/Hals verwendet
-						</xs:documentation>
+						Gibt an, mit welchem Ziel die Operation geplant wurde.
+						Die Angabe S = Sonstiges wird z.B. bei Tracheostomie vor Radiochenotherapie bei Kopf/Hals verwendet
+					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
 					<xs:restriction base="xs:string">
@@ -4152,7 +4153,7 @@ Zielgebietschlüssel nach oBDS 2014
 			<xs:element name="Kuerzel">
 				<xs:annotation>
 					<xs:documentation>
-							Gibt an, ob eine oder keine Komplikation aufgetreten ist, bzw. wenn eine aufgetreten ist, welche.
+						Gibt an, ob eine oder keine Komplikation aufgetreten ist, bzw. wenn eine aufgetreten ist, welche.
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
@@ -4580,11 +4581,11 @@ Zielgebietschlüssel nach oBDS 2014
 			<xs:element name="Intention">
 				<xs:annotation>
 					<xs:documentation>
-						
-				Gibt an, mit welcher Intention die Strahlentherapie geplant wurde.
-				Prophylaktisch/Salvage kann als kurativ oder palliativ kodiert werden.
-				"lokal kurativ" gibt an, wenn das Therapiekonzept lediglich lokal kurativ ist, steht also zwischen Kurativ und Palliativ
-				</xs:documentation>
+
+						Gibt an, mit welcher Intention die Strahlentherapie geplant wurde.
+						Prophylaktisch/Salvage kann als kurativ oder palliativ kodiert werden.
+						"lokal kurativ" gibt an, wenn das Therapiekonzept lediglich lokal kurativ ist, steht also zwischen Kurativ und Palliativ
+					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
 					<xs:restriction base="xs:string">
@@ -4619,11 +4620,11 @@ Zielgebietschlüssel nach oBDS 2014
 			<xs:element name="Stellung_OP">
 				<xs:annotation>
 					<xs:documentation>
-					Gibt an, in welchem Bezug zu einer operativen Therapie die Bestrahlung steht.  
-					Hinweise:
-					A = adjuvant gilt für Therapien nach R0 Resektion
-					Z = additiv gilt für Therapien nach R1/R2 und RX Resektion
-				</xs:documentation>
+						Gibt an, in welchem Bezug zu einer operativen Therapie die Bestrahlung steht.
+						Hinweise:
+						A = adjuvant gilt für Therapien nach R0 Resektion
+						Z = additiv gilt für Therapien nach R1/R2 und RX Resektion
+					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
 					<xs:restriction base="xs:string">
@@ -4932,9 +4933,9 @@ Zielgebietschlüssel nach oBDS 2014
 	<xs:simpleType name="Strahlenart_Kontakt_Typ">
 		<xs:annotation>
 			<xs:documentation>
-			UH ist der am meisten verbreitete Typ
-			Elektronenstrahlen kommen nur bei kurzer Reichweite - Aderhautmelanom und Haut - zum Einsatz
-		</xs:documentation>
+				UH ist der am meisten verbreitete Typ
+				Elektronenstrahlen kommen nur bei kurzer Reichweite - Aderhautmelanom und Haut - zum Einsatz
+			</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="Strahlenart_Typ">
 			<xs:enumeration value="UH"/>
@@ -5088,12 +5089,12 @@ Zielgebietschlüssel nach oBDS 2014
 	<xs:simpleType name="Seite_Zielgebiet_Typ">
 		<xs:annotation>
 			<xs:documentation>
-			Gibt die Seitenlokalisation des Zielgebietes an 
-			Hinweise:
-			Bei Zielgebieten, die durch "(r, l)" gekennzeichnet sind, ist eine Seitenangabe Pflicht.
-			Bei beidseitiger Bestrahlung paariger Organe sind die Bestrahlungen einzeln zu melden.
-			Paariges Zielgebiet ist ein anatomischer Begriff und nicht zu verwechseln mit paarigen Organen.
-		</xs:documentation>
+				Gibt die Seitenlokalisation des Zielgebietes an
+				Hinweise:
+				Bei Zielgebieten, die durch "(r, l)" gekennzeichnet sind, ist eine Seitenangabe Pflicht.
+				Bei beidseitiger Bestrahlung paariger Organe sind die Bestrahlungen einzeln zu melden.
+				Paariges Zielgebiet ist ein anatomischer Begriff und nicht zu verwechseln mit paarigen Organen.
+			</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="L">
@@ -5280,10 +5281,10 @@ Zielgebietschlüssel nach oBDS 2014
 			<xs:element name="Menge_Substanz" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					Gibt an, mit welcher Substanz die Systemtherapie durchgeführt wurde. 
-					Mehrere Substanzen sind einzeln anzugeben. Eine kommaseparierte Liste ist nicht zulässig.
-					Substanzen können mit ihrer Bezeichnung oder als ATC-Code inklusive Version angegebenw erden.
-				</xs:documentation>
+						Gibt an, mit welcher Substanz die Systemtherapie durchgeführt wurde.
+						Mehrere Substanzen sind einzeln anzugeben. Eine kommaseparierte Liste ist nicht zulässig.
+						Substanzen können mit ihrer Bezeichnung oder als ATC-Code inklusive Version angegebenw erden.
+					</xs:documentation>
 				</xs:annotation>
 				<xs:complexType>
 					<xs:sequence>
@@ -5320,8 +5321,8 @@ Zielgebietschlüssel nach oBDS 2014
 			<xs:element name="Ende_Grund" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					Gibt den Grund an, warum die Systemtherapie beendet wurde. 
-				</xs:documentation>
+						Gibt den Grund an, warum die Systemtherapie beendet wurde.
+					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
 					<xs:restriction base="xs:string">
@@ -5393,11 +5394,11 @@ Zielgebietschlüssel nach oBDS 2014
 			<xs:element name="Gesamtbeurteilung_Tumorstatus">
 				<xs:annotation>
 					<xs:documentation>
-					Gesamtbeurteilung der Erkrankung unter Berücksichtigung aller Manifestationen.  
-					Hinweise: 
-					P = Progression (Fortschreiten der Erkrankung)
-					Y = Rezidiv, jedes Wiederauftreten der Erkrankung bei vorheriger kompletter klinischer Tumorfreiheit (biochemisches Rezidiv, Lokalrezidiv und/oder Metastasierung)
-				</xs:documentation>
+						Gesamtbeurteilung der Erkrankung unter Berücksichtigung aller Manifestationen.
+						Hinweise:
+						P = Progression (Fortschreiten der Erkrankung)
+						Y = Rezidiv, jedes Wiederauftreten der Erkrankung bei vorheriger kompletter klinischer Tumorfreiheit (biochemisches Rezidiv, Lokalrezidiv und/oder Metastasierung)
+					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
 					<xs:restriction base="xs:string">
@@ -5457,10 +5458,10 @@ Zielgebietschlüssel nach oBDS 2014
 			<xs:element name="Verlauf_Lokaler_Tumorstatus" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					Beurteilung der Situation im Primärtumorbereich
-					Hinweis:
-					T = Tumorreste (Residualtumor), unbekannt, ob Progress oder No Change (auch für noch nicht therapierte Primärtumoren zu verwenden)
-				</xs:documentation>
+						Beurteilung der Situation im Primärtumorbereich
+						Hinweis:
+						T = Tumorreste (Residualtumor), unbekannt, ob Progress oder No Change (auch für noch nicht therapierte Primärtumoren zu verwenden)
+					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
 					<xs:restriction base="xs:string">
@@ -5510,10 +5511,10 @@ Zielgebietschlüssel nach oBDS 2014
 			<xs:element name="Verlauf_Tumorstatus_Lymphknoten" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					Beurteilung der Situation im Bereich der regionären Lymphknoten  
-					Hinweis:
-					T = bekannter Lymphknotenbefall Residuen, unbekannt, ob Progress oder No Change
-				</xs:documentation>
+						Beurteilung der Situation im Bereich der regionären Lymphknoten
+						Hinweis:
+						T = bekannter Lymphknotenbefall Residuen, unbekannt, ob Progress oder No Change
+					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
 					<xs:restriction base="xs:string">
@@ -5563,13 +5564,13 @@ Zielgebietschlüssel nach oBDS 2014
 			<xs:element name="Verlauf_Tumorstatus_Fernmetastasen" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>
-					Beurteilung der Situation im Bereich der Fernmetastasen  
-					Hinweis:
-					R= Neu aufgetretene Fernmetastase(n) bzw. Metastasenrezidivbeschriebt eine Situation, in der zuvor Metastatsenfreiheit bestanden hat 
-					oder durch Therapie erreicht wurde.Neue Metastasen auch unter "Fernmetastasen" mit Lokalisation und Datum übermitteln.
-					P= Wenn zu bestehenden Fernmetastasen neue hinzukommen. Bei einem klinisch divergenten Geschehen, ist die prognostisch ungünstigere Ausprägung zu übermitteln.
-					Neue Metastasen auch unter "Fernmetastasen" mit Lokalisation und Datum übermitteln.
-				</xs:documentation>
+						Beurteilung der Situation im Bereich der Fernmetastasen
+						Hinweis:
+						R= Neu aufgetretene Fernmetastase(n) bzw. Metastasenrezidivbeschriebt eine Situation, in der zuvor Metastatsenfreiheit bestanden hat
+						oder durch Therapie erreicht wurde.Neue Metastasen auch unter "Fernmetastasen" mit Lokalisation und Datum übermitteln.
+						P= Wenn zu bestehenden Fernmetastasen neue hinzukommen. Bei einem klinisch divergenten Geschehen, ist die prognostisch ungünstigere Ausprägung zu übermitteln.
+						Neue Metastasen auch unter "Fernmetastasen" mit Lokalisation und Datum übermitteln.
+					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
 					<xs:restriction base="xs:string">
@@ -5657,9 +5658,9 @@ Zielgebietschlüssel nach oBDS 2014
 	<xs:complexType name="Tumorkonferenz_Typ">
 		<xs:annotation>
 			<xs:documentation>
-		Hier werden Tumorkonferenzen und andere Therapieplanungen außerhalb von Tumorkonferenzen hinterlegt
-		Neu in oBDS 3.0.0 ist die Dokumentation der festgelegten Therapieschritte
-		</xs:documentation>
+				Hier werden Tumorkonferenzen und andere Therapieplanungen außerhalb von Tumorkonferenzen hinterlegt
+				Neu in oBDS 3.0.0 ist die Dokumentation der festgelegten Therapieschritte
+			</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="Meldeanlass">
@@ -5800,5 +5801,195 @@ Zielgebietschlüssel nach oBDS 2014
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="Tumorkonferenz_ID" type="FreitextID_Typ" use="optional"/>
+	</xs:complexType>
+	<!-- dktk-Änderung: Erweiterung um die Biobank-Daten -->
+	<!-- MDS-B (Biomaterial-Daten) Der Meldedatensatz für Biomaterial -->
+	<xs:complexType name="Samples_Type">
+		<xs:annotation>
+			<xs:documentation>Es handelt sich um eine Erweiterung des oBDS-Schemas um Biobank-Datenelemente (MDS).</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Sample" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Project" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Projekt oder Studie </xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="http://dktk.dkfz.de/fhir/sid/exliquid-specimen"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="Status" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Verfügbarkeitsstatus der Probe</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="available"/>
+									<xs:enumeration value="unavailable"/>
+									<xs:enumeration value="unsatisfactory"/>
+									<xs:enumeration value="entered-in-error"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="Sampletype">
+							<xs:annotation>
+								<xs:documentation>Gibt die Art des Biomaterials an</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="whole-blood">
+										<xs:annotation>
+											<xs:documentation>Whole blood</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="bone-marrow">
+										<xs:annotation>
+											<xs:documentation>Bone marrow</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="buffy-coat">
+										<xs:annotation>
+											<xs:documentation>Buffy-Coat</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="dried-whole-blood">
+										<xs:annotation>
+											<xs:documentation>Dried whole blood</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="peripheral-blood-cells-vital">
+										<xs:annotation>
+											<xs:documentation>Peripheral blood mononuclear cells (PBMCs, viable)</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="blood-plasma">
+										<xs:annotation>
+											<xs:documentation>Plasma</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="blood-serum">
+										<xs:annotation>
+											<xs:documentation>Serum</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="ascites">
+										<xs:annotation>
+											<xs:documentation>Ascites</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="csf-liquor">
+										<xs:annotation>
+											<xs:documentation>CSF/Liquor</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="saliva">
+										<xs:annotation>
+											<xs:documentation>Saliva</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="stool-faeces">
+										<xs:annotation>
+											<xs:documentation>Stool/Faeces</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="urine">
+										<xs:annotation>
+											<xs:documentation>Urine</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="swab">
+										<xs:annotation>
+											<xs:documentation>Swab</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="liquid-other">
+										<xs:annotation>
+											<xs:documentation>Other liquid biosample/storage</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="tissue-ffpe">
+										<xs:annotation>
+											<xs:documentation>Tissue FFPE</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="tissue-frozen">
+										<xs:annotation>
+											<xs:documentation>Tissue frozen</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="tissue-other">
+										<xs:annotation>
+											<xs:documentation>Other tissue storage</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="dna">
+										<xs:annotation>
+											<xs:documentation>DNA</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="rna">
+										<xs:annotation>
+											<xs:documentation>RNA</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="derivative-other">
+										<xs:annotation>
+											<xs:documentation>Other derivative</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="Collectiontime" type="Datum_Tag_genau_Typ" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Wann wurde die Probe entnommen (Entnahme-/Eingangsdatum)</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="SpecimenQuantity" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>designation:: Fixierungsart urn:dktk:dataelement:90:1 definition:: Gibt die Art der Fixierung des Biomaterials an</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="QuantityValue">
+										<xs:annotation>
+											<xs:documentation>Menge der Probe</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:decimal"/>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="Unit" type="xs:string" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Einheit der Probenmenge</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="BodySite" type="Topographie_ICD_O_Typ" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Entnahmestelle als ICD-O-3 Topographie Code</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+					<!-- @TODO: dktk: braucht man eine ID? -->
+					<xs:attribute name="Sample_ID" type="xs:string" use="required">
+						<xs:annotation>
+							<xs:documentation> Eine vom Melder generierte ID zur eindeutigen Identifikation des Vorgangs</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="Parent_ID" type="xs:string" use="optional">
+						<xs:annotation>
+							<xs:documentation>Link zur übergeordneten Stichprobe: Referenz auf die ID der Mutterprobe. Ist die Parent_ID nicht verfügbar und handelt es sich um eine aliquote Probe, kann hier eine beliebige Zahl oder ein beliebige Zeichenkette eingegeben werden.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
 	</xs:complexType>
 </xs:schema>
