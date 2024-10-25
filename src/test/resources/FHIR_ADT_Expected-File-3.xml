@@ -128,7 +128,7 @@
                   <version value="2024"/>
                   <code value="C43.4"/>
                </coding>
-               <text value="Malignes_Melanom_oberer_Ruecken_mittig"/>
+               <text value="Malignes_Melanom_oberer_Rücken_mittig"/>
             </code>
             <bodySite>
                <coding>
@@ -272,7 +272,7 @@
             <effectiveDateTime value="2024-03-02"/>
             <valueCodeableConcept>
                <coding>
-                  <system value="urn:WHO-Grading_fuer_Gehirntumoren"/>
+                  <system value="urn:WHO-Grading_für_Gehirntumoren"/>
                   <code value="II"/>
                </coding>
             </valueCodeableConcept>
@@ -346,7 +346,7 @@
                   <version value="33"/>
                   <code value="8721/3"/>
                </coding>
-               <text value="Nodulaeres_malignes_Melanom_(NM)"/>
+               <text value="Noduläres_malignes_Melanom_(NM)"/>
             </valueCodeableConcept>
             <hasMember>
                <reference value="Observation/grd3b517bb65fd6cddf"/>
@@ -1533,7 +1533,7 @@
                   <version value="33"/>
                   <code value="8721/3"/>
                </coding>
-               <text value="Nodulaeres_malignes_Melanom_(NM)"/>
+               <text value="Noduläres_malignes_Melanom_(NM)"/>
             </valueCodeableConcept>
             <hasMember>
                <reference value="Observation/grd473b8c6f78fbdbb4"/>
@@ -2361,7 +2361,7 @@
             </extension>
             <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-SystemischeTherapieProtokoll">
                <valueCodeableConcept>
-                  <text value="Atezolizumab/_Bevacizumab"/>
+                  <text value="Atezolizumab_Bevacizumab"/>
                </valueCodeableConcept>
             </extension>
             <status value="not-taken"/>
@@ -3428,7 +3428,7 @@
             <effectiveDateTime value="2023-07-18"/>
             <valueCodeableConcept>
                <coding>
-                  <system value="urn:problematic_duplicate:_diagnosis_and_progress"/>
+                  <system value="urn:problematic_duplicate_diagnosis_and_progress"/>
                   <code value="I"/>
                </coding>
             </valueCodeableConcept>

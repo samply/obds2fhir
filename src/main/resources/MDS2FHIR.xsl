@@ -2356,6 +2356,6 @@
 
     <xsl:function name="mds2fhir:fix-free-text">
         <xsl:param name="text" />
-        <xsl:value-of select="replace(replace(replace(replace(replace(replace(translate($text,' ', '_'), 'ä', 'ae'), 'Ä', 'Ae'), 'ö', 'oe'), 'Ö', 'Oe'), 'ü', 'ue'), 'Ü', 'Ue')"/>
+        <xsl:value-of select="replace($text, '[^a-zA-Z0-9äöüÄÖÜéÉèÈêÊàÀçÇñÑ\-_.,()]+', '_')"/>
     </xsl:function>
 </xsl:stylesheet>

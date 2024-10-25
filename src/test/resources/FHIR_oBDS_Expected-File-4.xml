@@ -158,10 +158,10 @@
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/Specimen/bio40336efc81b4c354"/>
+      <fullUrl value="http://example.com/Specimen/bioa632f6eca27ec259"/>
       <resource>
          <Specimen>
-            <id value="bio40336efc81b4c354"/>
+            <id value="bioa632f6eca27ec259"/>
             <meta>
                <profile value="https://fhir.bbmri.de/StructureDefinition/Specimen"/>
             </meta>
@@ -178,7 +178,7 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="Specimen/bio40336efc81b4c354"/>
+         <url value="Specimen/bioa632f6eca27ec259"/>
       </request>
    </entry>
    <entry>
@@ -255,7 +255,7 @@
                   <version value="2024"/>
                   <code value="C43.4"/>
                </coding>
-               <text value="Malignes_Melanom_oberer_Ruecken_mittig-pathologie"/>
+               <text value="Malignes_Melanom_oberer_Rücken_mittig-pathologie"/>
             </code>
             <bodySite>
                <coding>
@@ -378,7 +378,7 @@
             <effectiveDateTime value="2024-03-02"/>
             <valueCodeableConcept>
                <coding>
-                  <system value="urn:WHO-Grading_fuer_Gehirntumoren"/>
+                  <system value="urn:WHO-Grading_für_Gehirntumoren"/>
                   <code value="II"/>
                </coding>
             </valueCodeableConcept>
@@ -492,7 +492,7 @@
                   <version value="31"/>
                   <code value="8722/3"/>
                </coding>
-               <text value="Nodulaeres_malignes_Melanom_(NM)"/>
+               <text value="Noduläres_malignes_Melanom_(NM)"/>
             </valueCodeableConcept>
             <hasMember>
                <reference value="Observation/grdb7bd2dea7b9d637b"/>
@@ -707,7 +707,7 @@
                   <version value="31-pathologie"/>
                   <code value="8722/3-pathologie"/>
                </coding>
-               <text value="Nodulaeres_malignes_Melanom_(NM)-pathologie"/>
+               <text value="Noduläres_malignes_Melanom_(NM)-pathologie"/>
             </valueCodeableConcept>
             <hasMember>
                <reference value="Observation/grd227b50a3b958637a"/>
@@ -2111,7 +2111,7 @@
                   <version value="33"/>
                   <code value="8721/3"/>
                </coding>
-               <text value="Nodulaeres_malignes_Melanom_(NM)"/>
+               <text value="Noduläres_malignes_Melanom_(NM)"/>
             </valueCodeableConcept>
             <hasMember>
                <reference value="Observation/grda53c3ee5f0b90321"/>
@@ -2616,7 +2616,7 @@
             <actuality value="actual"/>
             <event>
                <coding>
-                  <system value="urn:proprietaerCode"/>
+                  <system value="urn:proprietärCode"/>
                   <version value="Sonstige"/>
                   <code value="proprietärCode"/>
                </coding>
@@ -3056,7 +3056,7 @@
             </extension>
             <extension url="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Extension-SystemischeTherapieProtokoll">
                <valueCodeableConcept>
-                  <text value="Atezolizumab/_Bevacizumab"/>
+                  <text value="Atezolizumab_Bevacizumab"/>
                </valueCodeableConcept>
             </extension>
             <status value="not-taken"/>
@@ -4053,7 +4053,7 @@
             <effectiveDateTime value="2023-07-18"/>
             <valueCodeableConcept>
                <coding>
-                  <system value="urn:problematic_duplicate:_diagnosis_and_progress"/>
+                  <system value="urn:problematic_duplicate_diagnosis_and_progress"/>
                   <code value="I"/>
                </coding>
             </valueCodeableConcept>
