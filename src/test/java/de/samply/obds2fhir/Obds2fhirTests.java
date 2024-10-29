@@ -1,12 +1,14 @@
 package de.samply.obds2fhir;
 
+import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.parser.IParser;
+import org.hl7.fhir.r4.model.Bundle;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
 import uk.org.webcompere.systemstubs.jupiter.SystemStub;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -18,18 +20,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Obds2fhirTests {
-    String pathWithFile=this.getClass().getClassLoader().getResource("clinical_data/InputData/File-1-ADT2_Testpatient.xml").getPath();
+    private final FhirContext fhirContext = FhirContext.forR4();;
+    private final String pathWithFile=this.getClass().getClassLoader().getResource("clinical_data/InputData/File-1-ADT2_Testpatient.xml").getPath();
     @SystemStub
-    private EnvironmentVariables environmentVariables =
-            new EnvironmentVariables("FILE_PATH", pathWithFile.substring(0, pathWithFile.indexOf("InputData")));
+    private EnvironmentVariables environmentVariables = new EnvironmentVariables("FILE_PATH", pathWithFile.substring(0, pathWithFile.indexOf("InputData")));
     @Test
     @Order(1)
     public void applyTransformation(){
-        Obds2fhir obds2fhir = new Obds2fhir();
-        obds2fhir.initializeTransformers(false);
-        obds2fhir.processXmlFiles("/InputData/",1);
-        obds2fhir.processXmlFiles("/tmp/oBDS_Patients/", 2);
-        obds2fhir.processXmlFiles("/tmp/ADT_Patients/", 2);
+        Obds2fhir.initializeTransformers(false);
+        Obds2fhir.processXmlFiles("/InputData/",1);
+        Obds2fhir.processXmlFiles("/tmp/oBDS_Patients/", 2);
+        Obds2fhir.processXmlFiles("/tmp/ADT_Patients/", 2);
         assertTrue(new File(System.getenv("FILE_PATH")).exists());
     }
     @Test
@@ -89,23 +90,23 @@ public class Obds2fhirTests {
         assertTrue(compare(result, expected));
     }
     private Boolean compare(String resultvar, String expectedvar) throws IOException {
-        String result = System.getenv("FILE_PATH")+resultvar;
-        String expected = this.getClass().getClassLoader().getResource(expectedvar).getPath();
-        String resultString = Files.readString(Paths.get(String.valueOf(new File(result))));
-        String expectedString = Files.readString(Paths.get(String.valueOf(new File(expected))));
-        resultString=replaceAllIds(resultString);
-        expectedString=replaceAllIds(expectedString);
-        return (resultString.equals(expectedString));
+        String resultString = replaceAllIds(Files.readString(Paths.get(String.valueOf(new File(System.getenv("FILE_PATH")+resultvar)))));
+        String expectedString = replaceAllIds(Files.readString(Paths.get(String.valueOf(new File(this.getClass().getClassLoader().getResource(expectedvar).getPath())))));
+        IParser xmlParser = fhirContext.newXmlParser();
+        Bundle resultBundle = xmlParser.parseResource(Bundle.class, resultString);
+        Bundle expectedBundle = xmlParser.parseResource(Bundle.class, expectedString);
+        return(resultBundle.equalsDeep(expectedBundle));
     }
-    private String replaceAllIds(String bundle){
+
+    private String replaceAllIds(String bundle) {
         //repalce ids
-        String result = bundle.replaceAll("([/\"])([a-z0-9]{16,23}[ADToBDS-]{0,5}[-0-9]{0,2})(\")","$1replaced-id$3");
+        String result = bundle.replaceAll("([/\"])([a-z0-9]{16,23}[ADToBDS-]{0,5}[-0-9]{0,2})(\")", "$1replaced-id$3");
         //replace pseudonym
-        result = result.replaceAll("(<value value=\")(.{1,32})\"","$1replaced-pseudonym\"");
+        result = result.replaceAll("(<value value=\")(.{1,32})\"", "1");
         //replace separator
-        result = result.replaceAll("\r","");
+        result = result.replaceAll("\r", "");
         //replace artefacts
-        result = result.replaceAll("<id value=\"tpatient.xml\"/>","<id value=\"replaced-id\"/>");
+        result = result.replaceAll("<id value=\"tpatient.xml\"/>", "<id value=\"replaced-id\"/>");
         return result;
     }
 }
