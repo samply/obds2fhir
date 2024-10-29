@@ -12,12 +12,12 @@
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <slf4j-simple.version>2.0.16</slf4j-simple.version>
+        <slf4j.version>2.0.16</slf4j.version>
         <hapi.fhir.version>7.4.5</hapi.fhir.version>
     </properties>
+
     <build>
         <plugins>
             <plugin>
@@ -30,6 +30,7 @@
                     </archive>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -53,7 +54,9 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.5.1</version>
             </plugin>
@@ -66,12 +69,13 @@
             <artifactId>Saxon-HE</artifactId>
             <version>12.5</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.httpcomponents.client5</groupId>
             <artifactId>httpclient5</artifactId>
             <version>5.4</version>
-            <scope>compile</scope>
         </dependency>
+
         <dependency>
             <groupId>de.pseudonymisierung</groupId>
             <artifactId>mainzelliste-client</artifactId>
@@ -83,67 +87,71 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
         <dependency>
             <groupId>org.codehaus.jettison</groupId>
             <artifactId>jettison</artifactId>
             <version>1.5.4</version>
         </dependency>
+
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.11.0</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <version>3.5.1</version>
-            <scope>test</scope>
-        </dependency>
+
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>5.11.3</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-inline</artifactId>
             <version>5.2.0</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>uk.org.webcompere</groupId>
             <artifactId>system-stubs-jupiter</artifactId>
             <version>2.1.7</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.17.0</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>ca.uhn.hapi.fhir</groupId>
-            <artifactId>hapi-fhir-structures-r4</artifactId> <!-- Specify FHIR version here -->
+            <artifactId>hapi-fhir-structures-r4</artifactId>
             <version>${hapi.fhir.version}</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>ca.uhn.hapi.fhir</groupId>
             <artifactId>hapi-fhir-base</artifactId>
             <version>${hapi.fhir.version}</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>${slf4j-simple.version}</version>
+            <version>${slf4j.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-            <version>${slf4j-simple.version}</version>
+            <version>${slf4j.version}</version>
         </dependency>
     </dependencies>
 </project>
