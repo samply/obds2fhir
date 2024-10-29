@@ -1,0 +1,78 @@
+<Bundle xmlns="http://hl7.org/fhir" xmlns:hash="java:de.samply.obds2fhir">
+   <id value="653ae947f9c1f8f6"/>
+   <type value="batch"/>
+   <entry>
+      <fullUrl value="http://example.com/Observation/vital653ae947f9c1f8f6"/>
+      <resource>
+         <Observation>
+            <id value="vital653ae947f9c1f8f6"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Vitalstatus"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="75186-7"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/653ae947f9c1f8f6"/>
+            </subject>
+            <effectiveDateTime value="2021-08-23"/>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VitalstatusCS"/>
+                  <code value="verstorben"/>
+               </coding>
+            </valueCodeableConcept>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/vital653ae947f9c1f8f6"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/tod653ae947f9c1f8f6"/>
+      <resource>
+         <Observation>
+            <id value="tod653ae947f9c1f8f6"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-TodUrsache"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="68343-3"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/653ae947f9c1f8f6"/>
+            </subject>
+            <effectiveDateTime value="2021-08-23"/>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://fhir.de/CodeSystem/bfarm/icd-10-gm"/>
+                  <version value="10 2004 GM"/>
+                  <code value="C61"/>
+               </coding>
+               <coding>
+                  <system value="http://fhir.de/CodeSystem/bfarm/icd-10-gm"/>
+                  <version value="10 2004 GM"/>
+                  <code value="C12"/>
+               </coding>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/JNUCS"/>
+                  <code value="J"/>
+               </coding>
+            </valueCodeableConcept>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/tod653ae947f9c1f8f6"/>
+      </request>
+   </entry>
+</Bundle>

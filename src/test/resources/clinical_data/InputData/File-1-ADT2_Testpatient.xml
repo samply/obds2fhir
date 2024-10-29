@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ADT_GEKID xmlns="http://www.gekid.de/namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gekid.de/namespace file:/C:/Workspace/adt2fhir/src/main/resources/ADT_GEKID_v2.2.1-dktk_v1.0.0.xsd" Schema_Version="2.0.0">
+<ADT_GEKID xmlns="http://www.gekid.de/namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gekid.de/namespace" Schema_Version="2.0.0">
 	<Absender Absender_ID="Absender_ID1" Software_ID="Software_ID1" Installations_ID="Installations_ID1">
 		<Absender_Bezeichnung>Absender_Bezeichnung0</Absender_Bezeichnung>
 		<Absender_Ansprechpartner>Absender_Ansprechpartner0</Absender_Ansprechpartner>
@@ -9,7 +9,7 @@
 	</Absender>
 	<Menge_Patient>
 		<Patient>
-			<Patienten_Stammdaten Patient_ID="testpatient1">
+			<Patienten_Stammdaten Patient_ID="testpatient-ADT-1">
 				<Patienten_Nachname>Mustermann</Patienten_Nachname>
 				<Patienten_Vornamen>Max</Patienten_Vornamen>
 				<Patienten_Geschlecht>M</Patienten_Geschlecht>
@@ -32,7 +32,7 @@
 						<Primaertumor_Diagnosetext>Primaertumor_Diagnosetext0</Primaertumor_Diagnosetext>
 						<Primaertumor_Topographie_ICD_O>C61.0</Primaertumor_Topographie_ICD_O>
 						<Primaertumor_Topographie_ICD_O_Version>31</Primaertumor_Topographie_ICD_O_Version>
-						<Primaertumor_Topographie_ICD_O_Freitext>Primaertumor_Topographie_ICD_O_Freitext0</Primaertumor_Topographie_ICD_O_Freitext>
+						<Primaertumor_Topographie_ICD_O_Freitext>Primaertumor_Topographie_ICD_O_Freitext_Ö</Primaertumor_Topographie_ICD_O_Freitext>
 						<Diagnosedatum>12.03.2021</Diagnosedatum>
 						<Diagnosesicherung>1</Diagnosesicherung>
 						<Seitenlokalisation>L</Seitenlokalisation>
@@ -45,7 +45,7 @@
 								<Morphologie_Freitext>Morphologie_Freitext0</Morphologie_Freitext>
 								<Grading>1</Grading>
 								<LK_untersucht>50</LK_untersucht>
-								<LK_befallen>50</LK_befallen>
+								<LK_befallen> 50</LK_befallen><!--for some reason this partially occurs-->
 								<Sentinel_LK_untersucht>50</Sentinel_LK_untersucht>
 								<Sentinel_LK_befallen>50</Sentinel_LK_befallen>
 							</Histologie>
@@ -276,6 +276,11 @@
 									<Nebenwirkung_Art>Nebenwirkung_Art1</Nebenwirkung_Art>
 									<Nebenwirkung_Version>4</Nebenwirkung_Version>
 								</ST_Nebenwirkung>
+								<ST_Nebenwirkung>
+									<Nebenwirkung_Grad>4</Nebenwirkung_Grad>
+									<Nebenwirkung_Art>testReplica</Nebenwirkung_Art>
+									<Nebenwirkung_Version>5.0</Nebenwirkung_Version>
+								</ST_Nebenwirkung>
 							</Menge_Nebenwirkung>
 							<Modul_Allgemein>
 								<DatumSozialdienstkontakt>
@@ -338,6 +343,16 @@
 									<Nebenwirkung_Art>Nebenwirkung_Art3</Nebenwirkung_Art>
 									<Nebenwirkung_Version>4</Nebenwirkung_Version>
 								</ST_Nebenwirkung>
+								<ST_Nebenwirkung>
+									<Nebenwirkung_Grad>4</Nebenwirkung_Grad>
+									<Nebenwirkung_Art>testReplica</Nebenwirkung_Art>
+									<Nebenwirkung_Version>5.0</Nebenwirkung_Version>
+								</ST_Nebenwirkung>
+								<ST_Nebenwirkung>
+									<Nebenwirkung_Grad>4</Nebenwirkung_Grad>
+									<Nebenwirkung_Art>testReplica</Nebenwirkung_Art>
+									<Nebenwirkung_Version>5.0</Nebenwirkung_Version>
+								</ST_Nebenwirkung>
 							</Menge_Nebenwirkung>
 							<Modul_Allgemein>
 								<DatumSozialdienstkontakt>
@@ -393,6 +408,11 @@
 									<Nebenwirkung_Art>Nebenwirkung_Art5</Nebenwirkung_Art>
 									<Nebenwirkung_Version>4</Nebenwirkung_Version>
 								</SYST_Nebenwirkung>
+								<SYST_Nebenwirkung>
+									<Nebenwirkung_Grad>4</Nebenwirkung_Grad>
+									<Nebenwirkung_Art>testReplica</Nebenwirkung_Art>
+									<Nebenwirkung_Version>5.0</Nebenwirkung_Version>
+								</SYST_Nebenwirkung>
 							</Menge_Nebenwirkung>
 							<Modul_Allgemein>
 								<DatumSozialdienstkontakt>
@@ -431,9 +451,14 @@
 									<Nebenwirkung_Version>4</Nebenwirkung_Version>
 								</SYST_Nebenwirkung>
 								<SYST_Nebenwirkung>
-									<Nebenwirkung_Grad>K</Nebenwirkung_Grad>
-									<Nebenwirkung_Art>Nebenwirkung_Art7</Nebenwirkung_Art>
-									<Nebenwirkung_Version>4</Nebenwirkung_Version>
+									<Nebenwirkung_Grad>4</Nebenwirkung_Grad>
+									<Nebenwirkung_Art>testReplica</Nebenwirkung_Art>
+									<Nebenwirkung_Version>5.0</Nebenwirkung_Version>
+								</SYST_Nebenwirkung>
+								<SYST_Nebenwirkung>
+									<Nebenwirkung_Grad>4</Nebenwirkung_Grad>
+									<Nebenwirkung_Art>testReplica</Nebenwirkung_Art>
+									<Nebenwirkung_Version>5.0</Nebenwirkung_Version>
 								</SYST_Nebenwirkung>
 							</Menge_Nebenwirkung>
 							<Modul_Allgemein>
@@ -491,7 +516,7 @@
 									<FM_Lokalisation>PUL</FM_Lokalisation>
 								</Fernmetastase>
 							</Menge_FM>
-							<Allgemeiner_Leistungszustand>0</Allgemeiner_Leistungszustand>
+							<Allgemeiner_Leistungszustand>3</Allgemeiner_Leistungszustand>
 						</Verlauf>
 					</Menge_Verlauf>
 				</Meldung>
@@ -555,31 +580,60 @@
 								<Tod_tumorbedingt>J</Tod_tumorbedingt>
 								<Menge_Todesursache>
 									<Todesursache_ICD>C61</Todesursache_ICD>
+									<Todesursache_ICD>C12</Todesursache_ICD>
 									<Todesursache_ICD_Version>10 2004 GM</Todesursache_ICD_Version>
 								</Menge_Todesursache>
 							</Tod>
 						</Verlauf>
 					</Menge_Verlauf>
 					<Menge_Biomaterial>
-						<Biomaterial Biomaterial_ID="1">
-							<Patienten_mit_Biomaterial>ja</Patienten_mit_Biomaterial>
+						<Biomaterial Biomaterial_ID="1-wrongProbentyp"><!--missing Probentyp -> should be ignored-->
+							<Patienten_mit_Biomaterial>ja</Patienten_mit_Biomaterial><!--ignored since FHIR-->
+							<Probenart>Tumorgewebe</Probenart>
+							<Fixierungsart>Paraffin(FFPE)</Fixierungsart>
+						</Biomaterial>
+						<Biomaterial Biomaterial_ID="1-rightProbentyp">
+							<Probentyp>Gewebeprobe</Probentyp>
+							<Probenart>Tumorgewebe</Probenart>
+							<Fixierungsart>Paraffin(FFPE)</Fixierungsart>
+						</Biomaterial>
+						<Biomaterial Biomaterial_ID="1-wrongDate1">
+							<Probentyp>Gewebeprobe</Probentyp>
 							<Probenart>Tumorgewebe</Probenart>
 							<Entnahmedatum>2021</Entnahmedatum>
 							<Fixierungsart>Paraffin(FFPE)</Fixierungsart>
 						</Biomaterial>
-						<Biomaterial Biomaterial_ID="2">
-							<Patienten_mit_Biomaterial>ja</Patienten_mit_Biomaterial>
+						<Biomaterial Biomaterial_ID="1-wrongDate2">
 							<Probentyp>Gewebeprobe</Probentyp>
-							<Entnahmedatum>07.2021</Entnahmedatum>
-						</Biomaterial>
-						<Biomaterial Biomaterial_ID="3">
-							<Patienten_mit_Biomaterial>ja</Patienten_mit_Biomaterial>
-							<Probentyp>Flüssigprobe</Probentyp>
 							<Probenart>Tumorgewebe</Probenart>
-							<Entnahmedatum>16.07.2021</Entnahmedatum>
+							<Entnahmedatum>07.2021</Entnahmedatum>
 							<Fixierungsart>Paraffin(FFPE)</Fixierungsart>
 						</Biomaterial>
-						<Biomaterial Biomaterial_ID="4">
+						<Biomaterial Biomaterial_ID="1-rightDate">
+							<Probentyp>Gewebeprobe</Probentyp>
+							<Probenart>Tumorgewebe</Probenart>
+							<Entnahmedatum>03.07.2021</Entnahmedatum>
+							<Fixierungsart>Paraffin(FFPE)</Fixierungsart>
+						</Biomaterial>
+						<Biomaterial Biomaterial_ID="1-minimal">
+							<Probentyp>Gewebeprobe</Probentyp>
+						</Biomaterial>
+						<Biomaterial Biomaterial_ID="2-otherFixierungsart">
+							<Probentyp>Gewebeprobe</Probentyp>
+							<Probenart>Tumorgewebe</Probenart>
+							<Entnahmedatum>03.07.2021</Entnahmedatum>
+							<Fixierungsart>Kryo/Frisch (FF)</Fixierungsart>
+						</Biomaterial>
+						<Biomaterial Biomaterial_ID="3-minimal">
+							<Probentyp>Flüssigprobe</Probentyp>
+							<Entnahmedatum>16.07.2021</Entnahmedatum>
+						</Biomaterial>
+						<Biomaterial Biomaterial_ID="3">
+							<Probentyp>Flüssigprobe</Probentyp>
+							<Probenart>Vollblut</Probenart>
+							<Entnahmedatum>11.12.2021</Entnahmedatum>
+						</Biomaterial>
+						<Biomaterial Biomaterial_ID="wrong">
 							<Patienten_mit_Biomaterial>nein</Patienten_mit_Biomaterial>
 						</Biomaterial>
 					</Menge_Biomaterial>
@@ -588,6 +642,10 @@
 		</Patient>
 		<Patient><!--External Diagnosis-->
 			<Patienten_Stammdaten Patient_ID="2345">
+				<Patienten_Nachname>Unterberg</Patienten_Nachname>
+				<Patienten_Vornamen>Max</Patienten_Vornamen>
+				<Patienten_Geschlecht>M</Patienten_Geschlecht>
+				<Patienten_Geburtsdatum>26.12.1992</Patienten_Geburtsdatum>
 				</Patienten_Stammdaten>
 				<Menge_Meldung>
 					<Meldung Meldung_ID="1" Melder_ID="1">

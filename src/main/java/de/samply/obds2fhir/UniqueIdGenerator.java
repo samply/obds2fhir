@@ -1,4 +1,4 @@
-package de.samply.adt2fhir;
+package de.samply.obds2fhir;
 
 import net.sf.saxon.expr.XPathContext;
 import net.sf.saxon.lib.ExtensionFunctionCall;
@@ -23,7 +23,7 @@ public class UniqueIdGenerator extends ExtensionFunctionDefinition {
 
     @Override
     public StructuredQName getFunctionQName() {
-        return new StructuredQName("hash", "java:de.samply.adt2fhir", "hash");
+        return new StructuredQName("hash", "java:de.samply.obds2fhir", "hash");
     }
 
     @Override

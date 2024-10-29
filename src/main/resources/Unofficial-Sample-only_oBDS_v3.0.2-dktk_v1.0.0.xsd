@@ -1,0 +1,681 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.basisdatensatz.de/oBDS/XML" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.basisdatensatz.de/oBDS/XML" targetNamespace="http://www.basisdatensatz.de/oBDS/XML" elementFormDefault="qualified" version="3.0.2-sample">
+	<xs:element name="oBDS">
+		<xs:annotation>
+			<xs:documentation>Root element</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Menge_Patient">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Patient" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Patienten_Stammdaten" type="Patienten_Stammdaten_Melder_Typ">
+											<xs:annotation>
+												<xs:documentation>Woher die Probe stammt. Dies ist die Referenz zum Patienten (FHIR:Specimen.subject) (PatientenID) </xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Menge_Meldung">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="Meldung" maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="Tumorzuordnung" type="Tumorzuordnung_Typ" minOccurs="0"/>
+																<xs:element name="Samples" type="Samples_Type"/>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+									<xs:attribute name="Patient_ID" type="FreitextID_Typ" use="required"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="Schema_Version" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="3.0.0">
+							<xs:annotation>
+								<xs:documentation>Erste Version beruhend auf Basisdatensatz 2021</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="3.0.1">
+							<xs:annotation>
+								<xs:documentation>Patch: Fehler im Modul DKKR behoben (GPOH_Therapiestudienpatient: Auswahl 2=nein statt 1=ja), Beschreibung im Nuklide_Typ korrigiert (Ir-192), Referenzprüfung Melder/ID auf Meldung/Melder_ID korrigiert (war vertauscht)</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="3.0.2">
+							<xs:annotation>
+								<xs:documentation>
+									- Erweiterung der zulässigen ICD-10-Versionen über das Jahr 2023 hinaus
+									- Ergänzung Diagnosesicherung 7.1-3 und 8 (§65c 2023/63/c1) </xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="3.0.2-sample">
+							<xs:annotation>
+								<xs:documentation> Anpassung an DKTK sample</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+		<xs:unique name="ID_Patient">
+			<xs:selector xpath="tns:Menge_Patient/tns:Patient"/>
+			<xs:field xpath="@Patient_ID"/>
+		</xs:unique>
+	</xs:element>
+	<xs:simpleType name="datatypeAtrimmed">
+		<xs:annotation>
+			<xs:documentation>Ergänzung: kein Whitespace am Anfang oder Ende. Der Datentyp A gibt wieder, welche Schriftzeichen in hoheitlichen Dokumenten für Namen natürlicher Personen verwendet werden.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="(('|[,-\.]|[A-Z]|[`-z]|~|¨|´|·|[À-Ö]|[Ø-ö]|[ø-ž]|[Ƈ-ƈ]|Ə|Ɨ|[Ơ-ơ]|[Ư-ư]|Ʒ|[Ǎ-ǜ]|[Ǟ-ǟ]|[Ǣ-ǰ]|[Ǵ-ǵ]|[Ǹ-ǿ]|[Ȓ-ȓ]|[Ș-ț]|[Ȟ-ȟ]|[ȧ-ȳ]|ə|ɨ|ʒ|[ʹ-ʺ]|[ʾ-ʿ]|ˈ|ˌ|[Ḃ-ḃ]|[Ḇ-ḇ]|[Ḋ-ḑ]|[Ḝ-ḫ]|[ḯ-ḷ]|[Ḻ-ḻ]|[Ṁ-ṉ]|[Ṓ-ṛ]|[Ṟ-ṣ]|[Ṫ-ṯ]|[Ẁ-ẇ]|[Ẍ-ẗ]|ẞ|[Ạ-ỹ]|’|‡|A̋|C(̀|̄|̆|̈|̕|̣|̦|̨̆)|D̂|F(̀|̄)|G̀|H(̄|̦|̱)|J(́|̌)|K(̀|̂|̄|̇|̕|̛|̦|͟H|͟h)|L(̂|̥|̥̄|̦)|M(̀|̂|̆|̐)|N(̂|̄|̆|̦)|P(̀|̄|̕|̣)|R(̆|̥|̥̄)|S(̀|̄|̛̄|̱)|T(̀|̄|̈|̕|̛)|U̇|Z(̀|̄|̆|̈|̧)|a̋|c(̀|̄|̆|̈|̕|̣|̦|̨̆)|d̂|f(̀|̄)|g̀|h(̄|̦)|j́|k(̀|̂|̄|̇|̕|̛|̦|͟h)|l(̂|̥|̥̄|̦)|m(̀|̂|̆|̐)|n(̂|̄|̆|̦)|p(̀|̄|̕|̣)|r(̆|̥|̥̄)|s(̀|̄|̛̄|̱)|t(̀|̄|̕|̛)|u̇|z(̀|̄|̆|̈|̧)|Ç̆|Û̄|ç̆|û̄|ÿ́|Č(̕|̣)|č(̕|̣)|Ī́|ī́|Ž(̦|̧)|ž(̦|̧)|Ḳ̄|ḳ̄|Ṣ̄|ṣ̄|Ṭ̄|ṭ̄|Ạ̈|ạ̈|Ọ̈|ọ̈|Ụ(̄|̈)|ụ(̄|̈))( |'|[,-\.]|[A-Z]|[`-z]|~|¨|´|·|[À-Ö]|[Ø-ö]|[ø-ž]|[Ƈ-ƈ]|Ə|Ɨ|[Ơ-ơ]|[Ư-ư]|Ʒ|[Ǎ-ǜ]|[Ǟ-ǟ]|[Ǣ-ǰ]|[Ǵ-ǵ]|[Ǹ-ǿ]|[Ȓ-ȓ]|[Ș-ț]|[Ȟ-ȟ]|[ȧ-ȳ]|ə|ɨ|ʒ|[ʹ-ʺ]|[ʾ-ʿ]|ˈ|ˌ|[Ḃ-ḃ]|[Ḇ-ḇ]|[Ḋ-ḑ]|[Ḝ-ḫ]|[ḯ-ḷ]|[Ḻ-ḻ]|[Ṁ-ṉ]|[Ṓ-ṛ]|[Ṟ-ṣ]|[Ṫ-ṯ]|[Ẁ-ẇ]|[Ẍ-ẗ]|ẞ|[Ạ-ỹ]|’|‡|A̋|C(̀|̄|̆|̈|̕|̣|̦|̨̆)|D̂|F(̀|̄)|G̀|H(̄|̦|̱)|J(́|̌)|K(̀|̂|̄|̇|̕|̛|̦|͟H|͟h)|L(̂|̥|̥̄|̦)|M(̀|̂|̆|̐)|N(̂|̄|̆|̦)|P(̀|̄|̕|̣)|R(̆|̥|̥̄)|S(̀|̄|̛̄|̱)|T(̀|̄|̈|̕|̛)|U̇|Z(̀|̄|̆|̈|̧)|a̋|c(̀|̄|̆|̈|̕|̣|̦|̨̆)|d̂|f(̀|̄)|g̀|h(̄|̦)|j́|k(̀|̂|̄|̇|̕|̛|̦|͟h)|l(̂|̥|̥̄|̦)|m(̀|̂|̆|̐)|n(̂|̄|̆|̦)|p(̀|̄|̕|̣)|r(̆|̥|̥̄)|s(̀|̄|̛̄|̱)|t(̀|̄|̕|̛)|u̇|z(̀|̄|̆|̈|̧)|Ç̆|Û̄|ç̆|û̄|ÿ́|Č(̕|̣)|č(̕|̣)|Ī́|ī́|Ž(̦|̧)|ž(̦|̧)|Ḳ̄|ḳ̄|Ṣ̄|ṣ̄|Ṭ̄|ṭ̄|Ạ̈|ạ̈|Ọ̈|ọ̈|Ụ(̄|̈)|ụ(̄|̈))*('|[,-\.]|[A-Z]|[`-z]|~|¨|´|·|[À-Ö]|[Ø-ö]|[ø-ž]|[Ƈ-ƈ]|Ə|Ɨ|[Ơ-ơ]|[Ư-ư]|Ʒ|[Ǎ-ǜ]|[Ǟ-ǟ]|[Ǣ-ǰ]|[Ǵ-ǵ]|[Ǹ-ǿ]|[Ȓ-ȓ]|[Ș-ț]|[Ȟ-ȟ]|[ȧ-ȳ]|ə|ɨ|ʒ|[ʹ-ʺ]|[ʾ-ʿ]|ˈ|ˌ|[Ḃ-ḃ]|[Ḇ-ḇ]|[Ḋ-ḑ]|[Ḝ-ḫ]|[ḯ-ḷ]|[Ḻ-ḻ]|[Ṁ-ṉ]|[Ṓ-ṛ]|[Ṟ-ṣ]|[Ṫ-ṯ]|[Ẁ-ẇ]|[Ẍ-ẗ]|ẞ|[Ạ-ỹ]|’|‡|A̋|C(̀|̄|̆|̈|̕|̣|̦|̨̆)|D̂|F(̀|̄)|G̀|H(̄|̦|̱)|J(́|̌)|K(̀|̂|̄|̇|̕|̛|̦|͟H|͟h)|L(̂|̥|̥̄|̦)|M(̀|̂|̆|̐)|N(̂|̄|̆|̦)|P(̀|̄|̕|̣)|R(̆|̥|̥̄)|S(̀|̄|̛̄|̱)|T(̀|̄|̈|̕|̛)|U̇|Z(̀|̄|̆|̈|̧)|a̋|c(̀|̄|̆|̈|̕|̣|̦|̨̆)|d̂|f(̀|̄)|g̀|h(̄|̦)|j́|k(̀|̂|̄|̇|̕|̛|̦|͟h)|l(̂|̥|̥̄|̦)|m(̀|̂|̆|̐)|n(̂|̄|̆|̦)|p(̀|̄|̕|̣)|r(̆|̥|̥̄)|s(̀|̄|̛̄|̱)|t(̀|̄|̕|̛)|u̇|z(̀|̄|̆|̈|̧)|Ç̆|Û̄|ç̆|û̄|ÿ́|Č(̕|̣)|č(̕|̣)|Ī́|ī́|Ž(̦|̧)|ž(̦|̧)|Ḳ̄|ḳ̄|Ṣ̄|ṣ̄|Ṭ̄|ṭ̄|Ạ̈|ạ̈|Ọ̈|ọ̈|Ụ(̄|̈)|ụ(̄|̈)))|('|[,-\.]|[A-Z]|[`-z]|~|¨|´|·|[À-Ö]|[Ø-ö]|[ø-ž]|[Ƈ-ƈ]|Ə|Ɨ|[Ơ-ơ]|[Ư-ư]|Ʒ|[Ǎ-ǜ]|[Ǟ-ǟ]|[Ǣ-ǰ]|[Ǵ-ǵ]|[Ǹ-ǿ]|[Ȓ-ȓ]|[Ș-ț]|[Ȟ-ȟ]|[ȧ-ȳ]|ə|ɨ|ʒ|[ʹ-ʺ]|[ʾ-ʿ]|ˈ|ˌ|[Ḃ-ḃ]|[Ḇ-ḇ]|[Ḋ-ḑ]|[Ḝ-ḫ]|[ḯ-ḷ]|[Ḻ-ḻ]|[Ṁ-ṉ]|[Ṓ-ṛ]|[Ṟ-ṣ]|[Ṫ-ṯ]|[Ẁ-ẇ]|[Ẍ-ẗ]|ẞ|[Ạ-ỹ]|’|‡|A̋|C(̀|̄|̆|̈|̕|̣|̦|̨̆)|D̂|F(̀|̄)|G̀|H(̄|̦|̱)|J(́|̌)|K(̀|̂|̄|̇|̕|̛|̦|͟H|͟h)|L(̂|̥|̥̄|̦)|M(̀|̂|̆|̐)|N(̂|̄|̆|̦)|P(̀|̄|̕|̣)|R(̆|̥|̥̄)|S(̀|̄|̛̄|̱)|T(̀|̄|̈|̕|̛)|U̇|Z(̀|̄|̆|̈|̧)|a̋|c(̀|̄|̆|̈|̕|̣|̦|̨̆)|d̂|f(̀|̄)|g̀|h(̄|̦)|j́|k(̀|̂|̄|̇|̕|̛|̦|͟h)|l(̂|̥|̥̄|̦)|m(̀|̂|̆|̐)|n(̂|̄|̆|̦)|p(̀|̄|̕|̣)|r(̆|̥|̥̄)|s(̀|̄|̛̄|̱)|t(̀|̄|̕|̛)|u̇|z(̀|̄|̆|̈|̧)|Ç̆|Û̄|ç̆|û̄|ÿ́|Č(̕|̣)|č(̕|̣)|Ī́|ī́|Ž(̦|̧)|ž(̦|̧)|Ḳ̄|ḳ̄|Ṣ̄|ṣ̄|Ṭ̄|ṭ̄|Ạ̈|ạ̈|Ọ̈|ọ̈|Ụ(̄|̈)|ụ(̄|̈)){0,1}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="datatypeBtrimmed">
+		<xs:annotation>
+			<xs:documentation>Ergänzung: kein Whitespace am Anfang oder Ende. Der Datentyp B wurde vor allem für sonstige Namen, wie z. B. Ortsnamen und Straßennamen mit Hausnummer, entworfen.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="(([!-~]|[¡-£]|¥|[§-¬]|[®-·]|[¹-»]|[¿-ž]|[Ƈ-ƈ]|Ə|Ɨ|[Ơ-ơ]|[Ư-ư]|Ʒ|[Ǎ-ǜ]|[Ǟ-ǟ]|[Ǣ-ǰ]|[Ǵ-ǵ]|[Ǹ-ǿ]|[Ȓ-ȓ]|[Ș-ț]|[Ȟ-ȟ]|[ȧ-ȳ]|ə|ɨ|ʒ|[ʹ-ʺ]|[ʾ-ʿ]|ˈ|ˌ|[Ḃ-ḃ]|[Ḇ-ḇ]|[Ḋ-ḑ]|[Ḝ-ḫ]|[ḯ-ḷ]|[Ḻ-ḻ]|[Ṁ-ṉ]|[Ṓ-ṛ]|[Ṟ-ṣ]|[Ṫ-ṯ]|[Ẁ-ẇ]|[Ẍ-ẗ]|ẞ|[Ạ-ỹ]|’|‡|€|A̋|C(̀|̄|̆|̈|̕|̣|̦|̨̆)|D̂|F(̀|̄)|G̀|H(̄|̦|̱)|J(́|̌)|K(̀|̂|̄|̇|̕|̛|̦|͟H|͟h)|L(̂|̥|̥̄|̦)|M(̀|̂|̆|̐)|N(̂|̄|̆|̦)|P(̀|̄|̕|̣)|R(̆|̥|̥̄)|S(̀|̄|̛̄|̱)|T(̀|̄|̈|̕|̛)|U̇|Z(̀|̄|̆|̈|̧)|a̋|c(̀|̄|̆|̈|̕|̣|̦|̨̆)|d̂|f(̀|̄)|g̀|h(̄|̦)|j́|k(̀|̂|̄|̇|̕|̛|̦|͟h)|l(̂|̥|̥̄|̦)|m(̀|̂|̆|̐)|n(̂|̄|̆|̦)|p(̀|̄|̕|̣)|r(̆|̥|̥̄)|s(̀|̄|̛̄|̱)|t(̀|̄|̕|̛)|u̇|z(̀|̄|̆|̈|̧)|Ç̆|Û̄|ç̆|û̄|ÿ́|Č(̕|̣)|č(̕|̣)|Ī́|ī́|Ž(̦|̧)|ž(̦|̧)|Ḳ̄|ḳ̄|Ṣ̄|ṣ̄|Ṭ̄|ṭ̄|Ạ̈|ạ̈|Ọ̈|ọ̈|Ụ(̄|̈)|ụ(̄|̈))([ -~]|[¡-£]|¥|[§-¬]|[®-·]|[¹-»]|[¿-ž]|[Ƈ-ƈ]|Ə|Ɨ|[Ơ-ơ]|[Ư-ư]|Ʒ|[Ǎ-ǜ]|[Ǟ-ǟ]|[Ǣ-ǰ]|[Ǵ-ǵ]|[Ǹ-ǿ]|[Ȓ-ȓ]|[Ș-ț]|[Ȟ-ȟ]|[ȧ-ȳ]|ə|ɨ|ʒ|[ʹ-ʺ]|[ʾ-ʿ]|ˈ|ˌ|[Ḃ-ḃ]|[Ḇ-ḇ]|[Ḋ-ḑ]|[Ḝ-ḫ]|[ḯ-ḷ]|[Ḻ-ḻ]|[Ṁ-ṉ]|[Ṓ-ṛ]|[Ṟ-ṣ]|[Ṫ-ṯ]|[Ẁ-ẇ]|[Ẍ-ẗ]|ẞ|[Ạ-ỹ]|’|‡|€|A̋|C(̀|̄|̆|̈|̕|̣|̦|̨̆)|D̂|F(̀|̄)|G̀|H(̄|̦|̱)|J(́|̌)|K(̀|̂|̄|̇|̕|̛|̦|͟H|͟h)|L(̂|̥|̥̄|̦)|M(̀|̂|̆|̐)|N(̂|̄|̆|̦)|P(̀|̄|̕|̣)|R(̆|̥|̥̄)|S(̀|̄|̛̄|̱)|T(̀|̄|̈|̕|̛)|U̇|Z(̀|̄|̆|̈|̧)|a̋|c(̀|̄|̆|̈|̕|̣|̦|̨̆)|d̂|f(̀|̄)|g̀|h(̄|̦)|j́|k(̀|̂|̄|̇|̕|̛|̦|͟h)|l(̂|̥|̥̄|̦)|m(̀|̂|̆|̐)|n(̂|̄|̆|̦)|p(̀|̄|̕|̣)|r(̆|̥|̥̄)|s(̀|̄|̛̄|̱)|t(̀|̄|̕|̛)|u̇|z(̀|̄|̆|̈|̧)|Ç̆|Û̄|ç̆|û̄|ÿ́|Č(̕|̣)|č(̕|̣)|Ī́|ī́|Ž(̦|̧)|ž(̦|̧)|Ḳ̄|ḳ̄|Ṣ̄|ṣ̄|Ṭ̄|ṭ̄|Ạ̈|ạ̈|Ọ̈|ọ̈|Ụ(̄|̈)|ụ(̄|̈))*([!-~]|[¡-£]|¥|[§-¬]|[®-·]|[¹-»]|[¿-ž]|[Ƈ-ƈ]|Ə|Ɨ|[Ơ-ơ]|[Ư-ư]|Ʒ|[Ǎ-ǜ]|[Ǟ-ǟ]|[Ǣ-ǰ]|[Ǵ-ǵ]|[Ǹ-ǿ]|[Ȓ-ȓ]|[Ș-ț]|[Ȟ-ȟ]|[ȧ-ȳ]|ə|ɨ|ʒ|[ʹ-ʺ]|[ʾ-ʿ]|ˈ|ˌ|[Ḃ-ḃ]|[Ḇ-ḇ]|[Ḋ-ḑ]|[Ḝ-ḫ]|[ḯ-ḷ]|[Ḻ-ḻ]|[Ṁ-ṉ]|[Ṓ-ṛ]|[Ṟ-ṣ]|[Ṫ-ṯ]|[Ẁ-ẇ]|[Ẍ-ẗ]|ẞ|[Ạ-ỹ]|’|‡|€|A̋|C(̀|̄|̆|̈|̕|̣|̦|̨̆)|D̂|F(̀|̄)|G̀|H(̄|̦|̱)|J(́|̌)|K(̀|̂|̄|̇|̕|̛|̦|͟H|͟h)|L(̂|̥|̥̄|̦)|M(̀|̂|̆|̐)|N(̂|̄|̆|̦)|P(̀|̄|̕|̣)|R(̆|̥|̥̄)|S(̀|̄|̛̄|̱)|T(̀|̄|̈|̕|̛)|U̇|Z(̀|̄|̆|̈|̧)|a̋|c(̀|̄|̆|̈|̕|̣|̦|̨̆)|d̂|f(̀|̄)|g̀|h(̄|̦)|j́|k(̀|̂|̄|̇|̕|̛|̦|͟h)|l(̂|̥|̥̄|̦)|m(̀|̂|̆|̐)|n(̂|̄|̆|̦)|p(̀|̄|̕|̣)|r(̆|̥|̥̄)|s(̀|̄|̛̄|̱)|t(̀|̄|̕|̛)|u̇|z(̀|̄|̆|̈|̧)|Ç̆|Û̄|ç̆|û̄|ÿ́|Č(̕|̣)|č(̕|̣)|Ī́|ī́|Ž(̦|̧)|ž(̦|̧)|Ḳ̄|ḳ̄|Ṣ̄|ṣ̄|Ṭ̄|ṭ̄|Ạ̈|ạ̈|Ọ̈|ọ̈|Ụ(̄|̈)|ụ(̄|̈)))|([!-~]|[¡-£]|¥|[§-¬]|[®-·]|[¹-»]|[¿-ž]|[Ƈ-ƈ]|Ə|Ɨ|[Ơ-ơ]|[Ư-ư]|Ʒ|[Ǎ-ǜ]|[Ǟ-ǟ]|[Ǣ-ǰ]|[Ǵ-ǵ]|[Ǹ-ǿ]|[Ȓ-ȓ]|[Ș-ț]|[Ȟ-ȟ]|[ȧ-ȳ]|ə|ɨ|ʒ|[ʹ-ʺ]|[ʾ-ʿ]|ˈ|ˌ|[Ḃ-ḃ]|[Ḇ-ḇ]|[Ḋ-ḑ]|[Ḝ-ḫ]|[ḯ-ḷ]|[Ḻ-ḻ]|[Ṁ-ṉ]|[Ṓ-ṛ]|[Ṟ-ṣ]|[Ṫ-ṯ]|[Ẁ-ẇ]|[Ẍ-ẗ]|ẞ|[Ạ-ỹ]|’|‡|€|A̋|C(̀|̄|̆|̈|̕|̣|̦|̨̆)|D̂|F(̀|̄)|G̀|H(̄|̦|̱)|J(́|̌)|K(̀|̂|̄|̇|̕|̛|̦|͟H|͟h)|L(̂|̥|̥̄|̦)|M(̀|̂|̆|̐)|N(̂|̄|̆|̦)|P(̀|̄|̕|̣)|R(̆|̥|̥̄)|S(̀|̄|̛̄|̱)|T(̀|̄|̈|̕|̛)|U̇|Z(̀|̄|̆|̈|̧)|a̋|c(̀|̄|̆|̈|̕|̣|̦|̨̆)|d̂|f(̀|̄)|g̀|h(̄|̦)|j́|k(̀|̂|̄|̇|̕|̛|̦|͟h)|l(̂|̥|̥̄|̦)|m(̀|̂|̆|̐)|n(̂|̄|̆|̦)|p(̀|̄|̕|̣)|r(̆|̥|̥̄)|s(̀|̄|̛̄|̱)|t(̀|̄|̕|̛)|u̇|z(̀|̄|̆|̈|̧)|Ç̆|Û̄|ç̆|û̄|ÿ́|Č(̕|̣)|č(̕|̣)|Ī́|ī́|Ž(̦|̧)|ž(̦|̧)|Ḳ̄|ḳ̄|Ṣ̄|ṣ̄|Ṭ̄|ṭ̄|Ạ̈|ạ̈|Ọ̈|ọ̈|Ụ(̄|̈)|ụ(̄|̈)){0,1}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="datatypeC">
+		<xs:annotation>
+			<xs:documentation>Der Datentyp C wurde für alle normativen Schriftzeichen der DIN SPEC entworfen. Er ist somit die technische Umsetzung der Schnittstellenvereinbarung Alle nach DIN SPEC 91379 normativen Schriftzeichen. Texte mit griechischen oder kyrillischen Buchstaben oder mit erweiterten (nicht-normativen) Nicht-Buchstaben sind unzulässig. </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="([\s]|[ -~]|[ -¬]|[®-ž]|[Ƈ-ƈ]|Ə|Ɨ|[Ơ-ơ]|[Ư-ư]|Ʒ|[Ǎ-ǜ]|[Ǟ-ǟ]|[Ǣ-ǰ]|[Ǵ-ǵ]|[Ǹ-ǿ]|[Ȓ-ȓ]|[Ș-ț]|[Ȟ-ȟ]|[ȧ-ȳ]|ə|ɨ|ʒ|[ʹ-ʺ]|[ʾ-ʿ]|ˈ|ˌ|[Ḃ-ḃ]|[Ḇ-ḇ]|[Ḋ-ḑ]|[Ḝ-ḫ]|[ḯ-ḷ]|[Ḻ-ḻ]|[Ṁ-ṉ]|[Ṓ-ṛ]|[Ṟ-ṣ]|[Ṫ-ṯ]|[Ẁ-ẇ]|[Ẍ-ẗ]|ẞ|[Ạ-ỹ]|’|‡|€|A̋|C(̀|̄|̆|̈|̕|̣|̦|̨̆)|D̂|F(̀|̄)|G̀|H(̄|̦|̱)|J(́|̌)|K(̀|̂|̄|̇|̕|̛|̦|͟H|͟h)|L(̂|̥|̥̄|̦)|M(̀|̂|̆|̐)|N(̂|̄|̆|̦)|P(̀|̄|̕|̣)|R(̆|̥|̥̄)|S(̀|̄|̛̄|̱)|T(̀|̄|̈|̕|̛)|U̇|Z(̀|̄|̆|̈|̧)|a̋|c(̀|̄|̆|̈|̕|̣|̦|̨̆)|d̂|f(̀|̄)|g̀|h(̄|̦)|j́|k(̀|̂|̄|̇|̕|̛|̦|͟h)|l(̂|̥|̥̄|̦)|m(̀|̂|̆|̐)|n(̂|̄|̆|̦)|p(̀|̄|̕|̣)|r(̆|̥|̥̄)|s(̀|̄|̛̄|̱)|t(̀|̄|̕|̛)|u̇|z(̀|̄|̆|̈|̧)|Ç̆|Û̄|ç̆|û̄|ÿ́|Č(̕|̣)|č(̕|̣)|Ī́|ī́|Ž(̦|̧)|ž(̦|̧)|Ḳ̄|ḳ̄|Ṣ̄|ṣ̄|Ṭ̄|ṭ̄|Ạ̈|ạ̈|Ọ̈|ọ̈|Ụ(̄|̈)|ụ(̄|̈))*"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="datatypeCtrimmed">
+		<xs:annotation>
+			<xs:documentation>Ergänzung: kein Whitespace am Anfang oder Ende.  Der Datentyp C wurde für alle normativen Schriftzeichen der DIN SPEC entworfen. Er ist somit die technische Umsetzung der Schnittstellenvereinbarung Alle nach DIN SPEC 91379 normativen Schriftzeichen. Texte mit griechischen oder kyrillischen Buchstaben oder mit erweiterten (nicht-normativen) Nicht-Buchstaben sind unzulässig. </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="(([!-~]|[ -¬]|[®-ž]|[Ƈ-ƈ]|Ə|Ɨ|[Ơ-ơ]|[Ư-ư]|Ʒ|[Ǎ-ǜ]|[Ǟ-ǟ]|[Ǣ-ǰ]|[Ǵ-ǵ]|[Ǹ-ǿ]|[Ȓ-ȓ]|[Ș-ț]|[Ȟ-ȟ]|[ȧ-ȳ]|ə|ɨ|ʒ|[ʹ-ʺ]|[ʾ-ʿ]|ˈ|ˌ|[Ḃ-ḃ]|[Ḇ-ḇ]|[Ḋ-ḑ]|[Ḝ-ḫ]|[ḯ-ḷ]|[Ḻ-ḻ]|[Ṁ-ṉ]|[Ṓ-ṛ]|[Ṟ-ṣ]|[Ṫ-ṯ]|[Ẁ-ẇ]|[Ẍ-ẗ]|ẞ|[Ạ-ỹ]|’|‡|€|A̋|C(̀|̄|̆|̈|̕|̣|̦|̨̆)|D̂|F(̀|̄)|G̀|H(̄|̦|̱)|J(́|̌)|K(̀|̂|̄|̇|̕|̛|̦|͟H|͟h)|L(̂|̥|̥̄|̦)|M(̀|̂|̆|̐)|N(̂|̄|̆|̦)|P(̀|̄|̕|̣)|R(̆|̥|̥̄)|S(̀|̄|̛̄|̱)|T(̀|̄|̈|̕|̛)|U̇|Z(̀|̄|̆|̈|̧)|a̋|c(̀|̄|̆|̈|̕|̣|̦|̨̆)|d̂|f(̀|̄)|g̀|h(̄|̦)|j́|k(̀|̂|̄|̇|̕|̛|̦|͟h)|l(̂|̥|̥̄|̦)|m(̀|̂|̆|̐)|n(̂|̄|̆|̦)|p(̀|̄|̕|̣)|r(̆|̥|̥̄)|s(̀|̄|̛̄|̱)|t(̀|̄|̕|̛)|u̇|z(̀|̄|̆|̈|̧)|Ç̆|Û̄|ç̆|û̄|ÿ́|Č(̕|̣)|č(̕|̣)|Ī́|ī́|Ž(̦|̧)|ž(̦|̧)|Ḳ̄|ḳ̄|Ṣ̄|ṣ̄|Ṭ̄|ṭ̄|Ạ̈|ạ̈|Ọ̈|ọ̈|Ụ(̄|̈)|ụ(̄|̈))([\s]|[ -~]|[ -¬]|[®-ž]|[Ƈ-ƈ]|Ə|Ɨ|[Ơ-ơ]|[Ư-ư]|Ʒ|[Ǎ-ǜ]|[Ǟ-ǟ]|[Ǣ-ǰ]|[Ǵ-ǵ]|[Ǹ-ǿ]|[Ȓ-ȓ]|[Ș-ț]|[Ȟ-ȟ]|[ȧ-ȳ]|ə|ɨ|ʒ|[ʹ-ʺ]|[ʾ-ʿ]|ˈ|ˌ|[Ḃ-ḃ]|[Ḇ-ḇ]|[Ḋ-ḑ]|[Ḝ-ḫ]|[ḯ-ḷ]|[Ḻ-ḻ]|[Ṁ-ṉ]|[Ṓ-ṛ]|[Ṟ-ṣ]|[Ṫ-ṯ]|[Ẁ-ẇ]|[Ẍ-ẗ]|ẞ|[Ạ-ỹ]|’|‡|€|A̋|C(̀|̄|̆|̈|̕|̣|̦|̨̆)|D̂|F(̀|̄)|G̀|H(̄|̦|̱)|J(́|̌)|K(̀|̂|̄|̇|̕|̛|̦|͟H|͟h)|L(̂|̥|̥̄|̦)|M(̀|̂|̆|̐)|N(̂|̄|̆|̦)|P(̀|̄|̕|̣)|R(̆|̥|̥̄)|S(̀|̄|̛̄|̱)|T(̀|̄|̈|̕|̛)|U̇|Z(̀|̄|̆|̈|̧)|a̋|c(̀|̄|̆|̈|̕|̣|̦|̨̆)|d̂|f(̀|̄)|g̀|h(̄|̦)|j́|k(̀|̂|̄|̇|̕|̛|̦|͟h)|l(̂|̥|̥̄|̦)|m(̀|̂|̆|̐)|n(̂|̄|̆|̦)|p(̀|̄|̕|̣)|r(̆|̥|̥̄)|s(̀|̄|̛̄|̱)|t(̀|̄|̕|̛)|u̇|z(̀|̄|̆|̈|̧)|Ç̆|Û̄|ç̆|û̄|ÿ́|Č(̕|̣)|č(̕|̣)|Ī́|ī́|Ž(̦|̧)|ž(̦|̧)|Ḳ̄|ḳ̄|Ṣ̄|ṣ̄|Ṭ̄|ṭ̄|Ạ̈|ạ̈|Ọ̈|ọ̈|Ụ(̄|̈)|ụ(̄|̈))*([!-~]|[ -¬]|[®-ž]|[Ƈ-ƈ]|Ə|Ɨ|[Ơ-ơ]|[Ư-ư]|Ʒ|[Ǎ-ǜ]|[Ǟ-ǟ]|[Ǣ-ǰ]|[Ǵ-ǵ]|[Ǹ-ǿ]|[Ȓ-ȓ]|[Ș-ț]|[Ȟ-ȟ]|[ȧ-ȳ]|ə|ɨ|ʒ|[ʹ-ʺ]|[ʾ-ʿ]|ˈ|ˌ|[Ḃ-ḃ]|[Ḇ-ḇ]|[Ḋ-ḑ]|[Ḝ-ḫ]|[ḯ-ḷ]|[Ḻ-ḻ]|[Ṁ-ṉ]|[Ṓ-ṛ]|[Ṟ-ṣ]|[Ṫ-ṯ]|[Ẁ-ẇ]|[Ẍ-ẗ]|ẞ|[Ạ-ỹ]|’|‡|€|A̋|C(̀|̄|̆|̈|̕|̣|̦|̨̆)|D̂|F(̀|̄)|G̀|H(̄|̦|̱)|J(́|̌)|K(̀|̂|̄|̇|̕|̛|̦|͟H|͟h)|L(̂|̥|̥̄|̦)|M(̀|̂|̆|̐)|N(̂|̄|̆|̦)|P(̀|̄|̕|̣)|R(̆|̥|̥̄)|S(̀|̄|̛̄|̱)|T(̀|̄|̈|̕|̛)|U̇|Z(̀|̄|̆|̈|̧)|a̋|c(̀|̄|̆|̈|̕|̣|̦|̨̆)|d̂|f(̀|̄)|g̀|h(̄|̦)|j́|k(̀|̂|̄|̇|̕|̛|̦|͟h)|l(̂|̥|̥̄|̦)|m(̀|̂|̆|̐)|n(̂|̄|̆|̦)|p(̀|̄|̕|̣)|r(̆|̥|̥̄)|s(̀|̄|̛̄|̱)|t(̀|̄|̕|̛)|u̇|z(̀|̄|̆|̈|̧)|Ç̆|Û̄|ç̆|û̄|ÿ́|Č(̕|̣)|č(̕|̣)|Ī́|ī́|Ž(̦|̧)|ž(̦|̧)|Ḳ̄|ḳ̄|Ṣ̄|ṣ̄|Ṭ̄|ṭ̄|Ạ̈|ạ̈|Ọ̈|ọ̈|Ụ(̄|̈)|ụ(̄|̈)))|([!-~]|[ -¬]|[®-ž]|[Ƈ-ƈ]|Ə|Ɨ|[Ơ-ơ]|[Ư-ư]|Ʒ|[Ǎ-ǜ]|[Ǟ-ǟ]|[Ǣ-ǰ]|[Ǵ-ǵ]|[Ǹ-ǿ]|[Ȓ-ȓ]|[Ș-ț]|[Ȟ-ȟ]|[ȧ-ȳ]|ə|ɨ|ʒ|[ʹ-ʺ]|[ʾ-ʿ]|ˈ|ˌ|[Ḃ-ḃ]|[Ḇ-ḇ]|[Ḋ-ḑ]|[Ḝ-ḫ]|[ḯ-ḷ]|[Ḻ-ḻ]|[Ṁ-ṉ]|[Ṓ-ṛ]|[Ṟ-ṣ]|[Ṫ-ṯ]|[Ẁ-ẇ]|[Ẍ-ẗ]|ẞ|[Ạ-ỹ]|’|‡|€|A̋|C(̀|̄|̆|̈|̕|̣|̦|̨̆)|D̂|F(̀|̄)|G̀|H(̄|̦|̱)|J(́|̌)|K(̀|̂|̄|̇|̕|̛|̦|͟H|͟h)|L(̂|̥|̥̄|̦)|M(̀|̂|̆|̐)|N(̂|̄|̆|̦)|P(̀|̄|̕|̣)|R(̆|̥|̥̄)|S(̀|̄|̛̄|̱)|T(̀|̄|̈|̕|̛)|U̇|Z(̀|̄|̆|̈|̧)|a̋|c(̀|̄|̆|̈|̕|̣|̦|̨̆)|d̂|f(̀|̄)|g̀|h(̄|̦)|j́|k(̀|̂|̄|̇|̕|̛|̦|͟h)|l(̂|̥|̥̄|̦)|m(̀|̂|̆|̐)|n(̂|̄|̆|̦)|p(̀|̄|̕|̣)|r(̆|̥|̥̄)|s(̀|̄|̛̄|̱)|t(̀|̄|̕|̛)|u̇|z(̀|̄|̆|̈|̧)|Ç̆|Û̄|ç̆|û̄|ÿ́|Č(̕|̣)|č(̕|̣)|Ī́|ī́|Ž(̦|̧)|ž(̦|̧)|Ḳ̄|ḳ̄|Ṣ̄|ṣ̄|Ṭ̄|ṭ̄|Ạ̈|ạ̈|Ọ̈|ọ̈|Ụ(̄|̈)|ụ(̄|̈)){0,1}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="datatypeE">
+		<xs:annotation>
+			<xs:documentation>Der Datentyp E wurde für alle normativen und erweiterten Schriftzeichen der DIN SPEC entworfen. Ein Einsatzgebiet dieses Datentyps kann der grenzüberschreitende Datenaustausch sein, wenn auch griechische und kyrillische Buchstaben benötigt werden. Er ist somit die technische Umsetzung der Schnittstellenvereinbarung Alle nach DIN SPEC 91379 normativen und nicht-normativen Schriftzeichen. Texte mit Buchstaben oder Nicht-Buchstaben, die in der DIN SPEC nicht enthalten sind, wie z. B. asiatische oder arabische Buchstaben, sind unzulässig.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="([\s]|[ -~]|[ -¬]|[®-ž]|[Ƈ-ƈ]|Ə|ƒ|Ɨ|[Ơ-ơ]|[Ư-ư]|Ʒ|[Ǎ-ǜ]|[Ǟ-ǟ]|[Ǣ-ǰ]|[Ǵ-ǵ]|[Ǹ-ǿ]|[Ȓ-ȓ]|[Ș-ț]|[Ȟ-ȟ]|[ȧ-ȳ]|ə|ɨ|ʒ|ʰ|ʳ|[ʹ-ʺ]|[ʾ-ʿ]|ˆ|ˈ|ˌ|˜|ˢ|Ά|[Έ-Ί]|Ό|[Ύ-Ρ]|[Σ-ώ]|Ѝ|[А-Ъ]|Ь|[Ю-ъ]|ь|[ю-я]|ѝ|ᵈ|ᵗ|[Ḃ-ḃ]|[Ḇ-ḇ]|[Ḋ-ḑ]|[Ḝ-ḫ]|[ḯ-ḷ]|[Ḻ-ḻ]|[Ṁ-ṉ]|[Ṓ-ṛ]|[Ṟ-ṣ]|[Ṫ-ṯ]|[Ẁ-ẇ]|[Ẍ-ẗ]|ẞ|[Ạ-ỹ]|[‘-‚]|[“-„]|[†-‡]|…|‰|[‹-›]|⁰|[⁴-⁹]|[ⁿ-₉]|€|™|∞|[≤-≥]|A̋|C(̀|̄|̆|̈|̕|̣|̦|̨̆)|D̂|F(̀|̄)|G̀|H(̄|̦|̱)|J(́|̌)|K(̀|̂|̄|̇|̕|̛|̦|͟H|͟h)|L(̂|̥|̥̄|̦)|M(̀|̂|̆|̐)|N(̂|̄|̆|̦)|P(̀|̄|̕|̣)|R(̆|̥|̥̄)|S(̀|̄|̛̄|̱)|T(̀|̄|̈|̕|̛)|U̇|Z(̀|̄|̆|̈|̧)|a̋|c(̀|̄|̆|̈|̕|̣|̦|̨̆)|d̂|f(̀|̄)|g̀|h(̄|̦)|j́|k(̀|̂|̄|̇|̕|̛|̦|͟h)|l(̂|̥|̥̄|̦)|m(̀|̂|̆|̐)|n(̂|̄|̆|̦)|p(̀|̄|̕|̣)|r(̆|̥|̥̄)|s(̀|̄|̛̄|̱)|t(̀|̄|̕|̛)|u̇|z(̀|̄|̆|̈|̧)|Ç̆|Û̄|ç̆|û̄|ÿ́|Č(̕|̣)|č(̕|̣)|Ī́|ī́|Ž(̦|̧)|ž(̦|̧)|Ḳ̄|ḳ̄|Ṣ̄|ṣ̄|Ṭ̄|ṭ̄|Ạ̈|ạ̈|Ọ̈|ọ̈|Ụ(̄|̈)|ụ(̄|̈))*"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="Tumorzuordnung_Typ">
+		<xs:sequence>
+			<xs:element name="Primaertumor_ICD" type="Tumor_ICD_Typ" minOccurs="0"/>
+			<xs:element name="Diagnosedatum" type="Datum_Tag_oder_Monat_oder_Jahr_oder_nicht_genau_Typ" minOccurs="0"/>
+			<xs:element name="Seitenlokalisation" type="Seitenlokalisation_Typ" minOccurs="0"/>
+			<xs:element name="Morphologie_ICD_O" type="Morphologie_ICD_O_Typ" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="Tumor_ID" type="FreitextID_Typ" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="Patienten_Stammdaten_Melder_Typ">
+		<xs:annotation>
+			<xs:documentation>Typ zur Verwendung in Meldungen, im RüD wird ein abweichender Typ mit Menge_Adresse verwendet werden</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Patienten_ID" type="FreitextID_Typ" minOccurs="0" />
+			<xs:element name="Patienten_Pseudonym" type="FreitextID_Typ" minOccurs="0" />
+			<xs:element name="Nachname" type="Namenstring255_Typ"/>
+			<xs:element name="Vornamen" type="Namenstring255_Typ"/>
+			<xs:element name="Geburtsname" type="Namenstring255_Typ" minOccurs="0"/>
+			<xs:element name="Menge_Frueherer_Name" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Frueherer_Name" type="Namenstring255_Typ" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Geschlecht">
+				<xs:annotation>
+					<xs:documentation>
+						Es wird, wenn möglich, das Geschlecht verwendet, wie es im Melderegister und auf der Gesundheitskarte vermerkt ist.
+						Es ist zu beachten, dass X=unbestimmtes Geschlecht (amtlich: keine Angabe) einer expliziten Angabe im Personenstandsregister entspricht und auf keinen Fall mit U=unbekannt gleichzusetzen ist.
+						"Unbekannt" bedeutet, dass dem Melder das Geschlecht tatsächlich unbekannt ist und stellt eine absolute Ausnahmesituation dar, da beispielsweise eine Versichertenkarte das amtliche Geschlecht enthält.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="M">
+							<xs:annotation>
+								<xs:documentation>Männlich</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="W">
+							<xs:annotation>
+								<xs:documentation>Weiblich</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="D">
+							<xs:annotation>
+								<xs:documentation>Divers</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="X">
+							<xs:annotation>
+								<xs:documentation>keine Angabe / unbestimmt</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="U">
+							<xs:annotation>
+								<xs:documentation>Unbekannt</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Geburtsdatum" type="Datum_Tag_oder_Monat_oder_Jahr_oder_nicht_genau_Typ"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="Zulaessiger_Datumsbereich_Typ">
+		<xs:restriction base="xs:date">
+			<xs:minInclusive value="1890-01-01"/>
+			<xs:maxInclusive value="2025-12-31"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="Datum_Tag_oder_Monat_oder_Jahr_oder_nicht_genau_Typ">
+		<xs:simpleContent>
+			<xs:extension base="Zulaessiger_Datumsbereich_Typ">
+				<xs:attribute name="Datumsgenauigkeit" use="required">
+					<xs:simpleType>
+						<xs:annotation>
+							<xs:documentation>
+								Bei allen geschätzten Angaben darf ein plausibles, genau wirkendes Datum eingetragen werden.
+								D.h. der vielfach praktizierten Konvention monatsgenau bedeutet Einsetzen des 15. und Jahresgenau bedeutet Einsetzen des 01.07. muss nicht gefolgt werden.
+								Im Gegenteil können durch Abweichen von dieser Konvention Verletzungen der Datumshierarchien (z.B. ungenaues Diagnosedatum nach genauem Therapiedatum) vermieden werden.
+								Es ist Sache des Registers, ungenaue Angaben bei bestimmten Anlässen, z.B. Auswertungen, ggf. gesondert zu handhaben.
+							</xs:documentation>
+						</xs:annotation>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="E">
+								<xs:annotation>
+									<xs:documentation>exakt (entspricht taggenau)</xs:documentation>
+								</xs:annotation>
+							</xs:enumeration>
+							<xs:enumeration value="T">
+								<xs:annotation>
+									<xs:documentation>Tag geschätzt (entspricht monatsgenau)</xs:documentation>
+								</xs:annotation>
+							</xs:enumeration>
+							<xs:enumeration value="M">
+								<xs:annotation>
+									<xs:documentation>Monat geschätzt (entspricht jahrgenau)</xs:documentation>
+								</xs:annotation>
+							</xs:enumeration>
+							<xs:enumeration value="V">
+								<xs:annotation>
+									<xs:documentation>vollständig geschätzt (genaue Angabe zum Jahr nicht möglich)</xs:documentation>
+								</xs:annotation>
+							</xs:enumeration>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="Datum_Tag_oder_Monat_genau_Typ">
+		<xs:simpleContent>
+			<xs:extension base="Zulaessiger_Datumsbereich_Typ">
+				<xs:attribute name="Datumsgenauigkeit" use="required">
+					<xs:simpleType>
+						<xs:annotation>
+							<xs:documentation>siehe Dokumentation zu Datum_Tag_oder_Monat_oder_Jahr_oder_nicht_genau_Typ</xs:documentation>
+						</xs:annotation>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="E">
+								<xs:annotation>
+									<xs:documentation>exakt (entspricht taggenau)</xs:documentation>
+								</xs:annotation>
+							</xs:enumeration>
+							<xs:enumeration value="T">
+								<xs:annotation>
+									<xs:documentation>Tag geschätzt (entspricht monatsgenau)</xs:documentation>
+								</xs:annotation>
+							</xs:enumeration>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:simpleType name="Datum_Tag_genau_Typ">
+		<xs:restriction base="Zulaessiger_Datumsbereich_Typ"/>
+	</xs:simpleType>
+	<xs:simpleType name="Datum_nur_Jahr_Typ">
+		<xs:restriction base="xs:gYear">
+			<xs:minInclusive value="1890"/>
+			<xs:maxInclusive value="2025"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="JNU_Typ">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="J">
+				<xs:annotation>
+					<xs:documentation>Ja</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="N">
+				<xs:annotation>
+					<xs:documentation>Nein</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="U">
+				<xs:annotation>
+					<xs:documentation>Unbekannt</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="JN_Typ">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="J">
+				<xs:annotation>
+					<xs:documentation>Ja</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="N">
+				<xs:annotation>
+					<xs:documentation>Nein</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ICD_Code_Typ">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[A-Z]\d\d(\.\d(\d)?)?"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="Tumor_ICD_Typ">
+		<xs:sequence>
+			<xs:element name="Code">
+				<xs:simpleType>
+					<xs:restriction base="ICD_Code_Typ">
+						<xs:pattern value="[CD]\d\d(\.\d(\d)?)?|M72.4"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Version" type="ICD_Version_Typ"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Allgemein_ICD_Typ">
+		<xs:sequence>
+			<xs:element name="Code" type="ICD_Code_Typ"/>
+			<xs:element name="Version" type="ICD_Version_Typ"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="ICD_Version_Typ">
+		<xs:annotation>
+			<xs:documentation>
+				ICD 10 Version 2006 WHO (gültig bis 2010),
+				ICD 10 Version 2011 WHO (gültig bis 2012),
+				ICD 10 Version 2013 WHO (gültig bis 2015),
+				ICD 10 Version 2016 WHO (gültig bis 2018),
+				ICD 10 Version 2019 WHO (letzte Version, wird nur noch in Ausnahmefällen aktualisiert)
+				Sonstige, falls andere bzw. ältere Versionen verwendet werden
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="(10 20\d{2} ((GM)|(WHO))|Sonstige)"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Ziffern9_Typ">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="\d{9}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="Ident_Nummern_Typ">
+		<xs:sequence>
+			<xs:element name="IKNR" type="Ziffern9_Typ" minOccurs="0"/>
+			<xs:element name="LANR" type="Ziffern9_Typ" minOccurs="0"/>
+			<xs:element name="BSNR" type="Ziffern9_Typ" minOccurs="0"/>
+			<xs:element name="ZANR" type="Ziffern9_Typ" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Morphologie_ICD_O_Typ">
+		<xs:sequence>
+			<xs:element name="Code">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value="\d\d\d\d/\d"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Version">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="31">
+							<xs:annotation>
+								<xs:documentation>ICD-O-3, 2003</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="32">
+							<xs:annotation>
+								<xs:documentation>ICD-O-3, 1. Revision 2014</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="33">
+							<xs:annotation>
+								<xs:documentation>ICD-O-3, 2. Revision 2019</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="bb">
+							<xs:annotation>
+								<xs:documentation>Neue Codes aus den WHO-Klassifikationen (BlueBooks)</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="Freitext30_Typ">
+		<xs:restriction base="datatypeCtrimmed">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="30"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="FreitextID_Typ">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="50"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Freitext255_Typ">
+		<xs:restriction base="datatypeCtrimmed">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="255"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Freitext255E_Typ">
+		<xs:restriction base="datatypeE">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="255"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Diagnosetext_Typ">
+		<xs:restriction base="datatypeC">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="1000"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Namenstring255_Typ">
+		<xs:restriction base="datatypeAtrimmed">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="255"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="Topographie_ICD_O_Typ">
+		<xs:sequence>
+			<xs:element name="Code">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value="C\d\d\.\d(\d)?"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Version">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="31">
+							<xs:annotation>
+								<xs:documentation>ICD-O-3, 2003</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="32">
+							<xs:annotation>
+								<xs:documentation>ICD-O-3, 1. Revision 2014</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="33">
+							<xs:annotation>
+								<xs:documentation>ICD-O-3, 2. Revision 2019</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="Seitenlokalisation_Typ">
+		<xs:annotation>
+			<xs:documentation>Organspezifische Angabe der betroffenen Seite</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="L">
+				<xs:annotation>
+					<xs:documentation>Links</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="R">
+				<xs:annotation>
+					<xs:documentation>Rechts</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="B">
+				<xs:annotation>
+					<xs:documentation>Beidseitig (bei bestimmten Tumoren 2 Meldungen
+						angeben)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="M">
+				<xs:annotation>
+					<xs:documentation>Mittellinie/mittig</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="U">
+				<xs:annotation>
+					<xs:documentation>Unbekannt</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="T">
+				<xs:annotation>
+					<xs:documentation>Trifft nicht zu (Seitenangabe nicht sinnvoll, einschließlich
+						Systemerkrankungen)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<!-- dktk-Änderung: Erweiterung um die Biobank-Daten -->
+	<!-- MDS-B (Biomaterial-Daten) Der Meldedatensatz für Biomaterial -->
+	<xs:complexType name="Samples_Type">
+		<xs:annotation>
+			<xs:documentation>Es handelt sich um eine Erweiterung des oBDS-Schemas um Biobank-Datenelemente (MDS).</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Sample" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Project" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Projekt oder Studie </xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="http://dktk.dkfz.de/fhir/sid/exliquid-specimen"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="Status" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Verfügbarkeitsstatus der Probe</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="available"/>
+									<xs:enumeration value="unavailable"/>
+									<xs:enumeration value="unsatisfactory"/>
+									<xs:enumeration value="entered-in-error"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="Sampletype">
+							<xs:annotation>
+								<xs:documentation>Gibt die Art des Biomaterials an</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="whole-blood">
+										<xs:annotation>
+											<xs:documentation>Whole blood</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="bone-marrow">
+										<xs:annotation>
+											<xs:documentation>Bone marrow</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="buffy-coat">
+										<xs:annotation>
+											<xs:documentation>Buffy-Coat</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="dried-whole-blood">
+										<xs:annotation>
+											<xs:documentation>Dried whole blood</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="peripheral-blood-cells-vital">
+										<xs:annotation>
+											<xs:documentation>Peripheral blood mononuclear cells (PBMCs, viable)</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="blood-plasma">
+										<xs:annotation>
+											<xs:documentation>Plasma</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="blood-serum">
+										<xs:annotation>
+											<xs:documentation>Serum</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="ascites">
+										<xs:annotation>
+											<xs:documentation>Ascites</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="csf-liquor">
+										<xs:annotation>
+											<xs:documentation>CSF/Liquor</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="saliva">
+										<xs:annotation>
+											<xs:documentation>Saliva</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="stool-faeces">
+										<xs:annotation>
+											<xs:documentation>Stool/Faeces</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="urine">
+										<xs:annotation>
+											<xs:documentation>Urine</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="swab">
+										<xs:annotation>
+											<xs:documentation>Swab</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="liquid-other">
+										<xs:annotation>
+											<xs:documentation>Other liquid biosample/storage</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="tissue-ffpe">
+										<xs:annotation>
+											<xs:documentation>Tissue FFPE</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="tissue-frozen">
+										<xs:annotation>
+											<xs:documentation>Tissue frozen</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="tissue-other">
+										<xs:annotation>
+											<xs:documentation>Other tissue storage</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="dna">
+										<xs:annotation>
+											<xs:documentation>DNA</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="rna">
+										<xs:annotation>
+											<xs:documentation>RNA</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+									<xs:enumeration value="derivative-other">
+										<xs:annotation>
+											<xs:documentation>Other derivative</xs:documentation>
+										</xs:annotation>
+									</xs:enumeration>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="Collectiontime" type="Datum_Tag_genau_Typ" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Wann wurde die Probe entnommen (Entnahme-/Eingangsdatum)</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="SpecimenQuantity" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>designation:: Fixierungsart urn:dktk:dataelement:90:1 definition:: Gibt die Art der Fixierung des Biomaterials an</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="QuantityValue">
+										<xs:annotation>
+											<xs:documentation>Menge der Probe</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:decimal"/>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="Unit" type="xs:string" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Einheit der Probenmenge</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="BodySite" type="Topographie_ICD_O_Typ" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Entnahmestelle als ICD-O-3 Topographie Code. Bei Gewebeprobe der anatomischen Topographie, an der die Probe entnommen wurde.(FHIR:Specimen.collection.bodySite.coding.code)</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+					<!-- @TODO: dktk: braucht man eine ID? -->
+					<xs:attribute name="Sample_ID" type="xs:string" use="required">
+						<xs:annotation>
+							<xs:documentation> Eine vom Melder generierte ID zur eindeutigen Identifikation des Vorgangs</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="Parent_ID" type="xs:string" use="optional">
+						<xs:annotation>
+							<xs:documentation>Link zur übergeordneten Stichprobe: Referenz auf die ID der Mutterprobe. Ist die Parent_ID nicht verfügbar und handelt es sich um eine aliquote Probe, kann hier eine beliebige Zahl oder ein beliebige Zeichenkette eingegeben werden.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>
