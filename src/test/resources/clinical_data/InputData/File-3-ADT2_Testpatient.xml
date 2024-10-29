@@ -49,10 +49,12 @@
 					<Diagnose Tumor_ID="012001">
 						<Primaertumor_ICD_Code>C43.4</Primaertumor_ICD_Code>
 						<Primaertumor_ICD_Version>10 2024 GM</Primaertumor_ICD_Version>
-						<Primaertumor_Diagnosetext>Malignes Melanom oberer Rücken mittig</Primaertumor_Diagnosetext>
+						<Primaertumor_Diagnosetext>Malignes Melanom oberer Rücken
+							mittig</Primaertumor_Diagnosetext>
 						<Primaertumor_Topographie_ICD_O>C44.5</Primaertumor_Topographie_ICD_O>
 						<Primaertumor_Topographie_ICD_O_Version>33</Primaertumor_Topographie_ICD_O_Version>
-						<Primaertumor_Topographie_ICD_O_Freitext>oberer quadrant</Primaertumor_Topographie_ICD_O_Freitext>
+						<Primaertumor_Topographie_ICD_O_Freitext>oberer
+								quadrant</Primaertumor_Topographie_ICD_O_Freitext>
 						<Diagnosedatum>02.03.2024</Diagnosedatum>
 						<Diagnosesicherung>2</Diagnosesicherung>
 						<Seitenlokalisation>M</Seitenlokalisation>

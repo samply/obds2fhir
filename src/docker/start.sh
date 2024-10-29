@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/sh
 
 echo "Checking required input and output directories..."
 directories="InputData Processed tmp tmp/oBDS_Patients tmp/ADT_Patients tmp/FHIR_Patients tmp/erroneous"
