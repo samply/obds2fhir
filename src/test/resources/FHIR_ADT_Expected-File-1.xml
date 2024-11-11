@@ -33,7 +33,7 @@
          <Specimen>
             <id value="bio08c57d26db215355"/>
             <meta>
-               <profile value="https://fhir.bbmri.de/StructureDefinition/Specimen"/>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Specimen-OncoSpecimen"/>
             </meta>
             <type>
                <coding>
@@ -57,7 +57,7 @@
          <Specimen>
             <id value="bio12f8b154b25cf6f1"/>
             <meta>
-               <profile value="https://fhir.bbmri.de/StructureDefinition/Specimen"/>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Specimen-OncoSpecimen"/>
             </meta>
             <type>
                <coding>
@@ -84,7 +84,7 @@
          <Specimen>
             <id value="bio48fbd4cd8880c079"/>
             <meta>
-               <profile value="https://fhir.bbmri.de/StructureDefinition/Specimen"/>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Specimen-OncoSpecimen"/>
             </meta>
             <type>
                <coding>
@@ -111,7 +111,7 @@
          <Specimen>
             <id value="bio6d850bd5da72a6be"/>
             <meta>
-               <profile value="https://fhir.bbmri.de/StructureDefinition/Specimen"/>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Specimen-OncoSpecimen"/>
             </meta>
             <type>
                <coding>
@@ -138,7 +138,7 @@
          <Specimen>
             <id value="bio2e4e9f850aeb36f5"/>
             <meta>
-               <profile value="https://fhir.bbmri.de/StructureDefinition/Specimen"/>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Specimen-OncoSpecimen"/>
             </meta>
             <type>
                <coding>
@@ -162,7 +162,7 @@
          <Specimen>
             <id value="bio389d48e1d1e8c637"/>
             <meta>
-               <profile value="https://fhir.bbmri.de/StructureDefinition/Specimen"/>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Specimen-OncoSpecimen"/>
             </meta>
             <type>
                <coding>
@@ -189,7 +189,7 @@
          <Specimen>
             <id value="biofe831bf4ea2964eb"/>
             <meta>
-               <profile value="https://fhir.bbmri.de/StructureDefinition/Specimen"/>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Specimen-OncoSpecimen"/>
             </meta>
             <type>
                <coding>
@@ -216,7 +216,7 @@
          <Specimen>
             <id value="bioa823f38f3f764a89"/>
             <meta>
-               <profile value="https://fhir.bbmri.de/StructureDefinition/Specimen"/>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Specimen-OncoSpecimen"/>
             </meta>
             <type>
                <coding>

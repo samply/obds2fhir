@@ -33,11 +33,11 @@
          <Specimen>
             <id value="bio644974f7c86b960a"/>
             <meta>
-               <profile value="https://fhir.bbmri.de/StructureDefinition/Specimen"/>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Specimen-OncoSpecimen"/>
             </meta>
             <identifier>
-               <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/Projects"/>
-               <value value="http://dktk.dkfz.de/fhir/sid/exliquid-specimen"/>
+               <system value="http://dktk.dkfz.de/fhir/sid/exliquid-specimen"/>
+
             </identifier>
             <status value="available"/>
             <type>
@@ -79,11 +79,11 @@
          <Specimen>
             <id value="bio4399fc25198c082f"/>
             <meta>
-               <profile value="https://fhir.bbmri.de/StructureDefinition/Specimen"/>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Specimen-OncoSpecimen"/>
             </meta>
             <identifier>
-               <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/Projects"/>
-               <value value="http://dktk.dkfz.de/fhir/sid/exliquid-specimen"/>
+               <system value="http://dktk.dkfz.de/fhir/sid/exliquid-specimen"/>
+
             </identifier>
             <status value="available"/>
             <type>
@@ -128,7 +128,7 @@
          <Specimen>
             <id value="bio40336efc81b4c354"/>
             <meta>
-               <profile value="https://fhir.bbmri.de/StructureDefinition/Specimen"/>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Specimen-OncoSpecimen"/>
             </meta>
             <status value="entered-in-error"/>
             <type>
@@ -163,7 +163,7 @@
          <Specimen>
             <id value="bioa632f6eca27ec259"/>
             <meta>
-               <profile value="https://fhir.bbmri.de/StructureDefinition/Specimen"/>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Specimen-OncoSpecimen"/>
             </meta>
             <type>
                <coding>
