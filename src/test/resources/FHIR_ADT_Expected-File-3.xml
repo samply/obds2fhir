@@ -33,7 +33,7 @@
          <Specimen>
             <id value="biob5283552a78b1b21"/>
             <meta>
-               <profile value="https://fhir.bbmri.de/StructureDefinition/Specimen"/>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Specimen-OncoSpecimen"/>
             </meta>
             <type>
                <coding>

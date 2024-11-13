@@ -154,7 +154,7 @@
                 <Specimen>
                     <id value="{$Sample_ID}"/>
                     <meta>
-                        <profile value="https://fhir.bbmri.de/StructureDefinition/Specimen"/>
+                        <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Specimen-OncoSpecimen"/>
                     </meta>
                     <type>
                         <coding>
@@ -238,7 +238,7 @@
                 <Specimen>
                     <id value="{$Sample_ID}"/>
                     <meta>
-                        <profile value="https://fhir.bbmri.de/StructureDefinition/Specimen"/>
+                        <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Specimen-OncoSpecimen"/>
                     </meta>
                     <!-- TODO add reference to condition if avialable
                     <xsl:if test="tumorID!=''">
@@ -248,8 +248,7 @@
                     </xsl:if>-->
                     <xsl:if test="Project!=''">
                         <identifier>
-                            <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/Projects" />
-                            <value value="{Project}" />
+                            <system value="{Project}" />
                         </identifier>
                     </xsl:if>
                     <xsl:if test="Status!=''">
