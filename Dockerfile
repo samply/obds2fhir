@@ -19,6 +19,7 @@ ENV FILE_PATH="/obds2fhir/clinical_data" \
     LOG_LEVEL="INFO" \
     MAINZELLISTE_URL="http://host.docker.internal:8080" \
     MAINZELLISTE_APIKEY="" \
+    MAINZELLISTE_EXTERNAL_ID="false" \
     IDTYPE="" \
     SALT="createLocalCustomSalt" \
     SSL_CERTIFICATE_VALIDATION="true" \
