@@ -172,7 +172,7 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
         if (!birthmonth.equals("empty")) idat.add(new BasicNameValuePair("Geburtsmonat", birthmonth));
         if (!birthyear.equals("empty")) idat.add(new BasicNameValuePair("Geburtsjahr", birthyear));
         if (!gender.equals("empty")) idat.add(new BasicNameValuePair("Geschlecht", gender));
-        if (!identifier.equals("empty") && Boolean.parseBoolean(System.getenv().getOrDefault("MAINZELLISTE_EXTERNAL_ID","false"))) {
+        if (!identifier.equals("empty") && Boolean.parseBoolean(System.getProperty("MAINZELLISTE_EXTERNAL_ID", "false"))) {
             idat.add(new BasicNameValuePair("locallyUniqueId", identifier));
         }
         idat.add(new BasicNameValuePair("sureness", "true"));
