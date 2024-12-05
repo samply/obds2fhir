@@ -13,6 +13,7 @@
     <xsl:strip-space elements="*"/>
     <xsl:param name="add_department" />
     <xsl:param name="keep_internal_id" />
+    <xsl:param name="use_pseudonym" />
 
     <xsl:template match="/ADT_GEKID/Menge_Patient">
         <Patienten>
@@ -24,7 +25,6 @@
         <xsl:choose>
             <xsl:when test="Patienten_Stammdaten/@Patient_ID!=''">
                 <Patient>
-                    <xsl:variable name="Patient_Id" select="if ($keep_internal_id=true()) then Patienten_Stammdaten/@Patient_ID else hash:hash(Patienten_Stammdaten/@Patient_ID,'','')"/>
                     <xsl:variable name="Geburtsdatum" select="Patienten_Stammdaten/xsi:Get-FHIR-date(Patienten_Geburtsdatum)"/>
                     <xsl:variable name="Geburtstag" select="string(replace($Geburtsdatum,'^\d{4}-\d{2}-(\d{2})$','$1'))"/>
                     <xsl:variable name="Geburtsmonat" select="string(replace($Geburtsdatum,'^\d{4}-(\d{2})-\d{2}$','$1'))"/>
@@ -38,6 +38,11 @@
                     xsi:ReplaceEmpty($Geburtsmonat),
                     xsi:ReplaceEmpty($Geburtsjahr),
                     xsi:ReplaceEmpty(Patienten_Stammdaten/@Patient_ID))"/>
+                    <xsl:variable name="Patient_Id" select="
+                        if ($use_pseudonym = true())
+                        then (if ($keep_internal_id = true()) then $Patient_Pseudonym else hash:hash($Patient_Pseudonym, '', ''))
+                        else (if ($keep_internal_id = true()) then Patienten_Stammdaten/@Patient_ID else hash:hash(Patienten_Stammdaten/@Patient_ID, '', ''))
+                    " />
                     <xsl:attribute name="Patient_ID" select="$Patient_Id"/>
                     <Geschlecht>
                         <xsl:value-of select="if (Patienten_Stammdaten/Patienten_Geschlecht = 'D') then 'S' else Patienten_Stammdaten/Patienten_Geschlecht" />

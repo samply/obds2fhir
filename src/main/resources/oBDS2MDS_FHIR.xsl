@@ -13,12 +13,14 @@
     <xsl:strip-space elements="*"/>
     <xsl:param name="add_department" />
     <xsl:param name="keep_internal_id" />
+    <xsl:param name="use_pseudonym" />
 
     <xsl:template match="/oBDS/Menge_Patient">
         <Patienten>
             <xsl:apply-templates select="node()| @*"/>
         </Patienten>
     </xsl:template>
+
     <xsl:template match="Patient">
         <Patient>
             <xsl:variable name="Geburtsdatum" select="Patienten_Stammdaten/Geburtsdatum"/>
@@ -43,12 +45,15 @@
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:variable>
-            <xsl:variable name="Patient_Id" select="if ($keep_internal_id=true()) then @Patient_ID else hash:hash($Patient_Pseudonym,'','')"/>
+            <xsl:variable name="Patient_Id" select="
+                if ($use_pseudonym = true())
+                then (if ($keep_internal_id = true()) then $Patient_Pseudonym else hash:hash($Patient_Pseudonym, '', ''))
+                else (if ($keep_internal_id = true()) then @Patient_ID else hash:hash(@Patient_ID, '', ''))
+            " />
             <xsl:attribute name="Patient_ID" select="$Patient_Id"/>
-    <DKTK_LOCAL_ID><xsl:value-of select="$Patient_Pseudonym"/></DKTK_LOCAL_ID>
-            <xsl:apply-templates select="Patienten_Stammdaten/Geschlecht | Patienten_Stammdaten/Geburtsdatum"/>
+            <DKTK_LOCAL_ID><xsl:value-of select="$Patient_Pseudonym"/></DKTK_LOCAL_ID>
             <!--<DKTK_ID>TODO</DKTK_ID>-->
-
+            <xsl:apply-templates select="Patienten_Stammdaten/Geschlecht | Patienten_Stammdaten/Geburtsdatum"/>
             <Vitalstatus_Gesamt Vitalstatus_ID="{concat('vital', $Patient_Id)}">
                 <Datum_des_letztbekannten_Vitalstatus>
                     <xsl:value-of select="if (Patienten_Stammdaten/Vitalstatus_Datum != '') then 'Patienten_Stammdaten/Vitalstatus_Datum' else xsi:Datum_des_letztbekannten_Vitalstatus(Menge_Meldung)"/>
