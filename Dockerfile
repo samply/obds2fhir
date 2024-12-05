@@ -25,4 +25,5 @@ ENV FILE_PATH="/obds2fhir/clinical_data" \
     SSL_CERTIFICATE_VALIDATION="true" \
     ADD_DEPARTMENTS="false" \
     WAIT_FOR_CONNECTION="false" \
-    KEEP_INTERNAL_ID="false"
+    KEEP_INTERNAL_ID="false" \
+    USE_PSEUDONYM="false"
