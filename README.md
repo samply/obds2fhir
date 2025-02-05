@@ -20,7 +20,7 @@ Optionally, you can (1) pseudonymize (e.g. see [Mainzelliste](https://bitbucket.
 
 oBDS2FHIR is designed for use with docker compose. To run, put the oBDS xml files in ```/clinical_data/Input_oBDS/``` and run:
 ```sh
-docker-compose up
+docker compose up
 ```
 
 You need at least docker-compose version `1.29.2`.
