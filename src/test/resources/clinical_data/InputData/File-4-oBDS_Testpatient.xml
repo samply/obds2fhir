@@ -11,17 +11,7 @@
 	<Menge_Patient>
 		<Patient Patient_ID="testpatient-oBDS-1">
 			<Patienten_Stammdaten>
-				<!--<Versichertendaten_GKV>
-                    <IKNR>thisValueIsIgnored</IKNR>
-                    <GKV_Versichertennummer>thisValueIsIgnored</GKV_Versichertennummer>
-				</Versichertendaten_GKV>-->
-				<!--<Versichertendaten_PKV>
-                    <IKNR>thisValueIsIgnored</IKNR>
-                    <PKV_Versichertennummer>thisValueIsIgnored</PKV_Versichertennummer>
-                    <Beihilfetraeger>thisValueIsIgnored</Beihilfetraeger>
-                </Versichertendaten_PKV>-->
 				<Versichertendaten_Sonstige>
-					<!--<Ersatzkode>thisValueIsIgnored</Ersatzkode>-->
 					<IKNR>thisValueIsIgnored</IKNR>
 					<KrankenkassenName>thisValueIsIgnored</KrankenkassenName>
 					<Versichertennummer>thisValueIsIgnored</Versichertennummer>
