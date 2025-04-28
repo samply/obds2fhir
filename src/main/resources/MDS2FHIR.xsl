@@ -78,9 +78,9 @@
                         </resource>
                         <request>
                             <method value="PUT"/>
-                            <xsl:if test="not(DKTK_LOCAL_ID!='') or not(Diagnosis/Tumor!='')">
-                                <ifNoneMatch value="*"/>
-                            </xsl:if>
+<!--                            <xsl:if test="not(DKTK_LOCAL_ID!='') or not(Diagnosis/Tumor!='')">-->
+<!--                                <ifNoneMatch value="*"/>-->
+<!--                            </xsl:if>-->
                             <url value="Patient/{$Patient_ID}"/>
                         </request>
                     </entry>

@@ -24,7 +24,6 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <ifNoneMatch value="*"/>
          <url value="Patient/1302b6d11c5b628d"/>
       </request>
    </entry>
