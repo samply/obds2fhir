@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Bundle xmlns="http://hl7.org/fhir" xmlns:hash="java:de.samply.obds2fhir">
    <id value="653ae947f9c1f8f6"/>
    <type value="batch"/>
@@ -4593,10 +4594,10 @@
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/Observation/replaced-id"/>
+      <fullUrl value="http://example.com/Observation/vital653ae947f9c1f8f6"/>
       <resource>
          <Observation>
-            <id value="replaced-id"/>
+            <id value="vital653ae947f9c1f8f6"/>
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Vitalstatus"/>
             </meta>
@@ -4608,7 +4609,7 @@
                </coding>
             </code>
             <subject>
-               <reference value="Patient/replaced-id"/>
+               <reference value="Patient/653ae947f9c1f8f6"/>
             </subject>
             <effectiveDateTime value="2021-08-23"/>
             <valueCodeableConcept>
@@ -4621,14 +4622,14 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="Observation/replaced-id"/>
+         <url value="Observation/vital653ae947f9c1f8f6"/>
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/Observation/replaced-id"/>
+      <fullUrl value="http://example.com/Observation/tod653ae947f9c1f8f6"/>
       <resource>
          <Observation>
-            <id value="replaced-id"/>
+            <id value="tod653ae947f9c1f8f6"/>
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-TodUrsache"/>
             </meta>
@@ -4640,7 +4641,7 @@
                </coding>
             </code>
             <subject>
-               <reference value="Patient/replaced-id"/>
+               <reference value="Patient/653ae947f9c1f8f6"/>
             </subject>
             <effectiveDateTime value="2021-08-23"/>
             <valueCodeableConcept>
@@ -4663,7 +4664,7 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="Observation/replaced-id"/>
+         <url value="Observation/tod653ae947f9c1f8f6"/>
       </request>
    </entry>
 </Bundle>

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Bundle xmlns="http://hl7.org/fhir" xmlns:hash="java:de.samply.obds2fhir">
    <id value="fde5b936394ab716"/>
    <type value="batch"/>
@@ -144,10 +145,10 @@
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/Observation/replaced-id"/>
+      <fullUrl value="http://example.com/Observation/vitalfde5b936394ab716"/>
       <resource>
          <Observation>
-            <id value="replaced-id"/>
+            <id value="vitalfde5b936394ab716"/>
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Vitalstatus"/>
             </meta>
@@ -159,7 +160,7 @@
                </coding>
             </code>
             <subject>
-               <reference value="Patient/replaced-id"/>
+               <reference value="Patient/fde5b936394ab716"/>
             </subject>
             <effectiveDateTime value="2021-04-21"/>
             <valueCodeableConcept>
@@ -173,7 +174,7 @@
       <request>
          <method value="PUT"/>
          <ifNoneMatch value="*"/>
-         <url value="Observation/replaced-id"/>
+         <url value="Observation/vitalfde5b936394ab716"/>
       </request>
    </entry>
 </Bundle>

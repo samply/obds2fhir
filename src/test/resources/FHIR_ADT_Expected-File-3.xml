@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Bundle xmlns="http://hl7.org/fhir" xmlns:hash="java:de.samply.obds2fhir">
    <id value="fc340e955e522dae"/>
    <type value="batch"/>
@@ -4264,10 +4265,10 @@
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/Observation/vital653ae947f9c1f8f6"/>
+      <fullUrl value="http://example.com/Observation/vitalfc340e955e522dae"/>
       <resource>
          <Observation>
-            <id value="vital653ae947f9c1f8f6"/>
+            <id value="vitalfc340e955e522dae"/>
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Vitalstatus"/>
             </meta>
@@ -4279,7 +4280,7 @@
                </coding>
             </code>
             <subject>
-               <reference value="Patient/653ae947f9c1f8f6"/>
+               <reference value="Patient/fc340e955e522dae"/>
             </subject>
             <effectiveDateTime value="2024-07-20"/>
             <valueCodeableConcept>
@@ -4292,14 +4293,14 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="Observation/vital653ae947f9c1f8f6"/>
+         <url value="Observation/vitalfc340e955e522dae"/>
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/Observation/tod653ae947f9c1f8f6"/>
+      <fullUrl value="http://example.com/Observation/todfc340e955e522dae"/>
       <resource>
          <Observation>
-            <id value="tod653ae947f9c1f8f6"/>
+            <id value="todfc340e955e522dae"/>
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-TodUrsache"/>
             </meta>
@@ -4311,7 +4312,7 @@
                </coding>
             </code>
             <subject>
-               <reference value="Patient/653ae947f9c1f8f6"/>
+               <reference value="Patient/fc340e955e522dae"/>
             </subject>
             <effectiveDateTime value="2024-07-20"/>
             <valueCodeableConcept>
@@ -4334,7 +4335,7 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="Observation/tod653ae947f9c1f8f6"/>
+         <url value="Observation/todfc340e955e522dae"/>
       </request>
    </entry>
 </Bundle>
