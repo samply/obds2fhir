@@ -41,7 +41,7 @@ public class FhirBatchImporter {
             if (!(status.startsWith("200") || status.startsWith("201") || status.startsWith("412"))) {
                 hasCriticalErrors = true;
                 String diagnostics = entry.path("response").path("outcome").path("issue").get(0).path("diagnostics").asText();
-                System.err.println("❌ Error in entry[" + index + "]: " + status + " — " + diagnostics);
+                logger.error("❌ Error in entry[" + index + "]: " + status + " — " + diagnostics);
             }
             index++;
         }
@@ -51,7 +51,7 @@ public class FhirBatchImporter {
             logger.error(EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8)+"\n");
             inputFile.renameTo(new File(System.getenv().getOrDefault("FILE_PATH","") + Obds2fhir.ERRONEOUS + inputFile.getName()));
         } else {
-            System.out.println("✅ Import successful for: " + inputFile.getName());
+            logger.debug("✅ Import successful for: " + inputFile.getName());
         }
     }
 }
