@@ -121,7 +121,6 @@ public class Obds2fhir {
                             inputFile.delete();
                         } else if (step==3){
                             FhirBatchImporter.importFile(inputFile, httpPost);
-//                            postToFhirStore(inputFile, httppost);
                         }
                         else {
                             inputFile.renameTo(new File(System.getenv().getOrDefault("FILE_PATH","") + PROCESSED + inputFile.getName()));
@@ -154,26 +153,6 @@ public class Obds2fhir {
         int fileVersion = Util.getFileVersion(file);
         return fileVersion==3 ? oBDS2SinglePatientTransformer : ADT2SinglePatientTransformer;
     }
-
-
-    private static void postToFhirStore(File inputFile, HttpPost httppost) throws IOException {
-        CloseableHttpClient httpclient = null;
-        httpclient = Util.getHttpClient(Boolean.parseBoolean(System.getenv().getOrDefault("SSL_CERTIFICATE_VALIDATION","")));
-        File file = new File(inputFile.toString());
-        FileEntity entity = new FileEntity(file);
-        httppost.setEntity(entity);
-        HttpResponse response = httpclient.execute(httppost);
-        if (!response.getStatusLine().getReasonPhrase().equals("OK")) {
-            logger.error("FHIR import: could not import file"+ inputFile.getName());
-            logger.error(EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8)+"\n");
-            inputFile.renameTo(new File(System.getenv().getOrDefault("FILE_PATH","") + ERRONEOUS + inputFile.getName()));
-        }
-        else {
-            inputFile.delete();
-        }
-        httpclient.close();
-    }
-
 
     private static String applyXslt(String xmlString, Transformer transformer) throws UnsupportedEncodingException, TransformerException {
         Source xmlSource = new StreamSource(new ByteArrayInputStream(xmlString.getBytes(StandardCharsets.UTF_8.name())));
