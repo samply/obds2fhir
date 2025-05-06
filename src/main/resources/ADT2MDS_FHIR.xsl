@@ -52,7 +52,7 @@
                         <xsl:value-of select="$Geburtsdatum"/>
                     </Geburtsdatum>
                     <DKTK_LOCAL_ID>
-                        <xsl:value-of select="if ($patient_id_plaintext) then @Patient_ID else $Patient_Pseudonym"/>
+                        <xsl:value-of select="if ($patient_id_plaintext) then Patienten_Stammdaten/@Patient_ID else $Patient_Pseudonym"/>
                     </DKTK_LOCAL_ID>
                     <xsl:choose>
                         <xsl:when test="lower-case(normalize-space(Patienten_Stammdaten/DKTK_Einwilligung_erfolgt)) = 'ja'"><DKTK_Einwilligung_erfolgt>true</DKTK_Einwilligung_erfolgt></xsl:when>
