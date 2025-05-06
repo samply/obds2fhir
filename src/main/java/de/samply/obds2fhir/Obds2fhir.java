@@ -32,7 +32,7 @@ public class Obds2fhir {
     private static final String oBDS_PATIENTS ="/tmp/oBDS_Patients/";
     private static final String ADT_PATIENTS ="/tmp/ADT_Patients/";
     private static final String FHIR_PATIENTS="/tmp/FHIR_Patients/";
-    private static final String ERRONEOUS="/tmp/erroneous/";
+    public static final String ERRONEOUS="/tmp/erroneous/";
     private static final String PROCESSED="/Processed/";
 
     private static final String ANSI_RESET = "\u001B[0m";
@@ -71,16 +71,16 @@ public class Obds2fhir {
         logger.info(DONE+(stopTime - startTime)/1000000000+ " seconds");
 
         if (importFhirFlag){
-            HttpPost httppost = new HttpPost(System.getenv().getOrDefault("STORE_PATH",""));
+            HttpPost httpPost = new HttpPost(System.getenv().getOrDefault("STORE_PATH",""));
             RequestConfig requestConfig = RequestConfig.copy(RequestConfig.DEFAULT).build();
-            httppost.setConfig(requestConfig);
+            httpPost.setConfig(requestConfig);
             String encoding = Base64.getEncoder().encodeToString((System.getenv().getOrDefault("STORE_AUTH","")).getBytes());
-            httppost.addHeader("content-type", "application/xml+fhir");
-            httppost.addHeader("Authorization", "Basic " + encoding);
+            httpPost.addHeader("content-type", "application/xml+fhir");
+            httpPost.addHeader("Authorization", "Basic " + encoding);
 
             startTime = System.nanoTime();
             logger.info("posting fhir resources to blaze store...");
-            processXmlFiles(FHIR_PATIENTS, httppost,3);
+            processXmlFiles(FHIR_PATIENTS, httpPost,3);
             stopTime = System.nanoTime();
             logger.info(DONE+(stopTime - startTime)/1000000000+ " seconds");
         }
@@ -91,7 +91,7 @@ public class Obds2fhir {
         processXmlFiles (inputData, null,step);
     }
 
-    public static void processXmlFiles(String inputDir, HttpPost httppost, int step){
+    public static void processXmlFiles(String inputDir, HttpPost httpPost, int step){
         File absoluteInputDir = new File(System.getenv().getOrDefault("FILE_PATH","") + inputDir);
         File[] listOfFiles = absoluteInputDir.listFiles();
         if (listOfFiles==null){
@@ -120,7 +120,7 @@ public class Obds2fhir {
                             applyXslt(xmlResult, MDS2FHIRTransformer);
                             inputFile.delete();
                         } else if (step==3){
-                            postToFhirStore(inputFile, httppost);
+                            FhirBatchImporter.importFile(inputFile, httpPost);
                         }
                         else {
                             inputFile.renameTo(new File(System.getenv().getOrDefault("FILE_PATH","") + PROCESSED + inputFile.getName()));
@@ -153,26 +153,6 @@ public class Obds2fhir {
         int fileVersion = Util.getFileVersion(file);
         return fileVersion==3 ? oBDS2SinglePatientTransformer : ADT2SinglePatientTransformer;
     }
-
-
-    private static void postToFhirStore(File inputFile, HttpPost httppost) throws IOException {
-        CloseableHttpClient httpclient = null;
-        httpclient = Util.getHttpClient(Boolean.parseBoolean(System.getenv().getOrDefault("SSL_CERTIFICATE_VALIDATION","")));
-        File file = new File(inputFile.toString());
-        FileEntity entity = new FileEntity(file);
-        httppost.setEntity(entity);
-        HttpResponse response = httpclient.execute(httppost);
-        if (!response.getStatusLine().getReasonPhrase().equals("OK")) {
-            logger.error("FHIR import: could not import file"+ inputFile.getName());
-            logger.error(EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8)+"\n");
-            inputFile.renameTo(new File(System.getenv().getOrDefault("FILE_PATH","") + ERRONEOUS + inputFile.getName()));
-        }
-        else {
-            inputFile.delete();
-        }
-        httpclient.close();
-    }
-
 
     private static String applyXslt(String xmlString, Transformer transformer) throws UnsupportedEncodingException, TransformerException {
         Source xmlSource = new StreamSource(new ByteArrayInputStream(xmlString.getBytes(StandardCharsets.UTF_8.name())));
