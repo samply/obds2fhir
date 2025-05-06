@@ -12,11 +12,16 @@ services:
       IDENTIFIER_SYSTEM: "http://dktk.dkfz.de/fhir/onco/core/CodeSystem/PseudonymArtCS"
       #MAINZELLISTE_URL: "http://host.docker.internal:8080"
       #MAINZELLISTE_APIKEY: "pleaseChangeMe"
+      #MAINZELLISTE_EXTERNAL_ID: "true"
       #IDTYPE: "pid"
       SALT: "createLocalCustomSalt"
       #SSL_CERTIFICATE_VALIDATION: "true"
       #ADD_DEPARTMENTS: "false"
+      #WAIT_FOR_CONNECTION: "false"
       LOG_LEVEL: "INFO"
+      #KEEP_INTERNAL_ID: "false"
+      #USE_PSEUDONYM: "false"
+      #PATIENT_ID_PLAINTEXT: "false"
     volumes:
       - ./clinical_data:/obds2fhir/clinical_data
       #- /etc/bridgehead/traefik-tls:/.../:ro
