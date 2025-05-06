@@ -26,4 +26,5 @@ ENV FILE_PATH="/obds2fhir/clinical_data" \
     ADD_DEPARTMENTS="false" \
     WAIT_FOR_CONNECTION="false" \
     KEEP_INTERNAL_ID="false" \
-    USE_PSEUDONYM="false"
+    USE_PSEUDONYM="false" \
+    PATIENT_ID_PLAINTEXT="false"

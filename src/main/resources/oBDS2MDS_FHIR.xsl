@@ -14,6 +14,7 @@
     <xsl:param name="add_department" />
     <xsl:param name="keep_internal_id" />
     <xsl:param name="use_pseudonym" />
+    <xsl:param name="patient_id_plaintext" />
 
     <xsl:template match="/oBDS/Menge_Patient">
         <Patienten>
@@ -51,7 +52,9 @@
                 else (if ($keep_internal_id = true()) then @Patient_ID else hash:hash(@Patient_ID, '', ''))
             " />
             <xsl:attribute name="Patient_ID" select="$Patient_Id"/>
-            <DKTK_LOCAL_ID><xsl:value-of select="$Patient_Pseudonym"/></DKTK_LOCAL_ID>
+            <DKTK_LOCAL_ID>
+                <xsl:value-of select="if ($patient_id_plaintext) then @Patient_ID else $Patient_Pseudonym"/>
+            </DKTK_LOCAL_ID>
             <!--<DKTK_ID>TODO</DKTK_ID>-->
             <xsl:apply-templates select="Patienten_Stammdaten/Geschlecht | Patienten_Stammdaten/Geburtsdatum"/>
             <Vitalstatus_Gesamt Vitalstatus_ID="{concat('vital', $Patient_Id)}">

@@ -180,10 +180,12 @@ public class Obds2fhir {
             oBDS2MDSTransformer.setParameter("add_department", System.getenv().getOrDefault("ADD_DEPARTMENTS","false"));
             oBDS2MDSTransformer.setParameter("keep_internal_id", System.getProperty("KEEP_INTERNAL_ID", "false"));
             oBDS2MDSTransformer.setParameter("use_pseudonym", System.getProperty("USE_PSEUDONYM", "false"));
+            oBDS2MDSTransformer.setParameter("patient_id_plaintext", System.getProperty("PATIENT_ID_PLAINTEXT", "false"));
             ADT2MDSTransformer = factory.newTransformer(new StreamSource(Obds2fhir.class.getClassLoader().getResourceAsStream("ADT2MDS_FHIR.xsl")));
             ADT2MDSTransformer.setParameter("add_department", System.getenv().getOrDefault("ADD_DEPARTMENTS","false"));
             ADT2MDSTransformer.setParameter("keep_internal_id", System.getProperty("KEEP_INTERNAL_ID", "false"));
             ADT2MDSTransformer.setParameter("use_pseudonym", System.getProperty("USE_PSEUDONYM", "false"));
+            ADT2MDSTransformer.setParameter("patient_id_plaintext", System.getProperty("PATIENT_ID_PLAINTEXT", "false"));
             MDS2FHIRTransformer = factory.newTransformer(new StreamSource(Obds2fhir.class.getClassLoader().getResourceAsStream("MDS2FHIR.xsl")));
             MDS2FHIRTransformer.setParameter("filepath", System.getenv().getOrDefault("FILE_PATH",""));
             MDS2FHIRTransformer.setParameter("identifier_system", System.getenv().getOrDefault("IDENTIFIER_SYSTEM","http://dktk.dkfz.de/fhir/onco/core/CodeSystem/PseudonymArtCS"));
