@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - develop
+      - feature/add_separate_patient_id
     # Build then a new version is tagged
     tags:
       - '*.*.*'
