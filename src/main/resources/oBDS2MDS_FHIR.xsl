@@ -11,10 +11,10 @@
     <xsl:output encoding="UTF-8" indent="yes" method="xml"/>
     <xsl:output omit-xml-declaration="no" indent="yes"/>
     <xsl:strip-space elements="*"/>
-    <xsl:param name="add_department" />
-    <xsl:param name="keep_internal_id" />
-    <xsl:param name="use_pseudonym" />
-    <xsl:param name="patient_id_plaintext" />
+    <xsl:param name="add_department" as="xs:boolean" select="false()"/>
+    <xsl:param name="keep_internal_id" as="xs:boolean" select="false()"/>
+    <xsl:param name="use_pseudonym" as="xs:boolean" select="false()"/>
+    <xsl:param name="patient_id_plaintext" as="xs:boolean" select="false()"/>
 
     <xsl:template match="/oBDS/Menge_Patient">
         <Patienten>
