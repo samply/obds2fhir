@@ -26,7 +26,7 @@ docker compose up
 You need at least docker-compose version `1.29.2`.
 The configuration is set in the [`docker-compose.yml`](./docker-compose.yml) file and is preconfigured with sane defaults (you probably won't need to set **#commented** parameters).
 
-In case you still want to change the configuration, heres are your options:
+In case you still want to change the configuration, here are your options:
 
 ###### Environment:
 
