@@ -25,23 +25,26 @@ public class FhirBatchImporter {
     public static void importFile(File inputFile, CloseableHttpClient httpClient, HttpPost httpPost) throws IOException {
         httpPost.setEntity(new FileEntity(inputFile));
         HttpResponse response = httpClient.execute(httpPost);
+        int statusCode = response.getStatusLine().getStatusCode();
         String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = mapper.readTree(responseBody);
-        boolean hasCriticalErrors = false;
-        int index = 0;
-        for (JsonNode entry : root.path("entry")) {
-            String status = entry.path("response").path("status").asText();
-            if (!(status.startsWith("200") || status.startsWith("201") || status.startsWith("412"))) {
-                hasCriticalErrors = true;
-                String diagnostics = entry.path("response").path("outcome").path("issue").get(0).path("diagnostics").asText();
-                logger.error("Error in entry[" + index + "]: " + status + " — " + diagnostics);
+
+        boolean hasCriticalErrors = statusCode != 200 && statusCode != 201;;
+        if (!hasCriticalErrors) {
+            JsonNode root = new ObjectMapper().readTree(responseBody);
+            int index = 0;
+            for (JsonNode entry : root.path("entry")) {
+                String status = entry.path("response").path("status").asText();
+                if (!(status.startsWith("200") || status.startsWith("201") || status.startsWith("412"))) {
+                    hasCriticalErrors = true;
+                    String diagnostics = entry.path("response").path("outcome").path("issue").get(0).path("diagnostics").asText();
+                    logger.error("Error in entry[" + index + "]: " + status + " — " + diagnostics);
+                }
+                index++;
             }
-            index++;
         }
         if (hasCriticalErrors) {
             logger.error("FHIR import: could not import file"+ inputFile.getName());
-            logger.error(EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8)+"\n");
+            logger.error(responseBody+"\n");
             inputFile.renameTo(new File(System.getenv().getOrDefault("FILE_PATH","") + Obds2fhir.ERRONEOUS + inputFile.getName()));
         } else {
             logger.debug("Import successful for: " + inputFile.getName());

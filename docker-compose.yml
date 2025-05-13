@@ -1,4 +1,3 @@
-version: "3.7"
 volumes:
   obds2fhir_data:
 
@@ -9,14 +8,21 @@ services:
       #FILE_PATH: "/obds2fhir/clinical_data"
       STORE_PATH: "http://host.docker.internal:8090/fhir"
       #STORE_AUTH: "user:password"
-      IDENTIFIER_SYSTEM: "http://dktk.dkfz.de/fhir/onco/core/CodeSystem/PseudonymArtCS"
+      #IDENTIFIER_SYSTEM: "http://dktk.dkfz.de/fhir/onco/core/CodeSystem/PseudonymArtCS"
       #MAINZELLISTE_URL: "http://host.docker.internal:8080"
       #MAINZELLISTE_APIKEY: "pleaseChangeMe"
       #IDTYPE: "pid"
       SALT: "createLocalCustomSalt"
       #SSL_CERTIFICATE_VALIDATION: "true"
       #ADD_DEPARTMENTS: "false"
-      LOG_LEVEL: "INFO"
+      #WAIT_FOR_CONNECTION: "false"
+      #LOG_LEVEL: "INFO"
+      #PATIENT_ID_PLAINTEXT: "false"
+    #command: [
+    #  "-Dkeep.internal.id=false",       # Keep cleartext Patient/@Patient_ID as FHIR Patient.id (default: false)
+    #  "-Duse.pseudonym=false",          # Use pseudonym as Patient.id instead of Patient/@Patient_ID (default: false)
+    #  "-Dmainzelliste.external.id=true" # Provide Patient/@Patient_ID as locallyUniqueId to Mainzelliste (default: true)
+    #]
     volumes:
       - ./clinical_data:/obds2fhir/clinical_data
       #- /etc/bridgehead/traefik-tls:/.../:ro
