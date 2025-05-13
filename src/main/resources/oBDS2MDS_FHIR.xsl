@@ -561,7 +561,7 @@
                     <xsl:when test="Menge_Bestrahlung[1]/Bestrahlung[1]/Beginn!=''"><xsl:value-of select="'gen',Menge_Bestrahlung[1]/Bestrahlung[1]/Beginn"/></xsl:when>
                 </xsl:choose>
             </xsl:variable>
-            <xsl:attribute name="ST_ID" select="concat('st', concat($Patient_Id, $Tumor_Id, string-join($attribute, '')))"/>
+            <xsl:attribute name="ST_ID" select="concat('st', hash:hash($Patient_Id, $Tumor_Id, string-join($attribute, '')))"/>
             <xsl:apply-templates select="Meldeanlass | Intention | Stellung_OP"/>
             <xsl:if test="Ende_Grund!=''"><Ende_Grund><xsl:value-of select="Ende_Grund"/></Ende_Grund></xsl:if>
             <xsl:apply-templates select="Nebenwirkungen">
