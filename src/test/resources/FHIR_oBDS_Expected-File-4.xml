@@ -2517,10 +2517,10 @@
       </request>
    </entry>
    <entry>
-      <fullUrl value="http://example.com/Procedure/sttestpatient-oBDS-101200120400001"/>
+      <fullUrl value="http://example.com/Procedure/stdd57c9ac55395c2b"/>
       <resource>
          <Procedure>
-            <id value="sttestpatient-oBDS-101200120400001"/>
+            <id value="stdd57c9ac55395c2b"/>
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Procedure-Strahlentherapie"/>
             </meta>
@@ -2571,7 +2571,7 @@
       </resource>
       <request>
          <method value="PUT"/>
-         <url value="Procedure/sttestpatient-oBDS-101200120400001"/>
+         <url value="Procedure/stdd57c9ac55395c2b"/>
       </request>
    </entry>
    <entry>
@@ -2598,7 +2598,7 @@
             </severity>
             <suspectEntity>
                <instance>
-                  <reference value="Procedure/sttestpatient-oBDS-101200120400001"/>
+                  <reference value="Procedure/stdd57c9ac55395c2b"/>
                </instance>
             </suspectEntity>
          </AdverseEvent>
@@ -2632,7 +2632,7 @@
             </severity>
             <suspectEntity>
                <instance>
-                  <reference value="Procedure/sttestpatient-oBDS-101200120400001"/>
+                  <reference value="Procedure/stdd57c9ac55395c2b"/>
                </instance>
             </suspectEntity>
          </AdverseEvent>
@@ -2665,7 +2665,7 @@
             </severity>
             <suspectEntity>
                <instance>
-                  <reference value="Procedure/sttestpatient-oBDS-101200120400001"/>
+                  <reference value="Procedure/stdd57c9ac55395c2b"/>
                </instance>
             </suspectEntity>
          </AdverseEvent>
@@ -2739,7 +2739,7 @@
                </extension>
             </extension>
             <partOf>
-               <reference value="Procedure/sttestpatient-oBDS-101200120400001"/>
+               <reference value="Procedure/stdd57c9ac55395c2b"/>
             </partOf>
             <status value="stopped"/>
             <category>
@@ -2830,7 +2830,7 @@
                </extension>
             </extension>
             <partOf>
-               <reference value="Procedure/sttestpatient-oBDS-101200120400001"/>
+               <reference value="Procedure/stdd57c9ac55395c2b"/>
             </partOf>
             <status value="stopped"/>
             <category>
@@ -2913,7 +2913,7 @@
                </extension>
             </extension>
             <partOf>
-               <reference value="Procedure/sttestpatient-oBDS-101200120400001"/>
+               <reference value="Procedure/stdd57c9ac55395c2b"/>
             </partOf>
             <status value="stopped"/>
             <category>
@@ -2996,7 +2996,7 @@
                </extension>
             </extension>
             <partOf>
-               <reference value="Procedure/sttestpatient-oBDS-101200120400001"/>
+               <reference value="Procedure/stdd57c9ac55395c2b"/>
             </partOf>
             <status value="stopped"/>
             <category>
