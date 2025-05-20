@@ -48,6 +48,7 @@ public class FhirBatchImporter {
             inputFile.renameTo(new File(System.getenv().getOrDefault("FILE_PATH","") + Obds2fhir.ERRONEOUS + inputFile.getName()));
         } else {
             logger.debug("Import successful for: " + inputFile.getName());
+            inputFile.delete();
         }
     }
 }
