@@ -87,7 +87,7 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
                     try {
                         output=pseudonymizationCall(gender, prename, surname, formername, birthday, birthmonth, birthyear, identifier);
                     } catch (URISyntaxException | MainzellisteNetworkException | InvalidSessionException | IOException e) {
-                        logger.error("Pseudonymization error: " + e);
+                        logger.debug("Pseudonymization error: " + e);
                     }
                 }
                 return StringValue.makeStringValue(output);
