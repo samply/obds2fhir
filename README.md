@@ -56,6 +56,8 @@ You can use the default value or set your own system URL.
 
 * ```ADD_DEPARTMENTS``` can be set to true if you want to add the departments that commited the patient report (=oBDS Melder). *Probably not  necessary*.
 
+* ```PATIENT_ID_PLAINTEXT``` can be set to true if you want oBDS (or ADT) @Patient_ID as identifier.
+
 ###### Properties:
 
 Some configurations are set during runtime (due to [oBDS2FHIR-REST](https://github.com/samply/obds2fhir-rest/)) directly as Java system properties. You can define them in your docker-compose.yml like this:
@@ -67,6 +69,7 @@ command: [
   "-Dmainzelliste.external.id=true"   # Provide Patient/@Patient_ID as locallyUniqueId to Mainzelliste (default: true)
 ]
 ```
+E.g. if you want to generate the same Patient.id based on the pseudonym for tumor documentation and sample data in separate imports.
 
 ###### Volumes:
 
