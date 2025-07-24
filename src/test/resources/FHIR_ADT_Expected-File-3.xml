@@ -17,6 +17,7 @@
                      <code value="Lokal"/>
                   </coding>
                </type>
+               <system value="replaceme"/>
                <value value="ed2a8052536d3adf0c4893b0550a64e4"/>
             </identifier>
             <gender value="male"/>
