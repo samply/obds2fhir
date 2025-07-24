@@ -51,6 +51,7 @@
                                                 <code value="Lokal"/>
                                             </coding>
                                         </type>
+                                        <system value="replaceme"/>
                                         <value value="{DKTK_LOCAL_ID}"/>
                                     </identifier>
                                 </xsl:if>
