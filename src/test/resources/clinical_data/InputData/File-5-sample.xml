@@ -16,6 +16,7 @@
 				<Meldung>
 					<Samples>
 						<Sample Sample_ID="Sample_ID1">
+							<Pseudonym>asdf</Pseudonym>
 							<Status>available</Status>
 							<Sampletype>whole-blood</Sampletype>
 							<Collectiontime>2024-09-04</Collectiontime>
@@ -40,6 +41,7 @@
 					<Samples>
 						<Sample Sample_ID="Sample_ID2" Parent_ID="Sample_ID1">
 							<Project>http://dktk.dkfz.de/fhir/sid/exliquid-specimen</Project>
+							<Pseudonym>sadfg</Pseudonym><!--TODO check tests-->
 							<Status>available</Status>
 							<Sampletype>whole-blood</Sampletype>
 							<Collectiontime>2006-05-04</Collectiontime>

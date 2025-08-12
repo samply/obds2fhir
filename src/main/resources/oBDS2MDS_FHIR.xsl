@@ -112,7 +112,7 @@
                         <xsl:value-of select="concat('bio', hash:hash($Patient_Id, @Parent_ID, ''))"/>
                     </parentID>
                 </xsl:if>
-                <xsl:apply-templates select="Project | Status | Sampletype | Collectiontime | SpecimenQuantity | BodySite"/>
+                <xsl:apply-templates select="Project | Pseudonym | Status | Sampletype | Collectiontime | SpecimenQuantity | BodySite"/>
             </Sample>
         </xsl:if>
     </xsl:template>
@@ -759,6 +759,11 @@
         <Project>
             <xsl:apply-templates select="node() | @*"/>
         </Project>
+    </xsl:template>
+    <xsl:template match="Pseudonym" >
+        <Pseudonym>
+            <xsl:apply-templates select="node() | @*"/>
+        </Pseudonym>
     </xsl:template>
     <xsl:template match="Status" >
         <Status>

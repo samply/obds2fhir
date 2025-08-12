@@ -37,6 +37,9 @@
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Specimen-OncoSpecimen"/>
             </meta>
+            <identifier>
+               <value value="asdf"/>
+            </identifier>
             <status value="available"/>
             <type>
                <coding>
