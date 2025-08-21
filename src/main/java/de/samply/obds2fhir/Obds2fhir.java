@@ -6,18 +6,13 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Base64;
-import java.util.stream.Collectors;
 import javax.xml.transform.*;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import net.sf.saxon.TransformerFactoryImpl;
 import net.sf.saxon.s9api.Processor;
-import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.FileEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +31,6 @@ public class Obds2fhir {
     private static final String PROCESSED="/Processed/";
 
     private static final String ANSI_RESET = "\u001B[0m";
-    private static final String ANSI_RED = "\u001B[31m";
     private static final String ANSI_GREEN = "\u001B[32m";
     private static final String DONE = ANSI_GREEN+"...done "+ANSI_RESET;
     private static TransformerFactoryImpl factory = null;
