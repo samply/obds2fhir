@@ -663,7 +663,6 @@
 							</xs:annotation>
 						</xs:element>
 					</xs:sequence>
-					<!-- @TODO: dktk: braucht man eine ID? -->
 					<xs:attribute name="Sample_ID" type="xs:string" use="required">
 						<xs:annotation>
 							<xs:documentation> Eine vom Melder generierte ID zur eindeutigen Identifikation des Vorgangs</xs:documentation>
