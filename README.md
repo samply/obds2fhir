@@ -30,6 +30,9 @@ oBDS2FHIR is designed for use with docker compose. To run, put the oBDS xml file
 docker compose up
 ```
 
+You need at least docker-compose version `1.29.2`.
+The configuration is set in the [`docker-compose.yml`](./docker-compose.yml) file and is preconfigured with sane defaults (you probably won't need to set **#commented** parameters).
+
 
 ### Configuration:
 
@@ -74,6 +77,21 @@ There souldn't be a reason to change this for docker.
 * ```SSL_CERTIFICATE_VALIDATION``` can be set to false **IF** your FHIR server is only accessible via https and you do **NOT** have a valid SSL certificate. Not recommended!
 
 * ```ADD_DEPARTMENTS``` can be set to true if you want to add the departments that commited the patient report (=oBDS Melder). *Probably not  necessary*.
+
+* ```PATIENT_ID_PLAINTEXT``` can be set to true if you want oBDS (or ADT) @Patient_ID as identifier.
+
+###### Properties:
+
+Some configurations are set during runtime (due to [oBDS2FHIR-REST](https://github.com/samply/obds2fhir-rest/)) directly as Java system properties. You can define them in your docker-compose.yml like this:
+
+```yaml
+command: [
+  "-Dkeep.internal.id=false",         # Keep cleartext Patient/@Patient_ID as FHIR Patient.id (default: false)
+  "-Duse.pseudonym=false",            # Use pseudonym as Patient.id instead of Patient/@Patient_ID (default: false)
+  "-Dmainzelliste.external.id=true"   # Provide Patient/@Patient_ID as locallyUniqueId to Mainzelliste (default: true)
+]
+```
+E.g. if you want to generate the same Patient.id based on the pseudonym for tumor documentation and sample data in separate imports.
 
 ###### Volumes:
 

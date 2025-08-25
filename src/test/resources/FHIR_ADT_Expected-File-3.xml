@@ -1,6 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Bundle xmlns="http://hl7.org/fhir" xmlns:hash="java:de.samply.obds2fhir">
    <id value="fc340e955e522dae"/>
-   <type value="transaction"/>
+   <type value="batch"/>
    <entry>
       <fullUrl value="http://example.com/Patient/fc340e955e522dae"/>
       <resource>
@@ -4261,6 +4262,80 @@
       <request>
          <method value="PUT"/>
          <url value="Observation/tnm8e496c569e7fe85a"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/vitalfc340e955e522dae"/>
+      <resource>
+         <Observation>
+            <id value="vitalfc340e955e522dae"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Vitalstatus"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="75186-7"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/fc340e955e522dae"/>
+            </subject>
+            <effectiveDateTime value="2024-07-20"/>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VitalstatusCS"/>
+                  <code value="verstorben"/>
+               </coding>
+            </valueCodeableConcept>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/vitalfc340e955e522dae"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/todfc340e955e522dae"/>
+      <resource>
+         <Observation>
+            <id value="todfc340e955e522dae"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-TodUrsache"/>
+            </meta>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="68343-3"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/fc340e955e522dae"/>
+            </subject>
+            <effectiveDateTime value="2024-07-20"/>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://fhir.de/CodeSystem/bfarm/icd-10-gm"/>
+                  <version value="10 2024 GM"/>
+                  <code value="C43.4"/>
+               </coding>
+               <coding>
+                  <system value="http://fhir.de/CodeSystem/bfarm/icd-10-gm"/>
+                  <version value="10 2024 GM"/>
+                  <code value="Sonstige"/>
+               </coding>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/JNUCS"/>
+                  <code value="J"/>
+               </coding>
+            </valueCodeableConcept>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/todfc340e955e522dae"/>
       </request>
    </entry>
 </Bundle>

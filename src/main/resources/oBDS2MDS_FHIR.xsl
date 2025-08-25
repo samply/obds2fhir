@@ -11,9 +11,10 @@
     <xsl:output encoding="UTF-8" indent="yes" method="xml"/>
     <xsl:output omit-xml-declaration="no" indent="yes"/>
     <xsl:strip-space elements="*"/>
-    <xsl:param name="add_department" />
-    <xsl:param name="keep_internal_id" />
-    <xsl:param name="use_pseudonym" />
+    <xsl:param name="add_department" as="xs:boolean" select="false()"/>
+    <xsl:param name="keep_internal_id" as="xs:boolean" select="false()"/>
+    <xsl:param name="use_pseudonym" as="xs:boolean" select="false()"/>
+    <xsl:param name="patient_id_plaintext" as="xs:boolean" select="false()"/>
 
     <xsl:template match="/oBDS/Menge_Patient">
         <Patienten>
@@ -51,7 +52,9 @@
                 else (if ($keep_internal_id = true()) then @Patient_ID else hash:hash(@Patient_ID, '', ''))
             " />
             <xsl:attribute name="Patient_ID" select="$Patient_Id"/>
-            <DKTK_LOCAL_ID><xsl:value-of select="$Patient_Pseudonym"/></DKTK_LOCAL_ID>
+            <DKTK_LOCAL_ID>
+                <xsl:value-of select="if ($patient_id_plaintext) then @Patient_ID else $Patient_Pseudonym"/>
+            </DKTK_LOCAL_ID>
             <!--<DKTK_ID>TODO</DKTK_ID>-->
             <xsl:apply-templates select="Patienten_Stammdaten/Geschlecht | Patienten_Stammdaten/Geburtsdatum"/>
             <Vitalstatus_Gesamt Vitalstatus_ID="{concat('vital', $Patient_Id)}">
@@ -109,7 +112,7 @@
                         <xsl:value-of select="concat('bio', hash:hash($Patient_Id, @Parent_ID, ''))"/>
                     </parentID>
                 </xsl:if>
-                <xsl:apply-templates select="Project | Status | Sampletype | Collectiontime | SpecimenQuantity | BodySite"/>
+                <xsl:apply-templates select="Project | Pseudonym | Status | Sampletype | Collectiontime | SpecimenQuantity | BodySite"/>
             </Sample>
         </xsl:if>
     </xsl:template>
@@ -558,7 +561,7 @@
                     <xsl:when test="Menge_Bestrahlung[1]/Bestrahlung[1]/Beginn!=''"><xsl:value-of select="'gen',Menge_Bestrahlung[1]/Bestrahlung[1]/Beginn"/></xsl:when>
                 </xsl:choose>
             </xsl:variable>
-            <xsl:attribute name="ST_ID" select="concat('st', concat($Patient_Id, $Tumor_Id, string-join($attribute, '')))"/>
+            <xsl:attribute name="ST_ID" select="concat('st', hash:hash($Patient_Id, $Tumor_Id, string-join($attribute, '')))"/>
             <xsl:apply-templates select="Meldeanlass | Intention | Stellung_OP"/>
             <xsl:if test="Ende_Grund!=''"><Ende_Grund><xsl:value-of select="Ende_Grund"/></Ende_Grund></xsl:if>
             <xsl:apply-templates select="Nebenwirkungen">
@@ -756,6 +759,11 @@
         <Project>
             <xsl:apply-templates select="node() | @*"/>
         </Project>
+    </xsl:template>
+    <xsl:template match="Pseudonym" >
+        <Pseudonym>
+            <xsl:apply-templates select="node() | @*"/>
+        </Pseudonym>
     </xsl:template>
     <xsl:template match="Status" >
         <Status>

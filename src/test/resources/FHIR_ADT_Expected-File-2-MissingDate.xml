@@ -1,6 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Bundle xmlns="http://hl7.org/fhir" xmlns:hash="java:de.samply.obds2fhir">
    <id value="fde5b936394ab716"/>
-   <type value="transaction"/>
+   <type value="batch"/>
    <entry>
       <fullUrl value="http://example.com/Patient/fde5b936394ab716"/>
       <resource>
@@ -141,6 +142,39 @@
       <request>
          <method value="PUT"/>
          <url value="Procedure/sts26dadc0370eaff12-0"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/vitalfde5b936394ab716"/>
+      <resource>
+         <Observation>
+            <id value="vitalfde5b936394ab716"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Vitalstatus"/>
+            </meta>
+            <status value="registered"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="75186-7"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/fde5b936394ab716"/>
+            </subject>
+            <effectiveDateTime value="2021-04-21"/>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VitalstatusCS"/>
+                  <code value="lebend"/>
+               </coding>
+            </valueCodeableConcept>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <ifNoneMatch value="*"/>
+         <url value="Observation/vitalfde5b936394ab716"/>
       </request>
    </entry>
 </Bundle>

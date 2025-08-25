@@ -33,7 +33,7 @@
         <xsl:result-document href="file:{$filepath}/tmp/FHIR_Patients/FHIR_{$customPrefix}">
             <Bundle xmlns="http://hl7.org/fhir">
                 <id value="{substring($customPrefix, 9, 16)}"/>
-                <type value="transaction"/>
+                <type value="batch"/>
                 <xsl:if test="Geschlecht!='' and Geburtsdatum!=''">
                     <entry>
                         <fullUrl value="http://example.com/Patient/{$Patient_ID}"/>
@@ -85,64 +85,27 @@
                         </request>
                     </entry>
                 </xsl:if>
-                <!-- Patienten > Patient > Sample -->
+                <!-- Patient > Sample -->
                 <xsl:apply-templates select="Sample[Probentyp!='']" mode="ADT">
                     <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
                 </xsl:apply-templates>
                 <xsl:apply-templates select="Sample[Sampletype!='']" mode="oBDS">
                     <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
                 </xsl:apply-templates>
-                <!-- Patienten > Patient > Diagnose -->
+                <!-- Patient > Diagnose -->
                 <xsl:apply-templates select="Diagnosis" mode="diagnosis">
+                    <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
+                </xsl:apply-templates>
+                <!-- Patient > Vitalstatus -->
+                <xsl:apply-templates select="Vitalstatus_Gesamt">
+                    <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
+                </xsl:apply-templates>
+                <!-- Patient > Department -->
+                <xsl:apply-templates select="Organisationen">
                     <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
                 </xsl:apply-templates>
             </Bundle>
         </xsl:result-document>
-
-        <xsl:if test="Vitalstatus_Gesamt/Datum_des_letztbekannten_Vitalstatus!='' or Vitalstatus_Gesamt/Tod!='' or Organisationen/Abteilung!=''">
-            <xsl:result-document href="file:{$filepath}/tmp/FHIR_Patients/FHIR_batch_{$customPrefix}">
-                <Bundle xmlns="http://hl7.org/fhir">
-                    <id value="{substring($customPrefix, 9, 16)}"/>
-                    <type value="batch"/>
-                    <xsl:apply-templates select="Vitalstatus_Gesamt">
-                        <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
-                    </xsl:apply-templates>
-
-                    <xsl:for-each select="Organisationen/Abteilung[.!='']">
-                        <xsl:variable name="Encounter_ID" select="hash:hash($Patient_ID, ., '')"/>
-                        <entry>
-                            <fullUrl value="http://example.com/Encounter/{$Encounter_ID}"/>
-                            <resource>
-                                <Encounter>
-                                    <id value="{$Encounter_ID}"/>
-                                    <meta>
-                                        <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Encounter-Fall"/>
-                                    </meta>
-                                    <identifier>
-                                        <system value="http://dktk.dkfz.de/fhir/sid/hki-department"/>
-                                        <value value="{.}"/>
-                                    </identifier>
-                                    <status value="finished"/>
-                                    <class>
-                                        <system value="http://terminology.hl7.org/CodeSystem/v3-ActCode"/>
-                                        <code value="VR"/>
-                                        <display value="virtual"/>
-                                    </class>
-                                    <subject>
-                                        <reference value="Patient/{$Patient_ID}"/>
-                                    </subject>
-                                </Encounter>
-                            </resource>
-                            <request>
-                                <method value="PUT"/>
-                                <ifNoneMatch value="*"/>
-                                <url value="Encounter/{$Encounter_ID}"/>
-                            </request>
-                        </entry>
-                    </xsl:for-each>
-                </Bundle>
-            </xsl:result-document>
-        </xsl:if>
     </xsl:template>
 
     <xsl:template match="Sample" mode="ADT">
@@ -246,9 +209,14 @@
                             <reference value="Condition/{tumorID}"/>
                         </extension>
                     </xsl:if>-->
-                    <xsl:if test="Project!=''">
+                    <xsl:if test="Project!='' or Pseudonym!=''">
                         <identifier>
-                            <system value="{Project}" />
+                            <xsl:if test="Project!=''">
+                                <system value="{Project}" />
+                            </xsl:if>
+                            <xsl:if test="Pseudonym!=''">
+                                <value value="{Pseudonym}" />
+                            </xsl:if>
                         </identifier>
                     </xsl:if>
                     <xsl:if test="Status!=''">
@@ -2093,6 +2061,42 @@
                 </entry>
             </xsl:if>
         </xsl:if>
+    </xsl:template>
+
+    <xsl:template match="Organisationen">
+        <xsl:param name="Patient_ID"/>
+        <xsl:for-each select="Abteilung[.!='']">
+            <xsl:variable name="Encounter_ID" select="hash:hash($Patient_ID, ., '')"/>
+            <entry>
+                <fullUrl value="http://example.com/Encounter/{$Encounter_ID}"/>
+                <resource>
+                    <Encounter>
+                        <id value="{$Encounter_ID}"/>
+                        <meta>
+                            <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Encounter-Fall"/>
+                        </meta>
+                        <identifier>
+                            <system value="http://dktk.dkfz.de/fhir/sid/hki-department"/>
+                            <value value="{.}"/>
+                        </identifier>
+                        <status value="finished"/>
+                        <class>
+                            <system value="http://terminology.hl7.org/CodeSystem/v3-ActCode"/>
+                            <code value="VR"/>
+                            <display value="virtual"/>
+                        </class>
+                        <subject>
+                            <reference value="Patient/{$Patient_ID}"/>
+                        </subject>
+                    </Encounter>
+                </resource>
+                <request>
+                    <method value="PUT"/>
+                    <ifNoneMatch value="*"/>
+                    <url value="Encounter/{$Encounter_ID}"/>
+                </request>
+            </entry>
+        </xsl:for-each>
     </xsl:template>
 
     <xsl:template match="Weitere_Klassifikation">

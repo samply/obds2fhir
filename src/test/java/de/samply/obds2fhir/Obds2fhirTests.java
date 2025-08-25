@@ -51,22 +51,6 @@ public class Obds2fhirTests {
     }
     @Test
     @Order(4)
-    public void compareBatchADT () throws IOException {
-        String filename = DigestUtils.sha256Hex("testpatient-ADT-1"+System.getenv().getOrDefault("SALT","")).substring(48);
-        String result = "tmp/FHIR_Patients/FHIR_batch_Patient_"+filename+"_ADT_1.xml";
-        String expected = "FHIR_batch_ADT_Expected-File-1.xml";
-        assertTrue(compare(result, expected));
-    }
-    @Test
-    @Order(5)
-    public void compareBatchOBDS () throws IOException {
-        String filename = DigestUtils.sha256Hex("testpatient-oBDS-1"+System.getenv().getOrDefault("SALT","")).substring(48);
-        String result = "tmp/FHIR_Patients/FHIR_batch_Patient_"+filename+"_oBDS_4.xml";
-        String expected = "FHIR_batch_oBDS_Expected-File-1.xml";
-        assertTrue(compare(result, expected));
-    }
-    @Test
-    @Order(6)
     public void comparePatientSyntheticADT () throws IOException {
         String filename = DigestUtils.sha256Hex("testpatient-ADT-3"+System.getenv().getOrDefault("SALT","")).substring(48);
         String result = "tmp/FHIR_Patients/FHIR_Patient_"+filename+"_ADT_3.xml";
@@ -74,7 +58,7 @@ public class Obds2fhirTests {
         assertTrue(compare(result, expected));
     }
     @Test
-    @Order(7)
+    @Order(5)
     public void comparePatientSyntheticOBDS () throws IOException {
         String filename = DigestUtils.sha256Hex("testpatient-oBDS-1"+System.getenv().getOrDefault("SALT","")).substring(48);
         String result = "tmp/FHIR_Patients/FHIR_Patient_"+filename+"_oBDS_4.xml";
@@ -82,7 +66,7 @@ public class Obds2fhirTests {
         assertTrue(compare(result, expected));
     }
     @Test
-    @Order(8)
+    @Order(6)
     public void compareSampleOBDS () throws IOException {
         String filename = DigestUtils.sha256Hex("testpatient-oBDS-1"+System.getenv().getOrDefault("SALT","")).substring(48);
         String result = "tmp/FHIR_Patients/FHIR_Patient_"+filename+"_oBDS_5.xml";
@@ -102,7 +86,7 @@ public class Obds2fhirTests {
         //repalce ids
         String result = bundle.replaceAll("([/\"])([a-z0-9]{16,23}[ADToBDS-]{0,5}[-0-9]{0,2})(\")", "$1replaced-id$3");
         //replace pseudonym
-        result = result.replaceAll("(<value value=\")(.{1,32})\"", "1");
+        result = result.replaceAll("(?m)^(\s{15})(<value value=\")([a-z0-9]{32})(\")", "$1$2replaced-value$4");
         //replace separator
         result = result.replaceAll("\r", "");
         //replace artefacts

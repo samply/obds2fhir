@@ -87,7 +87,7 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
                     try {
                         output=pseudonymizationCall(gender, prename, surname, formername, birthday, birthmonth, birthyear, identifier);
                     } catch (URISyntaxException | MainzellisteNetworkException | InvalidSessionException | IOException e) {
-                        logger.error("Pseudonymization error: " + e);
+                        logger.debug("Pseudonymization error: " + e);
                     }
                 }
                 return StringValue.makeStringValue(output);
@@ -172,7 +172,7 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
         if (!birthmonth.equals("empty")) idat.add(new BasicNameValuePair("Geburtsmonat", birthmonth));
         if (!birthyear.equals("empty")) idat.add(new BasicNameValuePair("Geburtsjahr", birthyear));
         if (!gender.equals("empty")) idat.add(new BasicNameValuePair("Geschlecht", gender));
-        if (!identifier.equals("empty") && Boolean.parseBoolean(System.getProperty("MAINZELLISTE_EXTERNAL_ID", "true"))) {
+        if (!identifier.equals("empty") && Boolean.parseBoolean(System.getProperty("mainzelliste.external.id", "true"))) {
             idat.add(new BasicNameValuePair("locallyUniqueId", identifier));
         }
         idat.add(new BasicNameValuePair("sureness", "true"));

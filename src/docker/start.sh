@@ -12,4 +12,4 @@ for dir in $directories; do
 done
 echo -e "\x1b[32m...done\x1b[39m"
 
-java -jar /obds2fhir/obds2fhir.jar
+java "$@" -jar /obds2fhir/obds2fhir.jar

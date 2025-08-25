@@ -1,11 +1,11 @@
-FROM maven:3.9.9-eclipse-temurin-17 AS build
+FROM maven:3.9.11-eclipse-temurin-21 AS build
 
 WORKDIR /app
 COPY pom.xml ./
 COPY src ./src
-RUN mvn clean install -U -DskipTests
+RUN mvn clean install -DskipTests
 
-FROM bellsoft/liberica-openjre-alpine:17
+FROM bellsoft/liberica-openjre-alpine:21
 COPY --from=build /app/target/obds2fhir*with-dependencies.jar /obds2fhir/obds2fhir.jar
 COPY src/docker/start.sh                        /obds2fhir/
 RUN chmod +x                                    /obds2fhir/start.sh
@@ -19,11 +19,9 @@ ENV FILE_PATH="/obds2fhir/clinical_data" \
     LOG_LEVEL="INFO" \
     MAINZELLISTE_URL="http://host.docker.internal:8080" \
     MAINZELLISTE_APIKEY="" \
-    MAINZELLISTE_EXTERNAL_ID="true" \
     IDTYPE="" \
     SALT="createLocalCustomSalt" \
     SSL_CERTIFICATE_VALIDATION="true" \
     ADD_DEPARTMENTS="false" \
     WAIT_FOR_CONNECTION="false" \
-    KEEP_INTERNAL_ID="false" \
-    USE_PSEUDONYM="false"
+    PATIENT_ID_PLAINTEXT="false"

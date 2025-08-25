@@ -1,6 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Bundle xmlns="http://hl7.org/fhir" xmlns:hash="java:de.samply.obds2fhir">
    <id value="1302b6d11c5b628d"/>
-   <type value="transaction"/>
+   <type value="batch"/>
    <entry>
       <fullUrl value="http://example.com/Patient/1302b6d11c5b628d"/>
       <resource>
@@ -36,6 +37,9 @@
             <meta>
                <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Specimen-OncoSpecimen"/>
             </meta>
+            <identifier>
+               <value value="asdf"/>
+            </identifier>
             <status value="available"/>
             <type>
                <coding>
@@ -111,6 +115,7 @@
             </meta>
             <identifier>
                <system value="http://dktk.dkfz.de/fhir/sid/exliquid-specimen"/>
+               <value value="sadfg"/>
             </identifier>
             <status value="available"/>
             <type>
@@ -219,6 +224,39 @@
       <request>
          <method value="PUT"/>
          <url value="Specimen/bio72e8c8d78bd47e2f"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="http://example.com/Observation/vital1302b6d11c5b628d"/>
+      <resource>
+         <Observation>
+            <id value="vital1302b6d11c5b628d"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-Vitalstatus"/>
+            </meta>
+            <status value="registered"/>
+            <code>
+               <coding>
+                  <system value="http://loinc.org"/>
+                  <code value="75186-7"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/1302b6d11c5b628d"/>
+            </subject>
+            <effectiveDateTime value="2024-09-11"/>
+            <valueCodeableConcept>
+               <coding>
+                  <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/VitalstatusCS"/>
+                  <code value="lebend"/>
+               </coding>
+            </valueCodeableConcept>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <ifNoneMatch value="*"/>
+         <url value="Observation/vital1302b6d11c5b628d"/>
       </request>
    </entry>
 </Bundle>
