@@ -260,7 +260,7 @@
                 </xsl:apply-templates>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:apply-templates select=".[not(Tumor_Histologiedatum=following::Histologie/Tumor_Histologiedatum)]">
+                    <xsl:apply-templates select=".[not(concat(Tumor_Histologiedatum,string-join(Morphologie_ICD_O/Code, ''),Grading)=following::Histologie/concat(Tumor_Histologiedatum,string-join(Morphologie_ICD_O/Code, ''),Grading))]">
                         <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                         <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
                     </xsl:apply-templates>
@@ -421,7 +421,7 @@
                         </xsl:apply-templates>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:apply-templates select="Histologie[not(Tumor_Histologiedatum=following::Histologie/Tumor_Histologiedatum)]">
+                        <xsl:apply-templates select="Histologie[not(concat(Tumor_Histologiedatum,string-join(Morphologie_ICD_O/Code, ''),Grading)=following::Histologie/concat(Tumor_Histologiedatum,string-join(Morphologie_ICD_O/Code, ''),Grading))]">
                             <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                             <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
                         </xsl:apply-templates>
@@ -518,7 +518,7 @@
                     </xsl:apply-templates>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:apply-templates select="Histologie[not(Tumor_Histologiedatum=following::Histologie/Tumor_Histologiedatum)]">
+                    <xsl:apply-templates select="Histologie[not(concat(Tumor_Histologiedatum,string-join(Morphologie_ICD_O/Code, ''),Grading)=following::Histologie/concat(Tumor_Histologiedatum,string-join(Morphologie_ICD_O/Code, ''),Grading))]">
                         <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
                         <xsl:with-param name="Tumor_Id" select="$Tumor_Id"/>
                     </xsl:apply-templates>
