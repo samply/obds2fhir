@@ -1,11 +1,11 @@
-FROM maven:3.9.9-eclipse-temurin-17 AS build
+FROM maven:3.9.11-eclipse-temurin-21 AS build
 
 WORKDIR /app
 COPY pom.xml ./
 COPY src ./src
-RUN mvn clean install -U -DskipTests
+RUN mvn clean install -DskipTests
 
-FROM bellsoft/liberica-openjre-alpine:17
+FROM bellsoft/liberica-openjre-alpine:21
 COPY --from=build /app/target/obds2fhir*with-dependencies.jar /obds2fhir/obds2fhir.jar
 COPY src/docker/start.sh                        /obds2fhir/
 RUN chmod +x                                    /obds2fhir/start.sh

@@ -2740,7 +2740,6 @@
 																							</xs:simpleType>
 																						</xs:element>
 																					</xs:sequence>
-																					<!-- @TODO: dktk: braucht man eine ID? -->
 																					<xs:attribute name="Biomaterial_ID" type="xs:string" use="required"/>
 																				</xs:complexType>
 																			</xs:element>

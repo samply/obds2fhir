@@ -209,9 +209,14 @@
                             <reference value="Condition/{tumorID}"/>
                         </extension>
                     </xsl:if>-->
-                    <xsl:if test="Project!=''">
+                    <xsl:if test="Project!='' or Pseudonym!=''">
                         <identifier>
-                            <system value="{Project}" />
+                            <xsl:if test="Project!=''">
+                                <system value="{Project}" />
+                            </xsl:if>
+                            <xsl:if test="Pseudonym!=''">
+                                <value value="{Pseudonym}" />
+                            </xsl:if>
                         </identifier>
                     </xsl:if>
                     <xsl:if test="Status!=''">
