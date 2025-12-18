@@ -508,6 +508,11 @@
 								</xs:restriction>
 							</xs:simpleType>
 						</xs:element>
+						<xs:element name="Pseudonym" type="Freitext255E_Typ"  minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Externer Identifier für Proben</xs:documentation>
+							</xs:annotation>
+						</xs:element>
 						<xs:element name="Status" minOccurs="0">
 							<xs:annotation>
 								<xs:documentation>Verfügbarkeitsstatus der Probe</xs:documentation>
