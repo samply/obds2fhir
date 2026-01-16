@@ -67,7 +67,7 @@
                     <xsl:when test="Menge_Meldung/Meldung/Tod"><Vitalstatus>verstorben</Vitalstatus></xsl:when>
                     <xsl:when test="not(Menge_Meldung/Meldung/Tod)"><Vitalstatus>lebend</Vitalstatus></xsl:when>
                 </xsl:choose>
-                <xsl:apply-templates select="Menge_Meldung/Meldung/Tod"/>
+                <xsl:apply-templates select="Menge_Meldung/Meldung/Tod[last()]"/>
             </Vitalstatus_Gesamt>
             <xsl:if test="$add_department=true()">
                 <Organisationen>
@@ -1118,7 +1118,7 @@
         <xsl:param name="meldungen"/>
         <xsl:choose>
             <xsl:when test="$meldungen/Meldung/Tod/Sterbedatum!=''">
-                <xsl:value-of select="$meldungen/Meldung/Tod/Sterbedatum"/>
+                <xsl:value-of select="max($meldungen/Meldung/Tod/xs:date(Sterbedatum))"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:value-of select="max($meldungen//(Diagnosedatum|Datum|Beginn|Ende|Untersuchungsdatum_Verlauf)/xs:date(xsi:Get-FHIR-date(.)))"/>
