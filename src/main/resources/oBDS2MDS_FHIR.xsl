@@ -468,7 +468,9 @@
     <xsl:template match="Observation ">
         <xsl:param name="Patient_Id"/>
         <xsl:choose>
-            <xsl:when test="@Observation_ID!=''"/>
+            <xsl:when test="@Observation_ID!=''">
+                test
+            </xsl:when>
             <xsl:otherwise>
                 <xsl:message terminate="yes" select="'ERROR: Missing Observation_ID in Patient:', $Patient_Id"/>
             </xsl:otherwise>
