@@ -475,7 +475,7 @@
         <xsl:param name="Patient_Id"/>
         <xsl:choose>
             <xsl:when test="@Observation_ID!=''">
-                <xsl:copy-of select="."/>
+                <xsl:copy-of select="." copy-namespaces="no"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:message terminate="yes" select="'ERROR: Missing Observation_ID in Patient:', $Patient_Id"/>
