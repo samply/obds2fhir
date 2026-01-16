@@ -57,18 +57,24 @@
             </DKTK_LOCAL_ID>
             <!--<DKTK_ID>TODO</DKTK_ID>-->
             <xsl:apply-templates select="Patienten_Stammdaten/Geschlecht | Patienten_Stammdaten/Geburtsdatum"/>
-            <Vitalstatus_Gesamt Vitalstatus_ID="{concat('vital', $Patient_Id)}">
-                <Datum_des_letztbekannten_Vitalstatus>
-                    <xsl:value-of select="if (Patienten_Stammdaten/Vitalstatus_Datum != '') then 'Patienten_Stammdaten/Vitalstatus_Datum' else xsi:Datum_des_letztbekannten_Vitalstatus(Menge_Meldung)"/>
-                </Datum_des_letztbekannten_Vitalstatus>
-                <xsl:choose>
-                    <xsl:when test="lower-case(Patienten_Stammdaten/Vitalstatus)='verstorben'"><Vitalstatus>verstorben</Vitalstatus></xsl:when>
-                    <xsl:when test="lower-case(Patienten_Stammdaten/Vitalstatus)='lebend'"><Vitalstatus >lebend</Vitalstatus></xsl:when>
-                    <xsl:when test="Menge_Meldung/Meldung/Tod"><Vitalstatus>verstorben</Vitalstatus></xsl:when>
-                    <xsl:when test="not(Menge_Meldung/Meldung/Tod)"><Vitalstatus>lebend</Vitalstatus></xsl:when>
-                </xsl:choose>
-                <xsl:apply-templates select="Menge_Meldung/Meldung/Tod[last()]"/>
-            </Vitalstatus_Gesamt>
+            <xsl:variable name="Datum_Vitalstatus" select="
+                if (Patienten_Stammdaten/Vitalstatus_Datum != '') then 'Patienten_Stammdaten/Vitalstatus_Datum'
+                else xsi:Datum_des_letztbekannten_Vitalstatus(Menge_Meldung)
+            " />
+            <xsl:if test="$Datum_Vitalstatus!=''">
+                <Vitalstatus_Gesamt Vitalstatus_ID="{concat('vital', $Patient_Id)}">
+                    <Datum_des_letztbekannten_Vitalstatus>
+                        <xsl:value-of select="$Datum_Vitalstatus"/>
+                    </Datum_des_letztbekannten_Vitalstatus>
+                    <xsl:choose>
+                        <xsl:when test="lower-case(Patienten_Stammdaten/Vitalstatus)='verstorben'"><Vitalstatus>verstorben</Vitalstatus></xsl:when>
+                        <xsl:when test="lower-case(Patienten_Stammdaten/Vitalstatus)='lebend'"><Vitalstatus >lebend</Vitalstatus></xsl:when>
+                        <xsl:when test="Menge_Meldung/Meldung/Tod"><Vitalstatus>verstorben</Vitalstatus></xsl:when>
+                        <xsl:when test="not(Menge_Meldung/Meldung/Tod)"><Vitalstatus>lebend</Vitalstatus></xsl:when>
+                    </xsl:choose>
+                    <xsl:apply-templates select="Menge_Meldung/Meldung/Tod[last()]"/>
+                </Vitalstatus_Gesamt>
+            </xsl:if>
             <xsl:if test="$add_department=true()">
                 <Organisationen>
                     <Organisation><xsl:value-of select="/oBDS/Menge_Melder/Melder[1]/Kontoinhaber"/></Organisation>
@@ -469,13 +475,12 @@
         <xsl:param name="Patient_Id"/>
         <xsl:choose>
             <xsl:when test="@Observation_ID!=''">
-                test
+                <xsl:copy-of select="."/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:message terminate="yes" select="'ERROR: Missing Observation_ID in Patient:', $Patient_Id"/>
             </xsl:otherwise>
         </xsl:choose>
-        <xsl:copy-of select="."/>
     </xsl:template>
 
     <xsl:template match="OP">
