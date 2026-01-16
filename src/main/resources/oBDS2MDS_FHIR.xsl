@@ -89,6 +89,11 @@
                     <xsl:with-param name="Tumor_Id" select="Tumorzuordnung/@Tumor_ID"/>
                 </xsl:apply-templates>
             </xsl:for-each>
+            <xsl:for-each select="Menge_Meldung/Meldung/Observations/Observation">
+                <xsl:apply-templates select=".">
+                    <xsl:with-param name="Patient_Id" select="$Patient_Id"/>
+                </xsl:apply-templates>
+            </xsl:for-each>
         </Patient>
     </xsl:template>
 
@@ -458,6 +463,17 @@
             <xsl:attribute name="Tumorkonferenz_ID" select="concat('tkz', hash:hash($Patient_Id, $Tumor_Id, $attribute))" />
             <xsl:apply-templates select="Meldeanlass | Datum | Typ | Therapieempfehlung"/>
         </Therapieempfehlung>
+    </xsl:template>
+
+    <xsl:template match="Observation ">
+        <xsl:param name="Patient_Id"/>
+        <xsl:choose>
+            <xsl:when test="@Observation_ID!=''"/>
+            <xsl:otherwise>
+                <xsl:message terminate="yes" select="'ERROR: Missing Observation_ID in Patient:', $Patient_Id"/>
+            </xsl:otherwise>
+        </xsl:choose>
+        <xsl:copy-of select="."/>
     </xsl:template>
 
     <xsl:template match="OP">
