@@ -2150,7 +2150,7 @@
         <xsl:param name="Patient_ID"/>
         <xsl:if test="true()">
             <entry>
-                <fullUrl value="http://example.com/Observation/{@Observation_ID}"/>
+                <fullUrl value="https://fhir.centraxx.de/Observation/{@Observation_ID}"/>
                 <resource>
                     <Observation>
                         <id value="{@Observation_ID}"/>
@@ -2160,8 +2160,8 @@
                         <status value="unknown"/>
                         <code>
                             <coding>
-                                <system value="Profile/ProfileSystem"/>
-                                <code value="Profile/ProfileName"/>
+                                <system value="{Profile/ProfileSystem}"/>
+                                <code value="{Profile/ProfileName}"/>
                             </coding>
                         </code>
                         <subject>
@@ -2170,7 +2170,7 @@
                         <method>
                             <coding>
                                 <system value="https://fhir.centraxx.de/system/laborMethod"/>
-                                <code value="Profile/ProfileName"/>
+                                <code value="{Profile/ProfileName}"/>
                             </coding>
                         </method>
                         <xsl:apply-templates select="Parameter"/>
@@ -2188,29 +2188,29 @@
         <component>
             <code>
                 <coding>
-                    <system value="Coding/System"/>
-                    <code value="Coding/Code"/>
+                    <system value="{Coding/System}"/>
+                    <code value="{Coding/Code}"/>
                 </coding>
             </code>
             <xsl:choose>
                 <xsl:when test="ValueQuantity/Value !=''">
                     <valueQuantity>
-                        <value value="ValueQuantity/Value"/>
+                        <value value="{ValueQuantity/Value}"/>
                         <xsl:if test="ValueQuantity/Unit !=''">
-                            <unit value="ValueQuantity/Unit"/>
+                            <unit value="{ValueQuantity/Unit}"/>
                         </xsl:if>
                     </valueQuantity>
                 </xsl:when>
                 <xsl:when test="ValueString !=''">
-                    <valueString value="ValueString"/>
+                    <valueString value="{ValueString}"/>
                 </xsl:when>
                 <xsl:when test="ValueDateTime !=''">
-                    <valueDateTime value="ValueDateTime"/>
+                    <valueDateTime value="{ValueDateTime}"/>
                 </xsl:when>
                 <xsl:when test="ValueCodeableConcept !=''">
                     <valueCodeableConcept>
                         <coding>
-                            <code value="ValueCodeableConcept/Code"/>
+                            <code value="{ValueCodeableConcept/Code}"/>
                         </coding>
                     </valueCodeableConcept>
                 </xsl:when>

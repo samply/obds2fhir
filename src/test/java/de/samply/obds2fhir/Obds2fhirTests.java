@@ -73,6 +73,14 @@ public class Obds2fhirTests {
         String expected = "FHIR_oBDS-Sample_Expected-File-5.xml";
         assertTrue(compare(result, expected));
     }
+    @Test
+    @Order(7)
+    public void compareOrganoidOBDS () throws IOException {
+        String filename = DigestUtils.sha256Hex("testpatient-oBDS-1"+System.getenv().getOrDefault("SALT","")).substring(48);
+        String result = "tmp/FHIR_Patients/FHIR_Patient_"+filename+"_oBDS_6.xml";
+        String expected = "FHIR_oBDS-Organoid_Expected-File-6.xml";
+        assertTrue(compare(result, expected));
+    }
     private Boolean compare(String resultvar, String expectedvar) throws IOException {
         String resultString = replaceAllIds(Files.readString(Paths.get(String.valueOf(new File(System.getenv("FILE_PATH")+resultvar)))));
         String expectedString = replaceAllIds(Files.readString(Paths.get(String.valueOf(new File(this.getClass().getClassLoader().getResource(expectedvar).getPath())))));
