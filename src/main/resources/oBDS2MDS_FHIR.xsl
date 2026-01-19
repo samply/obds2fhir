@@ -475,12 +475,25 @@
         <xsl:param name="Patient_Id"/>
         <xsl:choose>
             <xsl:when test="@Observation_ID!=''">
-                <xsl:copy-of select="." copy-namespaces="no"/>
+                <xsl:apply-templates select="." mode="strip-ns"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:message terminate="yes" select="'ERROR: Missing Observation_ID in Patient:', $Patient_Id"/>
             </xsl:otherwise>
         </xsl:choose>
+    </xsl:template>
+
+    <!-- Blind-copy subtree, since raw copy forces xmlns declarations -->
+    <xsl:template match="*" mode="strip-ns">
+        <xsl:element name="{local-name()}">
+            <xsl:apply-templates select="@*|node()" mode="strip-ns"/>
+        </xsl:element>
+    </xsl:template>
+
+    <xsl:template match="@*" mode="strip-ns">
+        <xsl:attribute name="{local-name()}">
+            <xsl:value-of select="."/>
+        </xsl:attribute>
     </xsl:template>
 
     <xsl:template match="OP">
