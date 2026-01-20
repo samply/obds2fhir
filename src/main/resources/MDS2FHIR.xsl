@@ -104,6 +104,10 @@
                 <xsl:apply-templates select="Organisationen">
                     <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
                 </xsl:apply-templates>
+                <!-- Patient > Organoid-Observations -->
+                <xsl:apply-templates select="Observation">
+                    <xsl:with-param name="Patient_ID" select="$Patient_ID"/>
+                </xsl:apply-templates>
             </Bundle>
         </xsl:result-document>
     </xsl:template>
@@ -2139,6 +2143,79 @@
                 </request>
             </entry>
         </xsl:if>
+    </xsl:template>
+
+    <!-- generic organoid Observation -->
+    <xsl:template match="Observation">
+        <xsl:param name="Patient_ID"/>
+        <xsl:if test="true()">
+            <entry>
+                <fullUrl value="https://fhir.centraxx.de/Observation/{@Observation_ID}"/>
+                <resource>
+                    <Observation>
+                        <id value="{@Observation_ID}"/>
+                        <!--<meta>
+                        <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Observation-TODO"/>
+                        </meta>-->
+                        <status value="unknown"/>
+                        <code>
+                            <coding>
+                                <system value="{Profile/ProfileSystem}"/>
+                                <code value="{Profile/ProfileName}"/>
+                            </coding>
+                        </code>
+                        <subject>
+                            <reference value="Patient/{$Patient_ID}"/>
+                        </subject>
+                        <method>
+                            <coding>
+                                <system value="https://fhir.centraxx.de/system/laborMethod"/>
+                                <code value="{Profile/ProfileName}"/>
+                            </coding>
+                        </method>
+                        <xsl:apply-templates select="Parameter"/>
+                    </Observation>
+                </resource>
+                <request>
+                    <method value="PUT"/>
+                    <url value="Observation/{@Observation_ID}"/>
+                </request>
+            </entry>
+        </xsl:if>
+    </xsl:template>
+
+    <xsl:template match="Parameter">
+        <component>
+            <code>
+                <coding>
+                    <system value="{Coding/System}"/>
+                    <code value="{Coding/Code}"/>
+                </coding>
+            </code>
+            <xsl:choose>
+                <xsl:when test="ValueQuantity/Value !=''">
+                    <valueQuantity>
+                        <value value="{ValueQuantity/Value}"/>
+                        <xsl:if test="ValueQuantity/Unit !=''">
+                            <unit value="{ValueQuantity/Unit}"/>
+                        </xsl:if>
+                    </valueQuantity>
+                </xsl:when>
+                <xsl:when test="ValueString !=''">
+                    <valueString value="{ValueString}"/>
+                </xsl:when>
+                <xsl:when test="ValueDateTime !=''">
+                    <valueDateTime value="{ValueDateTime}"/>
+                </xsl:when>
+                <xsl:when test="ValueCodeableConcept !=''">
+                    <valueCodeableConcept>
+                        <coding>
+                            <code value="{ValueCodeableConcept/Code}"/>
+                        </coding>
+                    </valueCodeableConcept>
+                </xsl:when>
+            </xsl:choose>
+        </component>
     </xsl:template>
 
     <xsl:template match="Tumor" mode="tumor">

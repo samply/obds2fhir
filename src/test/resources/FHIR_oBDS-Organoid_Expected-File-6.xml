@@ -1,0 +1,559 @@
+<Bundle xmlns="http://hl7.org/fhir" xmlns:hash="java:de.samply.obds2fhir">
+   <id value="1b7aa9b221904c3d"/>
+   <type value="batch"/>
+   <entry>
+      <fullUrl value="http://example.com/Patient/1b7aa9b221904c3d"/>
+      <resource>
+         <Patient>
+            <id value="1b7aa9b221904c3d"/>
+            <meta>
+               <profile value="http://dktk.dkfz.de/fhir/StructureDefinition/onco-core-Patient-Patient"/>
+            </meta>
+            <identifier>
+               <type>
+                  <coding>
+                     <system value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/PseudonymArtCS"/>
+                     <code value="Lokal"/>
+                  </coding>
+               </type>
+               <value value="31da08ed0d1028c926deed34398f2ec6"/>
+            </identifier>
+            <gender value="male"/>
+            <birthDate value="1999-02-28"/>
+         </Patient>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <ifNoneMatch value="*"/>
+         <url value="Patient/1b7aa9b221904c3d"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="https://fhir.centraxx.de/Observation/J5JPXWF2-VISIT-1A"/>
+      <resource>
+         <Observation>
+            <id value="J5JPXWF2-VISIT-1A"/>
+            <status value="unknown"/>
+            <code>
+               <coding>
+                  <system value="https://fhir.centraxx.de/system/finding/shortname"/>
+                  <code value="PROFILE_SIOP_NEOMATCH_VISIT-1A_PATIENTDATA"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/1b7aa9b221904c3d"/>
+            </subject>
+            <method>
+               <coding>
+                  <system value="https://fhir.centraxx.de/system/laborMethod"/>
+                  <code value="PROFILE_SIOP_NEOMATCH_VISIT-1A_PATIENTDATA"/>
+               </coding>
+            </method>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_AGE_STUDY_ENROLLMENT"/>
+                  </coding>
+               </code>
+               <valueQuantity>
+                  <value value="68"/>
+                  <unit value="Jahr"/>
+               </valueQuantity>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_GENDER"/>
+                  </coding>
+               </code>
+               <valueString value="M"/>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_DATE_DIAGNOSIS_PANCREATIC_TUMOR"/>
+                  </coding>
+               </code>
+               <valueDateTime value="1999-02-10"/>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_TNM_C-T"/>
+                  </coding>
+               </code>
+               <valueString value="T3"/>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_TNM_C-N"/>
+                  </coding>
+               </code>
+               <valueString value="N0"/>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_TNM_C-M"/>
+                  </coding>
+               </code>
+               <valueString value="M0"/>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_TNM_G"/>
+                  </coding>
+               </code>
+               <valueString value="NA"/>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_DIAGNOSIS_ICD-O-3"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <code value="NA"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_TUMORMARKER_CA19-9"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <code value="795"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_TUMORMARKER_CEA"/>
+                  </coding>
+               </code>
+               <valueCodeableConcept>
+                  <coding>
+                     <code value="9"/>
+                  </coding>
+               </valueCodeableConcept>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_DATE_BLOOD_COLLECTION"/>
+                  </coding>
+               </code>
+               <valueDateTime value="1999-10-10"/>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_DATE_BIOPSIE"/>
+                  </coding>
+               </code>
+               <valueDateTime value="1999-10-10"/>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_NEOADJ_CTX"/>
+                  </coding>
+               </code>
+               <valueString value="YES"/>
+            </component>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/J5JPXWF2-VISIT-1A"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="https://fhir.centraxx.de/Observation/J5JPXWF2-VISIT-1B"/>
+      <resource>
+         <Observation>
+            <id value="J5JPXWF2-VISIT-1B"/>
+            <status value="unknown"/>
+            <code>
+               <coding>
+                  <system value="https://fhir.centraxx.de/system/finding/shortname"/>
+                  <code value="PROFILE_SIOP_NEOMATCH_VISIT-1B_NEOADJUVANT_CTX"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/1b7aa9b221904c3d"/>
+            </subject>
+            <method>
+               <coding>
+                  <system value="https://fhir.centraxx.de/system/laborMethod"/>
+                  <code value="PROFILE_SIOP_NEOMATCH_VISIT-1B_NEOADJUVANT_CTX"/>
+               </coding>
+            </method>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_DATE_OF_VISITE"/>
+                  </coding>
+               </code>
+               <valueDateTime value="1999-02-05"/>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_NEOADJ_CTX_START_DATE"/>
+                  </coding>
+               </code>
+               <valueDateTime value="1999-02-05"/>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_NEOADJ_CTX_END_DATE"/>
+                  </coding>
+               </code>
+               <valueDateTime value="1999-03-12"/>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_NEOADJ_CTX_TOXICITY"/>
+                  </coding>
+               </code>
+               <valueString value="NO"/>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_NEOADJ_CTX_REGIMEN_NEOMATCH"/>
+                  </coding>
+               </code>
+               <valueString value="OTH"/>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_NEOADJ_CTX_REGIMEN_OTHER"/>
+                  </coding>
+               </code>
+               <valueString value="FOLFIRINOX MOD."/>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_NEOADJ_CTX_TOTAL_CYCLES"/>
+                  </coding>
+               </code>
+               <valueQuantity>
+                  <value value="4"/>
+               </valueQuantity>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_NEOADJ_CTX_ADJUSTMENT"/>
+                  </coding>
+               </code>
+               <valueString value="NO"/>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_NEOADJ_CTX_ADJUSTMENT_CYCLES"/>
+                  </coding>
+               </code>
+               <valueString value="NO"/>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_NEOADJ_CTX_DISCONTINUATION"/>
+                  </coding>
+               </code>
+               <valueString value="NO"/>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_TUMORMARKER_CEA"/>
+                  </coding>
+               </code>
+               <valueQuantity>
+                  <value value="5.45"/>
+                  <unit value="ng/ml"/>
+               </valueQuantity>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_TUMORMARKER_CA19-9"/>
+                  </coding>
+               </code>
+               <valueQuantity>
+                  <value value="547"/>
+                  <unit value="U/ml"/>
+               </valueQuantity>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_DATE_BLOOD_COLLECTION"/>
+                  </coding>
+               </code>
+               <valueDateTime value="1999-12-11"/>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_NEOADJ_CTX_ADDITIONAL_RT"/>
+                  </coding>
+               </code>
+               <valueString value="NO"/>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_NEOADJ_CTX_DOSE"/>
+                  </coding>
+               </code>
+               <valueQuantity>
+                  <value value="2"/>
+               </valueQuantity>
+            </component>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/J5JPXWF2-VISIT-1B"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="https://fhir.centraxx.de/Observation/J5JPXWF2-VISIT-1B-FOLFIRINOX"/>
+      <resource>
+         <Observation>
+            <id value="J5JPXWF2-VISIT-1B-FOLFIRINOX"/>
+            <status value="unknown"/>
+            <code>
+               <coding>
+                  <system value="https://fhir.centraxx.de/system/finding/shortname"/>
+                  <code value="PROFILE_SIOP_NEOMATCH_VISIT-1B_NEOADJUVANT_CTX"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/1b7aa9b221904c3d"/>
+            </subject>
+            <method>
+               <coding>
+                  <system value="https://fhir.centraxx.de/system/laborMethod"/>
+                  <code value="PROFILE_SIOP_NEOMATCH_VISIT-1B_NEOADJUVANT_CTX"/>
+               </coding>
+            </method>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_DATE_OF_VISITE"/>
+                  </coding>
+               </code>
+               <valueDateTime value="1999-10-22"/>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_NEOADJ_CTX_START_DATE"/>
+                  </coding>
+               </code>
+               <valueDateTime value="1999-10-22"/>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_NEOADJ_CTX_END_DATE"/>
+                  </coding>
+               </code>
+               <valueDateTime value="1999-12-03"/>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_NEOADJ_CTX_TOXICITY"/>
+                  </coding>
+               </code>
+               <valueString value="NO"/>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_NEOADJ_CTX_REGIMEN_NEOMATCH"/>
+                  </coding>
+               </code>
+               <valueString value="FOLFIRINOX"/>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_NEOADJ_CTX_TOTAL_CYCLES"/>
+                  </coding>
+               </code>
+               <valueQuantity>
+                  <value value="4"/>
+               </valueQuantity>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_NEOADJ_CTX_ADJUSTMENT"/>
+                  </coding>
+               </code>
+               <valueString value="NO"/>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_NEOADJ_CTX_ADJUSTMENT_CYCLES"/>
+                  </coding>
+               </code>
+               <valueString value="NO"/>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_NEOADJ_CTX_DISCONTINUATION"/>
+                  </coding>
+               </code>
+               <valueString value="NO"/>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_NEOADJ_CTX_ADDITIONAL_RT"/>
+                  </coding>
+               </code>
+               <valueString value="NO"/>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_NEOADJ_CTX_DOSE"/>
+                  </coding>
+               </code>
+               <valueQuantity>
+                  <value value="80"/>
+               </valueQuantity>
+            </component>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/J5JPXWF2-VISIT-1B-FOLFIRINOX"/>
+      </request>
+   </entry>
+   <entry>
+      <fullUrl value="https://fhir.centraxx.de/Observation/J5JPXWF2-VISIT-2B"/>
+      <resource>
+         <Observation>
+            <id value="J5JPXWF2-VISIT-2B"/>
+            <status value="unknown"/>
+            <code>
+               <coding>
+                  <system value="https://fhir.centraxx.de/system/finding/shortname"/>
+                  <code value="PROFILE_SIOP_NEOMATCH_VISIT-2B_SAMPLE_COLLECTION"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="Patient/1b7aa9b221904c3d"/>
+            </subject>
+            <method>
+               <coding>
+                  <system value="https://fhir.centraxx.de/system/laborMethod"/>
+                  <code value="PROFILE_SIOP_NEOMATCH_VISIT-2B_SAMPLE_COLLECTION"/>
+               </coding>
+            </method>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_DATE_OF_VISITE"/>
+                  </coding>
+               </code>
+               <valueDateTime value="1999-04-17"/>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_TIME_COLLECTION_ORGANOID"/>
+                  </coding>
+               </code>
+               <valueDateTime value="1999-04-17"/>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_SAMPLE_COLLECTION"/>
+                  </coding>
+               </code>
+               <valueString value="OP"/>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_SAMPLE_LOCALISATION"/>
+                  </coding>
+               </code>
+               <valueString value="PANCREASBODY"/>
+            </component>
+         </Observation>
+      </resource>
+      <request>
+         <method value="PUT"/>
+         <url value="Observation/J5JPXWF2-VISIT-2B"/>
+      </request>
+   </entry>
+</Bundle>
