@@ -475,7 +475,28 @@
         <xsl:param name="Patient_Id"/>
         <xsl:choose>
             <xsl:when test="@Observation_ID!=''">
-                <xsl:apply-templates select="." mode="strip-ns"/>
+                <xsl:variable name="pseudonym">
+                    <xsl:choose>
+                        <xsl:when test="contains(@Observation_ID, '_')">
+                            <xsl:value-of select="substring-before(@Observation_ID, '_')"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="@Observation_ID"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
+                <xsl:element name="Observation">
+                    <xsl:apply-templates select="@*|node()" mode="strip-ns"/>
+                    <component>
+                        <code>
+                            <coding>
+                                <system value="https://fhir.centraxx.de/system/laborValue"/>
+                                <code value="SIOP_PATIENT_PSEUDONYM"/>
+                            </coding>
+                        </code>
+                        <valueString value="{$pseudonym}"/>
+                    </component>
+                </xsl:element>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:message terminate="yes" select="'ERROR: Missing Observation_ID in Patient:', $Patient_Id"/>
