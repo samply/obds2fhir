@@ -2174,6 +2174,25 @@
                             </coding>
                         </method>
                         <xsl:apply-templates select="Parameter"/>
+                        <xsl:variable name="pseudonym">
+                            <xsl:choose>
+                                <xsl:when test="contains(@Observation_ID, '-')">
+                                    <xsl:value-of select="substring-before(@Observation_ID, '-')"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="@Observation_ID"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:variable>
+                        <component>
+                            <code>
+                                <coding>
+                                    <system value="https://fhir.centraxx.de/system/laborValue"/>
+                                    <code value="SIOP_PATIENT_PSEUDONYM"/>
+                                </coding>
+                            </code>
+                            <valueString value="{$pseudonym}"/>
+                        </component>
                     </Observation>
                 </resource>
                 <request>

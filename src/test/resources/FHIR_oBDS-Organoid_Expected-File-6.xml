@@ -181,6 +181,15 @@
                </code>
                <valueString value="YES"/>
             </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_PATIENT_PSEUDONYM"/>
+                  </coding>
+               </code>
+               <valueString value="J5JPXWF2"/>
+            </component>
          </Observation>
       </resource>
       <request>
@@ -354,6 +363,15 @@
                   <value value="2"/>
                </valueQuantity>
             </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_PATIENT_PSEUDONYM"/>
+                  </coding>
+               </code>
+               <valueString value="J5JPXWF2"/>
+            </component>
          </Observation>
       </resource>
       <request>
@@ -485,6 +503,15 @@
                   <value value="80"/>
                </valueQuantity>
             </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_PATIENT_PSEUDONYM"/>
+                  </coding>
+               </code>
+               <valueString value="J5JPXWF2"/>
+            </component>
          </Observation>
       </resource>
       <request>
@@ -548,6 +575,15 @@
                   </coding>
                </code>
                <valueString value="PANCREASBODY"/>
+            </component>
+            <component>
+               <code>
+                  <coding>
+                     <system value="https://fhir.centraxx.de/system/laborValue"/>
+                     <code value="SIOP_PATIENT_PSEUDONYM"/>
+                  </coding>
+               </code>
+               <valueString value="J5JPXWF2"/>
             </component>
          </Observation>
       </resource>
