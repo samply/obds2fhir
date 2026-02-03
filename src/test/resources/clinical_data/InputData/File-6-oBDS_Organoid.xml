@@ -5,10 +5,10 @@
     <Menge_Patient>
         <Patient Patient_ID="testpatient-oBDS-1">
             <Patienten_Stammdaten>
-                <Nachname>Xqunbz</Nachname>
-                <Vornamen>Rnrmfbegaylbfe</Vornamen>
+                <Nachname>Mustermann</Nachname>
+                <Vornamen>Max</Vornamen>
                 <Geschlecht>M</Geschlecht>
-                <Geburtsdatum Datumsgenauigkeit="E">1999-02-28</Geburtsdatum>
+                <Geburtsdatum Datumsgenauigkeit="E">1989-04-13</Geburtsdatum>
             </Patienten_Stammdaten>
             <Menge_Meldung>
                 <Meldung>
