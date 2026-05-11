@@ -167,7 +167,7 @@ public class PatientPseudonymizer extends ExtensionFunctionDefinition {
         List<NameValuePair> idat = new ArrayList<>();
         if (!prename.equals("empty")) idat.add(new BasicNameValuePair("Vorname", prename));
         if (!surname.equals("empty")) idat.add(new BasicNameValuePair("Nachname", surname));
-        if (!formername.equals("empty")) idat.add(new BasicNameValuePair("Fruehere_Namen", formername));
+        if ((!formername.equals("empty")) && (!formername.equalsIgnoreCase("unbekannt"))) idat.add(new BasicNameValuePair("Fruehere_Namen", formername));
         if (!birthday.equals("empty")) idat.add(new BasicNameValuePair("Geburtstag", birthday));
         if (!birthmonth.equals("empty")) idat.add(new BasicNameValuePair("Geburtsmonat", birthmonth));
         if (!birthyear.equals("empty")) idat.add(new BasicNameValuePair("Geburtsjahr", birthyear));
