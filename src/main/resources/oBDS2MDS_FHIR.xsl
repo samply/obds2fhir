@@ -72,7 +72,7 @@
                         <xsl:when test="Menge_Meldung/Meldung/Tod"><Vitalstatus>verstorben</Vitalstatus></xsl:when>
                         <xsl:when test="not(Menge_Meldung/Meldung/Tod)"><Vitalstatus>lebend</Vitalstatus></xsl:when>
                     </xsl:choose>
-                    <xsl:apply-templates select="Menge_Meldung/Meldung/Tod[last()]"/>
+                    <xsl:apply-templates select="(Menge_Meldung/Meldung/Tod)[last()]"/>
                 </Vitalstatus_Gesamt>
             </xsl:if>
             <xsl:if test="$add_department=true()">

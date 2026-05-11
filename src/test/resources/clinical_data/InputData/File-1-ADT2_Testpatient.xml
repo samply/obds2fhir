@@ -517,6 +517,15 @@
 								</Fernmetastase>
 							</Menge_FM>
 							<Allgemeiner_Leistungszustand>3</Allgemeiner_Leistungszustand>
+							<Tod>
+								<Sterbedatum>23.08.2021</Sterbedatum>
+								<Tod_tumorbedingt>J</Tod_tumorbedingt>
+								<Menge_Todesursache>
+									<Todesursache_ICD>C61</Todesursache_ICD>
+									<Todesursache_ICD>C12</Todesursache_ICD>
+									<Todesursache_ICD_Version>10 2004 GM</Todesursache_ICD_Version>
+								</Menge_Todesursache>
+							</Tod>
 						</Verlauf>
 					</Menge_Verlauf>
 				</Meldung>

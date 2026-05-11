@@ -908,6 +908,35 @@
 							<Version>Sonstige</Version>
 						</Primaertumor_ICD>
 					</Tumorzuordnung>
+					<Tod>
+						<Sterbedatum>2024-07-20</Sterbedatum>
+						<Tod_tumorbedingt>J</Tod_tumorbedingt>
+						<Menge_Todesursachen>
+							<Todesursache_ICD>
+								<Code>C43.4</Code>
+								<Version>10 2024 GM</Version>
+							</Todesursache_ICD>
+							<Todesursache_ICD>
+								<Code>Sonstige</Code>
+								<Version>10 2024 GM</Version>
+							</Todesursache_ICD>
+						</Menge_Todesursachen>
+					</Tod>
+				</Meldung>
+				<Meldung Meldung_ID="2000-12021" Melder_ID="3101">
+					<Meldebegruendung>I</Meldebegruendung>
+					<Tumorzuordnung Tumor_ID="012001">
+						<Primaertumor_ICD>
+							<Code>C43.4</Code>
+							<Version>10 2024 GM</Version>
+						</Primaertumor_ICD>
+						<Diagnosedatum Datumsgenauigkeit="E">2024-03-02</Diagnosedatum>
+						<Seitenlokalisation>M</Seitenlokalisation>
+						<Morphologie_ICD_O>
+							<Code>8721/3</Code>
+							<Version>33</Version>
+						</Morphologie_ICD_O>
+					</Tumorzuordnung>
 					<Tod Abschluss_ID="121">
 						<Sterbedatum>2024-07-20</Sterbedatum>
 						<Tod_tumorbedingt>J</Tod_tumorbedingt>
