@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -82,7 +83,10 @@ public class Obds2fhirTests {
         assertTrue(compare(result, expected));
     }
     private Boolean compare(String resultvar, String expectedvar) throws IOException {
-        String resultString = replaceAllIds(Files.readString(Paths.get(String.valueOf(new File(System.getenv("FILE_PATH")+resultvar)))));
+        File resultFile = new File(System.getenv("FILE_PATH"), resultvar);
+        File[] matches = resultFile.getParentFile().listFiles((dir, name) -> name.matches(Pattern.quote(resultFile.getName().replaceFirst("\\.xml$", "_")) + "[0-9]+\\.xml"));
+        assertTrue(matches != null && matches.length == 1, "Expected exactly one timestamped result for " + resultvar);
+        String resultString = replaceAllIds(Files.readString(matches[0].toPath()));
         String expectedString = replaceAllIds(Files.readString(Paths.get(String.valueOf(new File(this.getClass().getClassLoader().getResource(expectedvar).getPath())))));
         IParser xmlParser = fhirContext.newXmlParser();
         Bundle resultBundle = xmlParser.parseResource(Bundle.class, resultString);

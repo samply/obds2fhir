@@ -103,7 +103,7 @@ public class Obds2fhir {
                         String inputFileString = Files.readString(Paths.get(String.valueOf(inputFile)));
                         if (step==1){
                             Transformer transformer = identifyTransformer(inputFileString);
-                            transformer.setParameter("customPrefix", counter);
+                            transformer.setParameter("customPrefix", counter + "_" + System.currentTimeMillis());
                             applyXslt(inputFileString, transformer);
                             inputFile.renameTo(new File(System.getenv().getOrDefault("FILE_PATH","/obds2fhir/clinical_data") + PROCESSED + inputFile.getName()));
                         } else if (step==2){
