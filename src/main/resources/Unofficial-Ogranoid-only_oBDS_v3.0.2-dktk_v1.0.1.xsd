@@ -1,0 +1,1186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.basisdatensatz.de/oBDS/XML" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:tns="http://www.basisdatensatz.de/oBDS/XML"
+	targetNamespace="http://www.basisdatensatz.de/oBDS/XML" elementFormDefault="qualified"
+	version="3.0.2-sample">
+	<xs:element name="oBDS">
+		<xs:annotation>
+			<xs:documentation>Root element</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Menge_Patient">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Patient" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Patienten_Stammdaten"
+											type="Patienten_Stammdaten_Melder_Typ">
+											<xs:annotation>
+												<xs:documentation>Woher die Probe stammt. Dies ist die Referenz zum Patienten (FHIR:Specimen.subject) (PatientenID) </xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Menge_Meldung">
+											<xs:complexType>
+												<xs:sequence>
+												<xs:element name="Meldung" maxOccurs="unbounded">
+												<xs:complexType>
+												<xs:sequence>
+												<xs:element name="Tumorzuordnung"
+												type="Tumorzuordnung_Typ" minOccurs="0"/>
+												<xs:element name="Observations"
+												type="Observations_Type"/>
+												</xs:sequence>
+												</xs:complexType>
+												</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+									<xs:attribute name="Patient_ID" type="FreitextID_Typ"
+										use="required"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="Schema_Version" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="3.0.0">
+							<xs:annotation>
+								<xs:documentation>Erste Version beruhend auf Basisdatensatz 2021</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="3.0.1">
+							<xs:annotation>
+								<xs:documentation>Patch: Fehler im Modul DKKR behoben (GPOH_Therapiestudienpatient: Auswahl 2=nein statt 1=ja), Beschreibung im Nuklide_Typ korrigiert (Ir-192), Referenzprüfung Melder/ID auf Meldung/Melder_ID korrigiert (war vertauscht)</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="3.0.2">
+							<xs:annotation>
+								<xs:documentation>
+									- Erweiterung der zulässigen ICD-10-Versionen über das Jahr 2023 hinaus
+									- Ergänzung Diagnosesicherung 7.1-3 und 8 (§65c 2023/63/c1) </xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="3.0.2-sample">
+							<xs:annotation>
+								<xs:documentation> Anpassung an DKTK sample</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+		<xs:unique name="ID_Patient">
+			<xs:selector xpath="tns:Menge_Patient/tns:Patient"/>
+			<xs:field xpath="@Patient_ID"/>
+		</xs:unique>
+	</xs:element>
+	<xs:simpleType name="datatypeAtrimmed">
+		<xs:annotation>
+			<xs:documentation>Ergänzung: kein Whitespace am Anfang oder Ende. Der Datentyp A gibt wieder, welche Schriftzeichen in hoheitlichen Dokumenten für Namen natürlicher Personen verwendet werden.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern
+				value="(('|[,-\.]|[A-Z]|[`-z]|~|¨|´|·|[À-Ö]|[Ø-ö]|[ø-ž]|[Ƈ-ƈ]|Ə|Ɨ|[Ơ-ơ]|[Ư-ư]|Ʒ|[Ǎ-ǜ]|[Ǟ-ǟ]|[Ǣ-ǰ]|[Ǵ-ǵ]|[Ǹ-ǿ]|[Ȓ-ȓ]|[Ș-ț]|[Ȟ-ȟ]|[ȧ-ȳ]|ə|ɨ|ʒ|[ʹ-ʺ]|[ʾ-ʿ]|ˈ|ˌ|[Ḃ-ḃ]|[Ḇ-ḇ]|[Ḋ-ḑ]|[Ḝ-ḫ]|[ḯ-ḷ]|[Ḻ-ḻ]|[Ṁ-ṉ]|[Ṓ-ṛ]|[Ṟ-ṣ]|[Ṫ-ṯ]|[Ẁ-ẇ]|[Ẍ-ẗ]|ẞ|[Ạ-ỹ]|’|‡|A̋|C(̀|̄|̆|̈|̕|̣|̦|̨̆)|D̂|F(̀|̄)|G̀|H(̄|̦|̱)|J(́|̌)|K(̀|̂|̄|̇|̕|̛|̦|͟H|͟h)|L(̂|̥|̥̄|̦)|M(̀|̂|̆|̐)|N(̂|̄|̆|̦)|P(̀|̄|̕|̣)|R(̆|̥|̥̄)|S(̀|̄|̛̄|̱)|T(̀|̄|̈|̕|̛)|U̇|Z(̀|̄|̆|̈|̧)|a̋|c(̀|̄|̆|̈|̕|̣|̦|̨̆)|d̂|f(̀|̄)|g̀|h(̄|̦)|j́|k(̀|̂|̄|̇|̕|̛|̦|͟h)|l(̂|̥|̥̄|̦)|m(̀|̂|̆|̐)|n(̂|̄|̆|̦)|p(̀|̄|̕|̣)|r(̆|̥|̥̄)|s(̀|̄|̛̄|̱)|t(̀|̄|̕|̛)|u̇|z(̀|̄|̆|̈|̧)|Ç̆|Û̄|ç̆|û̄|ÿ́|Č(̕|̣)|č(̕|̣)|Ī́|ī́|Ž(̦|̧)|ž(̦|̧)|Ḳ̄|ḳ̄|Ṣ̄|ṣ̄|Ṭ̄|ṭ̄|Ạ̈|ạ̈|Ọ̈|ọ̈|Ụ(̄|̈)|ụ(̄|̈))( |'|[,-\.]|[A-Z]|[`-z]|~|¨|´|·|[À-Ö]|[Ø-ö]|[ø-ž]|[Ƈ-ƈ]|Ə|Ɨ|[Ơ-ơ]|[Ư-ư]|Ʒ|[Ǎ-ǜ]|[Ǟ-ǟ]|[Ǣ-ǰ]|[Ǵ-ǵ]|[Ǹ-ǿ]|[Ȓ-ȓ]|[Ș-ț]|[Ȟ-ȟ]|[ȧ-ȳ]|ə|ɨ|ʒ|[ʹ-ʺ]|[ʾ-ʿ]|ˈ|ˌ|[Ḃ-ḃ]|[Ḇ-ḇ]|[Ḋ-ḑ]|[Ḝ-ḫ]|[ḯ-ḷ]|[Ḻ-ḻ]|[Ṁ-ṉ]|[Ṓ-ṛ]|[Ṟ-ṣ]|[Ṫ-ṯ]|[Ẁ-ẇ]|[Ẍ-ẗ]|ẞ|[Ạ-ỹ]|’|‡|A̋|C(̀|̄|̆|̈|̕|̣|̦|̨̆)|D̂|F(̀|̄)|G̀|H(̄|̦|̱)|J(́|̌)|K(̀|̂|̄|̇|̕|̛|̦|͟H|͟h)|L(̂|̥|̥̄|̦)|M(̀|̂|̆|̐)|N(̂|̄|̆|̦)|P(̀|̄|̕|̣)|R(̆|̥|̥̄)|S(̀|̄|̛̄|̱)|T(̀|̄|̈|̕|̛)|U̇|Z(̀|̄|̆|̈|̧)|a̋|c(̀|̄|̆|̈|̕|̣|̦|̨̆)|d̂|f(̀|̄)|g̀|h(̄|̦)|j́|k(̀|̂|̄|̇|̕|̛|̦|͟h)|l(̂|̥|̥̄|̦)|m(̀|̂|̆|̐)|n(̂|̄|̆|̦)|p(̀|̄|̕|̣)|r(̆|̥|̥̄)|s(̀|̄|̛̄|̱)|t(̀|̄|̕|̛)|u̇|z(̀|̄|̆|̈|̧)|Ç̆|Û̄|ç̆|û̄|ÿ́|Č(̕|̣)|č(̕|̣)|Ī́|ī́|Ž(̦|̧)|ž(̦|̧)|Ḳ̄|ḳ̄|Ṣ̄|ṣ̄|Ṭ̄|ṭ̄|Ạ̈|ạ̈|Ọ̈|ọ̈|Ụ(̄|̈)|ụ(̄|̈))*('|[,-\.]|[A-Z]|[`-z]|~|¨|´|·|[À-Ö]|[Ø-ö]|[ø-ž]|[Ƈ-ƈ]|Ə|Ɨ|[Ơ-ơ]|[Ư-ư]|Ʒ|[Ǎ-ǜ]|[Ǟ-ǟ]|[Ǣ-ǰ]|[Ǵ-ǵ]|[Ǹ-ǿ]|[Ȓ-ȓ]|[Ș-ț]|[Ȟ-ȟ]|[ȧ-ȳ]|ə|ɨ|ʒ|[ʹ-ʺ]|[ʾ-ʿ]|ˈ|ˌ|[Ḃ-ḃ]|[Ḇ-ḇ]|[Ḋ-ḑ]|[Ḝ-ḫ]|[ḯ-ḷ]|[Ḻ-ḻ]|[Ṁ-ṉ]|[Ṓ-ṛ]|[Ṟ-ṣ]|[Ṫ-ṯ]|[Ẁ-ẇ]|[Ẍ-ẗ]|ẞ|[Ạ-ỹ]|’|‡|A̋|C(̀|̄|̆|̈|̕|̣|̦|̨̆)|D̂|F(̀|̄)|G̀|H(̄|̦|̱)|J(́|̌)|K(̀|̂|̄|̇|̕|̛|̦|͟H|͟h)|L(̂|̥|̥̄|̦)|M(̀|̂|̆|̐)|N(̂|̄|̆|̦)|P(̀|̄|̕|̣)|R(̆|̥|̥̄)|S(̀|̄|̛̄|̱)|T(̀|̄|̈|̕|̛)|U̇|Z(̀|̄|̆|̈|̧)|a̋|c(̀|̄|̆|̈|̕|̣|̦|̨̆)|d̂|f(̀|̄)|g̀|h(̄|̦)|j́|k(̀|̂|̄|̇|̕|̛|̦|͟h)|l(̂|̥|̥̄|̦)|m(̀|̂|̆|̐)|n(̂|̄|̆|̦)|p(̀|̄|̕|̣)|r(̆|̥|̥̄)|s(̀|̄|̛̄|̱)|t(̀|̄|̕|̛)|u̇|z(̀|̄|̆|̈|̧)|Ç̆|Û̄|ç̆|û̄|ÿ́|Č(̕|̣)|č(̕|̣)|Ī́|ī́|Ž(̦|̧)|ž(̦|̧)|Ḳ̄|ḳ̄|Ṣ̄|ṣ̄|Ṭ̄|ṭ̄|Ạ̈|ạ̈|Ọ̈|ọ̈|Ụ(̄|̈)|ụ(̄|̈)))|('|[,-\.]|[A-Z]|[`-z]|~|¨|´|·|[À-Ö]|[Ø-ö]|[ø-ž]|[Ƈ-ƈ]|Ə|Ɨ|[Ơ-ơ]|[Ư-ư]|Ʒ|[Ǎ-ǜ]|[Ǟ-ǟ]|[Ǣ-ǰ]|[Ǵ-ǵ]|[Ǹ-ǿ]|[Ȓ-ȓ]|[Ș-ț]|[Ȟ-ȟ]|[ȧ-ȳ]|ə|ɨ|ʒ|[ʹ-ʺ]|[ʾ-ʿ]|ˈ|ˌ|[Ḃ-ḃ]|[Ḇ-ḇ]|[Ḋ-ḑ]|[Ḝ-ḫ]|[ḯ-ḷ]|[Ḻ-ḻ]|[Ṁ-ṉ]|[Ṓ-ṛ]|[Ṟ-ṣ]|[Ṫ-ṯ]|[Ẁ-ẇ]|[Ẍ-ẗ]|ẞ|[Ạ-ỹ]|’|‡|A̋|C(̀|̄|̆|̈|̕|̣|̦|̨̆)|D̂|F(̀|̄)|G̀|H(̄|̦|̱)|J(́|̌)|K(̀|̂|̄|̇|̕|̛|̦|͟H|͟h)|L(̂|̥|̥̄|̦)|M(̀|̂|̆|̐)|N(̂|̄|̆|̦)|P(̀|̄|̕|̣)|R(̆|̥|̥̄)|S(̀|̄|̛̄|̱)|T(̀|̄|̈|̕|̛)|U̇|Z(̀|̄|̆|̈|̧)|a̋|c(̀|̄|̆|̈|̕|̣|̦|̨̆)|d̂|f(̀|̄)|g̀|h(̄|̦)|j́|k(̀|̂|̄|̇|̕|̛|̦|͟h)|l(̂|̥|̥̄|̦)|m(̀|̂|̆|̐)|n(̂|̄|̆|̦)|p(̀|̄|̕|̣)|r(̆|̥|̥̄)|s(̀|̄|̛̄|̱)|t(̀|̄|̕|̛)|u̇|z(̀|̄|̆|̈|̧)|Ç̆|Û̄|ç̆|û̄|ÿ́|Č(̕|̣)|č(̕|̣)|Ī́|ī́|Ž(̦|̧)|ž(̦|̧)|Ḳ̄|ḳ̄|Ṣ̄|ṣ̄|Ṭ̄|ṭ̄|Ạ̈|ạ̈|Ọ̈|ọ̈|Ụ(̄|̈)|ụ(̄|̈)){0,1}"
+			/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="datatypeBtrimmed">
+		<xs:annotation>
+			<xs:documentation>Ergänzung: kein Whitespace am Anfang oder Ende. Der Datentyp B wurde vor allem für sonstige Namen, wie z. B. Ortsnamen und Straßennamen mit Hausnummer, entworfen.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern
+				value="(([!-~]|[¡-£]|¥|[§-¬]|[®-·]|[¹-»]|[¿-ž]|[Ƈ-ƈ]|Ə|Ɨ|[Ơ-ơ]|[Ư-ư]|Ʒ|[Ǎ-ǜ]|[Ǟ-ǟ]|[Ǣ-ǰ]|[Ǵ-ǵ]|[Ǹ-ǿ]|[Ȓ-ȓ]|[Ș-ț]|[Ȟ-ȟ]|[ȧ-ȳ]|ə|ɨ|ʒ|[ʹ-ʺ]|[ʾ-ʿ]|ˈ|ˌ|[Ḃ-ḃ]|[Ḇ-ḇ]|[Ḋ-ḑ]|[Ḝ-ḫ]|[ḯ-ḷ]|[Ḻ-ḻ]|[Ṁ-ṉ]|[Ṓ-ṛ]|[Ṟ-ṣ]|[Ṫ-ṯ]|[Ẁ-ẇ]|[Ẍ-ẗ]|ẞ|[Ạ-ỹ]|’|‡|€|A̋|C(̀|̄|̆|̈|̕|̣|̦|̨̆)|D̂|F(̀|̄)|G̀|H(̄|̦|̱)|J(́|̌)|K(̀|̂|̄|̇|̕|̛|̦|͟H|͟h)|L(̂|̥|̥̄|̦)|M(̀|̂|̆|̐)|N(̂|̄|̆|̦)|P(̀|̄|̕|̣)|R(̆|̥|̥̄)|S(̀|̄|̛̄|̱)|T(̀|̄|̈|̕|̛)|U̇|Z(̀|̄|̆|̈|̧)|a̋|c(̀|̄|̆|̈|̕|̣|̦|̨̆)|d̂|f(̀|̄)|g̀|h(̄|̦)|j́|k(̀|̂|̄|̇|̕|̛|̦|͟h)|l(̂|̥|̥̄|̦)|m(̀|̂|̆|̐)|n(̂|̄|̆|̦)|p(̀|̄|̕|̣)|r(̆|̥|̥̄)|s(̀|̄|̛̄|̱)|t(̀|̄|̕|̛)|u̇|z(̀|̄|̆|̈|̧)|Ç̆|Û̄|ç̆|û̄|ÿ́|Č(̕|̣)|č(̕|̣)|Ī́|ī́|Ž(̦|̧)|ž(̦|̧)|Ḳ̄|ḳ̄|Ṣ̄|ṣ̄|Ṭ̄|ṭ̄|Ạ̈|ạ̈|Ọ̈|ọ̈|Ụ(̄|̈)|ụ(̄|̈))([ -~]|[¡-£]|¥|[§-¬]|[®-·]|[¹-»]|[¿-ž]|[Ƈ-ƈ]|Ə|Ɨ|[Ơ-ơ]|[Ư-ư]|Ʒ|[Ǎ-ǜ]|[Ǟ-ǟ]|[Ǣ-ǰ]|[Ǵ-ǵ]|[Ǹ-ǿ]|[Ȓ-ȓ]|[Ș-ț]|[Ȟ-ȟ]|[ȧ-ȳ]|ə|ɨ|ʒ|[ʹ-ʺ]|[ʾ-ʿ]|ˈ|ˌ|[Ḃ-ḃ]|[Ḇ-ḇ]|[Ḋ-ḑ]|[Ḝ-ḫ]|[ḯ-ḷ]|[Ḻ-ḻ]|[Ṁ-ṉ]|[Ṓ-ṛ]|[Ṟ-ṣ]|[Ṫ-ṯ]|[Ẁ-ẇ]|[Ẍ-ẗ]|ẞ|[Ạ-ỹ]|’|‡|€|A̋|C(̀|̄|̆|̈|̕|̣|̦|̨̆)|D̂|F(̀|̄)|G̀|H(̄|̦|̱)|J(́|̌)|K(̀|̂|̄|̇|̕|̛|̦|͟H|͟h)|L(̂|̥|̥̄|̦)|M(̀|̂|̆|̐)|N(̂|̄|̆|̦)|P(̀|̄|̕|̣)|R(̆|̥|̥̄)|S(̀|̄|̛̄|̱)|T(̀|̄|̈|̕|̛)|U̇|Z(̀|̄|̆|̈|̧)|a̋|c(̀|̄|̆|̈|̕|̣|̦|̨̆)|d̂|f(̀|̄)|g̀|h(̄|̦)|j́|k(̀|̂|̄|̇|̕|̛|̦|͟h)|l(̂|̥|̥̄|̦)|m(̀|̂|̆|̐)|n(̂|̄|̆|̦)|p(̀|̄|̕|̣)|r(̆|̥|̥̄)|s(̀|̄|̛̄|̱)|t(̀|̄|̕|̛)|u̇|z(̀|̄|̆|̈|̧)|Ç̆|Û̄|ç̆|û̄|ÿ́|Č(̕|̣)|č(̕|̣)|Ī́|ī́|Ž(̦|̧)|ž(̦|̧)|Ḳ̄|ḳ̄|Ṣ̄|ṣ̄|Ṭ̄|ṭ̄|Ạ̈|ạ̈|Ọ̈|ọ̈|Ụ(̄|̈)|ụ(̄|̈))*([!-~]|[¡-£]|¥|[§-¬]|[®-·]|[¹-»]|[¿-ž]|[Ƈ-ƈ]|Ə|Ɨ|[Ơ-ơ]|[Ư-ư]|Ʒ|[Ǎ-ǜ]|[Ǟ-ǟ]|[Ǣ-ǰ]|[Ǵ-ǵ]|[Ǹ-ǿ]|[Ȓ-ȓ]|[Ș-ț]|[Ȟ-ȟ]|[ȧ-ȳ]|ə|ɨ|ʒ|[ʹ-ʺ]|[ʾ-ʿ]|ˈ|ˌ|[Ḃ-ḃ]|[Ḇ-ḇ]|[Ḋ-ḑ]|[Ḝ-ḫ]|[ḯ-ḷ]|[Ḻ-ḻ]|[Ṁ-ṉ]|[Ṓ-ṛ]|[Ṟ-ṣ]|[Ṫ-ṯ]|[Ẁ-ẇ]|[Ẍ-ẗ]|ẞ|[Ạ-ỹ]|’|‡|€|A̋|C(̀|̄|̆|̈|̕|̣|̦|̨̆)|D̂|F(̀|̄)|G̀|H(̄|̦|̱)|J(́|̌)|K(̀|̂|̄|̇|̕|̛|̦|͟H|͟h)|L(̂|̥|̥̄|̦)|M(̀|̂|̆|̐)|N(̂|̄|̆|̦)|P(̀|̄|̕|̣)|R(̆|̥|̥̄)|S(̀|̄|̛̄|̱)|T(̀|̄|̈|̕|̛)|U̇|Z(̀|̄|̆|̈|̧)|a̋|c(̀|̄|̆|̈|̕|̣|̦|̨̆)|d̂|f(̀|̄)|g̀|h(̄|̦)|j́|k(̀|̂|̄|̇|̕|̛|̦|͟h)|l(̂|̥|̥̄|̦)|m(̀|̂|̆|̐)|n(̂|̄|̆|̦)|p(̀|̄|̕|̣)|r(̆|̥|̥̄)|s(̀|̄|̛̄|̱)|t(̀|̄|̕|̛)|u̇|z(̀|̄|̆|̈|̧)|Ç̆|Û̄|ç̆|û̄|ÿ́|Č(̕|̣)|č(̕|̣)|Ī́|ī́|Ž(̦|̧)|ž(̦|̧)|Ḳ̄|ḳ̄|Ṣ̄|ṣ̄|Ṭ̄|ṭ̄|Ạ̈|ạ̈|Ọ̈|ọ̈|Ụ(̄|̈)|ụ(̄|̈)))|([!-~]|[¡-£]|¥|[§-¬]|[®-·]|[¹-»]|[¿-ž]|[Ƈ-ƈ]|Ə|Ɨ|[Ơ-ơ]|[Ư-ư]|Ʒ|[Ǎ-ǜ]|[Ǟ-ǟ]|[Ǣ-ǰ]|[Ǵ-ǵ]|[Ǹ-ǿ]|[Ȓ-ȓ]|[Ș-ț]|[Ȟ-ȟ]|[ȧ-ȳ]|ə|ɨ|ʒ|[ʹ-ʺ]|[ʾ-ʿ]|ˈ|ˌ|[Ḃ-ḃ]|[Ḇ-ḇ]|[Ḋ-ḑ]|[Ḝ-ḫ]|[ḯ-ḷ]|[Ḻ-ḻ]|[Ṁ-ṉ]|[Ṓ-ṛ]|[Ṟ-ṣ]|[Ṫ-ṯ]|[Ẁ-ẇ]|[Ẍ-ẗ]|ẞ|[Ạ-ỹ]|’|‡|€|A̋|C(̀|̄|̆|̈|̕|̣|̦|̨̆)|D̂|F(̀|̄)|G̀|H(̄|̦|̱)|J(́|̌)|K(̀|̂|̄|̇|̕|̛|̦|͟H|͟h)|L(̂|̥|̥̄|̦)|M(̀|̂|̆|̐)|N(̂|̄|̆|̦)|P(̀|̄|̕|̣)|R(̆|̥|̥̄)|S(̀|̄|̛̄|̱)|T(̀|̄|̈|̕|̛)|U̇|Z(̀|̄|̆|̈|̧)|a̋|c(̀|̄|̆|̈|̕|̣|̦|̨̆)|d̂|f(̀|̄)|g̀|h(̄|̦)|j́|k(̀|̂|̄|̇|̕|̛|̦|͟h)|l(̂|̥|̥̄|̦)|m(̀|̂|̆|̐)|n(̂|̄|̆|̦)|p(̀|̄|̕|̣)|r(̆|̥|̥̄)|s(̀|̄|̛̄|̱)|t(̀|̄|̕|̛)|u̇|z(̀|̄|̆|̈|̧)|Ç̆|Û̄|ç̆|û̄|ÿ́|Č(̕|̣)|č(̕|̣)|Ī́|ī́|Ž(̦|̧)|ž(̦|̧)|Ḳ̄|ḳ̄|Ṣ̄|ṣ̄|Ṭ̄|ṭ̄|Ạ̈|ạ̈|Ọ̈|ọ̈|Ụ(̄|̈)|ụ(̄|̈)){0,1}"
+			/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="datatypeC">
+		<xs:annotation>
+			<xs:documentation>Der Datentyp C wurde für alle normativen Schriftzeichen der DIN SPEC entworfen. Er ist somit die technische Umsetzung der Schnittstellenvereinbarung Alle nach DIN SPEC 91379 normativen Schriftzeichen. Texte mit griechischen oder kyrillischen Buchstaben oder mit erweiterten (nicht-normativen) Nicht-Buchstaben sind unzulässig. </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern
+				value="([\s]|[ -~]|[ -¬]|[®-ž]|[Ƈ-ƈ]|Ə|Ɨ|[Ơ-ơ]|[Ư-ư]|Ʒ|[Ǎ-ǜ]|[Ǟ-ǟ]|[Ǣ-ǰ]|[Ǵ-ǵ]|[Ǹ-ǿ]|[Ȓ-ȓ]|[Ș-ț]|[Ȟ-ȟ]|[ȧ-ȳ]|ə|ɨ|ʒ|[ʹ-ʺ]|[ʾ-ʿ]|ˈ|ˌ|[Ḃ-ḃ]|[Ḇ-ḇ]|[Ḋ-ḑ]|[Ḝ-ḫ]|[ḯ-ḷ]|[Ḻ-ḻ]|[Ṁ-ṉ]|[Ṓ-ṛ]|[Ṟ-ṣ]|[Ṫ-ṯ]|[Ẁ-ẇ]|[Ẍ-ẗ]|ẞ|[Ạ-ỹ]|’|‡|€|A̋|C(̀|̄|̆|̈|̕|̣|̦|̨̆)|D̂|F(̀|̄)|G̀|H(̄|̦|̱)|J(́|̌)|K(̀|̂|̄|̇|̕|̛|̦|͟H|͟h)|L(̂|̥|̥̄|̦)|M(̀|̂|̆|̐)|N(̂|̄|̆|̦)|P(̀|̄|̕|̣)|R(̆|̥|̥̄)|S(̀|̄|̛̄|̱)|T(̀|̄|̈|̕|̛)|U̇|Z(̀|̄|̆|̈|̧)|a̋|c(̀|̄|̆|̈|̕|̣|̦|̨̆)|d̂|f(̀|̄)|g̀|h(̄|̦)|j́|k(̀|̂|̄|̇|̕|̛|̦|͟h)|l(̂|̥|̥̄|̦)|m(̀|̂|̆|̐)|n(̂|̄|̆|̦)|p(̀|̄|̕|̣)|r(̆|̥|̥̄)|s(̀|̄|̛̄|̱)|t(̀|̄|̕|̛)|u̇|z(̀|̄|̆|̈|̧)|Ç̆|Û̄|ç̆|û̄|ÿ́|Č(̕|̣)|č(̕|̣)|Ī́|ī́|Ž(̦|̧)|ž(̦|̧)|Ḳ̄|ḳ̄|Ṣ̄|ṣ̄|Ṭ̄|ṭ̄|Ạ̈|ạ̈|Ọ̈|ọ̈|Ụ(̄|̈)|ụ(̄|̈))*"
+			/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="datatypeCtrimmed">
+		<xs:annotation>
+			<xs:documentation>Ergänzung: kein Whitespace am Anfang oder Ende.  Der Datentyp C wurde für alle normativen Schriftzeichen der DIN SPEC entworfen. Er ist somit die technische Umsetzung der Schnittstellenvereinbarung Alle nach DIN SPEC 91379 normativen Schriftzeichen. Texte mit griechischen oder kyrillischen Buchstaben oder mit erweiterten (nicht-normativen) Nicht-Buchstaben sind unzulässig. </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern
+				value="(([!-~]|[ -¬]|[®-ž]|[Ƈ-ƈ]|Ə|Ɨ|[Ơ-ơ]|[Ư-ư]|Ʒ|[Ǎ-ǜ]|[Ǟ-ǟ]|[Ǣ-ǰ]|[Ǵ-ǵ]|[Ǹ-ǿ]|[Ȓ-ȓ]|[Ș-ț]|[Ȟ-ȟ]|[ȧ-ȳ]|ə|ɨ|ʒ|[ʹ-ʺ]|[ʾ-ʿ]|ˈ|ˌ|[Ḃ-ḃ]|[Ḇ-ḇ]|[Ḋ-ḑ]|[Ḝ-ḫ]|[ḯ-ḷ]|[Ḻ-ḻ]|[Ṁ-ṉ]|[Ṓ-ṛ]|[Ṟ-ṣ]|[Ṫ-ṯ]|[Ẁ-ẇ]|[Ẍ-ẗ]|ẞ|[Ạ-ỹ]|’|‡|€|A̋|C(̀|̄|̆|̈|̕|̣|̦|̨̆)|D̂|F(̀|̄)|G̀|H(̄|̦|̱)|J(́|̌)|K(̀|̂|̄|̇|̕|̛|̦|͟H|͟h)|L(̂|̥|̥̄|̦)|M(̀|̂|̆|̐)|N(̂|̄|̆|̦)|P(̀|̄|̕|̣)|R(̆|̥|̥̄)|S(̀|̄|̛̄|̱)|T(̀|̄|̈|̕|̛)|U̇|Z(̀|̄|̆|̈|̧)|a̋|c(̀|̄|̆|̈|̕|̣|̦|̨̆)|d̂|f(̀|̄)|g̀|h(̄|̦)|j́|k(̀|̂|̄|̇|̕|̛|̦|͟h)|l(̂|̥|̥̄|̦)|m(̀|̂|̆|̐)|n(̂|̄|̆|̦)|p(̀|̄|̕|̣)|r(̆|̥|̥̄)|s(̀|̄|̛̄|̱)|t(̀|̄|̕|̛)|u̇|z(̀|̄|̆|̈|̧)|Ç̆|Û̄|ç̆|û̄|ÿ́|Č(̕|̣)|č(̕|̣)|Ī́|ī́|Ž(̦|̧)|ž(̦|̧)|Ḳ̄|ḳ̄|Ṣ̄|ṣ̄|Ṭ̄|ṭ̄|Ạ̈|ạ̈|Ọ̈|ọ̈|Ụ(̄|̈)|ụ(̄|̈))([\s]|[ -~]|[ -¬]|[®-ž]|[Ƈ-ƈ]|Ə|Ɨ|[Ơ-ơ]|[Ư-ư]|Ʒ|[Ǎ-ǜ]|[Ǟ-ǟ]|[Ǣ-ǰ]|[Ǵ-ǵ]|[Ǹ-ǿ]|[Ȓ-ȓ]|[Ș-ț]|[Ȟ-ȟ]|[ȧ-ȳ]|ə|ɨ|ʒ|[ʹ-ʺ]|[ʾ-ʿ]|ˈ|ˌ|[Ḃ-ḃ]|[Ḇ-ḇ]|[Ḋ-ḑ]|[Ḝ-ḫ]|[ḯ-ḷ]|[Ḻ-ḻ]|[Ṁ-ṉ]|[Ṓ-ṛ]|[Ṟ-ṣ]|[Ṫ-ṯ]|[Ẁ-ẇ]|[Ẍ-ẗ]|ẞ|[Ạ-ỹ]|’|‡|€|A̋|C(̀|̄|̆|̈|̕|̣|̦|̨̆)|D̂|F(̀|̄)|G̀|H(̄|̦|̱)|J(́|̌)|K(̀|̂|̄|̇|̕|̛|̦|͟H|͟h)|L(̂|̥|̥̄|̦)|M(̀|̂|̆|̐)|N(̂|̄|̆|̦)|P(̀|̄|̕|̣)|R(̆|̥|̥̄)|S(̀|̄|̛̄|̱)|T(̀|̄|̈|̕|̛)|U̇|Z(̀|̄|̆|̈|̧)|a̋|c(̀|̄|̆|̈|̕|̣|̦|̨̆)|d̂|f(̀|̄)|g̀|h(̄|̦)|j́|k(̀|̂|̄|̇|̕|̛|̦|͟h)|l(̂|̥|̥̄|̦)|m(̀|̂|̆|̐)|n(̂|̄|̆|̦)|p(̀|̄|̕|̣)|r(̆|̥|̥̄)|s(̀|̄|̛̄|̱)|t(̀|̄|̕|̛)|u̇|z(̀|̄|̆|̈|̧)|Ç̆|Û̄|ç̆|û̄|ÿ́|Č(̕|̣)|č(̕|̣)|Ī́|ī́|Ž(̦|̧)|ž(̦|̧)|Ḳ̄|ḳ̄|Ṣ̄|ṣ̄|Ṭ̄|ṭ̄|Ạ̈|ạ̈|Ọ̈|ọ̈|Ụ(̄|̈)|ụ(̄|̈))*([!-~]|[ -¬]|[®-ž]|[Ƈ-ƈ]|Ə|Ɨ|[Ơ-ơ]|[Ư-ư]|Ʒ|[Ǎ-ǜ]|[Ǟ-ǟ]|[Ǣ-ǰ]|[Ǵ-ǵ]|[Ǹ-ǿ]|[Ȓ-ȓ]|[Ș-ț]|[Ȟ-ȟ]|[ȧ-ȳ]|ə|ɨ|ʒ|[ʹ-ʺ]|[ʾ-ʿ]|ˈ|ˌ|[Ḃ-ḃ]|[Ḇ-ḇ]|[Ḋ-ḑ]|[Ḝ-ḫ]|[ḯ-ḷ]|[Ḻ-ḻ]|[Ṁ-ṉ]|[Ṓ-ṛ]|[Ṟ-ṣ]|[Ṫ-ṯ]|[Ẁ-ẇ]|[Ẍ-ẗ]|ẞ|[Ạ-ỹ]|’|‡|€|A̋|C(̀|̄|̆|̈|̕|̣|̦|̨̆)|D̂|F(̀|̄)|G̀|H(̄|̦|̱)|J(́|̌)|K(̀|̂|̄|̇|̕|̛|̦|͟H|͟h)|L(̂|̥|̥̄|̦)|M(̀|̂|̆|̐)|N(̂|̄|̆|̦)|P(̀|̄|̕|̣)|R(̆|̥|̥̄)|S(̀|̄|̛̄|̱)|T(̀|̄|̈|̕|̛)|U̇|Z(̀|̄|̆|̈|̧)|a̋|c(̀|̄|̆|̈|̕|̣|̦|̨̆)|d̂|f(̀|̄)|g̀|h(̄|̦)|j́|k(̀|̂|̄|̇|̕|̛|̦|͟h)|l(̂|̥|̥̄|̦)|m(̀|̂|̆|̐)|n(̂|̄|̆|̦)|p(̀|̄|̕|̣)|r(̆|̥|̥̄)|s(̀|̄|̛̄|̱)|t(̀|̄|̕|̛)|u̇|z(̀|̄|̆|̈|̧)|Ç̆|Û̄|ç̆|û̄|ÿ́|Č(̕|̣)|č(̕|̣)|Ī́|ī́|Ž(̦|̧)|ž(̦|̧)|Ḳ̄|ḳ̄|Ṣ̄|ṣ̄|Ṭ̄|ṭ̄|Ạ̈|ạ̈|Ọ̈|ọ̈|Ụ(̄|̈)|ụ(̄|̈)))|([!-~]|[ -¬]|[®-ž]|[Ƈ-ƈ]|Ə|Ɨ|[Ơ-ơ]|[Ư-ư]|Ʒ|[Ǎ-ǜ]|[Ǟ-ǟ]|[Ǣ-ǰ]|[Ǵ-ǵ]|[Ǹ-ǿ]|[Ȓ-ȓ]|[Ș-ț]|[Ȟ-ȟ]|[ȧ-ȳ]|ə|ɨ|ʒ|[ʹ-ʺ]|[ʾ-ʿ]|ˈ|ˌ|[Ḃ-ḃ]|[Ḇ-ḇ]|[Ḋ-ḑ]|[Ḝ-ḫ]|[ḯ-ḷ]|[Ḻ-ḻ]|[Ṁ-ṉ]|[Ṓ-ṛ]|[Ṟ-ṣ]|[Ṫ-ṯ]|[Ẁ-ẇ]|[Ẍ-ẗ]|ẞ|[Ạ-ỹ]|’|‡|€|A̋|C(̀|̄|̆|̈|̕|̣|̦|̨̆)|D̂|F(̀|̄)|G̀|H(̄|̦|̱)|J(́|̌)|K(̀|̂|̄|̇|̕|̛|̦|͟H|͟h)|L(̂|̥|̥̄|̦)|M(̀|̂|̆|̐)|N(̂|̄|̆|̦)|P(̀|̄|̕|̣)|R(̆|̥|̥̄)|S(̀|̄|̛̄|̱)|T(̀|̄|̈|̕|̛)|U̇|Z(̀|̄|̆|̈|̧)|a̋|c(̀|̄|̆|̈|̕|̣|̦|̨̆)|d̂|f(̀|̄)|g̀|h(̄|̦)|j́|k(̀|̂|̄|̇|̕|̛|̦|͟h)|l(̂|̥|̥̄|̦)|m(̀|̂|̆|̐)|n(̂|̄|̆|̦)|p(̀|̄|̕|̣)|r(̆|̥|̥̄)|s(̀|̄|̛̄|̱)|t(̀|̄|̕|̛)|u̇|z(̀|̄|̆|̈|̧)|Ç̆|Û̄|ç̆|û̄|ÿ́|Č(̕|̣)|č(̕|̣)|Ī́|ī́|Ž(̦|̧)|ž(̦|̧)|Ḳ̄|ḳ̄|Ṣ̄|ṣ̄|Ṭ̄|ṭ̄|Ạ̈|ạ̈|Ọ̈|ọ̈|Ụ(̄|̈)|ụ(̄|̈)){0,1}"
+			/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="datatypeE">
+		<xs:annotation>
+			<xs:documentation>Der Datentyp E wurde für alle normativen und erweiterten Schriftzeichen der DIN SPEC entworfen. Ein Einsatzgebiet dieses Datentyps kann der grenzüberschreitende Datenaustausch sein, wenn auch griechische und kyrillische Buchstaben benötigt werden. Er ist somit die technische Umsetzung der Schnittstellenvereinbarung Alle nach DIN SPEC 91379 normativen und nicht-normativen Schriftzeichen. Texte mit Buchstaben oder Nicht-Buchstaben, die in der DIN SPEC nicht enthalten sind, wie z. B. asiatische oder arabische Buchstaben, sind unzulässig.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern
+				value="([\s]|[ -~]|[ -¬]|[®-ž]|[Ƈ-ƈ]|Ə|ƒ|Ɨ|[Ơ-ơ]|[Ư-ư]|Ʒ|[Ǎ-ǜ]|[Ǟ-ǟ]|[Ǣ-ǰ]|[Ǵ-ǵ]|[Ǹ-ǿ]|[Ȓ-ȓ]|[Ș-ț]|[Ȟ-ȟ]|[ȧ-ȳ]|ə|ɨ|ʒ|ʰ|ʳ|[ʹ-ʺ]|[ʾ-ʿ]|ˆ|ˈ|ˌ|˜|ˢ|Ά|[Έ-Ί]|Ό|[Ύ-Ρ]|[Σ-ώ]|Ѝ|[А-Ъ]|Ь|[Ю-ъ]|ь|[ю-я]|ѝ|ᵈ|ᵗ|[Ḃ-ḃ]|[Ḇ-ḇ]|[Ḋ-ḑ]|[Ḝ-ḫ]|[ḯ-ḷ]|[Ḻ-ḻ]|[Ṁ-ṉ]|[Ṓ-ṛ]|[Ṟ-ṣ]|[Ṫ-ṯ]|[Ẁ-ẇ]|[Ẍ-ẗ]|ẞ|[Ạ-ỹ]|[‘-‚]|[“-„]|[†-‡]|…|‰|[‹-›]|⁰|[⁴-⁹]|[ⁿ-₉]|€|™|∞|[≤-≥]|A̋|C(̀|̄|̆|̈|̕|̣|̦|̨̆)|D̂|F(̀|̄)|G̀|H(̄|̦|̱)|J(́|̌)|K(̀|̂|̄|̇|̕|̛|̦|͟H|͟h)|L(̂|̥|̥̄|̦)|M(̀|̂|̆|̐)|N(̂|̄|̆|̦)|P(̀|̄|̕|̣)|R(̆|̥|̥̄)|S(̀|̄|̛̄|̱)|T(̀|̄|̈|̕|̛)|U̇|Z(̀|̄|̆|̈|̧)|a̋|c(̀|̄|̆|̈|̕|̣|̦|̨̆)|d̂|f(̀|̄)|g̀|h(̄|̦)|j́|k(̀|̂|̄|̇|̕|̛|̦|͟h)|l(̂|̥|̥̄|̦)|m(̀|̂|̆|̐)|n(̂|̄|̆|̦)|p(̀|̄|̕|̣)|r(̆|̥|̥̄)|s(̀|̄|̛̄|̱)|t(̀|̄|̕|̛)|u̇|z(̀|̄|̆|̈|̧)|Ç̆|Û̄|ç̆|û̄|ÿ́|Č(̕|̣)|č(̕|̣)|Ī́|ī́|Ž(̦|̧)|ž(̦|̧)|Ḳ̄|ḳ̄|Ṣ̄|ṣ̄|Ṭ̄|ṭ̄|Ạ̈|ạ̈|Ọ̈|ọ̈|Ụ(̄|̈)|ụ(̄|̈))*"
+			/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="Tumorzuordnung_Typ">
+		<xs:sequence>
+			<xs:element name="Primaertumor_ICD" type="Tumor_ICD_Typ" minOccurs="0"/>
+			<xs:element name="Diagnosedatum"
+				type="Datum_Tag_oder_Monat_oder_Jahr_oder_nicht_genau_Typ" minOccurs="0"/>
+			<xs:element name="Seitenlokalisation" type="Seitenlokalisation_Typ" minOccurs="0"/>
+			<xs:element name="Morphologie_ICD_O" type="Morphologie_ICD_O_Typ" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="Tumor_ID" type="FreitextID_Typ" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="Patienten_Stammdaten_Melder_Typ">
+		<xs:annotation>
+			<xs:documentation>Typ zur Verwendung in Meldungen, im RüD wird ein abweichender Typ mit Menge_Adresse verwendet werden</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Patienten_ID" type="FreitextID_Typ" minOccurs="0"/>
+			<xs:element name="Patienten_Pseudonym" type="FreitextID_Typ" minOccurs="0"/>
+			<xs:element name="Nachname" type="Namenstring255_Typ"/>
+			<xs:element name="Vornamen" type="Namenstring255_Typ"/>
+			<xs:element name="Geburtsname" type="Namenstring255_Typ" minOccurs="0"/>
+			<xs:element name="Menge_Frueherer_Name" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Frueherer_Name" type="Namenstring255_Typ"
+							maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Geschlecht">
+				<xs:annotation>
+					<xs:documentation>
+						Es wird, wenn möglich, das Geschlecht verwendet, wie es im Melderegister und auf der Gesundheitskarte vermerkt ist.
+						Es ist zu beachten, dass X=unbestimmtes Geschlecht (amtlich: keine Angabe) einer expliziten Angabe im Personenstandsregister entspricht und auf keinen Fall mit U=unbekannt gleichzusetzen ist.
+						"Unbekannt" bedeutet, dass dem Melder das Geschlecht tatsächlich unbekannt ist und stellt eine absolute Ausnahmesituation dar, da beispielsweise eine Versichertenkarte das amtliche Geschlecht enthält.
+					</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="M">
+							<xs:annotation>
+								<xs:documentation>Männlich</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="W">
+							<xs:annotation>
+								<xs:documentation>Weiblich</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="D">
+							<xs:annotation>
+								<xs:documentation>Divers</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="X">
+							<xs:annotation>
+								<xs:documentation>keine Angabe / unbestimmt</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="U">
+							<xs:annotation>
+								<xs:documentation>Unbekannt</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Geburtsdatum"
+				type="Datum_Tag_oder_Monat_oder_Jahr_oder_nicht_genau_Typ"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="Zulaessiger_Datumsbereich_Typ">
+		<xs:restriction base="xs:date">
+			<xs:minInclusive value="1890-01-01"/>
+			<xs:maxInclusive value="2025-12-31"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="Datum_Tag_oder_Monat_oder_Jahr_oder_nicht_genau_Typ">
+		<xs:simpleContent>
+			<xs:extension base="Zulaessiger_Datumsbereich_Typ">
+				<xs:attribute name="Datumsgenauigkeit" use="required">
+					<xs:simpleType>
+						<xs:annotation>
+							<xs:documentation>
+								Bei allen geschätzten Angaben darf ein plausibles, genau wirkendes Datum eingetragen werden.
+								D.h. der vielfach praktizierten Konvention monatsgenau bedeutet Einsetzen des 15. und Jahresgenau bedeutet Einsetzen des 01.07. muss nicht gefolgt werden.
+								Im Gegenteil können durch Abweichen von dieser Konvention Verletzungen der Datumshierarchien (z.B. ungenaues Diagnosedatum nach genauem Therapiedatum) vermieden werden.
+								Es ist Sache des Registers, ungenaue Angaben bei bestimmten Anlässen, z.B. Auswertungen, ggf. gesondert zu handhaben.
+							</xs:documentation>
+						</xs:annotation>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="E">
+								<xs:annotation>
+									<xs:documentation>exakt (entspricht taggenau)</xs:documentation>
+								</xs:annotation>
+							</xs:enumeration>
+							<xs:enumeration value="T">
+								<xs:annotation>
+									<xs:documentation>Tag geschätzt (entspricht monatsgenau)</xs:documentation>
+								</xs:annotation>
+							</xs:enumeration>
+							<xs:enumeration value="M">
+								<xs:annotation>
+									<xs:documentation>Monat geschätzt (entspricht jahrgenau)</xs:documentation>
+								</xs:annotation>
+							</xs:enumeration>
+							<xs:enumeration value="V">
+								<xs:annotation>
+									<xs:documentation>vollständig geschätzt (genaue Angabe zum Jahr nicht möglich)</xs:documentation>
+								</xs:annotation>
+							</xs:enumeration>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="Datum_Tag_oder_Monat_genau_Typ">
+		<xs:simpleContent>
+			<xs:extension base="Zulaessiger_Datumsbereich_Typ">
+				<xs:attribute name="Datumsgenauigkeit" use="required">
+					<xs:simpleType>
+						<xs:annotation>
+							<xs:documentation>siehe Dokumentation zu Datum_Tag_oder_Monat_oder_Jahr_oder_nicht_genau_Typ</xs:documentation>
+						</xs:annotation>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="E">
+								<xs:annotation>
+									<xs:documentation>exakt (entspricht taggenau)</xs:documentation>
+								</xs:annotation>
+							</xs:enumeration>
+							<xs:enumeration value="T">
+								<xs:annotation>
+									<xs:documentation>Tag geschätzt (entspricht monatsgenau)</xs:documentation>
+								</xs:annotation>
+							</xs:enumeration>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:simpleType name="Datum_Tag_genau_Typ">
+		<xs:restriction base="Zulaessiger_Datumsbereich_Typ"/>
+	</xs:simpleType>
+	<xs:simpleType name="Datum_nur_Jahr_Typ">
+		<xs:restriction base="xs:gYear">
+			<xs:minInclusive value="1890"/>
+			<xs:maxInclusive value="2025"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="JNU_Typ">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="J">
+				<xs:annotation>
+					<xs:documentation>Ja</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="N">
+				<xs:annotation>
+					<xs:documentation>Nein</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="U">
+				<xs:annotation>
+					<xs:documentation>Unbekannt</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="JN_Typ">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="J">
+				<xs:annotation>
+					<xs:documentation>Ja</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="N">
+				<xs:annotation>
+					<xs:documentation>Nein</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ICD_Code_Typ">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[A-Z]\d\d(\.\d(\d)?)?"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="Tumor_ICD_Typ">
+		<xs:sequence>
+			<xs:element name="Code">
+				<xs:simpleType>
+					<xs:restriction base="ICD_Code_Typ">
+						<xs:pattern value="[CD]\d\d(\.\d(\d)?)?|M72.4"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Version" type="ICD_Version_Typ"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Allgemein_ICD_Typ">
+		<xs:sequence>
+			<xs:element name="Code" type="ICD_Code_Typ"/>
+			<xs:element name="Version" type="ICD_Version_Typ"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="ICD_Version_Typ">
+		<xs:annotation>
+			<xs:documentation>
+				ICD 10 Version 2006 WHO (gültig bis 2010),
+				ICD 10 Version 2011 WHO (gültig bis 2012),
+				ICD 10 Version 2013 WHO (gültig bis 2015),
+				ICD 10 Version 2016 WHO (gültig bis 2018),
+				ICD 10 Version 2019 WHO (letzte Version, wird nur noch in Ausnahmefällen aktualisiert)
+				Sonstige, falls andere bzw. ältere Versionen verwendet werden
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="(10 20\d{2} ((GM)|(WHO))|Sonstige)"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Ziffern9_Typ">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="\d{9}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="Ident_Nummern_Typ">
+		<xs:sequence>
+			<xs:element name="IKNR" type="Ziffern9_Typ" minOccurs="0"/>
+			<xs:element name="LANR" type="Ziffern9_Typ" minOccurs="0"/>
+			<xs:element name="BSNR" type="Ziffern9_Typ" minOccurs="0"/>
+			<xs:element name="ZANR" type="Ziffern9_Typ" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Morphologie_ICD_O_Typ">
+		<xs:sequence>
+			<xs:element name="Code">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value="\d\d\d\d/\d"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Version">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="31">
+							<xs:annotation>
+								<xs:documentation>ICD-O-3, 2003</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="32">
+							<xs:annotation>
+								<xs:documentation>ICD-O-3, 1. Revision 2014</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="33">
+							<xs:annotation>
+								<xs:documentation>ICD-O-3, 2. Revision 2019</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="bb">
+							<xs:annotation>
+								<xs:documentation>Neue Codes aus den WHO-Klassifikationen (BlueBooks)</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="Freitext30_Typ">
+		<xs:restriction base="datatypeCtrimmed">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="30"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="FreitextID_Typ">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="50"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Freitext255_Typ">
+		<xs:restriction base="datatypeCtrimmed">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="255"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Freitext255E_Typ">
+		<xs:restriction base="datatypeE">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="255"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Diagnosetext_Typ">
+		<xs:restriction base="datatypeC">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="1000"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Namenstring255_Typ">
+		<xs:restriction base="datatypeAtrimmed">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="255"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="Topographie_ICD_O_Typ">
+		<xs:sequence>
+			<xs:element name="Code">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value="C\d\d\.\d(\d)?"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Version">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="31">
+							<xs:annotation>
+								<xs:documentation>ICD-O-3, 2003</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="32">
+							<xs:annotation>
+								<xs:documentation>ICD-O-3, 1. Revision 2014</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="33">
+							<xs:annotation>
+								<xs:documentation>ICD-O-3, 2. Revision 2019</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="Seitenlokalisation_Typ">
+		<xs:annotation>
+			<xs:documentation>Organspezifische Angabe der betroffenen Seite</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="L">
+				<xs:annotation>
+					<xs:documentation>Links</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="R">
+				<xs:annotation>
+					<xs:documentation>Rechts</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="B">
+				<xs:annotation>
+					<xs:documentation>Beidseitig (bei bestimmten Tumoren 2 Meldungen
+						angeben)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="M">
+				<xs:annotation>
+					<xs:documentation>Mittellinie/mittig</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="U">
+				<xs:annotation>
+					<xs:documentation>Unbekannt</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="T">
+				<xs:annotation>
+					<xs:documentation>Trifft nicht zu (Seitenangabe nicht sinnvoll, einschließlich
+						Systemerkrankungen)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<!-- Organoide -->
+	<xs:complexType name="Observations_Type">
+		<xs:annotation>
+			<xs:documentation>Es handelt sich um eine Erweiterung des oBDS-Schemas um Biobank-Datenelemente (MDS).</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Observation" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+
+
+						<xs:element name="Profile">
+							<xs:annotation>
+								<xs:documentation>Profile</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="ProfileName">
+										<xs:annotation>
+											<xs:documentation>Verfügbarkeitsstatus der Probe</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:enumeration
+												value="PROFILE_SIOP_METPREDICT_VISIT-1_PATIENTDATA"/>
+												<xs:enumeration
+												value="PROFILE_SIOP_METPREDICT_VISIT-2A_OPERATION"/>
+												<xs:enumeration
+												value="PROFILE_SIOP_METPREDICT_VISIT-2B_SAMPLE_COLLECTION"/>
+												<xs:enumeration
+												value="PROFILE_SIOP_METPREDICT_VISIT-3_PATHOLOGICAL_FINDING"/>
+												<xs:enumeration
+												value="PROFILE_SIOP_METPREDICT_VISIT-4_END_ADJUVANT_THERAPY"/>
+												<xs:enumeration
+												value="PROFILE_SIOP_METPREDICT_VISIT-5-10_FOLLOW-UP"/>
+												<xs:enumeration
+												value="PROFILE_SIOP_NEOMATCH_VISIT-1A_PATIENTDATA"/>
+												<xs:enumeration
+												value="PROFILE_SIOP_NEOMATCH_VISIT-1B_NEOADJUVANT_CTX"/>
+												<xs:enumeration
+												value="PROFILE_SIOP_NEOMATCH_VISIT-2A_SURGERY"/>
+												<xs:enumeration
+												value="PROFILE_SIOP_NEOMATCH_VISIT-2B_SAMPLE_COLLECTION"/>
+												<xs:enumeration
+												value="PROFILE_SIOP_NEOMATCH_VISIT-3A_END_ADJUVANT_THERAPY"/>
+												<xs:enumeration
+												value="PROFILE_SIOP_NEOMATCH_VISIT-3B_ADJUVANT_CTX"/>
+												<xs:enumeration
+												value="PROFILE_SIOP_NEOMATCH_VISIT-4-N_FOLLOW-UP"/>
+												<xs:enumeration
+												value="PROFILE_SIOP_NEOMATCH_VISIT-X_END_OF_STUDY"
+												/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+
+									<xs:element name="MethodSystem" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>FHIR Method System</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:enumeration
+												value="https://fhir.centraxx.de/system/laborMethod"
+												/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="ProfileVersion" minOccurs="0" type="xs:string">
+										<xs:annotation>
+											<xs:documentation>Profile_CurrentLocalVersion</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="ProfileDisplay" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Projekt oder Studie </xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:enumeration
+												value="SIOrgP - MetPredict - Visite 1: Stammdaten Patient"/>
+												<xs:enumeration
+												value="SIOrgP - MetPredict - Visite 2a: Operation Lebermetastasen"/>
+												<xs:enumeration
+												value="SIOrgP - MetPredict - Visite 2b - Entnahmeprotokoll"/>
+												<xs:enumeration
+												value="SIOrgP - MetPredict - Visite3: Abschließende histologische Beurteilung"/>
+												<xs:enumeration
+												value="SIOrgP - MetPredict - Visite 4: End of adjuvanten oder zwischengeschalteten Therapie"/>
+												<xs:enumeration
+												value="SIOrgP - MetPredict - Visite 5-10: Follow Up"/>
+												<xs:enumeration
+												value="SIOrgP - NeoMatch - Visit 1a: Project specific data"/>
+												<xs:enumeration
+												value="SIOrgP - NeoMatch - Visit 1b: Neoadjuvant chemotherapy"/>
+												<xs:enumeration
+												value="SIOrgP - NeoMatch - Visit 2a: Surgery"/>
+												<xs:enumeration
+												value="(en) - PROFILE_SIOP_NEOMATCH_VISIT-2B"/>
+												<xs:enumeration
+												value="SIOrgP - NeoMatch - Visite 3a: End of adjuvant therapy"/>
+												<xs:enumeration
+												value="SIOrgP - NeoMatch - Visit 3b: Adjuvant chemotherapy"/>
+												<xs:enumeration
+												value="SIOrgP - NeoMatch - Visit 4-N: Follow Up"/>
+												<xs:enumeration
+												value="(en) - PROFILES_SIOP_NEOMATCH_VISIT-X_END_OF_STUDY"
+												/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="ProfileSystem" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>FHIR System</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:enumeration
+												value="https://fhir.centraxx.de/system/finding/shortname"
+												/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+
+						<xs:element name="Parameter" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="Coding">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="Code">
+												<xs:annotation>
+												<xs:documentation>Parameter_Code: IOP_AGE_STUDY_ENROLLMENT; SIOP_NEOADJ_CTX_DOSE; SIOP_ADJ_CTX_DISCONTINUATION_CYCLES""</xs:documentation>
+												</xs:annotation>
+
+												<xs:simpleType>
+												<xs:restriction base="xs:string">
+												<xs:enumeration value="SIOP_PATIENT_PSEUDONYM"/>
+												<xs:enumeration value="SIOP_DATE_OF_VISITE"/>
+												<xs:enumeration value="SIOP_AGE_STUDY_ENROLLMENT"/>
+												<xs:enumeration value="SIOP_GENDER"/>
+												<xs:enumeration
+												value="SIOP_DATE_DIAGNOSIS_PANCREATIC_TUMOR"/>
+												<xs:enumeration value="SIOP_TNM_C-T"/>
+												<xs:enumeration value="SIOP_TNM_C-N"/>
+												<xs:enumeration value="SIOP_TNM_C-M"/>
+												<xs:enumeration value="SIOP_TNM_G"/>
+												<xs:enumeration value="SIOP_DIAGNOSIS_ICD-O-3"/>
+												<xs:enumeration value="SIOP_TUMORMARKER_CA19-9"/>
+												<xs:enumeration value="SIOP_TUMORMARKER_CEA"/>
+												<xs:enumeration value="SIOP_DATE_BLOOD_COLLECTION"/>
+												<xs:enumeration value="SIOP_DATE_BIOPSIE"/>
+												<xs:enumeration
+												value="SIOP_ORGANOID_GROWTH_PRE-THERAPEUTIC"/>
+												<xs:enumeration value="SIOP_NEOADJ_CTX"/>
+												<xs:enumeration value="SIOP_NEOADJ_CTX_END_DATE"/>
+												<xs:enumeration value="SIOP_NEOADJ_CTX_START_DATE"/>
+												<xs:enumeration
+												value="SIOP_NEOADJ_CTX_REGIMEN_OTHER"/>
+												<xs:enumeration
+												value="SIOP_NEOADJ_CTX_REGIMEN_NEOMATCH"/>
+												<xs:enumeration
+												value="SIOP_NEOADJ_CTX_ADDITIONAL_RT"/>
+												<xs:enumeration
+												value="SIOP_NEOADJ_CTX_TOTAL_CYCLES"/>
+												<xs:enumeration value="SIOP_NEOADJ_CTX_DOSE"/>
+												<xs:enumeration value="SIOP_NEOADJ_CTX_TOXICITY"/>
+												<xs:enumeration
+												value="SIOP_NEOADJ_CTX_ADJUSTMENT_DOSE"/>
+												<xs:enumeration value="SIOP_NEOADJ_CTX_ADJUSTMENT"/>
+												<xs:enumeration
+												value="SIOP_NEOADJ_CTX_ADJUSTMENTS"/>
+												<xs:enumeration
+												value="SIOP_NEOADJ_CTX_ADJUSTMENT_CYCLES"/>
+												<xs:enumeration
+												value="SIOP_NEOADJ_CTX_DISCONTINUATION_REASON"/>
+												<xs:enumeration
+												value="SIOP_NEOADJ_CTX_DISCONTINUATION"/>
+												<xs:enumeration
+												value="SIOP_NEOADJ_CTX_DISCONTINUATION_REASONS_OTHER"/>
+												<xs:enumeration
+												value="SIOP_NEOADJ_CTX_DISCONTINUATION_CYCLES"/>
+												<xs:enumeration value="SIOP_SURGERY_PERFORMED"/>
+												<xs:enumeration value="SIOP_DATE_SURGERY"/>
+												<xs:enumeration value="SIOP_SAMPLE_COLLECTED"/>
+												<xs:enumeration
+												value="SIOP_ORGANOID_GROWTH_SURGERY"/>
+												<xs:enumeration value="SIOP_TNM_P-N"/>
+												<xs:enumeration value="SIOP_TNM_P-T"/>
+												<xs:enumeration value="SIOP_TNM_P-M"/>
+												<xs:enumeration value="SIOP_TNM_R"/>
+												<xs:enumeration value="SIOP_TNM_L"/>
+												<xs:enumeration value="SIOP_TNM_PN"/>
+												<xs:enumeration value="SIOP_TNM_V"/>
+												<xs:enumeration value="SIOP_COMMENTS"/>
+												<xs:enumeration
+												value="SIOP_TUMOR_REGRESSION_GRAD_SCODAN"/>
+												<xs:enumeration value="SIOP_VITAL_TUMOR_CELLS"/>
+												<xs:enumeration
+												value="SIOP_SAMPLE_COLLECTION_OTHER"/>
+												<xs:enumeration value="SIOP_SAMPLE_COLLECTION"/>
+												<xs:enumeration value="SIOP_SAMPLE_LOCALISATION"/>
+												<xs:enumeration value="SIOP_TIME_TUMOR_TISSUE_LN2"/>
+												<xs:enumeration
+												value="SIOP_TIME_COLLECTION_ORGANOID"/>
+												<xs:enumeration
+												value="SIOP_TIME_TRANSFER_ORGANOID_LAB"/>
+												<xs:enumeration value="SIOP_ADJ_CTX"/>
+												<xs:enumeration
+												value="SIOP_RECCURENCE_LOCALISATION_OTHER"/>
+												<xs:enumeration value="SIOP_RECURRENCE"/>
+												<xs:enumeration
+												value="SIOP_RECURRENCE_LOCALISATION"/>
+												<xs:enumeration
+												value="SIOP_RECURRENCE_DATE_DIAGNOSIS"/>
+												<xs:enumeration
+												value="SIOP_RECURRENCE_DIAGNOSTICS"/>
+												<xs:enumeration
+												value="SIOP_RECURRENCE_DIAGNOSTICS_OTHER"/>
+												<xs:enumeration
+												value="SIOP_RECURRENCE_HISTO_CONFIRMED"/>
+												<xs:enumeration value="SIOP_ONCOLOGICAL_STATUS"/>
+												<xs:enumeration value="SIOP_DATE_OF_DEATH"/>
+												<xs:enumeration value="SIOP_ADJ_CTX_START_DATE"/>
+												<xs:enumeration value="SIOP_ADJ_CTX_END_DATE"/>
+												<xs:enumeration value="SIOP_ADJ_CTX_REGIMEN_OTHER"/>
+												<xs:enumeration
+												value="SIOP_ADJ_CTX_REGIMEN_NEOMATCH"/>
+												<xs:enumeration value="SIOP_ADJ_CTX_ADDITIONAL_RT"/>
+												<xs:enumeration value="SIOP_ADJ_CTX_INTENTION"/>
+												<xs:enumeration value="SIOP_ADJ_CTX_TOTAL_CYCLES"/>
+												<xs:enumeration value="SIOP_ADJ_CTX_DOSE"/>
+												<xs:enumeration value="SIOP_ADJ_CTX_TOXICITY"/>
+												<xs:enumeration value="SIOP_ADJ_CTX_ADJUSTMENT"/>
+												<xs:enumeration
+												value="SIOP_ADJ_CTX_ADJUSTMENT_DOSE"/>
+												<xs:enumeration value="SIOP_ADJ_CTX_ADJUSTMENTS"/>
+												<xs:enumeration
+												value="SIOP_ADJ_CTX_ADJUSTMENT_CYCLES"/>
+												<xs:enumeration
+												value="SIOP_ADJ_CTX_DISCONTINUATION"/>
+												<xs:enumeration
+												value="SIOP_ADJ_CTX_DISCONTINUATION_CYCLES"/>
+												<xs:enumeration
+												value="SIOP_ADJ_CTX_DISCONTINUATION_REASONS_OTHER"/>
+												<xs:enumeration
+												value="SIOP_ADJ_CTX_DISCONTINUATION_REASON"/>
+												<xs:enumeration value="SIOP_FOLLOW-UP"/>
+												<xs:enumeration value="SIOP_FOLLOW-UP_OTHER"/>
+												<xs:enumeration
+												value="SIOP_PATIENT_COMPLETED_STUDY"/>
+												<xs:enumeration value="SIOP_DATE_OF_COMPLETION"/>
+												<xs:enumeration value="SIOP_DATE_OF_DROP_OUT"/>
+												<xs:enumeration
+												value="SIOP_DROP_OUT_REASONS_OTHER"/>
+												<xs:enumeration value="SIOP_DROP_OUT_REASONS"/>
+												<xs:enumeration value="SIOP_NO_SURGERY_REASONS"/>
+												<xs:enumeration
+												value="SIOP_NO_SURGERY_REASONS_OTHER"/>
+												<xs:enumeration value="SIOP_CAUSE_OF_DEATH_OTHER"/>
+												<xs:enumeration value="SIOP_CAUSE_OF_DEATH"/>
+												<xs:enumeration value="SIOP_HEIGHT"/>
+												<xs:enumeration value="SIOP_WEIGHT"/>
+												<xs:enumeration value="SIOP_ASA_CATEGORY"/>
+												<xs:enumeration value="SIOP_ECOG_STATUS"/>
+												<xs:enumeration value="SIOP_SMOKING"/>
+												<xs:enumeration value="SIOP_ALCOHOL_ABUSE"/>
+												<xs:enumeration value="SIOP_HEPATITIS"/>
+												<xs:enumeration value="SIOP_HEPATITS_ACTIVITY"/>
+												<xs:enumeration value="SIOP_NAFLD"/>
+												<xs:enumeration value="SIOP_ASH_NASH"/>
+												<xs:enumeration value="SIOP_LIVER_CIRRHOSIS"/>
+												<xs:enumeration
+												value="SIOP_LOCALISATION_PRIMARY_TUMOR"/>
+												<xs:enumeration
+												value="SIOP_LOCALISATION_PRIMARY_TUMOR_COLON"/>
+												<xs:enumeration
+												value="SIOP_DATE_DIAGONSIS_COLORECTAL_TUMOR"/>
+												<xs:enumeration
+												value="SIOP_NEOADJ_T_RECTAL_CARCINOMA"/>
+												<xs:enumeration
+												value="SIOP_NEOADJ_RCTX_RT_LONG_COURSE"/>
+												<xs:enumeration
+												value="SIOP_NEOADJ_RTX_RT_SHORT_COURSE"/>
+												<xs:enumeration value="SIOP_NEOADJ_TNT"/>
+												<xs:enumeration
+												value="SIOP_NEOADJ_RCTX_RT_TOTAL_DOSE"/>
+												<xs:enumeration
+												value="SIOP_NEOADJ_RCTX_CT_REGIMEN"/>
+												<xs:enumeration
+												value="SIOP_NEOADJ_RCTX_CT_REGIMEN_OTHER"/>
+												<xs:enumeration value="SIOP_NEOADJ_TNT_CT_REGIMEN"/>
+												<xs:enumeration
+												value="SIOP_NEOADJ_TNT_CT_REGIMEN_OTHER"/>
+												<xs:enumeration
+												value="SIOP_NEOADJ_TNT_CT_TOTAL_CYCLES"/>
+												<xs:enumeration
+												value="SIOP_NEOADJ_TNT_CT_DOSE_REDUCTION"/>
+												<xs:enumeration
+												value="SIOP_PRIMARY_TUMOR_RESECTED"/>
+												<xs:enumeration
+												value="SIOP_DATE_PRIMARY_TUMOR_RESECTION"/>
+												<xs:enumeration value="SIOP_ADJ_CTX_PRIMARY_TUMOR"/>
+												<xs:enumeration value="SIOP_ADJ_CTX_REGIMEN"/>
+												<xs:enumeration
+												value="SIOP_ADJ_CTX_DOSE_REDUCTION"/>
+												<xs:enumeration
+												value="SIOP_MET_LIVER_DATE_DIAGNOSIS"/>
+												<xs:enumeration value="SIOP_NEOADJ_CTX_MET"/>
+												<xs:enumeration
+												value="SIOP_NEOADJ_CTX_REGIMEN_METPREDICT"/>
+												<xs:enumeration value="SIOP_NEOADJ_CTX_ANTIBODIES"/>
+												<xs:enumeration
+												value="SIOP_NEOADJ_CTX_DOSE_REDUCTION"/>
+												<xs:enumeration value="SIOP_MET_LUNG"/>
+												<xs:enumeration
+												value="SIOP_MET_LUNG_DATE_DIAGNOSIS"/>
+												<xs:enumeration value="SIOP_MET_LUNG_TOTAL"/>
+												<xs:enumeration value="SIOP_MET_LUNG_TREATMENT"/>
+												<xs:enumeration
+												value="SIOP_MET_LUNG_TREATMENT_OTHER"/>
+												<xs:enumeration value="SIOP_PVE_PERFORMED"/>
+												<xs:enumeration value="SIOP_PVE_DATE"/>
+												<xs:enumeration value="SIOP_ISS_PERFORMED"/>
+												<xs:enumeration value="SIOP_ISS_DATE"/>
+												<xs:enumeration
+												value="SIOP_MET_LIVER_TOTAL_INTRAOP_IMAGING"/>
+												<xs:enumeration
+												value="SIOP_MET_LIVER_SEGMENTS_AFFECTED"/>
+												<xs:enumeration
+												value="SIOP_ATYPICAL_RESECTION_PERFORMED"/>
+												<xs:enumeration
+												value="SIOP_ATYPICAL_RESECTIONS_TOTAL"/>
+												<xs:enumeration
+												value="SIOP_ATYPICAL_RESECTION_SEGMENTS"/>
+												<xs:enumeration value="SIOP_ANATOMICAL_RESECTION"/>
+												<xs:enumeration
+												value="SIOP_ANATOMICAL_RESECTION_KIND"/>
+												<xs:enumeration
+												value="SIOP_ANATOMICAL_RESECTION_KIND_OTHER"/>
+												<xs:enumeration
+												value="SIOP_ANATOMICAL_RESECTION_SEGMENTS"/>
+												<xs:enumeration value="SIOP_PRIMARY_TUMOR_IN-SITU"/>
+												<xs:enumeration
+												value="SIOP_PRIMARY_TUMOR_SIMULTANEOUS_RESECTION"/>
+												<xs:enumeration
+												value="SIOP_NON-SURGICAL_LOCAL_THERAPY"/>
+												<xs:enumeration
+												value="SIOP_NON-SURGICAL_LOCAL_THERAPY_SEGMENTS"/>
+												<xs:enumeration value="SIOP_PREOP_COLLECTION_CPT"/>
+												<xs:enumeration
+												value="SIOP_COLLECTION_LIVER_NORMAL_TISSUE"/>
+												<xs:enumeration
+												value="SIOP_TIME_DEVASCULARIZATION"/>
+												<xs:enumeration value="SIOP_SAMPLE_M01_PSEUDONYM"/>
+												<xs:enumeration value="SIOP_SAMPLE_M01_SEGMENT"/>
+												<xs:enumeration value="SIOP_SAMPLE_M01_LN2"/>
+												<xs:enumeration
+												value="SIOP_SAMPLE_M01_CONFIRMATION_MET"/>
+												<xs:enumeration
+												value="SIOP_SAMPLE_M01_CHARACTERIZATION"/>
+												<xs:enumeration value="SIOP_SAMPLE_M02_PSEUDONYM"/>
+												<xs:enumeration value="SIOP_SAMPLE_M02_SEGMENT"/>
+												<xs:enumeration value="SIOP_SAMPLE_M02_LN2"/>
+												<xs:enumeration
+												value="SIOP_SAMPLE_M02_CONFIRMATION_MET"/>
+												<xs:enumeration
+												value="SIOP_SAMPLE_M02_CHARACTERIZATION"/>
+												<xs:enumeration value="SIOP_SAMPLE_M03_PSEUDONYM"/>
+												<xs:enumeration value="SIOP_SAMPLE_M03_SEGMENT"/>
+												<xs:enumeration value="SIOP_SAMPLE_M03_LN2"/>
+												<xs:enumeration
+												value="SIOP_SAMPLE_M03_CONFIRMATION_MET"/>
+												<xs:enumeration
+												value="SIOP_SAMPLE_M03_CHARACTERIZATION"/>
+												<xs:enumeration value="SIOP_SAMPLE_M04_PSEUDONYM"/>
+												<xs:enumeration value="SIOP_SAMPLE_M04_SEGMENT"/>
+												<xs:enumeration value="SIOP_SAMPLE_M04_LN2"/>
+												<xs:enumeration
+												value="SIOP_SAMPLE_M04_CONFIRMATION_MET"/>
+												<xs:enumeration
+												value="SIOP_SAMPLE_M04_CHARACTERIZATION"/>
+												<xs:enumeration value="SIOP_SAMPLE_M05_PSEUDONYM"/>
+												<xs:enumeration value="SIOP_SAMPLE_M05_SEGMENT"/>
+												<xs:enumeration value="SIOP_SAMPLE_M05_LN2"/>
+												<xs:enumeration
+												value="SIOP_SAMPLE_M05_CONFIRMATION_MET"/>
+												<xs:enumeration
+												value="SIOP_SAMPLE_M05_CHARACTERIZATION"/>
+												<xs:enumeration value="SIOP_SAMPLE_M06_PSEUDONYM"/>
+												<xs:enumeration value="SIOP_SAMPLE_M06_SEGMENT"/>
+												<xs:enumeration value="SIOP_SAMPLE_M06_LN2"/>
+												<xs:enumeration
+												value="SIOP_SAMPLE_M06_CONFIRMATION_MET"/>
+												<xs:enumeration
+												value="SIOP_SAMPLE_M06_CHARACTERIZATION"/>
+												<xs:enumeration value="SIOP_MET_LIVER_TOTAL_PATHO"/>
+												<xs:enumeration
+												value="SIOP_ALL_LIVER_MET_FOR_ORGANOIDS_VERIFIED_BY_PATHO"/>
+												<xs:enumeration
+												value="SIOP_SAMPLES_UNCONFIRMED_MET"/>
+												<xs:enumeration value="SIOP_RESECTION_IN-SANO"/>
+												<xs:enumeration
+												value="SIOP_RESECTION_NON-IN-SANO_SEGMENTS"/>
+												<xs:enumeration value="SIOP_LIVER_NORMAL_FINDING"/>
+												<xs:enumeration value="SIOP_LIVER_SPECIFICATION"/>
+												<xs:enumeration
+												value="SIOP_LIVER_SPECIFICATION_OTHER"/>
+												<xs:enumeration value="SIOP_ADJ_CTX_MET"/>
+												<xs:enumeration value="SIOP_ADJ_CTX_ANTIBODIES"/>
+												<xs:enumeration
+												value="SIOP_PRIMARY_TUMOR_RESECTED_MEANWHILE"/>
+												<xs:enumeration value="SIOP_MET_LIVER_RECURRENCE"/>
+												<xs:enumeration
+												value="SIOP_MET_LIVE_RECURRENCE_DATE_DIAGNOSIS"/>
+												<xs:enumeration
+												value="SIOP_MET_LIVER_RECURRENCE_DIAGNOSTICS"/>
+												<xs:enumeration
+												value="SIOP_MET_LIVER_RECURRENCE_DIAGNOSTICS_OTHER"/>
+												<xs:enumeration
+												value="SIOP_MET_LIVER_RECURRENCE_HISTO_CONFIRMED"/>
+												<xs:enumeration
+												value="SIOP_MET_LIVER_RECURRENCE_TOTAL"/>
+												<xs:enumeration
+												value="SIOP_MET_LIVER_RECURRENCE_SEGMENTS"/>
+												<xs:enumeration
+												value="SIOP_MET_LIVER_RECURRENCE_RESECTION_MARGIN"/>
+												<xs:enumeration
+												value="SIOP_MET_LIVER_RECURRENCE_INTERVENTION"/>
+												<xs:enumeration
+												value="SIOP_MET_LIVER_RECURRENCE_INTERVENTION_OTHER"/>
+												<xs:enumeration
+												value="SIOP_MET_LIVER_RECURRENCE_INTERVENTION_INTENTION_CTX"/>
+												<xs:enumeration
+												value="SIOP_MET_LUNG_HISTO_CONFIRMED"/>
+												<xs:enumeration value="SIOP_MET_LUNG_RECURRENCE"/>
+												<xs:enumeration
+												value="SIOP_MET_LUNG_RECURRENCE_DATE_DIAGNOSIS"/>
+												<xs:enumeration
+												value="SIOP_MET_LUNG_RECURRENCE_TOTAL"/>
+												<xs:enumeration
+												value="SIOP_MET_LUNG_RECURRENCE_TREATMENT"/>
+												<xs:enumeration
+												value="SIOP_MET_LUNG_RECURRENCE_TREATMENT_OTHER"/>
+												<xs:enumeration
+												value="SIOP_MET_EXTRAHEPATIC_RECURRENCE"/>
+												<xs:enumeration
+												value="SIOP_MET_EXTRAHEPATIC_RECURRENCE_DATE_DIAGNOSIS"/>
+												<xs:enumeration
+												value="SIOP_MET_EXTRAHEPATIC_RECURRENCE_LOCALISATION_W-O_PUL"/>
+												<xs:enumeration
+												value="SIOP_MET_EXTRAHEPATIC_RECURRENCE_LOCALISATION_OTHER"/>
+												<xs:enumeration
+												value="SIOP_RE-INTERVENTION_INTENTION"/>
+												<xs:enumeration value="SIOP_MET_LIVER_LAST_VISIT"/>
+												<xs:enumeration
+												value="SIOP_MET_LIVER_HISTO_CONFIRMED"/>
+												<xs:enumeration
+												value="SIOP_MET_LIVER_PERFORMED_INTERVENTION"/>
+												<xs:enumeration
+												value="SIOP_MET_LIVER_INTERVENTION_OTHER"/>
+												<xs:enumeration
+												value="SIOP_MET_EXTRAHEPATIC_RECURRENCE_LAST_VISIT"/>
+												<xs:enumeration
+												value="SIOP_MET_EXTRAHEPATIC_RECURRENCE_HISTO_CONFIRMED"/>
+												<xs:enumeration
+												value="SIOP_MET_EXTRAHEPATIC_RECURRENCE_PERFORMED_INTERVENTION"/>
+												<xs:enumeration
+												value="SIOP_MET_EXTRAHEPATIC_RECURRENCE_INTERVENTION_OTHER"/>
+												<xs:enumeration
+												value="SIOP_MET_EXTRAHEPATIC_RECURRENCE_LOCALISATION"/>
+												<xs:enumeration value="SIOP_RE-INTERVENTION"/>
+												<xs:enumeration value="SIOP_RE-INTERVENTION_OTHER"/>
+												<xs:enumeration
+												value="SIOP_RE-INTERVENTION_INTENTION_CTX"/>
+												</xs:restriction>
+												</xs:simpleType>
+
+												</xs:element>
+												<xs:element name="System" minOccurs="0">
+												<xs:annotation>
+												<xs:documentation>FHIR System</xs:documentation>
+												</xs:annotation>
+												<xs:simpleType>
+												<xs:restriction base="xs:string">
+												<xs:enumeration
+												value="https://fhir.centraxx.de/system/laborValue"
+												/>
+												</xs:restriction>
+												</xs:simpleType>
+												</xs:element>
+												<xs:element name="Display" minOccurs="0"
+												type="xs:string">
+												<xs:annotation>
+												<xs:documentation>Parameter_Name</xs:documentation>
+												</xs:annotation>
+												</xs:element>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+
+									<xs:choice minOccurs="0">
+										<xs:element name="ValueCodeableConcept">
+											<xs:complexType>
+												<xs:sequence>
+												<xs:element name="Code" type="xs:string">
+												<xs:annotation>
+												<xs:documentation>A value from the associated catalogue</xs:documentation>
+												</xs:annotation>
+												</xs:element>
+												<xs:element name="System" minOccurs="0">
+												<xs:annotation>
+												<xs:documentation>Code-System von CentraXX (ValueSet)</xs:documentation>
+												</xs:annotation>
+												<xs:simpleType>
+												<xs:restriction base="xs:string">
+												<xs:enumeration
+												value="urn:centraxx:CodeSystem/ValueList-335"/>
+												<xs:enumeration
+												value="urn:centraxx:CodeSystem/ValueList-330"/>
+												<xs:enumeration
+												value="urn:centraxx:CodeSystem/ValueList-329"/>
+												<xs:enumeration
+												value="urn:centraxx:CodeSystem/ValueList-328"/>
+												<xs:enumeration
+												value="urn:centraxx:CodeSystem/ValueList-356"/>
+												<xs:enumeration
+												value="urn:centraxx:CodeSystem/ValueList-363"/>
+												<xs:enumeration
+												value="urn:centraxx:CodeSystem/ValueList-334"/>
+												<xs:enumeration
+												value="urn:centraxx:CodeSystem/ValueList-370"/>
+												<xs:enumeration
+												value="urn:centraxx:CodeSystem/ValueList-371"/>
+												<xs:enumeration
+												value="urn:centraxx:CodeSystem/ValueList-357"/>
+												<xs:enumeration
+												value="urn:centraxx:CodeSystem/ValueList-365"/>
+												<xs:enumeration
+												value="urn:centraxx:CodeSystem/ValueList-373"/>
+												<xs:enumeration
+												value="http://dktk.dkfz.de/fhir/onco/core/CodeSystem/SIOrgPParamList"
+												/>
+												</xs:restriction>
+												</xs:simpleType>
+												</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="ValueDateTime" type="xs:date"/>
+										<xs:element name="ValueQuantity">
+											<xs:complexType>
+												<xs:sequence>
+												<xs:element name="Value" type="xs:decimal"/>
+												<xs:element name="Unit" minOccurs="0"
+												nillable="true">
+												<xs:annotation>
+												<xs:documentation>
+															U/ml, YEARS, ng/m etc.
+												</xs:documentation>
+												</xs:annotation>
+												<xs:simpleType>
+												<xs:restriction base="xs:string">
+												<xs:enumeration value="YEARS"/>
+												<xs:enumeration value="cm"/>
+												<xs:enumeration value="kg"/>
+												<xs:enumeration value="GRAY"/>
+												<xs:enumeration value="U/ml"/>
+												<xs:enumeration value="ng/ml"/>
+												<xs:enumeration value="%"/>
+												</xs:restriction>
+												</xs:simpleType>
+												</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="ValueString" type="xs:string"/>
+									</xs:choice>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+
+
+					</xs:sequence>
+					<!-- @TODO: dktk: braucht man eine ID? -->
+					<xs:attribute name="Observation_ID" type="xs:string" use="required">
+						<xs:annotation>
+							<xs:documentation> Eine vom Melder generierte ID zur eindeutigen Identifikation des Vorgangs</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="Parent_ID" type="xs:string" use="optional">
+						<xs:annotation>
+							<xs:documentation>Link zur übergeordneten Stichprobe: Referenz auf die ID der Mutterprobe. Ist die Parent_ID nicht verfügbar und handelt es sich um eine aliquote Probe, kann hier eine beliebige Zahl oder ein beliebige Zeichenkette eingegeben werden.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+
+	<xs:element name="valueCodeableConcept">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element maxOccurs="unbounded" ref="coding"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="valueDateTime">
+		<xs:complexType>
+			<xs:attribute name="value" use="required" type="xs:dateTime"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="valueQuantity">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="value"/>
+				<xs:element minOccurs="0" ref="unit"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="value">
+		<xs:complexType>
+			<xs:attribute name="value" use="required" type="xs:decimal"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="unit">
+		<xs:complexType>
+			<xs:attribute name="value" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="valueString">
+		<xs:complexType>
+			<xs:attribute name="value" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="coding">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="system"/>
+				<xs:element minOccurs="0" ref="version"/>
+				<xs:element ref="code"/>
+				<xs:element minOccurs="0" ref="display"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="system">
+		<xs:complexType>
+			<xs:attribute name="value" use="required" type="xs:anyURI"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="version">
+		<xs:complexType>
+			<xs:attribute name="value" use="required" type="xs:integer"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="display">
+		<xs:complexType>
+			<xs:attribute name="value" use="required"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="code">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" ref="coding"/>
+			</xs:sequence>
+			<xs:attribute name="value"/>
+		</xs:complexType>
+	</xs:element>
+
+</xs:schema>
