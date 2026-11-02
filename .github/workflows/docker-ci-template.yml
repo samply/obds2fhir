@@ -75,3 +75,16 @@ jobs:
       - uses: actions/checkout@v6
       - run: docker build -f testdata/Dockerfile -t testdata .
       - run: docker run --rm --network host -e STORE_PATH=http://localhost:8080/fhir testdata dktk --seed 1
+
+  testdata-types:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: testdata
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+      - run: pip install mypy==2.4.1 types-lxml==2026.2.16
+      - run: mypy --strict .

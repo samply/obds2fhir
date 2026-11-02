@@ -1,24 +1,26 @@
+from pathlib import Path
+
 from lxml import etree
 
 NS = "http://www.basisdatensatz.de/oBDS/XML"
 
 
-def E(tag, *children, **attrs):
+def E(tag: str, *children: etree._Element | str | None, **attrs: str) -> etree._Element:
     """Builds an oBDS element. Strings become text, None children are skipped."""
     element = etree.Element(f"{{{NS}}}{tag}", nsmap={None: NS})
     for key, value in attrs.items():
-        element.set(key, str(value))
+        element.set(key, value)
     for child in children:
         if child is None:
             continue
         if isinstance(child, etree._Element):
             element.append(child)
         else:
-            element.text = str(child)
+            element.text = child
     return element
 
 
-def document(patients):
+def document(patients: list[etree._Element]) -> etree._Element:
     return E(
         "oBDS",
         E(
@@ -36,11 +38,11 @@ def document(patients):
     )
 
 
-def write(path, patients, schema):
+def write(path: Path, patients: list[etree._Element], schema: etree.XMLSchema) -> None:
     doc = document(patients)
     schema.assertValid(doc)
     etree.ElementTree(doc).write(path, xml_declaration=True, encoding="UTF-8")
 
 
-def schema(xsd_path):
+def schema(xsd_path: Path) -> etree.XMLSchema:
     return etree.XMLSchema(etree.parse(xsd_path))

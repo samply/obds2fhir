@@ -14,7 +14,7 @@ import dktk
 FILE_PATH = Path("/tmp/clinical_data")
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("project", choices=["dktk"])
     parser.add_argument("--seed", type=int, required=True)
@@ -54,7 +54,7 @@ def main():
     print(f"Loaded {fingerprint}")
 
 
-def convert(store):
+def convert(store: str) -> None:
     for directory in [
         "Processed",
         "tmp/oBDS_Patients",

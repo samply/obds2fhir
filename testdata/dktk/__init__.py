@@ -5,6 +5,8 @@ from datetime import date, timedelta
 from pathlib import Path
 
 import obds
+from lxml import etree
+
 from obds import E
 
 XSD = Path(__file__).parents[2] / "src/main/resources/oBDS_v3.0.2-dktk_v1.0.0.xsd"
@@ -47,7 +49,7 @@ SAMPLE_TYPES = {
 PATIENTS_PER_FILE = 100
 
 
-def generate(seed, directory):
+def generate(seed: int, directory: Path) -> None:
     """Writes oBDS files for one seed into directory."""
     schema = obds.schema(XSD)
     count = round(1000 * random.Random(seed).uniform(0.9, 1.1))
@@ -57,7 +59,7 @@ def generate(seed, directory):
         obds.write(directory / f"{start // PATIENTS_PER_FILE:05}.xml", patients, schema)
 
 
-def patient(rng, patient_id):
+def patient(rng: random.Random, patient_id: str) -> etree._Element:
     sex = rng.choices("MWDU", weights=[480, 500, 2, 18])[0]
     age_at_diagnosis = min(max(round(rng.gauss(64, 13)), 18), 95)
     diagnosed = REFERENCE_DATE - timedelta(days=rng.randint(30, 20 * 365))
@@ -95,7 +97,9 @@ def patient(rng, patient_id):
     )
 
 
-def report(tumor_id, icd, diagnosed, content, morphology=None):
+def report(
+    tumor_id: str, icd: str, diagnosed: date, content: etree._Element, morphology: str | None = None
+) -> etree._Element:
     return E(
         "Meldung",
         E("Meldebegruendung", "I"),
@@ -104,7 +108,7 @@ def report(tumor_id, icd, diagnosed, content, morphology=None):
             "Tumorzuordnung",
             E("Primaertumor_ICD", E("Code", icd), E("Version", "10 2024 GM")),
             E("Diagnosedatum", diagnosed.isoformat(), Datumsgenauigkeit="E"),
-            morphology and E("Morphologie_ICD_O", E("Code", morphology), E("Version", "33")),
+            E("Morphologie_ICD_O", E("Code", morphology), E("Version", "33")) if morphology else None,
             Tumor_ID=tumor_id,
         ),
         content,
@@ -112,7 +116,7 @@ def report(tumor_id, icd, diagnosed, content, morphology=None):
     )
 
 
-def diagnosis(rng, tumor_id, icd, morphology, diagnosed):
+def diagnosis(rng: random.Random, tumor_id: str, icd: str, morphology: str, diagnosed: date) -> etree._Element:
     tnm = None
     if not icd.startswith(("C71", "C92")):
         tnm = E(
@@ -138,8 +142,8 @@ def diagnosis(rng, tumor_id, icd, morphology, diagnosed):
     )
 
 
-def samples(rng, tumor_id, icd, diagnosed):
-    kinds = rng.choices(list(SAMPLE_TYPES), weights=SAMPLE_TYPES.values(), k=rng.randint(1, 4))
+def samples(rng: random.Random, tumor_id: str, icd: str, diagnosed: date) -> etree._Element:
+    kinds = rng.choices(list(SAMPLE_TYPES), weights=list(SAMPLE_TYPES.values()), k=rng.randint(1, 4))
     return report(
         tumor_id,
         icd,
@@ -160,7 +164,7 @@ def samples(rng, tumor_id, icd, diagnosed):
     )
 
 
-def death(rng, tumor_id, icd, diagnosed, died):
+def death(rng: random.Random, tumor_id: str, icd: str, diagnosed: date, died: date) -> etree._Element:
     return report(
         tumor_id,
         icd,
@@ -173,6 +177,6 @@ def death(rng, tumor_id, icd, diagnosed, died):
     )
 
 
-def topography(icd):
+def topography(icd: str) -> str:
     """ICD-O topography always has a subcode, e.g. C61 becomes C61.9."""
     return icd if "." in icd else f"{icd}.9"
