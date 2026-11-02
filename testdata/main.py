@@ -2,7 +2,6 @@
 loads it into Blaze, unless Blaze already holds exactly this data."""
 
 import argparse
-import importlib
 import os
 import shutil
 import subprocess
@@ -10,17 +9,17 @@ import time
 from pathlib import Path
 
 import blaze
+import dktk
 
 FILE_PATH = Path("/tmp/clinical_data")
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("project")
+    parser.add_argument("project", choices=["dktk"])
     parser.add_argument("--seed", type=int, required=True)
     args = parser.parse_args()
 
-    project = importlib.import_module(args.project)
     store = os.environ["STORE_PATH"].rstrip("/")
     revision = os.environ.get("REVISION", "")
     fingerprint = f"{args.project} seed={args.seed} revision={revision}"
@@ -36,7 +35,9 @@ def main():
     shutil.rmtree(FILE_PATH, ignore_errors=True)
     input_dir = FILE_PATH / "InputData"
     input_dir.mkdir(parents=True)
-    project.generate(args.seed, input_dir)
+    match args.project:
+        case "dktk":
+            dktk.generate(args.seed, input_dir)
     print(f"Generated in {time.monotonic() - start:.0f}s")
 
     start = time.monotonic()
