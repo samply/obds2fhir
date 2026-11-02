@@ -3,3 +3,5 @@
 target
 *.properties
 docker-compose.override.yml
+__pycache__/
+.mypy_cache/

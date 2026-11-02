@@ -4,3 +4,5 @@
 !src/main/
 !src/docker/
 !target/obds2fhir*with-dependencies.jar
+!testdata/
+**/__pycache__

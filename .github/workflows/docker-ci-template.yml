@@ -15,6 +15,7 @@ on:
   schedule:
     # Build every night at 1am
     - cron: '0 1 * * *'
+
 jobs:
   build:
     # This workflow defines how a maven package is built, tested and published.
@@ -23,7 +24,7 @@ jobs:
     with:
       # The Docker Hub Repository you want eventually push to, e.g samply/share-client
       image-name: "samply/obds2fhir"
-      # Where to push your images ("dockerhub", "ghcr", "both" or "none")
+      # Where to push your images ("auto", "docker.io", "ghcr.io" or "none")
       push-to: docker.io
       # Define special prefixes for docker tags. They will prefix each images tag.
       # image-tag-prefix: "foo"
@@ -37,6 +38,8 @@ jobs:
       #   foo: bar
       # Define the target platforms of the docker build (default "linux/amd64,linux/arm64/v8")
       build-platforms: "linux/amd64"
+      # Nothing is pushed to ghcr, so there is nothing to clean up there
+      ghcr-retention-policy: keep
       # If your actions generate an artifact in a previous build step, you can tell this workflow to download it
       # '*' will download all artifacts to subdirectories.
       # artifact-name: '' # the default '' doesn't try to download an artifact
@@ -44,3 +47,44 @@ jobs:
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+
+  testdata:
+    # Test data generator, see testdata/README.md
+    uses: samply/github-workflows/.github/workflows/docker-ci.yml@main
+    with:
+      image-name: "samply/obds2fhir-testdata"
+      push-to: ghcr.io
+      build-file: testdata/Dockerfile
+      build-args: REVISION=${{ github.sha }}
+      build-platforms: "linux/amd64"
+    secrets:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+
+  testdata-run:
+    # Converts generated test data and loads it into Blaze
+    runs-on: ubuntu-latest
+    services:
+      blaze:
+        image: samply/blaze:latest
+        env:
+          ENFORCE_REFERENTIAL_INTEGRITY: "false"
+        ports:
+          - 8080:8080
+    steps:
+      - uses: actions/checkout@v6
+      - run: docker build -f testdata/Dockerfile -t testdata .
+      - run: docker run --rm --network host -e STORE_PATH=http://localhost:8080/fhir testdata dktk --seed 1
+
+  testdata-types:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: testdata
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+      - run: pip install mypy==2.4.1 types-lxml==2026.2.16
+      - run: mypy --strict .

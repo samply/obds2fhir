@@ -19,12 +19,15 @@ import java.util.concurrent.TimeUnit;
 
 public class Util {
     private static final Logger logger = LoggerFactory.getLogger(Util.class);
+    public static final int MAX_CONNECTIONS = 8;
 
     public static CloseableHttpClient getHttpClient(Boolean sslVerification){
         CloseableHttpClient httpclient;
         if (!sslVerification){//experimental feature, do not set ssl_certificate_validation=false
             try {
                 httpclient = HttpClients.custom()
+                        .setMaxConnPerRoute(MAX_CONNECTIONS)
+                        .setMaxConnTotal(MAX_CONNECTIONS)
                         .setSSLContext(new SSLContextBuilder().loadTrustMaterial(null, TrustAllStrategy.INSTANCE).build())
                         .setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE).build();
             } catch (NoSuchAlgorithmException | KeyManagementException | KeyStoreException e) {
@@ -32,7 +35,10 @@ public class Util {
             }
         }
         else {
-            httpclient = HttpClients.createDefault();
+            httpclient = HttpClients.custom()
+                    .setMaxConnPerRoute(MAX_CONNECTIONS)
+                    .setMaxConnTotal(MAX_CONNECTIONS)
+                    .build();
         }
         return httpclient;
     }
