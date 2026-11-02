@@ -37,6 +37,8 @@ jobs:
       #   foo: bar
       # Define the target platforms of the docker build (default "linux/amd64,linux/arm64/v8")
       build-platforms: "linux/amd64"
+      # Nothing is pushed to ghcr, so there is nothing to clean up there
+      ghcr-retention-policy: keep
       # If your actions generate an artifact in a previous build step, you can tell this workflow to download it
       # '*' will download all artifacts to subdirectories.
       # artifact-name: '' # the default '' doesn't try to download an artifact
