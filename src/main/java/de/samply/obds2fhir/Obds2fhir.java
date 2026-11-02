@@ -74,18 +74,14 @@ public class Obds2fhir {
 
             startTime = System.nanoTime();
             logger.info("posting fhir resources to blaze store...");
-            processXmlFiles(FHIR_PATIENTS, httpPost,3);
+            FhirBatchImporter.importFiles(new File(System.getenv().getOrDefault("FILE_PATH","") + FHIR_PATIENTS), httpPost);
             stopTime = System.nanoTime();
             logger.info(DONE+(stopTime - startTime)/1000000000+ " seconds");
         }
     }
 
 
-    public static void processXmlFiles(String inputData, int step){
-        processXmlFiles (inputData, null,step);
-    }
-
-    public static void processXmlFiles(String inputDir, HttpPost httpPost, int step){
+    public static void processXmlFiles(String inputDir, int step){
         File absoluteInputDir = new File(System.getenv().getOrDefault("FILE_PATH","") + inputDir);
         File[] listOfFiles = absoluteInputDir.listFiles();
         if (listOfFiles==null){
@@ -113,8 +109,6 @@ public class Obds2fhir {
                             MDS2FHIRTransformer.setParameter("customPrefix", inputFile.getName());
                             applyXslt(xmlResult, MDS2FHIRTransformer);
                             inputFile.delete();
-                        } else if (step==3){
-                            FhirBatchImporter.importFile(inputFile, httpPost);
                         }
                         else {
                             inputFile.renameTo(new File(System.getenv().getOrDefault("FILE_PATH","") + PROCESSED + inputFile.getName()));
