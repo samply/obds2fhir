@@ -15,6 +15,7 @@ on:
   schedule:
     # Build every night at 1am
     - cron: '0 1 * * *'
+
 jobs:
   build:
     # This workflow defines how a maven package is built, tested and published.
@@ -57,3 +58,18 @@ jobs:
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+
+  testdata-run:
+    # Converts generated test data and loads it into Blaze
+    runs-on: ubuntu-latest
+    services:
+      blaze:
+        image: samply/blaze:latest
+        env:
+          ENFORCE_REFERENTIAL_INTEGRITY: "false"
+        ports:
+          - 8080:8080
+    steps:
+      - uses: actions/checkout@v6
+      - run: docker build -f testdata/Dockerfile -t testdata .
+      - run: docker run --rm --network host -e STORE_PATH=http://localhost:8080/fhir testdata dktk --seed 1
